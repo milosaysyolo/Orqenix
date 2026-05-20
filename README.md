@@ -1,6 +1,8 @@
 # Orqenix
 
-Orqenix is a production-grade orchestration engine for AI agent systems.
+Orqenix is a production-grade orchestration engine 
+for AI agent systems, with built-in methodology 
+enforcement, continuous learning, and security guardrails.
 
 It enables developers to build, run, and scale multi-agent workflows with:
 - a modular orchestration runtime
