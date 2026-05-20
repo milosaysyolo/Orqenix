@@ -39,8 +39,6 @@ orqenix run
 
 Apache 2.0
 
-```
-
 ---
 
 ## 5. Naming structure
