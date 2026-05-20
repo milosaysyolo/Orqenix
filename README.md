@@ -1,4 +1,3 @@
-````markdown
 # Orqenix
 
 Orqenix is a production-grade orchestration engine for AI agent systems.
