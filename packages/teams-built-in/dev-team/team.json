@@ -1,0 +1,45 @@
+{
+  "$schema": "https://orqenix.dev/schema/team.json",
+  "name": "dev-team",
+  "version": "1.0.0",
+  "description": "Lean software development team for code projects",
+  "author": "Orqenix Team",
+  "license": "Apache-2.0",
+  "namingPrefix": "dev-team",
+  "teamLead": {
+    "role": "lead",
+    "file": "agents/lead.md",
+    "mode": "primary",
+    "isTeamLead": true
+  },
+  "agents": {
+    "core": [
+      { "role": "builder",   "file": "agents/builder.md",   "mode": "subagent" },
+      { "role": "inspector", "file": "agents/inspector.md", "mode": "subagent" },
+      { "role": "navigator", "file": "agents/navigator.md", "mode": "subagent" }
+    ],
+    "optional": [
+      {
+        "role": "debugger",
+        "file": "agents/debugger.md",
+        "mode": "subagent",
+        "lazyTriggers": ["bug", "debug", "error", "fix"]
+      },
+      {
+        "role": "researcher",
+        "file": "agents/researcher.md",
+        "mode": "subagent",
+        "lazyTriggers": ["research", "compare", "evaluate"]
+      }
+    ]
+  },
+  "defaultSkills": ["filesystem-ops", "git-ops", "shell-exec", "code-search"],
+  "defaultMCP": ["filesystem", "github"],
+  "syncTargets": {
+    "opencode": {
+      "enabled": true,
+      "outputDir": ".opencode/agents",
+      "filenamePattern": "{prefix}-{role}.md"
+    }
+  }
+}

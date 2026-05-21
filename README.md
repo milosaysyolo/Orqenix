@@ -1,65 +1,32 @@
 # Orqenix
 
-Orqenix is a production-grade orchestration engine 
-for AI agent systems, with built-in methodology 
-enforcement, continuous learning, and security guardrails.
+Production-grade primary-agent orchestration engine for AI agent systems.
 
-It enables developers to build, run, and scale multi-agent workflows with:
-- a modular orchestration runtime
-- pluggable memory and RAG pipelines
-- skill and plugin execution
-- built-in observability and cost control
-- extension-based architecture for enterprise features
+Orqenix coordinates specialized teams of AI agents across projects, branches,
+worktrees, and sessions, with built-in scope isolation, dynamic model routing,
+token-optimized context management, and persistent knowledge layers.
+
+## Status
+
+🚧 Pre-release. Phase 1 (Foundation) in progress.
 
 ## Why Orqenix
 
-- Built for production, not demos
-- Designed for multi-agent systems at scale
-- Extension-first architecture
-- Runtime-agnostic across LLM providers
-- Cost-aware by design
+- **SCOPE management** — true multi-project, multi-worktree, multi-session isolation
+- **TEAM orchestration** — Primary Agent + Sub-agents bundled by purpose
+- **Context optimization** — lazy load, smart compression, token-aware everywhere
+- **100% OpenCode compatible** — agents/skills you create work in OpenCode unchanged
+- **Editor agnostic** — Claude Code, Codex, Antigravity, Cursor via MCP
 
-## Quick start
+## Quick start (once Phase 1 ships)
 
 ```bash
-npm install -g @orqenix/cli
-orqenix init my-agent
-orqenix run
-````
-
-## Roadmap
-
-* [ ] Core orchestrator
-* [ ] Agent runtime
-* [ ] Memory system (MCP)
-* [ ] Skill/plugin system
-* [ ] Observability
-* [ ] Governance (Pro)
-* [ ] Cloud platform
+npm install -g orqenix
+orqenix init
+orqenix doctor
+orqenix run --task "Add user authentication"
+```
 
 ## License
 
-Apache 2.0
-
----
-
-## 5. Naming structure
-
-```
-
-orqenix          → OSS core
-orqenix-pro      → enterprise
-orqenix-cloud    → SaaS
-
-```
-
-Packages:
-
-```
-
-@orqenix/core
-@orqenix/agents
-@orqenix/skills
-@orqenix/cli
-
-```
+Apache 2.0 (core). See LICENSE.
