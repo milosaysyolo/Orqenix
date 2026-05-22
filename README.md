@@ -1,17 +1,18 @@
+
 <div align="center">
 
-assets/banner.svgOrqenix" width="100%" />
+<img src="assets/banner.svg" alt="Orqenix Banner" width="100%" />
 
 **A structured runtime and control plane for multi-agent AI systems.**
 
-https://img.shields.io/badge/status-early--stage-orange]()
-https://img.shields.io/badge/phase-foundation-blue]()
-https://img.shields.io/badge/contributions-welcome-brightgreen]()
-https://img.shields.io/badge/license-TBD-lightgrey]()
+<div align="center">
+
+![Status](https://img.shields.io/badge/status-early--stage-orange)
+![Phase](https://img.shields.io/badge/phase-foundation-blue)
+![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen)
+![License](https://img.shields.io/badge/license-Apache_2.0-yellow)
 
 </div>
-
----
 
 ## 📖 Contents
 
@@ -78,11 +79,13 @@ Orqenix is an **AI orchestration platform** for composing, governing, and evolvi
 
 ## 🏗 Architecture
 
+
 <div align="center">
 
-assets/architecture.svgOrqenix Architecture" width="100%" />
+<img src="assets/architecture.svg" alt="Orqenix Architecture" width="100%" />
 
 </div>
+
 
 ### Layer Responsibilities
 
