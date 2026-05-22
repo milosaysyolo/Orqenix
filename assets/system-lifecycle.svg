@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" font-family="Inter, Arial">
+
+  <!-- Background -->
+  <rect width="1200" height="700" fill="#0B1020"/>
+
+  <!-- Title -->
+  <text x="600" y="50" text-anchor="middle" fill="#FFFFFF" font-size="24" font-weight="600">
+    Orqenix System Lifecycle
+  </text>
+
+  <!-- ================= TOP: USER ================= -->
+  <rect x="450" y="90" width="300" height="60" rx="10" fill="#141B33" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="600" y="125" text-anchor="middle" fill="#5EE7DF">User Request</text>
+
+  <!-- Arrow -->
+  <line x1="600" y1="150" x2="600" y2="190" stroke="#5EE7DF" stroke-width="2"/>
+
+  <!-- ================= ORCHESTRATOR ================= -->
+  <rect x="400" y="190" width="400" height="90" rx="14" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="600" y="220" text-anchor="middle" fill="#FFFFFF" font-size="16">Orchestrator</text>
+  <text x="600" y="245" text-anchor="middle" fill="#9AA6C2" font-size="12">
+    Decompose Task · Route Agents · Select Models
+  </text>
+
+  <!-- Arrow down -->
+  <line x1="600" y1="280" x2="600" y2="320" stroke="#5EE7DF" stroke-width="2"/>
+
+  <!-- ================= EXECUTION ================= -->
+  <rect x="350" y="320" width="500" height="90" rx="14" fill="#141B33" stroke="#5EE7DF"/>
+  <text x="600" y="350" text-anchor="middle" fill="#5EE7DF">Multi-Agent Execution</text>
+  <text x="600" y="370" text-anchor="middle" fill="#FFFFFF" font-size="12">
+    Agents · Skills · Plugins · MCP · Model Routing
+  </text>
+
+  <!-- Arrow down -->
+  <line x1="600" y1="410" x2="600" y2="450" stroke="#5EE7DF" stroke-width="2"/>
+
+  <!-- ================= RESULT ================= -->
+  <rect x="450" y="450" width="300" height="60" rx="10" fill="#2A1F40" stroke="#B490FF"/>
+  <text x="600" y="485" text-anchor="middle" fill="#B490FF">Execution Result</text>
+
+  <!-- ================= LEARNING ================= -->
+  <rect x="850" y="320" width="260" height="80" rx="12" fill="#141B33" stroke="#3AD29F"/>
+  <text x="980" y="350" text-anchor="middle" fill="#3AD29F">Observation</text>
+  <text x="980" y="370" text-anchor="middle" fill="#FFFFFF" font-size="11">
+    Capture execution patterns
+  </text>
+
+  <!-- Arrow from execution to observation -->
+  <line x1="850" y1="360" x2="900" y2="360" stroke="#3AD29F" stroke-width="2"/>
+
+  <!-- ================= SKILL EXTRACTION ================= -->
+  <rect x="850" y="430" width="260" height="80" rx="12" fill="#141B33" stroke="#3AD29F"/>
+  <text x="980" y="460" text-anchor="middle" fill="#3AD29F">Candidate Skill</text>
+  <text x="980" y="480" text-anchor="middle" fill="#FFFFFF" font-size="11">
+    Extract reusable capability
+  </text>
+
+  <!-- Down arrow -->
+  <line x1="980" y1="400" x2="980" y2="430" stroke="#3AD29F" stroke-width="2"/>
+
+  <!-- ================= GOVERNANCE ================= -->
+  <rect x="750" y="540" width="460" height="90" rx="14" fill="#2A1F40" stroke="#B490FF"/>
+  <text x="980" y="570" text-anchor="middle" fill="#B490FF">Governance Pipeline</text>
+  <text x="980" y="595" text-anchor="middle" fill="#FFFFFF" font-size="12">
+    Review · Conflict Check · Approval · Versioning
+  </text>
+
+  <!-- Arrow down -->
+  <line x1="980" y1="510" x2="980" y2="540" stroke="#B490FF" stroke-width="2"/>
+
+  <!-- ================= SKILL REGISTRY ================= -->
+  <rect x="350" y="580" width="300" height="70" rx="12" fill="#1E2A55" stroke="#5EE7DF"/>
+  <text x="500" y="610" text-anchor="middle" fill="#5EE7DF">Skill Registry</text>
+  <text x="500" y="630" text-anchor="middle" fill="#FFFFFF" font-size="11">
+    Approved · Versioned · Discoverable
+  </text>
+
+  <!-- Arrow from governance to registry -->
+  <line x1="750" y1="585" x2="650" y2="615" stroke="#B490FF" stroke-width="2"/>
+
+  <!-- ================= LOOP BACK ================= -->
+  <path d="M350 615 C150 500, 150 150, 450 120" stroke="#5EE7DF" stroke-width="2" fill="none"/>
+
+  <text x="230" y="300" fill="#9AA6C2" font-size="12">
+    Skills reused in future executions
+  </text>
+
+</svg>
