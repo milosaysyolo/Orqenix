@@ -1,5 +1,4 @@
 import { existsSync } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { log } from "../util/logger.js";
