@@ -1,94 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" font-family="Inter, Arial">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
 
-  <!-- Background -->
-  <rect width="1200" height="620" fill="#0B1020"/>
+  <rect width="1200" height="600" fill="#0B1020"/>
 
   <!-- Title -->
-  <text x="600" y="50" text-anchor="middle" fill="#FFFFFF" font-size="22" font-weight="600">
-    Memory & Context Pruning Pipeline
+  <text x="600" y="40" fill="#ffffff" text-anchor="middle" font-size="20">
+    Memory & Context Pruning
   </text>
 
-  <!-- ================= RAW INPUT ================= -->
-  <rect x="80" y="140" width="220" height="100" rx="12" fill="#141B33" stroke="#FF8C42" stroke-width="2"/>
-  <text x="190" y="170" text-anchor="middle" fill="#FF8C42" font-size="14">Raw Context</text>
-  <text x="190" y="195" text-anchor="middle" fill="#FFFFFF" font-size="11">Full history</text>
-  <text x="190" y="210" text-anchor="middle" fill="#FFFFFF" font-size="11">Logs · memory · noise</text>
+  <!-- Raw Context -->
+  <rect x="80" y="220" width="180" height="80" fill="#141B33" stroke="#FF8C42"/>
+  <text x="170" y="250" fill="#FF8C42" text-anchor="middle" font-size="14">Raw Context</text>
+  <text x="170" y="270" fill="#ffffff" text-anchor="middle" font-size="12">Full history</text>
 
-  <!-- Arrow -->
-  <line x1="300" y1="190" x2="380" y2="190" stroke="#5EE7DF" stroke-width="2"/>
+  <!-- Filter -->
+  <rect x="360" y="200" width="200" height="120" fill="#1E2A55" stroke="#5EE7DF"/>
+  <text x="460" y="235" fill="#5EE7DF" text-anchor="middle" font-size="14">Filter</text>
+  <text x="460" y="260" fill="#ffffff" text-anchor="middle" font-size="12">Remove noise</text>
 
-  <!-- ================= FILTER ================= -->
-  <rect x="380" y="120" width="220" height="140" rx="12" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
-  <text x="490" y="150" text-anchor="middle" fill="#5EE7DF">Context Filter</text>
+  <!-- Compression -->
+  <rect x="660" y="200" width="200" height="120" fill="#1E2A55" stroke="#3AD29F"/>
+  <text x="760" y="235" fill="#3AD29F" text-anchor="middle" font-size="14">Compression</text>
+  <text x="760" y="260" fill="#ffffff" text-anchor="middle" font-size="12">Extract signals</text>
 
-  <text x="490" y="180" text-anchor="middle" fill="#FFFFFF" font-size="12">
-    Remove irrelevant tokens
-  </text>
-  <text x="490" y="200" text-anchor="middle" fill="#FFFFFF" font-size="12">
-    Detect task signals
-  </text>
+  <!-- Model Input -->
+  <rect x="960" y="220" width="180" height="80" fill="#1E2A55" stroke="#5EE7DF"/>
+  <text x="1050" y="250" fill="#5EE7DF" text-anchor="middle" font-size="14">Model Input</text>
+  <text x="1050" y="270" fill="#ffffff" text-anchor="middle" font-size="12">High signal</text>
 
-  <!-- Arrow -->
-  <line x1="600" y1="190" x2="680" y2="190" stroke="#5EE7DF" stroke-width="2"/>
+  <!-- Lines -->
+  <line x1="260" y1="260" x2="360" y2="260" stroke="#5EE7DF"/>
+  <line x1="560" y1="260" x2="660" y2="260" stroke="#5EE7DF"/>
+  <line x1="860" y1="260" x2="960" y2="260" stroke="#5EE7DF"/>
 
-  <!-- ================= COMPRESSION ================= -->
-  <rect x="680" y="120" width="220" height="140" rx="12" fill="#1E2A55" stroke="#3AD29F" stroke-width="2"/>
-  <text x="790" y="150" text-anchor="middle" fill="#3AD29F">Compression</text>
+  <!-- Memory Layer -->
+  <rect x="200" y="420" width="200" height="60" fill="#141B33" stroke="#5EE7DF"/>
+  <text x="300" y="455" fill="#5EE7DF" text-anchor="middle" font-size="12">Short-term</text>
 
-  <text x="790" y="180" text-anchor="middle" fill="#FFFFFF" font-size="12">
-    Summarize context
-  </text>
-  <text x="790" y="200" text-anchor="middle" fill="#FFFFFF" font-size="12">
-    Extract key signals
-  </text>
+  <rect x="450" y="420" width="200" height="60" fill="#141B33" stroke="#B490FF"/>
+  <text x="550" y="455" fill="#B490FF" text-anchor="middle" font-size="12">Long-term</text>
 
-  <!-- Arrow -->
-  <line x1="900" y1="190" x2="1000" y2="250" stroke="#5EE7DF" stroke-width="2"/>
+  <rect x="700" y="420" width="200" height="60" fill="#141B33" stroke="#3AD29F"/>
+  <text x="800" y="455" fill="#3AD29F" text-anchor="middle" font-size="12">RAG</text>
 
-  <!-- ================= MODEL INPUT ================= -->
-  <rect x="940" y="250" width="220" height="100" rx="12" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
-  <text x="1050" y="280" text-anchor="middle" fill="#5EE7DF">Model Input</text>
+  <!-- Dashed lines -->
+  <line x1="300" y1="420" x2="460" y2="320" stroke="#888888" stroke-dasharray="4"/>
+  <line x1="550" y1="420" x2="760" y2="320" stroke="#888888" stroke-dasharray="4"/>
+  <line x1="800" y1="420" x2="760" y2="320" stroke="#888888" stroke-dasharray="4"/>
 
-  <text x="1050" y="305" text-anchor="middle" fill="#FFFFFF" font-size="12">
-    Clean, high-signal context
-  </text>
-
-  <!-- ================= MEMORY LAYERS ================= -->
-
-  <!-- Short-term -->
-  <rect x="250" y="360" width="200" height="80" rx="10" fill="#141B33" stroke="#5EE7DF"/>
-  <text x="350" y="390" text-anchor="middle" fill="#5EE7DF" font-size="12">Short-term</text>
-  <text x="350" y="410" text-anchor="middle" fill="#FFFFFF" font-size="11">Execution state</text>
-
-  <!-- Long-term -->
-  <rect x="500" y="360" width="200" height="80" rx="10" fill="#141B33" stroke="#B490FF"/>
-  <text x="600" y="390" text-anchor="middle" fill="#B490FF" font-size="12">Long-term</text>
-  <text x="600" y="410" text-anchor="middle" fill="#FFFFFF" font-size="11">Persistent knowledge</text>
-
-  <!-- RAG -->
-  <rect x="750" y="360" width="200" height="80" rx="10" fill="#141B33" stroke="#3AD29F"/>
-  <text x="850" y="390" text-anchor="middle" fill="#3AD29F" font-size="12">RAG Retrieval</text>
-  <text x="850" y="410" text-anchor="middle" fill="#FFFFFF" font-size="11">On-demand context</text>
-
-  <!-- Connections up -->
-  <g stroke="#9AA6C2" stroke-dasharray="4,4" stroke-width="2">
-    <line x1="350" y1="360" x2="490" y2="260"/>
-    <line x1="600" y1="360" x2="790" y2="260"/>
-    <line x1="850" y1="360" x2="790" y2="260"/>
-  </g>
-
-  <!-- ================= RESULT COMPARISON ================= -->
-
-  <text x="320" y="520" text-anchor="middle" fill="#FF6B6B" font-size="12">
-    Without pruning: large + noisy context
+  <!-- Comparison -->
+  <text x="300" y="550" text-anchor="middle" fill="#FF6B6B" font-size="12">
+    Without pruning: large context
   </text>
 
-  <text x="880" y="520" text-anchor="middle" fill="#3AD29F" font-size="12">
-    With Orqenix: compact + high signal
+  <text x="900" y="550" text-anchor="middle" fill="#3AD29F" font-size="12">
+    With pruning: efficient context
   </text>
-
-  <!-- Visual hint -->
-  <rect x="220" y="540" width="200" height="20" fill="#FF6B6B" opacity="0.4"/>
-  <rect x="780" y="540" width="80" height="20" fill="#3AD29F" opacity="0.6"/>
 
 </svg>
