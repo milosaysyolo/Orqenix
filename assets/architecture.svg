@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1020"/>
+      <stop offset="100%" stop-color="#1E2A55"/>
+    </linearGradient>
+
+    <!-- Accent gradient -->
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5EE7DF"/>
+      <stop offset="100%" stop-color="#B490FF"/>
+    </linearGradient>
+
+    <!-- Layer gradients -->
+    <linearGradient id="orchGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1B2550"/>
+      <stop offset="100%" stop-color="#2A3A7A"/>
+    </linearGradient>
+    <linearGradient id="layerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#141B33"/>
+      <stop offset="100%" stop-color="#1E2A55"/>
+    </linearGradient>
+    <linearGradient id="govGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3A2A55"/>
+      <stop offset="100%" stop-color="#2A1F40"/>
+    </linearGradient>
+
+    <!-- Glow filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Arrow marker -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5EE7DF"/>
+    </marker>
+    <marker id="arrowSoft" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#9AA6C2" opacity="0.7"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="760" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="600" y="50" text-anchor="middle" fill="#FFFFFF" font-size="26" font-weight="700" letter-spacing="1">
+    Orqenix Architecture
+  </text>
+  <text x="600" y="78" text-anchor="middle" fill="#9AA6C2" font-size="14" letter-spacing="2">
+    ORCHESTRATION · GOVERNANCE · EVOLUTION
+  </text>
+
+  <!-- ============== USER / CLIENT LAYER ============== -->
+  <g>
+    <rect x="80" y="110" width="1040" height="60" rx="10" fill="url(#layerGrad)" stroke="#3A4A80" stroke-width="1"/>
+    <text x="105" y="135" fill="#9AA6C2" font-size="12" letter-spacing="2">CLIENT LAYER</text>
+    <text x="105" y="158" fill="#FFFFFF" font-size="16" font-weight="600">
+      Developers  ·  Applications  ·  CI/CD  ·  External Systems
+    </text>
+  </g>
+
+  <!-- Arrow down -->
+  <line x1="600" y1="170" x2="600" y2="200" stroke="#5EE7DF" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ============== ORCHESTRATOR CORE ============== -->
+  <g filter="url(#glow)">
+    <rect x="350" y="205" width="500" height="90" rx="14" fill="url(#orchGrad)" stroke="url(#accent)" stroke-width="2"/>
+    <text x="600" y="235" text-anchor="middle" fill="#FFFFFF" font-size="20" font-weight="700">
+      Orchestrator Core
+    </text>
+    <text x="600" y="262" text-anchor="middle" fill="#9AA6C2" font-size="13">
+      Task Decomposition · Model Routing · Execution Flow · Retry &amp; Fallback
+    </text>
+    <text x="600" y="282" text-anchor="middle" fill="#5EE7DF" font-size="11" letter-spacing="2">
+      DETERMINISTIC  ·  OBSERVABLE  ·  COST-AWARE
+    </text>
+  </g>
+
+  <!-- Governance sidebar (right) -->
+  <g>
+    <rect x="900" y="205" width="220" height="280" rx="12" fill="url(#govGrad)" stroke="#7A5FB0" stroke-width="1.5"/>
+    <text x="1010" y="232" text-anchor="middle" fill="#B490FF" font-size="12" letter-spacing="2">GOVERNANCE LAYER</text>
+    <line x1="920" y1="245" x2="1100" y2="245" stroke="#7A5FB0" stroke-width="1" opacity="0.5"/>
+
+    <g fill="#FFFFFF" font-size="13">
+      <text x="920" y="270">✓ Skill Approval</text>
+      <text x="920" y="295">✓ Conflict Detection</text>
+      <text x="920" y="320">✓ Version Control</text>
+      <text x="920" y="345">✓ Audit Trail</text>
+      <text x="920" y="370">✓ Rollback</text>
+      <text x="920" y="395">✓ Lifecycle Mgmt</text>
+    </g>
+
+    <text x="1010" y="440" text-anchor="middle" fill="#9AA6C2" font-size="11" font-style="italic">
+      Cross-cutting concern
+    </text>
+    <text x="1010" y="458" text-anchor="middle" fill="#9AA6C2" font-size="11" font-style="italic">
+      across all layers
+    </text>
+  </g>
+
+  <!-- Observability sidebar (left) -->
+  <g>
+    <rect x="80" y="205" width="220" height="280" rx="12" fill="#1A2A3A" stroke="#3A6080" stroke-width="1.5"/>
+    <text x="190" y="232" text-anchor="middle" fill="#5EE7DF" font-size="12" letter-spacing="2">OBSERVABILITY</text>
+    <line x1="100" y1="245" x2="280" y2="245" stroke="#3A6080" stroke-width="1" opacity="0.5"/>
+
+    <g fill="#FFFFFF" font-size="13">
+      <text x="100" y="270">◆ Execution Traces</text>
+      <text x="100" y="295">◆ Metrics &amp; Cost</text>
+      <text x="100" y="320">◆ Structured Logs</text>
+      <text x="100" y="345">◆ Agent State</text>
+      <text x="100" y="370">◆ Skill Usage</text>
+      <text x="100" y="395">◆ Error Tracking</text>
+    </g>
+
+    <text x="190" y="440" text-anchor="middle" fill="#9AA6C2" font-size="11" font-style="italic">
+      Cross-cutting concern
+    </text>
+    <text x="190" y="458" text-anchor="middle" fill="#9AA6C2" font-size="11" font-style="italic">
+      across all layers
+    </text>
+  </g>
+
+  <!-- Dotted lines from sidebars to core -->
+  <line x1="300" y1="250" x2="350" y2="250" stroke="#5EE7DF" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>
+  <line x1="850" y1="250" x2="900" y2="250" stroke="#B490FF" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>
+
+  <!-- Arrows from orchestrator to execution layer -->
+  <line x1="450" y1="295" x2="420" y2="335" stroke="#5EE7DF" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="600" y1="295" x2="600" y2="335" stroke="#5EE7DF" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="750" y1="295" x2="780" y2="335" stroke="#5EE7DF" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ============== EXECUTION LAYER (Agents, Skills, Plugins) ============== -->
+  <!-- Agents -->
+  <g>
+    <rect x="330" y="340" width="170" height="110" rx="12" fill="url(#layerGrad)" stroke="#5EE7DF" stroke-width="1.5"/>
+    <text x="415" y="370" text-anchor="middle" fill="#5EE7DF" font-size="12" letter-spacing="2">AGENTS</text>
+    <text x="415" y="395" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="600">Execution Units</text>
+    <text x="415" y="418" text-anchor="middle" fill="#9AA6C2" font-size="11">Planner · Executor</text>
+    <text x="415" y="434" text-anchor="middle" fill="#9AA6C2" font-size="11">Reviewer · Debugger</text>
+  </g>
+
+  <!-- Skills -->
+  <g>
+    <rect x="515" y="340" width="170" height="110" rx="12" fill="url(#layerGrad)" stroke="#5EE7DF" stroke-width="1.5"/>
+    <text x="600" y="370" text-anchor="middle" fill="#5EE7DF" font-size="12" letter-spacing="2">SKILLS</text>
+    <text x="600" y="395" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="600">Capabilities</text>
+    <text x="600" y="418" text-anchor="middle" fill="#9AA6C2" font-size="11">Versioned · Reviewed</text>
+    <text x="600" y="434" text-anchor="middle" fill="#9AA6C2" font-size="11">Composable · Reusable</text>
+  </g>
+
+  <!-- Plugins -->
+  <g>
+    <rect x="700" y="340" width="170" height="110" rx="12" fill="url(#layerGrad)" stroke="#5EE7DF" stroke-width="1.5"/>
+    <text x="785" y="370" text-anchor="middle" fill="#5EE7DF" font-size="12" letter-spacing="2">PLUGINS</text>
+    <text x="785" y="395" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="600">External Bridges</text>
+    <text x="785" y="418" text-anchor="middle" fill="#9AA6C2" font-size="11">APIs · Services</text>
+    <text x="785" y="434" text-anchor="middle" fill="#9AA6C2" font-size="11">Tools · Integrations</text>
+  </g>
+
+  <!-- Arrows down to MCP -->
+  <line x1="415" y1="450" x2="500" y2="495" stroke="#5EE7DF" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="600" y1="450" x2="600" y2="495" stroke="#5EE7DF" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="785" y1="450" x2="700" y2="495" stroke="#5EE7DF" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ============== MCP LAYER ============== -->
+  <g>
+    <rect x="350" y="500" width="500" height="70" rx="12" fill="url(#layerGrad)" stroke="url(#accent)" stroke-width="1.5"/>
+    <text x="600" y="527" text-anchor="middle" fill="#B490FF" font-size="12" letter-spacing="2">MCP · MODEL CONTEXT PROTOCOL</text>
+    <text x="600" y="552" text-anchor="middle" fill="#FFFFFF" font-size="13">
+      Standardized access to memory, tools, knowledge, and services
+    </text>
+  </g>
+
+  <!-- Arrow down to memory -->
+  <line x1="600" y1="570" x2="600" y2="605" stroke="#5EE7DF" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ============== MEMORY LAYER ============== -->
+  <g>
+    <rect x="350" y="610" width="500" height="80" rx="12" fill="url(#layerGrad)" stroke="#3A6080" stroke-width="1.5"/>
+    <text x="600" y="635" text-anchor="middle" fill="#5EE7DF" font-size="12" letter-spacing="2">MEMORY LAYER</text>
+    <g fill="#FFFFFF" font-size="12" text-anchor="middle">
+      <text x="430" y="665">Short-term</text>
+      <text x="430" y="680" fill="#9AA6C2" font-size="10">execution context</text>
+
+      <text x="600" y="665">Long-term</text>
+      <text x="600" y="680" fill="#9AA6C2" font-size="10">knowledge base</text>
+
+      <text x="770" y="665">RAG</text>
+      <text x="770" y="680" fill="#9AA6C2" font-size="10">semantic retrieval</text>
+    </g>
+  </g>
+
+  <!-- ============== LLM PROVIDERS (bottom layer) ============== -->
+  <g>
+    <rect x="80" y="710" width="1040" height="40" rx="8" fill="#0F1730" stroke="#3A4A80" stroke-width="1"/>
+    <text x="105" y="735" fill="#9AA6C2" font-size="11" letter-spacing="2">LLM PROVIDERS</text>
+    <text x="600" y="735" text-anchor="middle" fill="#FFFFFF" font-size="13">
+      OpenAI  ·  Anthropic  ·  Local Models  ·  Open Source  ·  Custom Endpoints
+    </text>
+  </g>
+
+  <!-- Side dotted connection from MCP to memory wraps to providers -->
+  <line x1="850" y1="650" x2="1010" y2="650" stroke="#9AA6C2" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+  <line x1="1010" y1="650" x2="1010" y2="710" stroke="#9AA6C2" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" marker-end="url(#arrowSoft)"/>
+
+  <line x1="350" y1="650" x2="190" y2="650" stroke="#9AA6C2" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+  <line x1="190" y1="650" x2="190" y2="710" stroke="#9AA6C2" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" marker-end="url(#arrowSoft)"/>
+</svg>
