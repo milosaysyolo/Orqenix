@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" font-family="Inter, Arial">
+
+  <!-- Background -->
+  <rect width="1200" height="620" fill="#0B1020"/>
+
+  <!-- Title -->
+  <text x="600" y="50" text-anchor="middle" fill="#FFFFFF" font-size="22" font-weight="600">
+    Dynamic Model Routing
+  </text>
+
+  <!-- Input Task -->
+  <rect x="420" y="90" width="360" height="80" rx="12" fill="#141B33" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="600" y="120" text-anchor="middle" fill="#5EE7DF" font-size="14">Incoming Task</text>
+  <text x="600" y="145" text-anchor="middle" fill="#FFFFFF" font-size="13">Request from Orchestrator</text>
+
+  <!-- Arrow down -->
+  <line x1="600" y1="170" x2="600" y2="210" stroke="#5EE7DF" stroke-width="2"/>
+
+  <!-- Decision Engine -->
+  <rect x="380" y="210" width="440" height="90" rx="12" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="600" y="240" text-anchor="middle" fill="#FFFFFF" font-size="15">Routing Engine</text>
+
+  <text x="600" y="265" text-anchor="middle" fill="#9AA6C2" font-size="12">
+    Complexity · Cost Budget · Latency · Task Type
+  </text>
+
+  <text x="600" y="285" text-anchor="middle" fill="#5EE7DF" font-size="11" letter-spacing="2">
+    DECIDE BEST MODEL
+  </text>
+
+  <!-- Branching -->
+  <g stroke="#5EE7DF" stroke-width="2">
+    <line x1="600" y1="300" x2="250" y2="380"/>
+    <line x1="600" y1="300" x2="600" y2="380"/>
+    <line x1="600" y1="300" x2="950" y2="380"/>
+  </g>
+
+  <!-- Labels for branches -->
+  <text x="250" y="350" text-anchor="middle" fill="#9AA6C2" font-size="11">Low cost / simple</text>
+  <text x="600" y="350" text-anchor="middle" fill="#9AA6C2" font-size="11">Balanced</text>
+  <text x="950" y="350" text-anchor="middle" fill="#9AA6C2" font-size="11">High complexity</text>
+
+  <!-- Cheap Model -->
+  <rect x="150" y="380" width="200" height="90" rx="12" fill="#1E2A55" stroke="#3AD29F" stroke-width="2"/>
+  <text x="250" y="410" text-anchor="middle" fill="#3AD29F" font-size="14">Cheap Model</text>
+  <text x="250" y="435" text-anchor="middle" fill="#FFFFFF" font-size="12">Fast · Low Cost</text>
+  <text x="250" y="455" text-anchor="middle" fill="#9AA6C2" font-size="11">e.g. GPT-lite / small LLM</text>
+
+  <!-- Balanced Model -->
+  <rect x="500" y="380" width="200" height="90" rx="12" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="600" y="410" text-anchor="middle" fill="#5EE7DF" font-size="14">Balanced Model</text>
+  <text x="600" y="435" text-anchor="middle" fill="#FFFFFF" font-size="12">Quality vs Cost</text>
+  <text x="600" y="455" text-anchor="middle" fill="#9AA6C2" font-size="11">Default choice</text>
+
+  <!-- Expensive Model -->
+  <rect x="850" y="380" width="220" height="90" rx="12" fill="#1E2A55" stroke="#B490FF" stroke-width="2"/>
+  <text x="960" y="410" text-anchor="middle" fill="#B490FF" font-size="14">Advanced Model</text>
+  <text x="960" y="435" text-anchor="middle" fill="#FFFFFF" font-size="12">High reasoning power</text>
+  <text x="960" y="455" text-anchor="middle" fill="#9AA6C2" font-size="11">e.g. GPT-4 / Claude Opus</text>
+
+  <!-- Return arrows -->
+  <g stroke="#B490FF" stroke-width="2">
+    <line x1="250" y1="470" x2="600" y2="540"/>
+    <line x1="600" y1="470" x2="600" y2="540"/>
+    <line x1="960" y1="470" x2="600" y2="540"/>
+  </g>
+
+  <!-- Output -->
+  <rect x="420" y="540" width="360" height="60" rx="10" fill="#2A1F40" stroke="#B490FF" stroke-width="2"/>
+  <text x="600" y="570" text-anchor="middle" fill="#B490FF" font-size="14">Execution Result</text>
+
+  <!-- Notes -->
+  <text x="600" y="605" text-anchor="middle" fill="#9AA6C2" font-size="11">
+    Dynamic routing optimizes cost, latency, and quality per task
+  </text>
+
+</svg>
