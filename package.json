@@ -23,7 +23,7 @@
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && npx rimraf node_modules",
     "verify-phase-1": "tsx scripts/verify-phase-1.ts",
-    "postinstall": "tsx scripts/postinstall.ts"
+    "postinstall": "tsx scripts/postinstall.ts",
     "smoke": "pnpm build && tsx scripts/cross-platform-smoke.ts"
   },
   "devDependencies": {

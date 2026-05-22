@@ -120,6 +120,7 @@ const checks: Check[] = [
   },
 ];
 
+(async () => {
 let failures = 0;
 for (const c of checks) {
   process.stdout.write(`  • ${c.name} ... `);
@@ -139,3 +140,4 @@ if (failures === 0) {
   console.error(`\n✗ ${failures} check(s) failed`);
   process.exit(1);
 }
+})();
