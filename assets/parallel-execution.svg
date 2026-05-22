@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" font-family="Inter, Arial">
+
+  <!-- Background -->
+  <rect width="1200" height="620" fill="#0B1020"/>
+
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" fill="#FFFFFF" font-size="22" font-weight="600">
+    Parallel Multi-Agent Execution Flow
+  </text>
+
+  <!-- Orchestrator -->
+  <rect x="450" y="70" width="300" height="80" rx="12" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="600" y="105" text-anchor="middle" fill="#5EE7DF" font-size="14">Orchestrator</text>
+  <text x="600" y="125" text-anchor="middle" fill="#FFFFFF" font-size="13">Task Decomposition</text>
+
+  <!-- Task Split -->
+  <text x="600" y="170" text-anchor="middle" fill="#9AA6C2" font-size="12">Split into parallel sub-tasks</text>
+
+  <!-- Lines to agents -->
+  <g stroke="#5EE7DF" stroke-width="2">
+    <line x1="600" y1="150" x2="200" y2="230"/>
+    <line x1="600" y1="150" x2="600" y2="230"/>
+    <line x1="600" y1="150" x2="1000" y2="230"/>
+  </g>
+
+  <!-- Agents -->
+  <!-- Agent 1 -->
+  <rect x="120" y="230" width="160" height="100" rx="10" fill="#141B33" stroke="#5EE7DF"/>
+  <text x="200" y="260" text-anchor="middle" fill="#5EE7DF">Agent A</text>
+  <text x="200" y="285" text-anchor="middle" fill="#FFFFFF" font-size="12">Planner</text>
+
+  <!-- Agent 2 -->
+  <rect x="520" y="230" width="160" height="100" rx="10" fill="#141B33" stroke="#5EE7DF"/>
+  <text x="600" y="260" text-anchor="middle" fill="#5EE7DF">Agent B</text>
+  <text x="600" y="285" text-anchor="middle" fill="#FFFFFF" font-size="12">Executor</text>
+
+  <!-- Agent 3 -->
+  <rect x="920" y="230" width="160" height="100" rx="10" fill="#141B33" stroke="#5EE7DF"/>
+  <text x="1000" y="260" text-anchor="middle" fill="#5EE7DF">Agent C</text>
+  <text x="1000" y="285" text-anchor="middle" fill="#FFFFFF" font-size="12">Reviewer</text>
+
+  <!-- Skills layer -->
+  <text x="600" y="360" text-anchor="middle" fill="#9AA6C2" font-size="12">
+    Each agent invokes skills independently
+  </text>
+
+  <!-- Lines down -->
+  <g stroke="#5EE7DF" stroke-width="2">
+    <line x1="200" y1="330" x2="200" y2="380"/>
+    <line x1="600" y1="330" x2="600" y2="380"/>
+    <line x1="1000" y1="330" x2="1000" y2="380"/>
+  </g>
+
+  <!-- Skills -->
+  <rect x="130" y="380" width="140" height="60" rx="8" fill="#1E2A55"/>
+  <text x="200" y="415" text-anchor="middle" fill="#fff">Skills A</text>
+
+  <rect x="530" y="380" width="140" height="60" rx="8" fill="#1E2A55"/>
+  <text x="600" y="415" text-anchor="middle" fill="#fff">Skills B</text>
+
+  <rect x="930" y="380" width="140" height="60" rx="8" fill="#1E2A55"/>
+  <text x="1000" y="415" text-anchor="middle" fill="#fff">Skills C</text>
+
+  <!-- Merge -->
+  <text x="600" y="470" text-anchor="middle" fill="#9AA6C2" font-size="12">
+    Orchestrator aggregates results
+  </text>
+
+  <g stroke="#B490FF" stroke-width="2">
+    <line x1="200" y1="440" x2="600" y2="510"/>
+    <line x1="600" y1="440" x2="600" y2="510"/>
+    <line x1="1000" y1="440" x2="600" y2="510"/>
+  </g>
+
+  <!-- Final -->
+  <rect x="450" y="510" width="300" height="70" rx="10" fill="#2A1F40" stroke="#B490FF"/>
+  <text x="600" y="540" text-anchor="middle" fill="#B490FF">Final Output</text>
+  <text x="600" y="560" text-anchor="middle" fill="#FFFFFF" font-size="12">
+    Synthesized Result
+  </text>
+</svg>
