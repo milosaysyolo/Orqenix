@@ -1,0 +1,29 @@
+name: Feature request
+description: Suggest an enhancement or new capability
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Target phase
+      options:
+        - Phase 2 (Capability)
+        - Phase 3 (Context optimization)
+        - Phase 4 (Knowledge layer)
+        - Phase 5 (Cluster)
+        - Phase 6 (Web UI)
+        - Phase 7 (Distribution)
+        - Later
+        - Unknown
