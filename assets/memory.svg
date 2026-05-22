@@ -1,58 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
 
   <rect width="1200" height="600" fill="#0B1020"/>
 
-  <!-- Title -->
-  <text x="600" y="40" fill="#ffffff" text-anchor="middle" font-size="20">
-    Memory & Context Pruning
+  <text x="600" y="40" text-anchor="middle" fill="#ffffff" font-size="20">
+    Memory &amp; Context Pruning
   </text>
 
   <!-- Raw Context -->
-  <rect x="80" y="220" width="180" height="80" fill="#141B33" stroke="#FF8C42"/>
-  <text x="170" y="250" fill="#FF8C42" text-anchor="middle" font-size="14">Raw Context</text>
-  <text x="170" y="270" fill="#ffffff" text-anchor="middle" font-size="12">Full history</text>
+  <rect x="80" y="220" width="180" height="80" fill="#141B33" stroke="#FF8C42" stroke-width="2"/>
+  <text x="170" y="250" text-anchor="middle" fill="#FF8C42" font-size="14">Raw Context</text>
+  <text x="170" y="270" text-anchor="middle" fill="#ffffff" font-size="12">Full history</text>
 
   <!-- Filter -->
-  <rect x="360" y="200" width="200" height="120" fill="#1E2A55" stroke="#5EE7DF"/>
-  <text x="460" y="235" fill="#5EE7DF" text-anchor="middle" font-size="14">Filter</text>
-  <text x="460" y="260" fill="#ffffff" text-anchor="middle" font-size="12">Remove noise</text>
+  <rect x="340" y="200" width="220" height="120" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="450" y="240" text-anchor="middle" fill="#5EE7DF" font-size="14">Filter</text>
+  <text x="450" y="265" text-anchor="middle" fill="#ffffff" font-size="12">Remove noise</text>
 
   <!-- Compression -->
-  <rect x="660" y="200" width="200" height="120" fill="#1E2A55" stroke="#3AD29F"/>
-  <text x="760" y="235" fill="#3AD29F" text-anchor="middle" font-size="14">Compression</text>
-  <text x="760" y="260" fill="#ffffff" text-anchor="middle" font-size="12">Extract signals</text>
+  <rect x="620" y="200" width="220" height="120" fill="#1E2A55" stroke="#3AD29F" stroke-width="2"/>
+  <text x="730" y="240" text-anchor="middle" fill="#3AD29F" font-size="14">Compression</text>
+  <text x="730" y="265" text-anchor="middle" fill="#ffffff" font-size="12">Extract signal</text>
 
-  <!-- Model Input -->
-  <rect x="960" y="220" width="180" height="80" fill="#1E2A55" stroke="#5EE7DF"/>
-  <text x="1050" y="250" fill="#5EE7DF" text-anchor="middle" font-size="14">Model Input</text>
-  <text x="1050" y="270" fill="#ffffff" text-anchor="middle" font-size="12">High signal</text>
+  <!-- Model -->
+  <rect x="900" y="220" width="200" height="80" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="1000" y="250" text-anchor="middle" fill="#5EE7DF" font-size="14">Model Input</text>
+  <text x="1000" y="270" text-anchor="middle" fill="#ffffff" font-size="12">Clean context</text>
 
   <!-- Lines -->
-  <line x1="260" y1="260" x2="360" y2="260" stroke="#5EE7DF"/>
-  <line x1="560" y1="260" x2="660" y2="260" stroke="#5EE7DF"/>
-  <line x1="860" y1="260" x2="960" y2="260" stroke="#5EE7DF"/>
+  <line x1="260" y1="260" x2="340" y2="260" stroke="#5EE7DF" stroke-width="2"/>
+  <line x1="560" y1="260" x2="620" y2="260" stroke="#5EE7DF" stroke-width="2"/>
+  <line x1="840" y1="260" x2="900" y2="260" stroke="#5EE7DF" stroke-width="2"/>
 
-  <!-- Memory Layer -->
-  <rect x="200" y="420" width="200" height="60" fill="#141B33" stroke="#5EE7DF"/>
-  <text x="300" y="455" fill="#5EE7DF" text-anchor="middle" font-size="12">Short-term</text>
+  <!-- Memory layer -->
+  <rect x="250" y="420" width="180" height="60" fill="#141B33" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="340" y="455" text-anchor="middle" fill="#5EE7DF" font-size="12">Short-term</text>
 
-  <rect x="450" y="420" width="200" height="60" fill="#141B33" stroke="#B490FF"/>
-  <text x="550" y="455" fill="#B490FF" text-anchor="middle" font-size="12">Long-term</text>
+  <rect x="510" y="420" width="180" height="60" fill="#141B33" stroke="#B490FF" stroke-width="2"/>
+  <text x="600" y="455" text-anchor="middle" fill="#B490FF" font-size="12">Long-term</text>
 
-  <rect x="700" y="420" width="200" height="60" fill="#141B33" stroke="#3AD29F"/>
-  <text x="800" y="455" fill="#3AD29F" text-anchor="middle" font-size="12">RAG</text>
+  <rect x="770" y="420" width="180" height="60" fill="#141B33" stroke="#3AD29F" stroke-width="2"/>
+  <text x="860" y="455" text-anchor="middle" fill="#3AD29F" font-size="12">RAG</text>
 
-  <!-- Dashed lines -->
-  <line x1="300" y1="420" x2="460" y2="320" stroke="#888888" stroke-dasharray="4"/>
-  <line x1="550" y1="420" x2="760" y2="320" stroke="#888888" stroke-dasharray="4"/>
-  <line x1="800" y1="420" x2="760" y2="320" stroke="#888888" stroke-dasharray="4"/>
+  <!-- Dotted lines -->
+  <line x1="340" y1="420" x2="450" y2="320" stroke="#888888" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="600" y1="420" x2="730" y2="320" stroke="#888888" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="860" y1="420" x2="730" y2="320" stroke="#888888" stroke-width="2" stroke-dasharray="5,5"/>
 
-  <!-- Comparison -->
-  <text x="300" y="550" text-anchor="middle" fill="#FF6B6B" font-size="12">
+  <!-- Compare -->
+  <text x="300" y="560" text-anchor="middle" fill="#FF6B6B" font-size="12">
     Without pruning: large context
   </text>
 
-  <text x="900" y="550" text-anchor="middle" fill="#3AD29F" font-size="12">
+  <text x="900" y="560" text-anchor="middle" fill="#3AD29F" font-size="12">
     With pruning: efficient context
   </text>
 
