@@ -1,9 +1,18 @@
-
 <div align="center">
 
 <img src="assets/banner.svg" alt="Orqenix Banner" width="100%" />
 
-**A structured runtime and control plane for multi-agent AI systems.**
+</div>
+
+<div align="center">
+
+# 🌀 Orqenix
+
+</div>
+
+**The control plane for multi-agent AI systems.**
+
+*Orchestrate · Govern · Evolve*
 
 <div align="center">
 
@@ -14,183 +23,332 @@
 
 </div>
 
-## 📖 Contents
-
-| Section | Section |
-|---|---|
-| #-overview | #-positioning |
-| #-vision--mission | #-comparison |
-| #-pain-points | #-roadmap |
-| #-core-concepts | #-contributing |
-| #-architecture | #-status |
-
 ---
 
-## 🌐 Overview
+## ✨ What is Orqenix
 
-Orqenix is an **AI orchestration platform** for composing, governing, and evolving multi-agent systems.
+Orqenix is a runtime and control plane for building multi-agent AI systems that are structured, observable, and safely evolvable.
 
-| Aspect | Description |
+Most teams can run agents. Few can control, scale, and evolve them safely. Orqenix is the layer that solves exactly that.
+
+| Orqenix is | Orqenix is not |
 |---|---|
-| **What it is** | A runtime and control plane for multi-agent AI |
-| **What it solves** | Coordination, governance, controlled evolution |
-| **Who it's for** | Teams building serious multi-agent systems |
-| **What it isn't** | Another single-agent framework |
+| A control plane for multi-agent systems | A prompt chaining library |
+| A governance + orchestration platform | A single-agent runtime |
+| A knowledge + memory backbone | Another agent framework |
 
-> Orqenix turns chaotic agent experimentation into engineered, reviewable, maintainable systems.
+## 🧭 Positioning
 
----
+Orqenix is complementary to existing tools, not a replacement. It sits at a layer most of them skip.
 
-## 🎯 Vision & Mission
-
-| Vision | Mission |
-|---|---|
-| A control plane where multi-agent systems can be composed, governed, and evolved safely at scale. | Provide deterministic orchestration, standardized skills, safe evolution, and cost-aware execution, while staying framework-agnostic. |
-
----
-
-## 💥 Pain Points
-
-| # | Pain Point | Orqenix Response |
+| Layer | Examples | Orqenix Role |
 |---|---|---|
-| 1 | Uncontrolled skill growth | Skill registry, versioning, conflict detection |
-| 2 | Hidden coordination logic | Explicit orchestration with full traceability |
-| 3 | Cost blowups | Dynamic per-task model routing |
-| 4 | Ungoverned learning | Review → validate → promote workflow |
-| 5 | Fragmented memory | Unified MCP-based memory layer |
-| 6 | Vendor lock-in | Plugin and MCP abstractions |
-| 7 | Mixed concerns | Strict separation: Agent vs Skill vs Plugin vs MCP |
+| LLM Providers | OpenAI, Anthropic, local | Consumed via routing |
+| Agent Runtimes | OpenCode, Claude Code, Codex | Coordinated |
+| Agent Frameworks | LangGraph, CrewAI, AutoGen | Complementary |
+| Skill Ecosystems | Superpowers, oh-my-openagent | Standardized inside |
+| **Control Plane** | **Orqenix** | **This is us** |
 
----
+## ⚔️ Feature Comparison
 
-## 🧠 Core Concepts
+| Capability | LangGraph | CrewAI | AutoGen | Superpowers | OMO | **Orqenix** |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Deterministic orchestration | ✅ | ⚠️ | ❌ | ❌ | ⚠️ | ✅ |
+| Skill governance | ❌ | ❌ | ❌ | ⚠️ | ⚠️ | ✅ |
+| Dynamic model routing | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Specialized knowledge bases | ❌ | ❌ | ❌ | ❌ | ⚠️ | ✅ |
+| Context pruning | ❌ | ❌ | ❌ | ❌ | ⚠️ | ✅ |
+| Controlled learning loop | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Runtime-agnostic | ⚠️ | ⚠️ | ⚠️ | ❌ | ❌ | ✅ |
+| Observability-first | ✅ | ⚠️ | ❌ | ❌ | ⚠️ | ✅ |
 
-| Concept | Role |
-|---|---|
-| **Orchestrator** | Decomposes tasks, routes models, manages execution |
-| **Agents** | Specialized, stateless, composable execution units |
-| **Skills** | Versioned, reviewable, reusable capabilities |
-| **Plugins** | Bridge agents to external systems |
-| **MCP** | Standard protocol for memory and tool access |
-| **Memory** | Short-term + long-term + RAG retrieval |
-| **Governance** | Approval, conflict detection, rollback, audit |
+Legend: ✅ first-class · ⚠️ partial · ❌ not supported
+
+## 💥 Pain Points We Solve
+
+| Problem | Typical Systems | Orqenix |
+|---|---|---|
+| Agent chaos | Uncontrolled chat loops | Orchestrated execution |
+| Skill explosion | Unmanaged growth | Versioned + governed registry |
+| Cost blowups | Hardcoded models | Dynamic routing |
+| Learning drift | Unverified updates | Approval pipeline |
+| Token waste | Full context stuffing | Pruning + recall |
+| Debugging pain | Hidden state | Full traceability |
 
 ---
 
 ## 🏗 Architecture
 
+assets/architecture.svgrchitecture" width="100%" />
 
-<div align="center">
+Orqenix follows a layered design with two cross-cutting concerns (Observability and Governance) that span every component.
 
-<img src="assets/architecture.svg" alt="Orqenix Architecture" width="100%" />
-
-</div>
-
-
-### Layer Responsibilities
+<details>
+<summary>📖 Layer breakdown</summary>
 
 | Layer | Responsibility |
 |---|---|
-| **Client Layer** | Entry points: developers, applications, CI/CD, external systems |
-| **Orchestrator Core** | Task decomposition, model routing, execution flow control |
-| **Agents** | Specialized execution units (Planner, Executor, Reviewer, Debugger) |
-| **Skills** | Versioned, reviewable, reusable capabilities |
-| **Plugins** | External bridges to APIs, services, and tools |
-| **MCP** | Standardized protocol for memory and tool access |
-| **Memory Layer** | Short-term context, long-term knowledge, RAG retrieval |
-| **LLM Providers** | Backend models consumed via dynamic routing |
-| **Governance** | Cross-cutting: approval, conflict detection, versioning, audit |
-| **Observability** | Cross-cutting: traces, metrics, logs, error tracking |
+| Client Layer | Entry points: applications, developers, CI/CD |
+| Orchestrator Core | Task decomposition, model routing, execution flow |
+| Agents | Specialized stateless units (Planner, Executor, Reviewer) |
+| Skills | Versioned, reusable capabilities |
+| Plugins | Bridges to external systems |
+| MCP | Standard protocol for tools and context |
+| Memory | Short-term execution + long-term knowledge |
+| Governance | Approval, conflict detection, versioning, audit |
+| Observability | Traces, metrics, logs, error tracking |
 
-### Design Principles
+Each layer is independently replaceable, preserving composability and avoiding lock-in.
+
+</details>
+
+## ⚙️ Execution Model
+
+<img src="assets/parallel-execution.svg" alt="Parallel Execution" width="100%" />
+
+Tasks are decomposed and dispatched in parallel across specialized agents. The orchestrator merges results deterministically, avoiding the unbounded chat loops common in conversational frameworks.
+
+<details>
+<summary>📖 Why parallel execution matters</summary>
+
+- Each agent runs in isolated context
+- Skills are invoked independently per agent
+- No cross-agent prompt pollution
+- Aggregation is deterministic and reviewable
+- Failures are isolated, not cascading
+
+This pattern is what allows Orqenix to scale agent count without scaling chaos.
+
+</details>
+
+## 💬 Agent Communication
+
+assets/agent-communication.svgent Communication" width="100%" />
+
+Agents do not converse freely. The orchestrator owns the communication graph, and peer-to-peer paths are opt-in and bounded.
+
+<details>
+<summary>📖 Why this matters</summary>
+
+Conversational frameworks (such as AutoGen) suffer from:
+
+- Unpredictable termination
+- Hard-to-audit reasoning traces
+- Token cost explosion via repeated debate
+
+Orqenix replaces emergent conversation with designed coordination, keeping the system auditable and bounded.
+
+</details>
+
+## 🧠 Dynamic Model Routing
+
+assets/model-routing.svgodel Routing" width="100%" />
+
+Every task is routed at runtime to the most appropriate model, based on complexity, cost budget, latency, and task type.
+
+<details>
+<summary>📖 How routing decisions are made</summary>
+
+| Signal | Influence |
+|---|---|
+| Complexity | Reasoning power required |
+| Budget | Cost ceiling per task |
+| Latency | Response time targets |
+| Task type | Match model capability profile |
+
+Routing is deterministic, observable, and overridable per skill. This avoids the common pattern of hardcoding expensive models for every sub-task.
+
+</details>
+
+## 📚 Knowledge Base System
+
+assets/kb-system.svgB System" width="100%" />
+
+Orqenix splits knowledge into three specialized KBs, each with its own chunking, compression, and recall strategy. The session never receives raw data, only distilled knowledge.
+
+<details>
+<summary>📖 The three KBs</summary>
+
+| KB | Stores | Used For |
+|---|---|---|
+| **DocsKB** | Specs, RFCs, READMEs, ADRs | Domain and system intent |
+| **CodeKB** | Source, AST, symbols, tests | Implementation awareness |
+| **DecisionKB** | Trade-offs, rationale, outcomes | Consistency over time |
+
+</details>
+
+<details>
+<summary>📖 Ingestion pipeline</summary>
+
+| Stage | Description |
+|---|---|
+| Chunk | Split into semantically meaningful units |
+| Embed | Generate vector representation |
+| Compress | Summarize and remove redundancy |
+| Index | Store with metadata (tags, version, scope) |
+
+Each KB tunes the pipeline differently:
+
+| KB | Chunking | Compression |
+|---|---|---|
+| DocsKB | Section-based | Summarization |
+| CodeKB | Symbol-based | Signature + intent extraction |
+| DecisionKB | Decision record | Context + outcome distillation |
+
+</details>
+
+<details>
+<summary>📖 Session recall flow</summary>
+
+1. Smart Retriever detects task type
+2. Routes query to the relevant KB(s)
+3. Compressor reduces to high-signal content
+4. Context Injector delivers minimal context into the session
+5. Outcomes feed back into DecisionKB
+
+Memory holds the present. Knowledge holds the past. Decisions shape the future.
+
+</details>
+
+## 🛡 Governance Pipeline
+
+<img src="assets/governance.svg" alt="Governance" width="100%" />
+
+Every new capability flows through a controlled pipeline: learning, candidate, review, approval, versioning. Orqenix never auto-promotes a skill into the active registry.
+
+<details>
+<summary>📖 Governance in detail</summary>
+
+| Stage | Purpose |
+|---|---|
+| Observation | Capture execution patterns |
+| Candidate | Extract reusable capability |
+| Review | Human or automated validation |
+| Conflict Check | Detect overlap with existing skills |
+| Approval | Promote into registry |
+| Versioning | Manage lifecycle and rollback |
+
+This is the layer that prevents silent quality degradation as the system grows.
+
+</details>
+
+## 🔁 Skill Lifecycle
+
+assets/skill-lifecycle.svgkill Lifecycle" width="100%" />
+
+Skills move through clear states with explicit transitions. Nothing enters production without passing review.
+
+<details>
+<summary>📖 Lifecycle states</summary>
+
+| State | Meaning |
+|---|---|
+| Draft | Proposed, not yet validated |
+| Review | Under evaluation |
+| Approved | Validated and signed off |
+| Versioned | Released into registry |
+| Deprecated | Replaced or retired |
+| Removed | Fully removed with audit trail |
+
+</details>
+
+## 🔄 Execution Sequence
+
+assets/sequence.svg" alt="Execution Sequence" width="100%" />
+
+A clean, observable pipeline from request to response. Each step is traceable and replayable.
+
+<details>
+<summary>📖 What happens at each step</summary>
+
+1. Client submits a task
+2. Orchestrator selects and assigns agents
+3. Agents invoke skills as needed
+4. Skills call into MCP for context and tools
+5. MCP pulls from memory and routes to LLM
+6. Results bubble back through the chain
+7. Orchestrator synthesizes the final response
+
+</details>
+
+## 🌐 System Lifecycle
+
+assets/system-lifecycle.svgstem Lifecycle" width="100%" />
+
+The full closed loop: execute, observe, learn, validate, promote, reuse. This is what turns Orqenix from a runtime into a system that improves itself, safely.
+
+<details>
+<summary>📖 Why this loop matters</summary>
+
+Most agent stacks stop at execution. Orqenix closes the loop with governance and knowledge persistence, so every execution strengthens the system rather than producing throwaway output.
+
+| Step | Effect |
+|---|---|
+| Execute | Produce result |
+| Observe | Capture signal |
+| Learn | Generate candidate skill |
+| Validate | Govern quality |
+| Promote | Register safely |
+| Reuse | Apply on next task |
+
+</details>
+
+---
+
+## 🚀 Roadmap
+
+Phase-based, not time-based.
+
+| Phase | Theme | Key Outcomes |
+|---|---|---|
+| 1 | Foundation Runtime | Orchestrator loop, agent abstraction, MCP basics |
+| 2 | Skill System | Registry, execution pipeline, discovery |
+| 3 | Governance | Approval workflow, conflict detection, rollback |
+| 4 | Advanced Orchestration | Dynamic routing, parallel execution |
+| 5 | Plugin Ecosystem | External integrations, secure execution |
+| 6 | Learning Loop | Observation, candidate, validation, promotion |
+| 7 | Organization Layer | Agent teams, roles, delegation |
+| 8 | Platformization | UI, dashboards, deployment models |
+
+## 🤝 Contributing
+
+We are building Orqenix for long-term system design, not quick hacks. Contributions are welcome from anyone aligned with these principles.
 
 | Principle | Meaning |
 |---|---|
 | Deterministic | Predictable, traceable behavior |
 | Composable | Small, replaceable parts |
 | Governed | Capabilities are reviewable |
-| Cost-aware | Efficiency is a first-class concern |
-| Separated | Clear boundaries across layers |
+| Cost-aware | Efficiency is first-class |
 | Observable | No hidden behavior |
 
----
-
-## 🧭 Positioning
-
-| Layer | Examples | Orqenix Role |
-|---|---|---|
-| LLM Providers | OpenAI, Anthropic, local models | Consumed via routing |
-| Agent Runtimes | OpenCode, Claude Code, Codex | Coordinated |
-| Agent Frameworks | LangGraph, CrewAI, AutoGen | Complementary |
-| Skill Ecosystems | Superpowers, oh-my-openagent | Standardized inside |
-| **Control Plane** | **Orqenix** | **Where Orqenix lives** |
-
----
-
-## ⚔️ Comparison
-
-| Solution | Strength | Gap Orqenix Fills |
-|---|---|---|
-| **LangGraph** | Graph-based deterministic workflows 【1-9c9683】 | No skill system, governance, or evolution |
-| **CrewAI** | Fast prototyping, role-based teams【1-9c9683】 | Lacks fine-grained control and governance |
-| **AutoGen / MS Agent Framework** | Conversational collaboration【2-f3a6dc】 | Hard to audit, hard to terminate |
-| **Superpowers** | Skills as composable files【3-a1e6b7】 | Single-agent methodology only |
-| **OMO / OpenCode Orchestrator** | Multi-model harness 【4-2ced76】【5-c576ca】 | Tied to one runtime |
-| **Claude Squad / Conductor / Astro** | Parallel coding execution【6-99ed01】【7-4ac0e9】 | No governance, no platform layer |
-
-### Where Orqenix Uniquely Sits
-
-| Others optimize for | Orqenix optimizes for |
-|---|---|
-| Workflow control | Multi-agent orchestration |
-| Role-based prototyping | Skill and plugin governance |
-| Conversational collaboration | Controlled evolution |
-| Single-runtime extension | Runtime-agnostic composition |
-| Parallel execution | Platform-level discipline |
-
----
-
-## 🚀 Roadmap
-
-> Phase-based, not time-based.
-
-| Phase | Theme | Key Outcomes |
-|---|---|---|
-| **1. Foundation Runtime** | Stable orchestration core | Orchestrator loop, agent abstraction, MCP basics |
-| **2. Skill System** | Standardized capabilities | Skill registry, execution pipeline, discovery |
-| **3. Governance** | Controlled evolution | Approval workflow, conflict detection, rollback |
-| **4. Advanced Orchestration** | Performance & cost | Dynamic model routing, parallel execution |
-| **5. Plugin Ecosystem** | Real-world integration | Plugin interface, secure execution |
-| **6. Learning Loop** | Safe self-improvement | Observation → candidate → validation → promotion |
-| **7. Organization Layer** | Teams of agents | Roles, hierarchies, delegation |
-| **8. Platformization** | Full platform maturity | UI, dashboards, import/export, deployment |
-
----
-
-## 🤝 Contributing
-
-Orqenix is in an early architectural phase. Contributions are welcome, but must align with the project's principles.
-
-### Contribution Types
-
-| Type | Examples |
-|---|---|
-| **Code** | Orchestrator, agents, skills, plugins, MCP, observability |
-| **Design** | RFCs, architecture proposals, skill spec refinements |
-| **Documentation** | Concepts, tutorials, diagrams, patterns |
-| **Quality** | Tests, benchmarks, reproductions, bug reports |
-
-### Workflow
+<details>
+<summary>📖 Contribution workflow</summary>
 
 | Step | Action |
 |---|---|
-| 1 | Open an issue first for non-trivial work |
-| 2 | Fork and create a clear branch (`feature/...`, `fix/...`, `docs/...`) |
-| 3 | Keep changes scoped, documented, and tested |
-| 4 | Open a PR with problem, approach, trade-offs, evidence |
+| 1 | Open an issue for non-trivial work |
+| 2 | Fork and branch (`feature/...`, `fix/...`, `docs/...`) |
+| 3 | Keep changes scoped, documented, tested |
+| 4 | Open a PR with problem, approach, and trade-offs |
 | 5 | Pass review focused on alignment with principles |
 
-### Quality Bar
+</details>
+
+<details>
+<summary>📖 Contribution types</summary>
+
+| Type | Examples |
+|---|---|
+| Code | Orchestrator, agents, skills, plugins, MCP |
+| Design | RFCs, architecture proposals, skill spec |
+| Documentation | Concepts, tutorials, diagrams |
+| Quality | Tests, benchmarks, bug reports |
+
+</details>
+
+<details>
+<summary>📖 Quality bar</summary>
 
 | Requirement | Standard |
 |---|---|
@@ -200,25 +358,21 @@ Orqenix is in an early architectural phase. Contributions are welcome, but must 
 | Documentation | Required for new concepts |
 | Tests | Required on critical paths |
 
-### Working on Skills
+</details>
 
-| Step | Description |
+<details>
+<summary>📖 Priority right now</summary>
+
+| Priority | Area |
 |---|---|
-| Draft | Define scope, boundaries, conflicts |
-| Review | Maintainer + automated checks |
-| Approved | Versioned and promoted |
-| Deprecated | Replaced or removed with audit trail |
+| 🔴 High | Orchestrator core, skill spec, KB schema |
+| 🟡 Medium | Governance, routing, observability |
+| 🟢 Open | Docs, examples, integrations |
 
-### Working on the Orchestrator Core
+</details>
 
-| Requirement | Reason |
-|---|---|
-| No hidden control flow | Predictability |
-| Observability hooks | Debuggability |
-| Clean extension points | Long-term composability |
-| Design proposal required | Sensitive surface area |
-
-### RFC Template
+<details>
+<summary>📖 RFC template</summary>
 
 | Section | Purpose |
 |---|---|
@@ -229,23 +383,18 @@ Orqenix is in an early architectural phase. Contributions are welcome, but must 
 | Risks | Trade-offs and unknowns |
 | Impact | Effect on existing components |
 
-### Code of Conduct
+</details>
+
+<details>
+<summary>📖 Code of Conduct</summary>
 
 | Do | Don't |
 |---|---|
-| Be respectful, constructive, async | Harass, discriminate, attack individuals |
+| Be respectful and constructive | Harass or attack individuals |
 | Focus on ideas | Be hostile in disagreement |
 | Assume good intent | Make assumptions about identity |
 
-### What We Need Right Now
-
-| Priority | Area |
-|---|---|
-| 🔴 High | Architectural feedback, skill spec refinement |
-| 🟡 Medium | Orchestrator core foundations, documentation |
-| 🟢 Open | Reference implementations, tests, examples |
-
----
+</details>
 
 ## 📌 Status
 
@@ -255,13 +404,16 @@ Orqenix is in an early architectural phase. Contributions are welcome, but must 
 | Architectural concepts | ✅ Defined |
 | Orchestrator core | 🚧 In progress |
 | Skill system | 🚧 In progress |
+| KB system | 🚧 In progress |
 | Governance layer | 🔜 Planned |
 | Plugin ecosystem | 🔜 Planned |
 | Learning loop | 🔜 Planned |
 | Platformization | 🔜 Planned |
 
----
+## ✅ Summary
 
-<div align="center">
+Orqenix solves the real bottleneck of modern AI systems.
 
-**Orqenix · Built to last. Designed to evolve. Governed by principle.**
+Not intelligence. **Coordination, knowledge, and controlled evolution.**
+
+Built to scale agents. Designed to control them. Engineered to evolve safely.
