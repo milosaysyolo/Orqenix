@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1020"/>
+      <stop offset="50%" stop-color="#141B33"/>
+      <stop offset="100%" stop-color="#1E2A55"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5EE7DF"/>
+      <stop offset="100%" stop-color="#B490FF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5EE7DF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#5EE7DF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  <circle cx="200" cy="150" r="220" fill="url(#glow)"/>
+
+  <!-- Orbit rings -->
+  <g transform="translate(200,150)" fill="none" stroke="url(#accent)" stroke-width="1.5" opacity="0.7">
+    <ellipse rx="110" ry="40" transform="rotate(20)"/>
+    <ellipse rx="110" ry="40" transform="rotate(-30)"/>
+    <ellipse rx="110" ry="40" transform="rotate(80)"/>
+  </g>
+
+  <!-- Center core -->
+  <g transform="translate(200,150)">
+    <circle r="28" fill="#0B1020" stroke="url(#accent)" stroke-width="2.5"/>
+    <circle r="8" fill="url(#accent)"/>
+  </g>
+
+  <!-- Nodes -->
+  <g fill="url(#accent)">
+    <circle cx="305" cy="115" r="5"/>
+    <circle cx="100" cy="180" r="5"/>
+    <circle cx="240" cy="220" r="5"/>
+    <circle cx="160" cy="80"  r="5"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(420,150)" fill="#FFFFFF" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="0" y="0" font-size="84" font-weight="700" letter-spacing="-2">
+      Orqenix
+    </text>
+    <text x="4" y="40" font-size="18" font-weight="400" fill="#9AA6C2" letter-spacing="2">
+      ORCHESTRATE  ·  GOVERN  ·  EVOLVE
+    </text>
+  </g>
+
+  <!-- Bottom accent line -->
+  <rect x="420" y="190" width="540" height="2" fill="url(#accent)" opacity="0.8"/>
+</svg>
