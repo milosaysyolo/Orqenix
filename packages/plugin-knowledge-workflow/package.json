@@ -1,0 +1,32 @@
+{
+  "name": "@orqenix/plugin-knowledge-workflow",
+  "version": "0.2.0-dev",
+  "description": "Agent-agnostic knowledge workflow: pre-task briefing + post-task reindex",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "clean": "npx rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@orqenix/core": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

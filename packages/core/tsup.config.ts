@@ -7,6 +7,7 @@ export default defineConfig({
     "src/config/index.ts",
     "src/storage/index.ts",
     "src/sync/index.ts",
+    "src/plugin/index.ts",
   ],
   format: ["esm", "cjs"],
   dts: true,

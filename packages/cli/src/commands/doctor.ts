@@ -2,7 +2,7 @@ import { defineCommand } from "citty";
 import consola from "consola";
 import kleur from "kleur";
 import { existsSync } from "node:fs";
-import { mkdir, writeFile, unlink } from "node:fs/promises";
+import { mkdir, writeFile, unlink, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { createServer } from "node:net";
 import { spawnSync } from "node:child_process";
@@ -128,6 +128,29 @@ async function checkSyncDrift(cwd: string): Promise<CheckResult> {
   }
 }
 
+async function checkPlugins(cwd: string): Promise<CheckResult> {
+  try {
+    const opencodePath = join(cwd, "opencode.json");
+    if (!existsSync(opencodePath)) {
+      return { name: "plugins", status: "warn", detail: "no opencode.json" };
+    }
+    const oc = JSON.parse(await readFile(opencodePath, "utf-8"));
+    const npmPlugins = Array.isArray(oc.plugin) ? (oc.plugin as string[]) : [];
+    const { PluginHost } = await import("@orqenix/plugin-host");
+    const host = new PluginHost({ projectRoot: cwd, npmPlugins });
+    await host.start();
+    const loaded = host.registry.list();
+    await host.stop();
+    return {
+      name: "plugins",
+      status: "ok",
+      detail: `${loaded.length} loaded`,
+    };
+  } catch (err) {
+    return { name: "plugins", status: "warn", detail: String(err) };
+  }
+}
+
 export const doctor = defineCommand({
   meta: { name: "doctor", description: "Diagnose your Orqenix installation" },
   args: {
@@ -147,6 +170,7 @@ export const doctor = defineCommand({
     results.push(await checkGitRepo());
     results.push(await checkScope());
     results.push(await checkSyncDrift(args.cwd));
+    results.push(await checkPlugins(args.cwd));
 
     let ok = 0,
       warn = 0,

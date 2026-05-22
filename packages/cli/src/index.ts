@@ -5,11 +5,13 @@ import { configCmd } from "./commands/config.js";
 import { scopeCmd } from "./commands/scope.js";
 import { teamCmd } from "./commands/team.js";
 import { syncCmd } from "./commands/sync.js";
+import { pluginCmd } from "./commands/plugin.js";
+import { mcpCmd } from "./commands/mcp.js";
 
 const main = defineCommand({
   meta: {
     name: "orqenix",
-    version: "0.1.0-dev",
+    version: "0.2.0-dev",
     description: "Primary-agent orchestration engine",
   },
   subCommands: {
@@ -19,6 +21,8 @@ const main = defineCommand({
     scope: scopeCmd,
     team: teamCmd,
     sync: syncCmd,
+    plugin: pluginCmd,
+    mcp: mcpCmd,
   },
 });
 

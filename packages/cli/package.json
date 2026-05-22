@@ -22,6 +22,8 @@
   "dependencies": {
     "@inquirer/prompts": "^7.0.0",
     "@orqenix/core": "workspace:*",
+    "@orqenix/plugin-host": "workspace:*",
+    "@orqenix/mcp-server": "workspace:*",
     "citty": "^0.1.6",
     "cli-table3": "^0.6.5",
     "consola": "^3.2.3",

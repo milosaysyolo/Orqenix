@@ -57,6 +57,9 @@ jobs:
       - name: Verify Phase 1
         run: pnpm verify-phase-1
 
+      - name: Verify Phase 2
+        run: pnpm verify-phase-2
+
       # ✅ Optional but highly valuable
       - name: Smoke test (integration)
         run: pnpm smoke

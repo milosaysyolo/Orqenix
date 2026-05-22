@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/core",
-  "version": "0.1.0-dev",
+  "version": "0.2.0-dev",
   "description": "Orqenix core runtime: scope, config, storage, sync engine",
   "license": "Apache-2.0",
   "type": "module",
@@ -28,6 +28,10 @@
     "./sync": {
       "import": "./dist/sync/index.js",
       "types": "./dist/sync/index.d.ts"
+    },
+    "./plugin": {
+      "import": "./dist/plugin/index.js",
+      "types": "./dist/plugin/index.d.ts"
     }
   },
   "files": [
