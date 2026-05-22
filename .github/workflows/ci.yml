@@ -42,8 +42,7 @@ jobs:
       - name: Setup Windows build env
         if: runner.os == 'Windows'
         run: |
-          npm config set msvs_version 2022
-          npm config set python python3
+          echo "Skipping manual MSVC setup (node-gyp auto-detect)"
         shell: powershell
 
       - name: Install dependencies
