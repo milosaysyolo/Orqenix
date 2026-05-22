@@ -7,12 +7,9 @@ import type {
   MemoryQuery,
   OrqenixPlugin,
   PluginContext,
-  PluginHookName,
   PluginHooks,
-  Session,
   Task,
   TaskResult,
-  ToolInput,
   ToolOutput,
 } from "./types.js";
 
