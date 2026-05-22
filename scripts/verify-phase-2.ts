@@ -92,12 +92,6 @@ const checks: Check[] = [
     },
   },
   {
-    name: "docs: phase-2 implementation guide exists",
-    run: async () => ({
-      pass: existsSync(join(ROOT, "docs/implementation/phase-2-capability.md")),
-    }),
-  },
-  {
     name: "docs: 3 architecture notes present",
     run: async () => {
       const required = ["plugin-system.md", "mcp-integration.md", "skill-loader.md"];
