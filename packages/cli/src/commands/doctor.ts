@@ -9,10 +9,7 @@ import { spawnSync } from "node:child_process";
 import { detectGitInfo, detectSession, generateScopeId } from "@orqenix/core/scope";
 import { loadConfig } from "@orqenix/core/config";
 import { SyncEngine } from "@orqenix/core/sync";
-import {
-  orqenixGlobalConfigDir,
-  orqenixDataDir,
-} from "@orqenix/core";
+import { orqenixGlobalConfigDir, orqenixDataDir } from "@orqenix/core";
 
 interface CheckResult {
   name: string;
@@ -44,7 +41,11 @@ async function checkPnpm(): Promise<CheckResult> {
 async function checkGit(): Promise<CheckResult> {
   const r = spawnSync("git", ["--version"], { encoding: "utf-8" });
   if (r.status !== 0) {
-    return { name: "git", status: "warn", detail: "system git not found (isomorphic-git fallback ok)" };
+    return {
+      name: "git",
+      status: "warn",
+      detail: "system git not found (isomorphic-git fallback ok)",
+    };
   }
   return { name: (r.stdout ?? "git").trim(), status: "ok" };
 }
@@ -147,10 +148,16 @@ export const doctor = defineCommand({
     results.push(await checkScope());
     results.push(await checkSyncDrift(args.cwd));
 
-    let ok = 0, warn = 0, fail = 0;
+    let ok = 0,
+      warn = 0,
+      fail = 0;
     for (const r of results) {
       const icon =
-        r.status === "ok" ? kleur.green("✓") : r.status === "warn" ? kleur.yellow("⚠") : kleur.red("✗");
+        r.status === "ok"
+          ? kleur.green("✓")
+          : r.status === "warn"
+            ? kleur.yellow("⚠")
+            : kleur.red("✗");
       consola.log(`  ${icon} ${r.name}${r.detail ? kleur.gray(`  (${r.detail})`) : ""}`);
       if (r.status === "ok") ok++;
       else if (r.status === "warn") warn++;

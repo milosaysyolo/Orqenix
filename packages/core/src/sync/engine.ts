@@ -101,11 +101,7 @@ export class SyncEngine {
       await mkdir(outputDirAbs, { recursive: true });
     }
 
-    const allAgents = [
-      manifest.teamLead,
-      ...manifest.agents.core,
-      ...manifest.agents.optional,
-    ];
+    const allAgents = [manifest.teamLead, ...manifest.agents.core, ...manifest.agents.optional];
 
     for (const decl of allAgents) {
       const sourcePath = join(teamDir, decl.file);

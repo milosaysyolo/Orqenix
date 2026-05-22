@@ -7,7 +7,12 @@
   "bin": {
     "orqenix": "./bin/orqenix.js"
   },
-  "files": ["bin", "dist", "README.md", "LICENSE"],
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",

@@ -12,7 +12,7 @@
 
 **The control plane for multi-agent AI systems.**
 
-*Orchestrate · Govern · Evolve*
+_Orchestrate · Govern · Evolve_
 
 <div align="center">
 
@@ -31,49 +31,49 @@ Orqenix is a runtime and control plane for building multi-agent AI systems that 
 
 Most teams can run agents. Few can control, scale, and evolve them safely. Orqenix is the layer that solves exactly that.
 
-| Orqenix is | Orqenix is not |
-|---|---|
+| Orqenix is                              | Orqenix is not            |
+| --------------------------------------- | ------------------------- |
 | A control plane for multi-agent systems | A prompt chaining library |
-| A governance + orchestration platform | A single-agent runtime |
-| A knowledge + memory backbone | Another agent framework |
+| A governance + orchestration platform   | A single-agent runtime    |
+| A knowledge + memory backbone           | Another agent framework   |
 
 ## 🧭 Positioning
 
 Orqenix is complementary to existing tools, not a replacement. It sits at a layer most of them skip.
 
-| Layer | Examples | Orqenix Role |
-|---|---|---|
-| LLM Providers | OpenAI, Anthropic, local | Consumed via routing |
-| Agent Runtimes | OpenCode, Claude Code, Codex | Coordinated |
-| Agent Frameworks | LangGraph, CrewAI, AutoGen | Complementary |
-| Skill Ecosystems | Superpowers, oh-my-openagent | Standardized inside |
-| **Control Plane** | **Orqenix** | **This is us** |
+| Layer             | Examples                     | Orqenix Role         |
+| ----------------- | ---------------------------- | -------------------- |
+| LLM Providers     | OpenAI, Anthropic, local     | Consumed via routing |
+| Agent Runtimes    | OpenCode, Claude Code, Codex | Coordinated          |
+| Agent Frameworks  | LangGraph, CrewAI, AutoGen   | Complementary        |
+| Skill Ecosystems  | Superpowers, oh-my-openagent | Standardized inside  |
+| **Control Plane** | **Orqenix**                  | **This is us**       |
 
 ## ⚔️ Feature Comparison
 
-| Capability | LangGraph | CrewAI | AutoGen | Superpowers | OMO | **Orqenix** |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| Deterministic orchestration | ✅ | ⚠️ | ❌ | ❌ | ⚠️ | ✅ |
-| Skill governance | ❌ | ❌ | ❌ | ⚠️ | ⚠️ | ✅ |
-| Dynamic model routing | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| Specialized knowledge bases | ❌ | ❌ | ❌ | ❌ | ⚠️ | ✅ |
-| Context pruning | ❌ | ❌ | ❌ | ❌ | ⚠️ | ✅ |
-| Controlled learning loop | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Runtime-agnostic | ⚠️ | ⚠️ | ⚠️ | ❌ | ❌ | ✅ |
-| Observability-first | ✅ | ⚠️ | ❌ | ❌ | ⚠️ | ✅ |
+| Capability                  | LangGraph | CrewAI | AutoGen | Superpowers | OMO | **Orqenix** |
+| --------------------------- | :-------: | :----: | :-----: | :---------: | :-: | :---------: |
+| Deterministic orchestration |    ✅     |   ⚠️   |   ❌    |     ❌      | ⚠️  |     ✅      |
+| Skill governance            |    ❌     |   ❌   |   ❌    |     ⚠️      | ⚠️  |     ✅      |
+| Dynamic model routing       |    ❌     |   ❌   |   ❌    |     ❌      | ✅  |     ✅      |
+| Specialized knowledge bases |    ❌     |   ❌   |   ❌    |     ❌      | ⚠️  |     ✅      |
+| Context pruning             |    ❌     |   ❌   |   ❌    |     ❌      | ⚠️  |     ✅      |
+| Controlled learning loop    |    ❌     |   ❌   |   ❌    |     ❌      | ❌  |     ✅      |
+| Runtime-agnostic            |    ⚠️     |   ⚠️   |   ⚠️    |     ❌      | ❌  |     ✅      |
+| Observability-first         |    ✅     |   ⚠️   |   ❌    |     ❌      | ⚠️  |     ✅      |
 
 Legend: ✅ first-class · ⚠️ partial · ❌ not supported
 
 ## 💥 Pain Points We Solve
 
-| Problem | Typical Systems | Orqenix |
-|---|---|---|
-| Agent chaos | Uncontrolled chat loops | Orchestrated execution |
-| Skill explosion | Unmanaged growth | Versioned + governed registry |
-| Cost blowups | Hardcoded models | Dynamic routing |
-| Learning drift | Unverified updates | Approval pipeline |
-| Token waste | Full context stuffing | Pruning + recall |
-| Debugging pain | Hidden state | Full traceability |
+| Problem         | Typical Systems         | Orqenix                       |
+| --------------- | ----------------------- | ----------------------------- |
+| Agent chaos     | Uncontrolled chat loops | Orchestrated execution        |
+| Skill explosion | Unmanaged growth        | Versioned + governed registry |
+| Cost blowups    | Hardcoded models        | Dynamic routing               |
+| Learning drift  | Unverified updates      | Approval pipeline             |
+| Token waste     | Full context stuffing   | Pruning + recall              |
+| Debugging pain  | Hidden state            | Full traceability             |
 
 ---
 
@@ -86,17 +86,17 @@ Orqenix follows a layered design with two cross-cutting concerns (Observability 
 <details>
 <summary>📖 Layer breakdown</summary>
 
-| Layer | Responsibility |
-|---|---|
-| Client Layer | Entry points: applications, developers, CI/CD |
-| Orchestrator Core | Task decomposition, model routing, execution flow |
-| Agents | Specialized stateless units (Planner, Executor, Reviewer) |
-| Skills | Versioned, reusable capabilities |
-| Plugins | Bridges to external systems |
-| MCP | Standard protocol for tools and context |
-| Memory | Short-term execution + long-term knowledge |
-| Governance | Approval, conflict detection, versioning, audit |
-| Observability | Traces, metrics, logs, error tracking |
+| Layer             | Responsibility                                            |
+| ----------------- | --------------------------------------------------------- |
+| Client Layer      | Entry points: applications, developers, CI/CD             |
+| Orchestrator Core | Task decomposition, model routing, execution flow         |
+| Agents            | Specialized stateless units (Planner, Executor, Reviewer) |
+| Skills            | Versioned, reusable capabilities                          |
+| Plugins           | Bridges to external systems                               |
+| MCP               | Standard protocol for tools and context                   |
+| Memory            | Short-term execution + long-term knowledge                |
+| Governance        | Approval, conflict detection, versioning, audit           |
+| Observability     | Traces, metrics, logs, error tracking                     |
 
 Each layer is independently replaceable, preserving composability and avoiding lock-in.
 
@@ -149,12 +149,12 @@ Every task is routed at runtime to the most appropriate model, based on complexi
 <details>
 <summary>📖 How routing decisions are made</summary>
 
-| Signal | Influence |
-|---|---|
-| Complexity | Reasoning power required |
-| Budget | Cost ceiling per task |
-| Latency | Response time targets |
-| Task type | Match model capability profile |
+| Signal     | Influence                      |
+| ---------- | ------------------------------ |
+| Complexity | Reasoning power required       |
+| Budget     | Cost ceiling per task          |
+| Latency    | Response time targets          |
+| Task type  | Match model capability profile |
 
 Routing is deterministic, observable, and overridable per skill. This avoids the common pattern of hardcoding expensive models for every sub-task.
 
@@ -169,30 +169,30 @@ Orqenix splits knowledge into three specialized KBs, each with its own chunking,
 <details>
 <summary>📖 The three KBs</summary>
 
-| KB | Stores | Used For |
-|---|---|---|
-| **DocsKB** | Specs, RFCs, READMEs, ADRs | Domain and system intent |
-| **CodeKB** | Source, AST, symbols, tests | Implementation awareness |
-| **DecisionKB** | Trade-offs, rationale, outcomes | Consistency over time |
+| KB             | Stores                          | Used For                 |
+| -------------- | ------------------------------- | ------------------------ |
+| **DocsKB**     | Specs, RFCs, READMEs, ADRs      | Domain and system intent |
+| **CodeKB**     | Source, AST, symbols, tests     | Implementation awareness |
+| **DecisionKB** | Trade-offs, rationale, outcomes | Consistency over time    |
 
 </details>
 
 <details>
 <summary>📖 Ingestion pipeline</summary>
 
-| Stage | Description |
-|---|---|
-| Chunk | Split into semantically meaningful units |
-| Embed | Generate vector representation |
-| Compress | Summarize and remove redundancy |
-| Index | Store with metadata (tags, version, scope) |
+| Stage    | Description                                |
+| -------- | ------------------------------------------ |
+| Chunk    | Split into semantically meaningful units   |
+| Embed    | Generate vector representation             |
+| Compress | Summarize and remove redundancy            |
+| Index    | Store with metadata (tags, version, scope) |
 
 Each KB tunes the pipeline differently:
 
-| KB | Chunking | Compression |
-|---|---|---|
-| DocsKB | Section-based | Summarization |
-| CodeKB | Symbol-based | Signature + intent extraction |
+| KB         | Chunking        | Compression                    |
+| ---------- | --------------- | ------------------------------ |
+| DocsKB     | Section-based   | Summarization                  |
+| CodeKB     | Symbol-based    | Signature + intent extraction  |
 | DecisionKB | Decision record | Context + outcome distillation |
 
 </details>
@@ -219,14 +219,14 @@ Every new capability flows through a controlled pipeline: learning, candidate, r
 <details>
 <summary>📖 Governance in detail</summary>
 
-| Stage | Purpose |
-|---|---|
-| Observation | Capture execution patterns |
-| Candidate | Extract reusable capability |
-| Review | Human or automated validation |
+| Stage          | Purpose                             |
+| -------------- | ----------------------------------- |
+| Observation    | Capture execution patterns          |
+| Candidate      | Extract reusable capability         |
+| Review         | Human or automated validation       |
 | Conflict Check | Detect overlap with existing skills |
-| Approval | Promote into registry |
-| Versioning | Manage lifecycle and rollback |
+| Approval       | Promote into registry               |
+| Versioning     | Manage lifecycle and rollback       |
 
 This is the layer that prevents silent quality degradation as the system grows.
 
@@ -241,14 +241,14 @@ Skills move through clear states with explicit transitions. Nothing enters produ
 <details>
 <summary>📖 Lifecycle states</summary>
 
-| State | Meaning |
-|---|---|
-| Draft | Proposed, not yet validated |
-| Review | Under evaluation |
-| Approved | Validated and signed off |
-| Versioned | Released into registry |
-| Deprecated | Replaced or retired |
-| Removed | Fully removed with audit trail |
+| State      | Meaning                        |
+| ---------- | ------------------------------ |
+| Draft      | Proposed, not yet validated    |
+| Review     | Under evaluation               |
+| Approved   | Validated and signed off       |
+| Versioned  | Released into registry         |
+| Deprecated | Replaced or retired            |
+| Removed    | Fully removed with audit trail |
 
 </details>
 
@@ -282,14 +282,14 @@ The full closed loop: execute, observe, learn, validate, promote, reuse. This is
 
 Most agent stacks stop at execution. Orqenix closes the loop with governance and knowledge persistence, so every execution strengthens the system rather than producing throwaway output.
 
-| Step | Effect |
-|---|---|
-| Execute | Produce result |
-| Observe | Capture signal |
-| Learn | Generate candidate skill |
-| Validate | Govern quality |
-| Promote | Register safely |
-| Reuse | Apply on next task |
+| Step     | Effect                   |
+| -------- | ------------------------ |
+| Execute  | Produce result           |
+| Observe  | Capture signal           |
+| Learn    | Generate candidate skill |
+| Validate | Govern quality           |
+| Promote  | Register safely          |
+| Reuse    | Apply on next task       |
 
 </details>
 
@@ -299,116 +299,116 @@ Most agent stacks stop at execution. Orqenix closes the loop with governance and
 
 Phase-based, not time-based.
 
-| Phase | Theme | Key Outcomes |
-|---|---|---|
-| 1 | Foundation Runtime | Orchestrator loop, agent abstraction, MCP basics |
-| 2 | Skill System | Registry, execution pipeline, discovery |
-| 3 | Governance | Approval workflow, conflict detection, rollback |
-| 4 | Advanced Orchestration | Dynamic routing, parallel execution |
-| 5 | Plugin Ecosystem | External integrations, secure execution |
-| 6 | Learning Loop | Observation, candidate, validation, promotion |
-| 7 | Organization Layer | Agent teams, roles, delegation |
-| 8 | Platformization | UI, dashboards, deployment models |
+| Phase | Theme                  | Key Outcomes                                     |
+| ----- | ---------------------- | ------------------------------------------------ |
+| 1     | Foundation Runtime     | Orchestrator loop, agent abstraction, MCP basics |
+| 2     | Skill System           | Registry, execution pipeline, discovery          |
+| 3     | Governance             | Approval workflow, conflict detection, rollback  |
+| 4     | Advanced Orchestration | Dynamic routing, parallel execution              |
+| 5     | Plugin Ecosystem       | External integrations, secure execution          |
+| 6     | Learning Loop          | Observation, candidate, validation, promotion    |
+| 7     | Organization Layer     | Agent teams, roles, delegation                   |
+| 8     | Platformization        | UI, dashboards, deployment models                |
 
 ## 🤝 Contributing
 
 We are building Orqenix for long-term system design, not quick hacks. Contributions are welcome from anyone aligned with these principles.
 
-| Principle | Meaning |
-|---|---|
+| Principle     | Meaning                         |
+| ------------- | ------------------------------- |
 | Deterministic | Predictable, traceable behavior |
-| Composable | Small, replaceable parts |
-| Governed | Capabilities are reviewable |
-| Cost-aware | Efficiency is first-class |
-| Observable | No hidden behavior |
+| Composable    | Small, replaceable parts        |
+| Governed      | Capabilities are reviewable     |
+| Cost-aware    | Efficiency is first-class       |
+| Observable    | No hidden behavior              |
 
 <details>
 <summary>📖 Contribution workflow</summary>
 
-| Step | Action |
-|---|---|
-| 1 | Open an issue for non-trivial work |
-| 2 | Fork and branch (`feature/...`, `fix/...`, `docs/...`) |
-| 3 | Keep changes scoped, documented, tested |
-| 4 | Open a PR with problem, approach, and trade-offs |
-| 5 | Pass review focused on alignment with principles |
+| Step | Action                                                 |
+| ---- | ------------------------------------------------------ |
+| 1    | Open an issue for non-trivial work                     |
+| 2    | Fork and branch (`feature/...`, `fix/...`, `docs/...`) |
+| 3    | Keep changes scoped, documented, tested                |
+| 4    | Open a PR with problem, approach, and trade-offs       |
+| 5    | Pass review focused on alignment with principles       |
 
 </details>
 
 <details>
 <summary>📖 Contribution types</summary>
 
-| Type | Examples |
-|---|---|
-| Code | Orchestrator, agents, skills, plugins, MCP |
-| Design | RFCs, architecture proposals, skill spec |
-| Documentation | Concepts, tutorials, diagrams |
-| Quality | Tests, benchmarks, bug reports |
+| Type          | Examples                                   |
+| ------------- | ------------------------------------------ |
+| Code          | Orchestrator, agents, skills, plugins, MCP |
+| Design        | RFCs, architecture proposals, skill spec   |
+| Documentation | Concepts, tutorials, diagrams              |
+| Quality       | Tests, benchmarks, bug reports             |
 
 </details>
 
 <details>
 <summary>📖 Quality bar</summary>
 
-| Requirement | Standard |
-|---|---|
-| Determinism | No hidden non-determinism |
-| Traceability | Observable execution paths |
+| Requirement   | Standard                            |
+| ------------- | ----------------------------------- |
+| Determinism   | No hidden non-determinism           |
+| Traceability  | Observable execution paths          |
 | Compatibility | Migration path for breaking changes |
-| Documentation | Required for new concepts |
-| Tests | Required on critical paths |
+| Documentation | Required for new concepts           |
+| Tests         | Required on critical paths          |
 
 </details>
 
 <details>
 <summary>📖 Priority right now</summary>
 
-| Priority | Area |
-|---|---|
-| 🔴 High | Orchestrator core, skill spec, KB schema |
-| 🟡 Medium | Governance, routing, observability |
-| 🟢 Open | Docs, examples, integrations |
+| Priority  | Area                                     |
+| --------- | ---------------------------------------- |
+| 🔴 High   | Orchestrator core, skill spec, KB schema |
+| 🟡 Medium | Governance, routing, observability       |
+| 🟢 Open   | Docs, examples, integrations             |
 
 </details>
 
 <details>
 <summary>📖 RFC template</summary>
 
-| Section | Purpose |
-|---|---|
-| Problem | What is broken or missing |
-| Goals / Non-goals | Scope boundaries |
-| Design | Proposed approach |
-| Alternatives | What else was considered |
-| Risks | Trade-offs and unknowns |
-| Impact | Effect on existing components |
+| Section           | Purpose                       |
+| ----------------- | ----------------------------- |
+| Problem           | What is broken or missing     |
+| Goals / Non-goals | Scope boundaries              |
+| Design            | Proposed approach             |
+| Alternatives      | What else was considered      |
+| Risks             | Trade-offs and unknowns       |
+| Impact            | Effect on existing components |
 
 </details>
 
 <details>
 <summary>📖 Code of Conduct</summary>
 
-| Do | Don't |
-|---|---|
-| Be respectful and constructive | Harass or attack individuals |
-| Focus on ideas | Be hostile in disagreement |
-| Assume good intent | Make assumptions about identity |
+| Do                             | Don't                           |
+| ------------------------------ | ------------------------------- |
+| Be respectful and constructive | Harass or attack individuals    |
+| Focus on ideas                 | Be hostile in disagreement      |
+| Assume good intent             | Make assumptions about identity |
 
 </details>
 
 ## 📌 Status
 
-| Area | Status |
-|---|---|
-| Vision and principles | ✅ Stable |
-| Architectural concepts | ✅ Defined |
-| Orchestrator core | 🚧 In progress |
-| Skill system | 🚧 In progress |
-| KB system | 🚧 In progress |
-| Governance layer | 🔜 Planned |
-| Plugin ecosystem | 🔜 Planned |
-| Learning loop | 🔜 Planned |
-| Platformization | 🔜 Planned |
+| Area                   | Status         |
+| ---------------------- | -------------- |
+| Vision and principles  | ✅ Stable      |
+| Architectural concepts | ✅ Defined     |
+| Orchestrator core      | 🚧 In progress |
+| Skill system           | 🚧 In progress |
+| KB system              | 🚧 In progress |
+| Governance layer       | 🔜 Planned     |
+| Plugin ecosystem       | 🔜 Planned     |
+| Learning loop          | 🔜 Planned     |
+| Platformization        | 🔜 Planned     |
 
 ## ✅ Summary
 

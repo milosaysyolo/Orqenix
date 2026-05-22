@@ -49,11 +49,7 @@ export interface StorageAdapter {
     vector: number[],
     metadata: Record<string, unknown>,
   ): Promise<void>;
-  searchVectors(
-    collection: string,
-    vector: number[],
-    topK: number,
-  ): Promise<VectorResult[]>;
+  searchVectors(collection: string, vector: number[], topK: number): Promise<VectorResult[]>;
 
   // Maintenance
   vacuum?(): Promise<void>;

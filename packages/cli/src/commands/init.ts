@@ -118,9 +118,7 @@ export const init = defineCommand({
     consola.info("  orqenix team list           # see installed teams");
     consola.info("  edit AGENTS.md              # describe project conventions");
     consola.info("");
-    consola.info(
-      "Note: @orqenix/opencode-plugin will be available in Phase 2. Until then,",
-    );
+    consola.info("Note: @orqenix/opencode-plugin will be available in Phase 2. Until then,");
     consola.info("OpenCode may warn that the plugin is missing — this is expected.");
   },
 });

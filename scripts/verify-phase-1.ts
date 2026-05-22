@@ -62,10 +62,7 @@ const checks: Check[] = [
         join(ROOT, "packages/core/src/sync/skill-compiler.ts"),
         "utf-8",
       );
-      const engine = await fs.readFile(
-        join(ROOT, "packages/core/src/sync/engine.ts"),
-        "utf-8",
-      );
+      const engine = await fs.readFile(join(ROOT, "packages/core/src/sync/engine.ts"), "utf-8");
       const watcher = existsSync(join(ROOT, "packages/core/src/sync/watcher.ts"));
       const okSkill =
         skill.includes("compileSkillForOpenCode") &&
@@ -87,10 +84,7 @@ const checks: Check[] = [
     name: "init: forward-compat opencode plugin registration",
     run: async () => {
       const fs = await import("node:fs/promises");
-      const init = await fs.readFile(
-        join(ROOT, "packages/cli/src/commands/init.ts"),
-        "utf-8",
-      );
+      const init = await fs.readFile(join(ROOT, "packages/cli/src/commands/init.ts"), "utf-8");
       return {
         pass: init.includes("@orqenix/opencode-plugin"),
         msg: "init.ts does not register @orqenix/opencode-plugin",
@@ -121,23 +115,23 @@ const checks: Check[] = [
 ];
 
 (async () => {
-let failures = 0;
-for (const c of checks) {
-  process.stdout.write(`  • ${c.name} ... `);
-  const r = await c.run();
-  if (r.pass) {
-    process.stdout.write("✓\n");
-  } else {
-    process.stdout.write(`✗  (${r.msg ?? "fail"})\n`);
-    failures++;
+  let failures = 0;
+  for (const c of checks) {
+    process.stdout.write(`  • ${c.name} ... `);
+    const r = await c.run();
+    if (r.pass) {
+      process.stdout.write("✓\n");
+    } else {
+      process.stdout.write(`✗  (${r.msg ?? "fail"})\n`);
+      failures++;
+    }
   }
-}
 
-if (failures === 0) {
-  console.log(`\n✓ All checks passed${IS_CI ? " (CI)" : ""}`);
-  process.exit(0);
-} else {
-  console.error(`\n✗ ${failures} check(s) failed`);
-  process.exit(1);
-}
+  if (failures === 0) {
+    console.log(`\n✓ All checks passed${IS_CI ? " (CI)" : ""}`);
+    process.exit(0);
+  } else {
+    console.error(`\n✗ ${failures} check(s) failed`);
+    process.exit(1);
+  }
 })();

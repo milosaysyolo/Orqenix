@@ -2,10 +2,7 @@ import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parse as parseJsonc } from "jsonc-parser";
-import {
-  orqenixGlobalConfigDir,
-  projectOrqenixDir,
-} from "../util/paths.js";
+import { orqenixGlobalConfigDir, projectOrqenixDir } from "../util/paths.js";
 import { log } from "../util/logger.js";
 import { DEFAULT_CONFIG } from "./defaults.js";
 import type { OrqenixConfig } from "../types/config.js";

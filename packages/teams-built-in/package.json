@@ -3,5 +3,9 @@
   "version": "0.1.0-dev",
   "description": "Built-in Orqenix team bundles (dev-team)",
   "license": "Apache-2.0",
-  "files": ["dev-team", "README.md", "LICENSE"]
+  "files": [
+    "dev-team",
+    "README.md",
+    "LICENSE"
+  ]
 }

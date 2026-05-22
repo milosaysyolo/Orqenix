@@ -186,9 +186,7 @@ export const teamCmd = defineCommand({
         const opt = (optionalRaw ? optionalRaw.split(",") : [])
           .map((s) => s.trim())
           .filter(Boolean);
-        const skills = (skillsRaw ? skillsRaw.split(",") : [])
-          .map((s) => s.trim())
-          .filter(Boolean);
+        const skills = (skillsRaw ? skillsRaw.split(",") : []).map((s) => s.trim()).filter(Boolean);
         const mcp = (mcpRaw ? mcpRaw.split(",") : []).map((s) => s.trim()).filter(Boolean);
         if (!NAME_RE.test(leadRole)) {
           consola.error(`Invalid lead role: ${leadRole}`);
@@ -301,12 +299,7 @@ export const teamCmd = defineCommand({
         const cwd = args.cwd as string;
         const teamName = args.name as string;
         const role = args.role as string;
-        const path = join(
-          projectTeamsDir(cwd),
-          teamName,
-          "agents",
-          `${role}.md`,
-        );
+        const path = join(projectTeamsDir(cwd), teamName, "agents", `${role}.md`);
         if (!existsSync(path)) {
           consola.error(`Agent file not found: ${path}`);
           process.exit(1);

@@ -13,6 +13,7 @@
 - `team-system.md` — Team Lead + Sub-agents bundle (Phase 1)
 
 Each note must:
+
 1. Open with **Problem** (1 paragraph)
 2. List **Constraints** (bullets)
 3. Present **Design** (diagrams + interfaces)

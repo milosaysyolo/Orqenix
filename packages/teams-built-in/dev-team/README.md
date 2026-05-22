@@ -4,14 +4,14 @@ Lean software development team for code projects.
 
 ## Roster (4 always-loaded + 2 lazy)
 
-| Agent | Mode | Loaded | Responsibility |
-|---|---|---|---|
-| `dev-team-lead` | primary | ✅ Always | Coordinator |
-| `dev-team-builder` | subagent | ✅ Always | Write, refactor, integrate |
-| `dev-team-inspector` | subagent | ✅ Always | Test, review, verify |
-| `dev-team-navigator` | subagent | ✅ Always | Search, read, plan, document |
-| `dev-team-debugger` | subagent | ⏣ Lazy | Systematic debugging (bug tasks) |
-| `dev-team-researcher` | subagent | ⏣ Lazy | External research |
+| Agent                 | Mode     | Loaded    | Responsibility                   |
+| --------------------- | -------- | --------- | -------------------------------- |
+| `dev-team-lead`       | primary  | ✅ Always | Coordinator                      |
+| `dev-team-builder`    | subagent | ✅ Always | Write, refactor, integrate       |
+| `dev-team-inspector`  | subagent | ✅ Always | Test, review, verify             |
+| `dev-team-navigator`  | subagent | ✅ Always | Search, read, plan, document     |
+| `dev-team-debugger`   | subagent | ⏣ Lazy    | Systematic debugging (bug tasks) |
+| `dev-team-researcher` | subagent | ⏣ Lazy    | External research                |
 
 ## Why 4+2 (not 10)
 

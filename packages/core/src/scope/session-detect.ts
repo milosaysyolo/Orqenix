@@ -67,9 +67,7 @@ async function detectCodexSession(): Promise<string | null> {
 }
 
 async function detectAntigravitySession(): Promise<string | null> {
-  return process.env.ANTIGRAVITY_SESSION_ID
-    ? `ag-${process.env.ANTIGRAVITY_SESSION_ID}`
-    : null;
+  return process.env.ANTIGRAVITY_SESSION_ID ? `ag-${process.env.ANTIGRAVITY_SESSION_ID}` : null;
 }
 
 async function detectMcpEnvSession(): Promise<string | null> {

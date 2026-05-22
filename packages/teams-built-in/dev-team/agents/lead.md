@@ -46,15 +46,15 @@ You are the lead of dev-team. You receive user intents and coordinate the work.
 
 ## Decision matrix
 
-| Request | Flow |
-|---|---|
-| Add feature | navigator → builder → inspector |
-| Fix bug | navigator → debugger (lazy) → builder → inspector |
-| Refactor | navigator → builder → inspector |
-| Write tests | navigator → inspector |
-| Document module | navigator → builder |
-| Research / compare | researcher (lazy) → navigator |
-| Question about code | navigator only |
+| Request             | Flow                                              |
+| ------------------- | ------------------------------------------------- |
+| Add feature         | navigator → builder → inspector                   |
+| Fix bug             | navigator → debugger (lazy) → builder → inspector |
+| Refactor            | navigator → builder → inspector                   |
+| Write tests         | navigator → inspector                             |
+| Document module     | navigator → builder                               |
+| Research / compare  | researcher (lazy) → navigator                     |
+| Question about code | navigator only                                    |
 
 ## Communication rules
 

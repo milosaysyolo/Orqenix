@@ -14,7 +14,7 @@
   },
   "agents": {
     "core": [
-      { "role": "builder",   "file": "agents/builder.md",   "mode": "subagent" },
+      { "role": "builder", "file": "agents/builder.md", "mode": "subagent" },
       { "role": "inspector", "file": "agents/inspector.md", "mode": "subagent" },
       { "role": "navigator", "file": "agents/navigator.md", "mode": "subagent" }
     ],

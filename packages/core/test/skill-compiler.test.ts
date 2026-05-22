@@ -2,19 +2,13 @@ import { describe, it, expect } from "vitest";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import {
-  compileSkillForOpenCode,
-  readSkillSource,
-} from "../src/sync/skill-compiler.js";
+import { compileSkillForOpenCode, readSkillSource } from "../src/sync/skill-compiler.js";
 
 describe("skill-compiler", () => {
   it("reads frontmatter and body", async () => {
     const dir = mkdtempSync(join(tmpdir(), "orqenix-skill-"));
     const path = join(dir, "SKILL.md");
-    writeFileSync(
-      path,
-      `---\nname: my-skill\ndescription: Does things\n---\n## Body\nHi`,
-    );
+    writeFileSync(path, `---\nname: my-skill\ndescription: Does things\n---\n## Body\nHi`);
     const skill = await readSkillSource(path, "my-skill");
     expect(skill.frontmatter.name).toBe("my-skill");
     expect(skill.frontmatter.description).toBe("Does things");

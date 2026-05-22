@@ -1,12 +1,7 @@
 import Database from "better-sqlite3";
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
-import type {
-  Document,
-  Filter,
-  StorageAdapter,
-  VectorResult,
-} from "./adapter.js";
+import type { Document, Filter, StorageAdapter, VectorResult } from "./adapter.js";
 
 /**
  * SQLite-backed storage adapter implementing KV, document, and vector operations.
@@ -16,7 +11,10 @@ import type {
  */
 export class SqliteAdapter implements StorageAdapter {
   private db: Database.Database | null = null;
-  constructor(private readonly dbPath: string, private readonly opts: { wal?: boolean } = {}) {}
+  constructor(
+    private readonly dbPath: string,
+    private readonly opts: { wal?: boolean } = {},
+  ) {}
 
   async open(): Promise<void> {
     await mkdir(dirname(this.dbPath), { recursive: true });
@@ -91,9 +89,7 @@ export class SqliteAdapter implements StorageAdapter {
       .all(collection, limit) as Array<{ json: string }>;
     const docs = rows.map((r) => JSON.parse(r.json) as Document);
     // Naive filter; real impl will index in Phase 2.
-    return docs.filter((d) =>
-      Object.entries(filter).every(([k, v]) => (d as any)[k] === v),
-    );
+    return docs.filter((d) => Object.entries(filter).every(([k, v]) => (d as any)[k] === v));
   }
 
   // ─────────── Vector ───────────
