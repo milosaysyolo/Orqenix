@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="260" viewBox="0 0 1000 260" font-family="Inter, Arial">
+  <rect width="1000" height="260" fill="#0B1020"/>
+
+  <!-- Nodes -->
+  <g fill="#1E2A55" stroke="#5EE7DF" stroke-width="2">
+    <rect x="50" y="100" width="130" height="50" rx="10"/>
+    <rect x="230" y="100" width="130" height="50" rx="10"/>
+    <rect x="410" y="100" width="130" height="50" rx="10"/>
+    <rect x="590" y="100" width="130" height="50" rx="10"/>
+    <rect x="770" y="100" width="150" height="50" rx="10"/>
+  </g>
+
+  <!-- Labels -->
+  <g fill="#fff" font-size="14" text-anchor="middle">
+    <text x="115" y="130">Draft</text>
+    <text x="295" y="130">Review</text>
+    <text x="475" y="130">Approved</text>
+    <text x="655" y="130">Versioned</text>
+    <text x="845" y="130">Deprecated</text>
+  </g>
+
+  <!-- Arrows -->
+  <g stroke="#5EE7DF" stroke-width="2">
+    <line x1="180" y1="125" x2="230" y2="125"/>
+    <line x1="360" y1="125" x2="410" y2="125"/>
+    <line x1="540" y1="125" x2="590" y2="125"/>
+    <line x1="720" y1="125" x2="770" y2="125"/>
+  </g>
+
+  <!-- Back arrow -->
+  <path d="M295 100 C295 50, 115 50, 115 100" stroke="#B490FF" fill="none"/>
+  <text x="200" y="60" fill="#B490FF" font-size="12" text-anchor="middle">Rework</text>
+
+</svg>
