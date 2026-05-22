@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780">
+
+  <rect width="1200" height="780" fill="#0B1020"/>
+
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" fill="#ffffff" font-size="22">
+    Knowledge Base System
+  </text>
+  <text x="600" y="65" text-anchor="middle" fill="#9AA6C2" font-size="13">
+    DocsKB · CodeKB · DecisionKB
+  </text>
+
+  <!-- ============ SOURCES ============ -->
+  <text x="120" y="110" fill="#9AA6C2" font-size="12">SOURCES</text>
+
+  <!-- DocsKB source -->
+  <rect x="80" y="130" width="220" height="70" fill="#141B33" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="190" y="158" text-anchor="middle" fill="#5EE7DF" font-size="13">DocsKB</text>
+  <text x="190" y="180" text-anchor="middle" fill="#ffffff" font-size="11">Specs · RFC · README · ADR</text>
+
+  <!-- CodeKB source -->
+  <rect x="80" y="230" width="220" height="70" fill="#141B33" stroke="#B490FF" stroke-width="2"/>
+  <text x="190" y="258" text-anchor="middle" fill="#B490FF" font-size="13">CodeKB</text>
+  <text x="190" y="280" text-anchor="middle" fill="#ffffff" font-size="11">Source · AST · Symbols · Tests</text>
+
+  <!-- DecisionKB source -->
+  <rect x="80" y="330" width="220" height="70" fill="#141B33" stroke="#3AD29F" stroke-width="2"/>
+  <text x="190" y="358" text-anchor="middle" fill="#3AD29F" font-size="13">DecisionKB</text>
+  <text x="190" y="380" text-anchor="middle" fill="#ffffff" font-size="11">Trade-offs · Rationale · Outcomes</text>
+
+  <!-- ============ INGESTION PIPELINE ============ -->
+  <text x="500" y="110" fill="#9AA6C2" font-size="12">INGESTION PIPELINE</text>
+
+  <rect x="370" y="130" width="160" height="50" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="450" y="160" text-anchor="middle" fill="#ffffff" font-size="12">Chunk</text>
+
+  <rect x="370" y="200" width="160" height="50" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="450" y="230" text-anchor="middle" fill="#ffffff" font-size="12">Embed</text>
+
+  <rect x="370" y="270" width="160" height="50" fill="#1E2A55" stroke="#3AD29F" stroke-width="2"/>
+  <text x="450" y="300" text-anchor="middle" fill="#ffffff" font-size="12">Compress / Summarize</text>
+
+  <rect x="370" y="340" width="160" height="50" fill="#1E2A55" stroke="#B490FF" stroke-width="2"/>
+  <text x="450" y="370" text-anchor="middle" fill="#ffffff" font-size="12">Index</text>
+
+  <!-- Arrows from sources to pipeline -->
+  <line x1="300" y1="165" x2="370" y2="155" stroke="#5EE7DF" stroke-width="2"/>
+  <line x1="300" y1="265" x2="370" y2="225" stroke="#B490FF" stroke-width="2"/>
+  <line x1="300" y1="365" x2="370" y2="295" stroke="#3AD29F" stroke-width="2"/>
+
+  <!-- Pipeline internal flow -->
+  <line x1="450" y1="180" x2="450" y2="200" stroke="#ffffff" stroke-width="2"/>
+  <line x1="450" y1="250" x2="450" y2="270" stroke="#ffffff" stroke-width="2"/>
+  <line x1="450" y1="320" x2="450" y2="340" stroke="#ffffff" stroke-width="2"/>
+
+  <!-- ============ STORAGE ============ -->
+  <text x="700" y="110" fill="#9AA6C2" font-size="12">STORAGE</text>
+
+  <rect x="620" y="130" width="200" height="80" fill="#141B33" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="720" y="160" text-anchor="middle" fill="#5EE7DF" font-size="13">DocsKB Store</text>
+  <text x="720" y="180" text-anchor="middle" fill="#ffffff" font-size="11">Vector + metadata</text>
+  <text x="720" y="195" text-anchor="middle" fill="#9AA6C2" font-size="10">tags · version · scope</text>
+
+  <rect x="620" y="240" width="200" height="80" fill="#141B33" stroke="#B490FF" stroke-width="2"/>
+  <text x="720" y="270" text-anchor="middle" fill="#B490FF" font-size="13">CodeKB Store</text>
+  <text x="720" y="290" text-anchor="middle" fill="#ffffff" font-size="11">Symbols + graph</text>
+  <text x="720" y="305" text-anchor="middle" fill="#9AA6C2" font-size="10">file · module · function</text>
+
+  <rect x="620" y="350" width="200" height="80" fill="#141B33" stroke="#3AD29F" stroke-width="2"/>
+  <text x="720" y="380" text-anchor="middle" fill="#3AD29F" font-size="13">DecisionKB Store</text>
+  <text x="720" y="400" text-anchor="middle" fill="#ffffff" font-size="11">Records + links</text>
+  <text x="720" y="415" text-anchor="middle" fill="#9AA6C2" font-size="10">context · outcome</text>
+
+  <!-- Pipeline to storage -->
+  <line x1="530" y1="365" x2="620" y2="170" stroke="#5EE7DF" stroke-width="2"/>
+  <line x1="530" y1="365" x2="620" y2="280" stroke="#B490FF" stroke-width="2"/>
+  <line x1="530" y1="365" x2="620" y2="390" stroke="#3AD29F" stroke-width="2"/>
+
+  <!-- ============ RECALL ============ -->
+  <text x="980" y="110" fill="#9AA6C2" font-size="12">SESSION RECALL</text>
+
+  <rect x="900" y="130" width="220" height="90" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="1010" y="160" text-anchor="middle" fill="#5EE7DF" font-size="13">Smart Retriever</text>
+  <text x="1010" y="180" text-anchor="middle" fill="#ffffff" font-size="11">Task-aware query</text>
+  <text x="1010" y="200" text-anchor="middle" fill="#9AA6C2" font-size="10">routes to right KB</text>
+
+  <rect x="900" y="250" width="220" height="80" fill="#1E2A55" stroke="#3AD29F" stroke-width="2"/>
+  <text x="1010" y="280" text-anchor="middle" fill="#3AD29F" font-size="13">Compressor</text>
+  <text x="1010" y="300" text-anchor="middle" fill="#ffffff" font-size="11">Reduce to signal only</text>
+  <text x="1010" y="315" text-anchor="middle" fill="#9AA6C2" font-size="10">remove redundancy</text>
+
+  <rect x="900" y="360" width="220" height="80" fill="#1E2A55" stroke="#B490FF" stroke-width="2"/>
+  <text x="1010" y="390" text-anchor="middle" fill="#B490FF" font-size="13">Context Injector</text>
+  <text x="1010" y="410" text-anchor="middle" fill="#ffffff" font-size="11">Minimal · relevant</text>
+  <text x="1010" y="425" text-anchor="middle" fill="#9AA6C2" font-size="10">into agent session</text>
+
+  <!-- Storage to recall -->
+  <line x1="820" y1="170" x2="900" y2="165" stroke="#5EE7DF" stroke-width="2"/>
+  <line x1="820" y1="280" x2="900" y2="180" stroke="#B490FF" stroke-width="2"/>
+  <line x1="820" y1="390" x2="900" y2="195" stroke="#3AD29F" stroke-width="2"/>
+
+  <!-- Recall internal flow -->
+  <line x1="1010" y1="220" x2="1010" y2="250" stroke="#ffffff" stroke-width="2"/>
+  <line x1="1010" y1="330" x2="1010" y2="360" stroke="#ffffff" stroke-width="2"/>
+
+  <!-- ============ SESSION ============ -->
+  <rect x="350" y="540" width="500" height="100" fill="#2A1F40" stroke="#B490FF" stroke-width="2"/>
+  <text x="600" y="575" text-anchor="middle" fill="#B490FF" font-size="15">Active Agent Session</text>
+  <text x="600" y="600" text-anchor="middle" fill="#ffffff" font-size="12">Receives only the knowledge it needs, when it needs it</text>
+  <text x="600" y="622" text-anchor="middle" fill="#9AA6C2" font-size="11">Minimal context · High signal · Cost-aware</text>
+
+  <!-- Injector to session -->
+  <line x1="1010" y1="440" x2="850" y2="580" stroke="#B490FF" stroke-width="2"/>
+
+  <!-- Feedback loop to DecisionKB -->
+  <line x1="350" y1="600" x2="190" y2="400" stroke="#3AD29F" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="220" y="500" fill="#3AD29F" font-size="11">Outcomes feed DecisionKB</text>
+
+  <!-- Bottom annotation -->
+  <text x="600" y="700" text-anchor="middle" fill="#9AA6C2" font-size="12">
+    Each KB is stored, compressed, and recalled independently
+  </text>
+  <text x="600" y="720" text-anchor="middle" fill="#5EE7DF" font-size="12">
+    The session never sees raw data, only distilled knowledge
+  </text>
+
+</svg>
