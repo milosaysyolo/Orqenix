@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" font-family="Inter, Arial">
+
+  <!-- Background -->
+  <rect width="1200" height="620" fill="#0B1020"/>
+
+  <!-- Title -->
+  <text x="600" y="50" text-anchor="middle" fill="#FFFFFF" font-size="22" font-weight="600">
+    Memory & Context Pruning Pipeline
+  </text>
+
+  <!-- ================= RAW INPUT ================= -->
+  <rect x="80" y="140" width="220" height="100" rx="12" fill="#141B33" stroke="#FF8C42" stroke-width="2"/>
+  <text x="190" y="170" text-anchor="middle" fill="#FF8C42" font-size="14">Raw Context</text>
+  <text x="190" y="195" text-anchor="middle" fill="#FFFFFF" font-size="11">Full history</text>
+  <text x="190" y="210" text-anchor="middle" fill="#FFFFFF" font-size="11">Logs · memory · noise</text>
+
+  <!-- Arrow -->
+  <line x1="300" y1="190" x2="380" y2="190" stroke="#5EE7DF" stroke-width="2"/>
+
+  <!-- ================= FILTER ================= -->
+  <rect x="380" y="120" width="220" height="140" rx="12" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="490" y="150" text-anchor="middle" fill="#5EE7DF">Context Filter</text>
+
+  <text x="490" y="180" text-anchor="middle" fill="#FFFFFF" font-size="12">
+    Remove irrelevant tokens
+  </text>
+  <text x="490" y="200" text-anchor="middle" fill="#FFFFFF" font-size="12">
+    Detect task signals
+  </text>
+
+  <!-- Arrow -->
+  <line x1="600" y1="190" x2="680" y2="190" stroke="#5EE7DF" stroke-width="2"/>
+
+  <!-- ================= COMPRESSION ================= -->
+  <rect x="680" y="120" width="220" height="140" rx="12" fill="#1E2A55" stroke="#3AD29F" stroke-width="2"/>
+  <text x="790" y="150" text-anchor="middle" fill="#3AD29F">Compression</text>
+
+  <text x="790" y="180" text-anchor="middle" fill="#FFFFFF" font-size="12">
+    Summarize context
+  </text>
+  <text x="790" y="200" text-anchor="middle" fill="#FFFFFF" font-size="12">
+    Extract key signals
+  </text>
+
+  <!-- Arrow -->
+  <line x1="900" y1="190" x2="1000" y2="250" stroke="#5EE7DF" stroke-width="2"/>
+
+  <!-- ================= MODEL INPUT ================= -->
+  <rect x="940" y="250" width="220" height="100" rx="12" fill="#1E2A55" stroke="#5EE7DF" stroke-width="2"/>
+  <text x="1050" y="280" text-anchor="middle" fill="#5EE7DF">Model Input</text>
+
+  <text x="1050" y="305" text-anchor="middle" fill="#FFFFFF" font-size="12">
+    Clean, high-signal context
+  </text>
+
+  <!-- ================= MEMORY LAYERS ================= -->
+
+  <!-- Short-term -->
+  <rect x="250" y="360" width="200" height="80" rx="10" fill="#141B33" stroke="#5EE7DF"/>
+  <text x="350" y="390" text-anchor="middle" fill="#5EE7DF" font-size="12">Short-term</text>
+  <text x="350" y="410" text-anchor="middle" fill="#FFFFFF" font-size="11">Execution state</text>
+
+  <!-- Long-term -->
+  <rect x="500" y="360" width="200" height="80" rx="10" fill="#141B33" stroke="#B490FF"/>
+  <text x="600" y="390" text-anchor="middle" fill="#B490FF" font-size="12">Long-term</text>
+  <text x="600" y="410" text-anchor="middle" fill="#FFFFFF" font-size="11">Persistent knowledge</text>
+
+  <!-- RAG -->
+  <rect x="750" y="360" width="200" height="80" rx="10" fill="#141B33" stroke="#3AD29F"/>
+  <text x="850" y="390" text-anchor="middle" fill="#3AD29F" font-size="12">RAG Retrieval</text>
+  <text x="850" y="410" text-anchor="middle" fill="#FFFFFF" font-size="11">On-demand context</text>
+
+  <!-- Connections up -->
+  <g stroke="#9AA6C2" stroke-dasharray="4,4" stroke-width="2">
+    <line x1="350" y1="360" x2="490" y2="260"/>
+    <line x1="600" y1="360" x2="790" y2="260"/>
+    <line x1="850" y1="360" x2="790" y2="260"/>
+  </g>
+
+  <!-- ================= RESULT COMPARISON ================= -->
+
+  <text x="320" y="520" text-anchor="middle" fill="#FF6B6B" font-size="12">
+    Without pruning: large + noisy context
+  </text>
+
+  <text x="880" y="520" text-anchor="middle" fill="#3AD29F" font-size="12">
+    With Orqenix: compact + high signal
+  </text>
+
+  <!-- Visual hint -->
+  <rect x="220" y="540" width="200" height="20" fill="#FF6B6B" opacity="0.4"/>
+  <rect x="780" y="540" width="80" height="20" fill="#3AD29F" opacity="0.6"/>
+
+</svg>
