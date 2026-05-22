@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" font-family="Inter, Arial">
+
+  <!-- Background -->
+  <rect width="1200" height="520" fill="#0B1020"/>
+
+  <!-- Title -->
+  <text x="600" y="50" text-anchor="middle" fill="#FFFFFF" font-size="22" font-weight="600">
+    Skill Governance Pipeline
+  </text>
+
+  <!-- Step boxes -->
+  <g fill="#141B33" stroke="#5EE7DF" stroke-width="2">
+
+    <rect x="50" y="200" width="160" height="80" rx="12"/>
+    <rect x="250" y="200" width="160" height="80" rx="12"/>
+    <rect x="450" y="200" width="180" height="80" rx="12"/>
+    <rect x="670" y="200" width="160" height="80" rx="12"/>
+    <rect x="870" y="200" width="220" height="80" rx="12"/>
+
+  </g>
+
+  <!-- Text labels -->
+  <g fill="#FFFFFF" font-size="14" text-anchor="middle">
+
+    <text x="130" y="235">Learning</text>
+    <text x="130" y="255" font-size="12" fill="#9AA6C2">Observed behavior</text>
+
+    <text x="330" y="235">Candidate Skill</text>
+    <text x="330" y="255" font-size="12" fill="#9AA6C2">Extracted capability</text>
+
+    <text x="540" y="235">Review + Validation</text>
+    <text x="540" y="255" font-size="12" fill="#9AA6C2">Human / automated</text>
+
+    <text x="750" y="235">Approved</text>
+    <text x="750" y="255" font-size="12" fill="#9AA6C2">Ready for use</text>
+
+    <text x="980" y="235">Versioned + Registry</text>
+    <text x="980" y="255" font-size="12" fill="#9AA6C2">Managed lifecycle</text>
+
+  </g>
+
+  <!-- Forward arrows -->
+  <g stroke="#5EE7DF" stroke-width="2">
+    <line x1="210" y1="240" x2="250" y2="240"/>
+    <line x1="410" y1="240" x2="450" y2="240"/>
+    <line x1="630" y1="240" x2="670" y2="240"/>
+    <line x1="830" y1="240" x2="870" y2="240"/>
+  </g>
+
+  <!-- Decision: rejected -->
+  <path d="M540 200 C540 120, 300 120, 300 200" stroke="#FF6B6B" stroke-width="2" fill="none"/>
+  <text x="420" y="115" fill="#FF6B6B" font-size="12" text-anchor="middle">Rejected → back to candidate</text>
+
+  <!-- Conflict Check -->
+  <rect x="470" y="340" width="140" height="60" rx="10" fill="#2A1F40" stroke="#B490FF" stroke-width="2"/>
+  <text x="540" y="370" text-anchor="middle" fill="#B490FF" font-size="13">Conflict Check</text>
+
+  <line x1="540" y1="280" x2="540" y2="340" stroke="#B490FF" stroke-width="2"/>
+  <line x1="540" y1="340" x2="540" y2="280" stroke="#B490FF" stroke-dasharray="4,4" opacity="0.6"/>
+
+  <!-- Lifecycle (bottom) -->
+  <g fill="#1E2A55" stroke="#3A6080" stroke-width="1.5">
+
+    <rect x="350" y="440" width="140" height="50" rx="10"/>
+    <rect x="520" y="440" width="140" height="50" rx="10"/>
+    <rect x="690" y="440" width="140" height="50" rx="10"/>
+
+  </g>
+
+  <g fill="#FFFFFF" font-size="13" text-anchor="middle">
+    <text x="420" y="470">Active</text>
+    <text x="590" y="470">Deprecated</text>
+    <text x="760" y="470">Removed</text>
+  </g>
+
+  <!-- Lifecycle arrows -->
+  <g stroke="#9AA6C2" stroke-width="2">
+    <line x1="490" y1="465" x2="520" y2="465"/>
+    <line x1="660" y1="465" x2="690" y2="465"/>
+  </g>
+
+  <!-- Connection from registry to lifecycle -->
+  <line x1="980" y1="280" x2="590" y2="440" stroke="#9AA6C2" stroke-dasharray="4,4"/>
+
+</svg>
