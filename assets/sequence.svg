@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" font-family="Inter, Arial">
+  <rect width="1200" height="520" fill="#0B1020"/>
+
+  <!-- Participants -->
+  <g fill="#fff" font-size="14">
+    <text x="80" y="40">Client</text>
+    <text x="260" y="40">Orchestrator</text>
+    <text x="440" y="40">Agent</text>
+    <text x="600" y="40">Skill</text>
+    <text x="750" y="40">MCP</text>
+    <text x="900" y="40">Memory</text>
+    <text x="1040" y="40">LLM</text>
+  </g>
+
+  <!-- Lifelines -->
+  <g stroke="#555" stroke-dasharray="4">
+    <line x1="100" y1="60" x2="100" y2="500"/>
+    <line x1="300" y1="60" x2="300" y2="500"/>
+    <line x1="460" y1="60" x2="460" y2="500"/>
+    <line x1="620" y1="60" x2="620" y2="500"/>
+    <line x1="780" y1="60" x2="780" y2="500"/>
+    <line x1="930" y1="60" x2="930" y2="500"/>
+    <line x1="1070" y1="60" x2="1070" y2="500"/>
+  </g>
+
+  <!-- Arrows -->
+  <g stroke="#5EE7DF" stroke-width="2" fill="none">
+    <line x1="100" y1="100" x2="300" y2="100"/>
+    <line x1="300" y1="140" x2="460" y2="140"/>
+    <line x1="460" y1="180" x2="620" y2="180"/>
+    <line x1="620" y1="220" x2="780" y2="220"/>
+    <line x1="780" y1="260" x2="930" y2="260"/>
+    <line x1="780" y1="300" x2="1070" y2="300"/>
+
+    <line x1="1070" y1="340" x2="780" y2="340"/>
+    <line x1="780" y1="380" x2="460" y2="380"/>
+    <line x1="460" y1="420" x2="300" y2="420"/>
+    <line x1="300" y1="460" x2="100" y2="460"/>
+  </g>
+
+  <!-- Labels -->
+  <g fill="#9AA6C2" font-size="12">
+    <text x="150" y="95">Submit task</text>
+    <text x="330" y="135">Assign</text>
+    <text x="500" y="175">Use skill</text>
+    <text x="650" y="215">Context request</text>
+    <text x="800" y="255">Retrieve</text>
+    <text x="820" y="295">Call model</text>
+
+    <text x="880" y="335">Response</text>
+    <text x="580" y="375">Return result</text>
+    <text x="350" y="415">Complete</text>
+    <text x="150" y="455">Final response</text>
+  </g>
+</svg>
