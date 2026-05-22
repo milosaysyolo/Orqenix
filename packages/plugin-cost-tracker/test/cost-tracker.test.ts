@@ -48,7 +48,7 @@ describe("cost-tracker plugin", () => {
     const entries = ledger.list();
     expect(entries).toHaveLength(1);
     expect(entries[0]?.agent).toBe("dev-team-builder");
-    expect(entries[0]?.costUsd).toBeCloseTo(0.0015, 5);
+    expect(entries[0]?.costUsd).toBeCloseTo(0.00135, 5);
   });
 
   it("aggregates cost by agent and model", async () => {

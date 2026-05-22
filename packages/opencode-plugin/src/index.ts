@@ -1,4 +1,4 @@
-import { detectGitInfo, detectSession, generateScopeId, log } from "@orqenix/core";
+import { detectGitInfo, generateScopeId, log } from "@orqenix/core";
 
 type OpenCodePluginContext = {
   project?: { directory?: string };

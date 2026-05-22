@@ -6,7 +6,7 @@ import { log } from "@orqenix/core";
 export type McpTransportConfig =
   | { type: "stdio"; command: string; args?: string[]; env?: Record<string, string> }
   | { type: "sse"; url: string; headers?: Record<string, string> }
-  | { type: "ws"; url: string; headers?: Record<string, string> };
+  | { type: "ws"; url: string };
 
 export interface McpServerConfig {
   name: string;
@@ -103,7 +103,9 @@ export class McpClientManager {
       });
     }
     if (cfg.type === "sse") {
-      return new SSEClientTransport(new URL(cfg.url), { headers: cfg.headers });
+      return new SSEClientTransport(new URL(cfg.url), {
+        requestInit: cfg.headers ? { headers: cfg.headers } : undefined,
+      });
     }
     throw new Error(`Unsupported MCP transport: ${(cfg as { type: string }).type}`);
   }

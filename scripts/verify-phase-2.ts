@@ -63,7 +63,7 @@ const checks: Check[] = [
       const idx = await fs.readFile(join(ROOT, "packages/cli/src/index.ts"), "utf-8");
       const cmd = await fs.readFile(join(ROOT, "packages/cli/src/commands/plugin.ts"), "utf-8");
       return {
-        pass: idx.includes("pluginCmd") && cmd.includes("plugin list"),
+        pass: idx.includes("pluginCmd") && cmd.includes('name: "list"'),
         msg: "plugin command not wired",
       };
     },

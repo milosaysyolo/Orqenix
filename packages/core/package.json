@@ -9,29 +9,29 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     },
     "./scope": {
-      "import": "./dist/scope/index.js",
-      "types": "./dist/scope/index.d.ts"
+      "types": "./dist/scope/index.d.ts",
+      "import": "./dist/scope/index.js"
     },
     "./config": {
-      "import": "./dist/config/index.js",
-      "types": "./dist/config/index.d.ts"
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.js"
     },
     "./storage": {
-      "import": "./dist/storage/index.js",
-      "types": "./dist/storage/index.d.ts"
+      "types": "./dist/storage/index.d.ts",
+      "import": "./dist/storage/index.js"
     },
     "./sync": {
-      "import": "./dist/sync/index.js",
-      "types": "./dist/sync/index.d.ts"
+      "types": "./dist/sync/index.d.ts",
+      "import": "./dist/sync/index.js"
     },
     "./plugin": {
-      "import": "./dist/plugin/index.js",
-      "types": "./dist/plugin/index.d.ts"
+      "types": "./dist/plugin/index.d.ts",
+      "import": "./dist/plugin/index.js"
     }
   },
   "files": [

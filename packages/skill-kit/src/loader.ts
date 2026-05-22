@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { isAbsolute, join, resolve } from "node:path";
 import { extract as tarExtract } from "tar";
 import isoGit from "isomorphic-git";
-import isoGitHttp from "isomorphic-git/http/node/index.js";
+import isoGitHttp from "isomorphic-git/http/node";
 import { projectOpencodeDir } from "@orqenix/core";
 
 export interface SkillInstallSource {

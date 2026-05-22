@@ -38,6 +38,7 @@ coverage/
 # Orqenix runtime data (only ignore at repo root; .orqenix in user projects is fine)
 /.orqenix/cache/
 /.orqenix/logs/
+/docs/implementation/
 /.orqenix/memory/
 /.orqenix/knowledge/
 
