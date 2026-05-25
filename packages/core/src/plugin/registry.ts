@@ -57,9 +57,7 @@ export class PluginRegistry {
   }
 
   list(): OrqenixPlugin[] {
-    return Array.from(this.plugins.values()).sort(
-      (a, b) => (b.priority ?? 0) - (a.priority ?? 0),
-    );
+    return Array.from(this.plugins.values()).sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
   }
 
   has(name: string): boolean {
@@ -70,10 +68,9 @@ export class PluginRegistry {
     return this.plugins.get(name);
   }
 
-  async runBefore<K extends "agent.task.before" | "tool.execute.before" | "session.start" | "session.end">(
-    hook: K,
-    arg: Parameters<NonNullable<PluginHooks[K]>>[0],
-  ): Promise<void> {
+  async runBefore<
+    K extends "agent.task.before" | "tool.execute.before" | "session.start" | "session.end",
+  >(hook: K, arg: Parameters<NonNullable<PluginHooks[K]>>[0]): Promise<void> {
     const ctx = this.context();
     for (const p of this.list()) {
       const fn = p.hooks[hook] as ((a: unknown, c: PluginContext) => Promise<void>) | undefined;
@@ -102,10 +99,7 @@ export class PluginRegistry {
     }
   }
 
-  async runTransformTool(
-    hook: "tool.execute.after",
-    initial: ToolOutput,
-  ): Promise<ToolOutput> {
+  async runTransformTool(hook: "tool.execute.after", initial: ToolOutput): Promise<ToolOutput> {
     let current = initial;
     const ctx = this.context();
     for (const p of this.list()) {
@@ -116,10 +110,7 @@ export class PluginRegistry {
     return current;
   }
 
-  async runTransformMemory(
-    hook: "memory.write",
-    initial: MemoryEntry,
-  ): Promise<MemoryEntry> {
+  async runTransformMemory(hook: "memory.write", initial: MemoryEntry): Promise<MemoryEntry> {
     let current = initial;
     const ctx = this.context();
     for (const p of this.list()) {
@@ -130,10 +121,7 @@ export class PluginRegistry {
     return current;
   }
 
-  async runTransformMemoryQuery(
-    hook: "memory.query",
-    initial: MemoryQuery,
-  ): Promise<MemoryQuery> {
+  async runTransformMemoryQuery(hook: "memory.query", initial: MemoryQuery): Promise<MemoryQuery> {
     let current = initial;
     const ctx = this.context();
     for (const p of this.list()) {
@@ -158,10 +146,7 @@ export class PluginRegistry {
     return current;
   }
 
-  async runTransformLLM(
-    hook: "llm.call.before",
-    initial: LLMCall,
-  ): Promise<LLMCall> {
+  async runTransformLLM(hook: "llm.call.before", initial: LLMCall): Promise<LLMCall> {
     let current = initial;
     const ctx = this.context();
     for (const p of this.list()) {
@@ -172,9 +157,7 @@ export class PluginRegistry {
     return current;
   }
 
-  async runKnowledgeUpdate(
-    paths: { docs?: string[]; code?: string[] },
-  ): Promise<void> {
+  async runKnowledgeUpdate(paths: { docs?: string[]; code?: string[] }): Promise<void> {
     const ctx = this.context();
     for (const p of this.list()) {
       const fn = p.hooks["knowledge.update"];

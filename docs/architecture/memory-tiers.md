@@ -31,6 +31,7 @@ concurrent reads during writes.
 ### Cleanup strategy
 
 `planCleanup()` produces a dry-run plan showing:
+
 - Tier name
 - Candidate count
 - Total bytes to free
@@ -51,6 +52,7 @@ entries removed or none.
 ### Export/Import
 
 `exportScope()` returns `{tier: MemoryEntry[]}` JSON. User can:
+
 - Backup before risky operations
 - Migrate between machines
 - Transfer between projects

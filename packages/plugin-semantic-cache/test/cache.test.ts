@@ -22,8 +22,6 @@ describe("SemanticCache", () => {
       { model: "m", messages: [{ role: "user", content: "  hi  " }] },
       { content: "hello", tokens: { input: 1, output: 1 } },
     );
-    expect(
-      cache.get({ model: "m", messages: [{ role: "user", content: "hi" }] }),
-    ).not.toBeNull();
+    expect(cache.get({ model: "m", messages: [{ role: "user", content: "hi" }] })).not.toBeNull();
   });
 });

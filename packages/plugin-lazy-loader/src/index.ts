@@ -93,9 +93,7 @@ export class LazyContentLoader {
 
   private evictIfNeeded(incomingBytes: number): void {
     while (this.totalBytes + incomingBytes > this.config.cacheMaxBytes && this.cache.size > 0) {
-      const entries = [...this.cache.entries()].sort(
-        (a, b) => a[1].accessedAt - b[1].accessedAt,
-      );
+      const entries = [...this.cache.entries()].sort((a, b) => a[1].accessedAt - b[1].accessedAt);
       const oldest = entries[0];
       if (!oldest) break;
       this.cache.delete(oldest[0]);

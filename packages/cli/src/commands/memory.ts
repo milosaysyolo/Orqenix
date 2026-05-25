@@ -5,11 +5,7 @@ import Table from "cli-table3";
 import { select, confirm } from "@inquirer/prompts";
 import { writeFile, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import {
-  detectGitInfo,
-  detectSession,
-  generateScopeId,
-} from "@orqenix/core";
+import { detectGitInfo, detectSession, generateScopeId } from "@orqenix/core";
 import { MemoryManager, type RetentionPolicy, type Tier } from "@orqenix/memory-tiers";
 import { loadConfig } from "@orqenix/core/config";
 
@@ -51,15 +47,9 @@ function fmtBytes(n: number): string {
 }
 
 function renderCleanupPlan(scope: string, plans: Array<any>): void {
-  const head = kleur.bold(
-    "╔═══════════════════════════════════════════════════════════════════╗",
-  );
-  const sep = kleur.bold(
-    "╠═══════════════════════════════════════════════════════════════════╣",
-  );
-  const foot = kleur.bold(
-    "╚═══════════════════════════════════════════════════════════════════╝",
-  );
+  const head = kleur.bold("╔═══════════════════════════════════════════════════════════════════╗");
+  const sep = kleur.bold("╠═══════════════════════════════════════════════════════════════════╣");
+  const foot = kleur.bold("╚═══════════════════════════════════════════════════════════════════╝");
 
   consola.log(head);
   consola.log(kleur.bold("║          ⚠️  Memory Cleanup Confirmation                           ║"));
@@ -76,7 +66,8 @@ function renderCleanupPlan(scope: string, plans: Array<any>): void {
     if (p.willRemove.length === 0 && p.protectedCount === 0 && p.checkpointCount === 0) continue;
     consola.log(
       `║ ${p.tier.padEnd(12)} ${String(p.willRemove.length).padStart(6)} entries, ` +
-        `${fmtBytes(p.totalBytes).padStart(10)} (older than threshold)`.padEnd(50) + "║",
+        `${fmtBytes(p.totalBytes).padStart(10)} (older than threshold)`.padEnd(50) +
+        "║",
     );
     totalRemove += p.willRemove.length;
     totalBytes += p.totalBytes;
@@ -85,11 +76,17 @@ function renderCleanupPlan(scope: string, plans: Array<any>): void {
   }
 
   consola.log("║                                                                     ║");
-  consola.log(`║ TOTAL TO REMOVE: ${String(totalRemove).padStart(6)} entries, ${fmtBytes(totalBytes).padStart(10)}                  ║`);
+  consola.log(
+    `║ TOTAL TO REMOVE: ${String(totalRemove).padStart(6)} entries, ${fmtBytes(totalBytes).padStart(10)}                  ║`,
+  );
   consola.log("║                                                                     ║");
   consola.log("║ WILL PRESERVE:                                                     ║");
-  consola.log(`║   - ${String(totalProtected).padStart(6)} marked-protected entries                                ║`);
-  consola.log(`║   - ${String(totalCheckpoints).padStart(6)} checkpoints                                              ║`);
+  consola.log(
+    `║   - ${String(totalProtected).padStart(6)} marked-protected entries                                ║`,
+  );
+  consola.log(
+    `║   - ${String(totalCheckpoints).padStart(6)} checkpoints                                              ║`,
+  );
   consola.log(foot);
 }
 
@@ -142,7 +139,10 @@ export const memoryCmd = defineCommand({
     }),
 
     "preview-cleanup": defineCommand({
-      meta: { name: "preview-cleanup", description: "Dry-run cleanup and show what would be removed" },
+      meta: {
+        name: "preview-cleanup",
+        description: "Dry-run cleanup and show what would be removed",
+      },
       args: {
         cwd: { type: "string", default: process.cwd() },
         scope: { type: "string", default: "" },

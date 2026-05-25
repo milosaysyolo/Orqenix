@@ -95,9 +95,7 @@ const checks: Check[] = [
     name: "docs: 3 architecture notes present",
     run: async () => {
       const required = ["plugin-system.md", "mcp-integration.md", "skill-loader.md"];
-      const missing = required.filter(
-        (f) => !existsSync(join(ROOT, "docs/architecture", f)),
-      );
+      const missing = required.filter((f) => !existsSync(join(ROOT, "docs/architecture", f)));
       return {
         pass: missing.length === 0,
         msg: missing.length ? `missing: ${missing.join(", ")}` : undefined,

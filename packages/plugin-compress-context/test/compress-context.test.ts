@@ -42,31 +42,18 @@ describe("estimateMessagesTokens", () => {
 describe("shouldTriggerCompression", () => {
   it("does not trigger below minTokensTrigger", () => {
     const msgs: ConversationMessage[] = [{ role: "user", content: "short" }];
-    expect(
-      shouldTriggerCompression(msgs, DEFAULT_CFG, "onTaskComplete", 100000),
-    ).toBe(false);
+    expect(shouldTriggerCompression(msgs, DEFAULT_CFG, "onTaskComplete", 100000)).toBe(false);
   });
 
   it("always triggers above maxTokensTrigger", () => {
-    const msgs: ConversationMessage[] = [
-      { role: "user", content: "x".repeat(500000) },
-    ];
-    expect(
-      shouldTriggerCompression(msgs, DEFAULT_CFG, "onIdle", 100000),
-    ).toBe(true);
+    const msgs: ConversationMessage[] = [{ role: "user", content: "x".repeat(500000) }];
+    expect(shouldTriggerCompression(msgs, DEFAULT_CFG, "onIdle", 100000)).toBe(true);
   });
 
   it("respects mode=manual", () => {
-    const msgs: ConversationMessage[] = [
-      { role: "user", content: "x".repeat(200000) },
-    ];
+    const msgs: ConversationMessage[] = [{ role: "user", content: "x".repeat(200000) }];
     expect(
-      shouldTriggerCompression(
-        msgs,
-        { ...DEFAULT_CFG, mode: "manual" },
-        "onTaskComplete",
-        100000,
-      ),
+      shouldTriggerCompression(msgs, { ...DEFAULT_CFG, mode: "manual" }, "onTaskComplete", 100000),
     ).toBe(false);
   });
 });

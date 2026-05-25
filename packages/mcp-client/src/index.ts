@@ -33,10 +33,7 @@ export class McpClientManager {
     }
 
     const transport = this.makeTransport(server.transport);
-    const client = new Client(
-      { name: "orqenix", version: "0.2.0" },
-      { capabilities: {} },
-    );
+    const client = new Client({ name: "orqenix", version: "0.2.0" }, { capabilities: {} });
     await client.connect(transport);
     this.clients.set(server.name, client);
     log.info("mcp-client: connected", { server: server.name });

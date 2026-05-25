@@ -114,7 +114,9 @@ export const pluginCmd = defineCommand({
         );
         consola.log(kleur.bold(`Configured plugins (${expected.length}):`));
         for (const e of expected) {
-          const found = loaded.some((l) => e.includes(l) || l.includes(e.replace(/^@orqenix\//, "")));
+          const found = loaded.some(
+            (l) => e.includes(l) || l.includes(e.replace(/^@orqenix\//, "")),
+          );
           consola.log(`  ${found ? kleur.green("✓") : kleur.red("✗")} ${e}`);
         }
         await host.stop();

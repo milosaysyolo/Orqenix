@@ -18,6 +18,7 @@ must work consistently.
 ### Discovery
 
 Walks four directories per OpenCode conventions:
+
 - `.opencode/skills/<name>/SKILL.md` (project)
 - `.orqenix/skills/<name>/SKILL.md` (project, Orqenix-only)
 - `~/.config/opencode/skills/<name>/SKILL.md` (global)

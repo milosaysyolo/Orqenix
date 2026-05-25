@@ -26,7 +26,14 @@ describe("detectOutputType", () => {
     expect(detectOutputType("diff --git a/x b/x\n@@ -1 +1 @@\n-old\n+new")).toBe("diff");
   });
   it("detects logs", () => {
-    const log = ["2026-01-01 INFO x", "2026-01-01 INFO y", "2026-01-01 INFO z", "2026-01-01 INFO w", "2026-01-01 INFO v", "2026-01-01 INFO u"].join("\n");
+    const log = [
+      "2026-01-01 INFO x",
+      "2026-01-01 INFO y",
+      "2026-01-01 INFO z",
+      "2026-01-01 INFO w",
+      "2026-01-01 INFO v",
+      "2026-01-01 INFO u",
+    ].join("\n");
     expect(detectOutputType(log)).toBe("logs");
   });
   it("returns unknown for plain text", () => {

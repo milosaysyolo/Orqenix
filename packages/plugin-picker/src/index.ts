@@ -53,9 +53,7 @@ function mmrSelect<T>(
     let bestScore = -Infinity;
     for (let i = 0; i < remaining.length; i++) {
       const candidate = remaining[i]!;
-      const maxSimToSelected = Math.max(
-        ...selected.map((s) => similarity(candidate, s)),
-      );
+      const maxSimToSelected = Math.max(...selected.map((s) => similarity(candidate, s)));
       const mmrScore = lambda * candidate.score - (1 - lambda) * maxSimToSelected;
       if (mmrScore > bestScore) {
         bestScore = mmrScore;
@@ -89,8 +87,18 @@ function cosineSimilarity(a: number[], b: number[]): number {
 }
 
 function jaccardTextSimilarity(a: string, b: string): number {
-  const tokensA = new Set(a.toLowerCase().split(/\s+/).filter((t) => t.length > 2));
-  const tokensB = new Set(b.toLowerCase().split(/\s+/).filter((t) => t.length > 2));
+  const tokensA = new Set(
+    a
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((t) => t.length > 2),
+  );
+  const tokensB = new Set(
+    b
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((t) => t.length > 2),
+  );
   const intersection = [...tokensA].filter((t) => tokensB.has(t)).length;
   const union = new Set([...tokensA, ...tokensB]).size;
   if (union === 0) return 0;

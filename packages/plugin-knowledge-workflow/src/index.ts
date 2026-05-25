@@ -53,8 +53,7 @@ export function createKnowledgeWorkflowPlugin(deps: KnowledgeWorkflowDeps): Orqe
             maxTokens,
           });
           if (briefing) {
-            task.context.systemPrelude =
-              (task.context.systemPrelude ?? "") + "\n\n" + briefing;
+            task.context.systemPrelude = (task.context.systemPrelude ?? "") + "\n\n" + briefing;
             ctx.log.debug("knowledge-workflow: briefing injected", {
               agent: task.agentName,
               bytes: briefing.length,

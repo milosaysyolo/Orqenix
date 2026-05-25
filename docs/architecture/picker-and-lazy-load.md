@@ -25,16 +25,19 @@ Both reduce wasted tokens.
 ### Picker
 
 `pickTopN(candidates, config)`:
+
 1. Filter by `minScore`
 2. If `diversity: false`: sort by score, slice top N
 3. If `diversity: true`: apply MMR (Maximal Marginal Relevance)
 
 MMR formula:
+
 ```
 score(c) = λ·relevance(c) - (1-λ)·max(similarity(c, s)) for s in selected
 ```
 
 Similarity sources:
+
 - If `vector` present on both: cosine similarity (Phase 4 with embeddings)
 - Else if `text` present: Jaccard on tokens (Phase 3 fallback)
 - Else: 0 (no diversity penalty)
@@ -42,6 +45,7 @@ Similarity sources:
 ### Lazy loader
 
 `LazyContentLoader`:
+
 - `createHandle(path)`: reads file, returns `{path, size, hash, mtime}`
 - `load(handle)`: reads file, verifies hash matches handle. Throws if file
   modified since handle creation

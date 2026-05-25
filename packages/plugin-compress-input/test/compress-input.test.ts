@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  deduplicateMessages,
-  injectConcision,
-  removeWhitespaceNoise,
-} from "../src/index.js";
+import { deduplicateMessages, injectConcision, removeWhitespaceNoise } from "../src/index.js";
 
 describe("removeWhitespaceNoise", () => {
   it("collapses multiple blank lines", () => {

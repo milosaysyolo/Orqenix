@@ -107,14 +107,8 @@ export type PluginHooks = {
     output: ToolOutput,
     ctx: PluginContext,
   ) => ToolOutput | Promise<ToolOutput>;
-  "memory.write"?: (
-    entry: MemoryEntry,
-    ctx: PluginContext,
-  ) => MemoryEntry | Promise<MemoryEntry>;
-  "memory.query"?: (
-    query: MemoryQuery,
-    ctx: PluginContext,
-  ) => MemoryQuery | Promise<MemoryQuery>;
+  "memory.write"?: (entry: MemoryEntry, ctx: PluginContext) => MemoryEntry | Promise<MemoryEntry>;
+  "memory.query"?: (query: MemoryQuery, ctx: PluginContext) => MemoryQuery | Promise<MemoryQuery>;
   "knowledge.query"?: (
     query: KnowledgeQuery,
     ctx: PluginContext,

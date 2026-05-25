@@ -30,6 +30,7 @@ Each is an independent plugin with its own lifecycle hook.
 ### compress-input (priority 70)
 
 Hooks `llm.call.before`. Transformations:
+
 1. Whitespace cleanup (collapse blank lines, trim trailing)
 2. Adjacent message dedup
 3. Auto-inject concision instructions to system prompt
@@ -39,6 +40,7 @@ Mode "soft" (default) does only 1 and 2. Mode "rewrite" adds pseudo-code.
 ### compress-output (priority 70)
 
 Hooks `tool.execute.after`. Type-aware compression:
+
 - `file_list`: directory grouping + count summary
 - `logs`: error preservation + dedup + frequency count
 - `json`: array first 3 + last 1; object schema preview
@@ -51,6 +53,7 @@ Only triggers when output exceeds `thresholdTokens` (default 2000).
 
 Hooks `session.end` (Phase 3) and conversation events (Phase 3.5 when
 LLM dispatch lands). Smart-detect triggers:
+
 - `onTaskComplete`: compress completed task's messages
 - `onMilestone`: compress before a milestone marker
 - `onContextPressure`: trigger at 70% of model context limit
@@ -58,6 +61,7 @@ LLM dispatch lands). Smart-detect triggers:
 - `onIdle`: optional, defaults off
 
 Preservation rules (defaults match Monetization Lock):
+
 - `decisionKB`: true (decisions are expensive to re-derive)
 - `docsKB`: false (will reindex; cached snapshot drifts)
 - `codeKB`: false (will reindex; cached snapshot drifts)

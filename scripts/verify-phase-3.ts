@@ -54,10 +54,7 @@ const checks: Check[] = [
     run: async () => {
       const fs = await import("node:fs/promises");
       const idx = await fs.readFile(join(ROOT, "packages/cli/src/index.ts"), "utf-8");
-      const cmd = await fs.readFile(
-        join(ROOT, "packages/cli/src/commands/memory.ts"),
-        "utf-8",
-      );
+      const cmd = await fs.readFile(join(ROOT, "packages/cli/src/commands/memory.ts"), "utf-8");
       return {
         pass: idx.includes("memoryCmd") && cmd.includes("preview-cleanup"),
         msg: "memory command not wired",
@@ -67,14 +64,8 @@ const checks: Check[] = [
   {
     name: "docs: 3 architecture notes present",
     run: async () => {
-      const required = [
-        "compression-system.md",
-        "memory-tiers.md",
-        "picker-and-lazy-load.md",
-      ];
-      const missing = required.filter(
-        (f) => !existsSync(join(ROOT, "docs/architecture", f)),
-      );
+      const required = ["compression-system.md", "memory-tiers.md", "picker-and-lazy-load.md"];
+      const missing = required.filter((f) => !existsSync(join(ROOT, "docs/architecture", f)));
       return {
         pass: missing.length === 0,
         msg: missing.length ? `missing: ${missing.join(", ")}` : undefined,
@@ -87,7 +78,9 @@ const checks: Check[] = [
       const fs = await import("node:fs/promises");
       const pkgs = await fs.readdir(join(ROOT, "packages"), { withFileTypes: true });
       const paid = pkgs.filter(
-        (e) => e.isDirectory() && (e.name.startsWith("orqenix-pro") || e.name.startsWith("orqenix-cloud")),
+        (e) =>
+          e.isDirectory() &&
+          (e.name.startsWith("orqenix-pro") || e.name.startsWith("orqenix-cloud")),
       );
       return {
         pass: paid.length === 0,

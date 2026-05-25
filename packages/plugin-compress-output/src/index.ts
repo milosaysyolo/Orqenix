@@ -20,7 +20,14 @@ export function estimateTokens(text: string): number {
   return Math.ceil(text.length * TOKENS_PER_CHAR);
 }
 
-export type OutputType = "file_list" | "logs" | "json" | "table" | "diff" | "search_results" | "unknown";
+export type OutputType =
+  | "file_list"
+  | "logs"
+  | "json"
+  | "table"
+  | "diff"
+  | "search_results"
+  | "unknown";
 
 export function detectOutputType(output: unknown): OutputType {
   if (Array.isArray(output)) {
@@ -109,7 +116,9 @@ export function compressJson(obj: unknown): string {
   return JSON.stringify(obj);
 }
 
-export function compressSearchResults(results: Array<{ score: number; [k: string]: unknown }>): string {
+export function compressSearchResults(
+  results: Array<{ score: number; [k: string]: unknown }>,
+): string {
   if (results.length <= 5) return JSON.stringify(results, null, 2);
   const top5 = results.slice(0, 5);
   return JSON.stringify(
@@ -134,7 +143,11 @@ export function compressOutput(output: unknown, type: OutputType): unknown {
   if (type === "search_results" && Array.isArray(output))
     return compressSearchResults(output as Array<{ score: number }>);
   if (typeof output === "string" && output.length > 4000) {
-    return output.slice(0, 2000) + `\n\n... [${output.length - 4000} chars truncated] ...\n\n` + output.slice(-2000);
+    return (
+      output.slice(0, 2000) +
+      `\n\n... [${output.length - 4000} chars truncated] ...\n\n` +
+      output.slice(-2000)
+    );
   }
   return output;
 }
@@ -151,7 +164,8 @@ export function createPlugin(userConfig: Partial<CompressOutputConfig> = {}): Or
     hooks: {
       "tool.execute.after": async (output: ToolOutput, _ctx) => {
         if (!config.enabled) return output;
-        const serialized = typeof output.result === "string" ? output.result : JSON.stringify(output.result);
+        const serialized =
+          typeof output.result === "string" ? output.result : JSON.stringify(output.result);
         const tokens = estimateTokens(serialized);
         if (tokens < config.thresholdTokens) return output;
 

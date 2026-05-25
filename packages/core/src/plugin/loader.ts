@@ -103,6 +103,8 @@ export class PluginLoader {
   private isPlugin(x: unknown): x is OrqenixPlugin {
     if (!x || typeof x !== "object") return false;
     const p = x as Record<string, unknown>;
-    return typeof p.name === "string" && typeof p.version === "string" && typeof p.hooks === "object";
+    return (
+      typeof p.name === "string" && typeof p.version === "string" && typeof p.hooks === "object"
+    );
   }
 }

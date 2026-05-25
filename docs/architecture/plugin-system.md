@@ -31,11 +31,11 @@ llm.call.before     llm.call.after
 
 ### Execution semantics
 
-| Hook type | Behavior on throw | Chains output? |
-|---|---|---|
-| `before` (5 hooks) | aborts execution | No |
-| `after` (2 hooks) | logged, continues | No |
-| `transform` (5 hooks) | logged, continues | Yes (chained) |
+| Hook type             | Behavior on throw | Chains output? |
+| --------------------- | ----------------- | -------------- |
+| `before` (5 hooks)    | aborts execution  | No             |
+| `after` (2 hooks)     | logged, continues | No             |
+| `transform` (5 hooks) | logged, continues | Yes (chained)  |
 
 ### Priority
 

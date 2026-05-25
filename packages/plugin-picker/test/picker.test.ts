@@ -6,7 +6,10 @@ const CFG = { enabled: true, topN: 3, minScore: 0.3, diversity: true, lambda: 0.
 describe("pickTopN", () => {
   it("returns empty when no candidates pass minScore", () => {
     const r = pickTopN(
-      [{ item: "a", score: 0.1 }, { item: "b", score: 0.2 }],
+      [
+        { item: "a", score: 0.1 },
+        { item: "b", score: 0.2 },
+      ],
       CFG,
     );
     expect(r).toEqual([]);

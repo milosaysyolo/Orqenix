@@ -95,9 +95,7 @@ export class TierStore {
     const limit = q.limit ?? 100;
     const offset = q.offset ?? 0;
     const rows = this.required()
-      .prepare(
-        `SELECT * FROM memory ${whereSql} ORDER BY timestamp DESC LIMIT ? OFFSET ?`,
-      )
+      .prepare(`SELECT * FROM memory ${whereSql} ORDER BY timestamp DESC LIMIT ? OFFSET ?`)
       .all(...params, limit, offset) as Array<{
       id: string;
       scope: string;
@@ -124,9 +122,7 @@ export class TierStore {
   }
 
   async get(id: string): Promise<MemoryEntry | null> {
-    const row = this.required()
-      .prepare("SELECT * FROM memory WHERE id = ?")
-      .get(id) as
+    const row = this.required().prepare("SELECT * FROM memory WHERE id = ?").get(id) as
       | {
           id: string;
           scope: string;
