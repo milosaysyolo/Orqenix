@@ -39,6 +39,7 @@ export class SqliteAdapter implements StorageAdapter {
         v TEXT NOT NULL,
         expires_at INTEGER
       );
+      CREATE INDEX IF NOT EXISTS kv_expires_idx ON kv(expires_at) WHERE expires_at IS NOT NULL;
       CREATE TABLE IF NOT EXISTS docs (
         id TEXT PRIMARY KEY,
         collection TEXT NOT NULL,
@@ -46,6 +47,7 @@ export class SqliteAdapter implements StorageAdapter {
         created_at INTEGER NOT NULL
       );
       CREATE INDEX IF NOT EXISTS docs_collection_idx ON docs(collection);
+      CREATE INDEX IF NOT EXISTS docs_created_idx ON docs(created_at);
     `);
     // stub: sqlite-vec extension load — wire in Phase 4 when CodeKB lands.
   }
@@ -101,6 +103,27 @@ export class SqliteAdapter implements StorageAdapter {
   async searchVectors(): Promise<VectorResult[]> {
     // stub: implement in Phase 4.
     throw new Error("searchVectors: implement in Phase 4 (sqlite-vec wiring)");
+  }
+
+  // ─────────── Phase 3 additions ───────────
+
+  async sweepExpired(): Promise<number> {
+    const r = this.required()
+      .prepare("DELETE FROM kv WHERE expires_at IS NOT NULL AND expires_at < ?")
+      .run(Date.now());
+    return r.changes;
+  }
+
+  async vacuum(): Promise<void> {
+    this.required().exec("VACUUM");
+  }
+
+  async backup(path: string): Promise<void> {
+    await this.required().backup(path);
+  }
+
+  _rawHandle(): Database.Database {
+    return this.required();
   }
 
   private required(): Database.Database {

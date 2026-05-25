@@ -7,11 +7,12 @@ import { teamCmd } from "./commands/team.js";
 import { syncCmd } from "./commands/sync.js";
 import { pluginCmd } from "./commands/plugin.js";
 import { mcpCmd } from "./commands/mcp.js";
+import { memoryCmd } from "./commands/memory.js";
 
 const main = defineCommand({
   meta: {
     name: "orqenix",
-    version: "0.2.0-dev",
+    version: "0.3.0-dev",
     description: "Primary-agent orchestration engine",
   },
   subCommands: {
@@ -23,6 +24,7 @@ const main = defineCommand({
     sync: syncCmd,
     plugin: pluginCmd,
     mcp: mcpCmd,
+    memory: memoryCmd,
   },
 });
 
