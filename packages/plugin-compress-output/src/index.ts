@@ -63,7 +63,10 @@ export function compressLogs(text: string): string {
       errors.push(line);
       continue;
     }
-    const normalized = line.replace(/\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}/g, "{ts}").replace(/\b[a-f0-9]{8,}\b/g, "{id}");
+    const normalized = line
+      .replace(/\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(\.\d+)?/g, "{ts}")
+      .replace(/\b[a-f0-9]{8,}\b/gi, "{hex}")
+      .replace(/\b\d+\b/g, "{n}");
     counted.set(normalized, (counted.get(normalized) ?? 0) + 1);
   }
   const top = [...counted.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);

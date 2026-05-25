@@ -1,7 +1,7 @@
 export function parseDuration(d: string | null): number | null {
   if (d === null) return null;
   const m = d.match(/^(\d+)([smhdw])$/);
-  if (!m) throw new Error(`Invalid duration: ${d}`);
+  if (!m || !m[1] || !m[2]) throw new Error(`Invalid duration: ${d}`);
   const n = Number(m[1]);
   const unit = m[2];
   const mult: Record<string, number> = {
@@ -11,5 +11,7 @@ export function parseDuration(d: string | null): number | null {
     d: 24 * 60 * 60 * 1000,
     w: 7 * 24 * 60 * 60 * 1000,
   };
-  return n * mult[unit]!;
+  const factor = mult[unit];
+  if (factor === undefined) throw new Error(`Unknown duration unit: ${unit}`);
+  return n * factor;
 }

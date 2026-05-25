@@ -1,5 +1,3 @@
-import type { ScopeId } from "@orqenix/core";
-
 export type Tier = "working" | "episodic" | "semantic" | "global";
 
 export interface MemoryEntry {

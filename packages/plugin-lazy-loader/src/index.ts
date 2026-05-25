@@ -130,7 +130,10 @@ export function createPlugin(userConfig: Partial<LazyLoaderConfig> = {}): Orqeni
     capabilities: ["lazy-loading", "context-management"],
     hooks: {
       "session.start": async (_session, ctx) => {
-        ctx.log.debug("lazy-loader: ready");
+        ctx.log.debug("lazy-loader: ready", {
+          cacheMaxBytes: config.cacheMaxBytes,
+          hashCheckOnRead: config.hashCheckOnRead,
+        });
       },
     },
   };

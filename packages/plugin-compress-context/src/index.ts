@@ -181,7 +181,13 @@ export function createPlugin(userConfig: Partial<CompressContextConfig> = {}): O
     capabilities: ["compression", "context-management"],
     hooks: {
       "session.end": async (_session, ctx) => {
-        ctx.log.debug("compress-context: session.end hook fired");
+        ctx.log.debug("compress-context: session.end fired", {
+          mode: config.mode,
+          minTrigger: config.minTokensTrigger,
+          maxTrigger: config.maxTokensTrigger,
+        });
+        // Phase 3: hooks registered. Full integration with conversation store
+        // ships when LLM dispatch layer lands (Phase 3.5).
       },
     },
   };
