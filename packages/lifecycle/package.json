@@ -1,0 +1,24 @@
+{
+  "name": "@orqenix/lifecycle",
+  "version": "0.4.0",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "better-sqlite3": "^11.0.0",
+    "yaml": "^2.4.0",
+    "blake3-wasm": "^2.0.0",
+    "semver": "^7.6.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0",
+    "typescript": "^5.4.0",
+    "@types/semver": "^7.5.8"
+  }
+}

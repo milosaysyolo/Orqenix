@@ -1,0 +1,21 @@
+{
+  "name": "@orqenix/embedding-cloud",
+  "version": "0.4.0",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@anthropic-ai/sdk": "^0.27.0",
+    "openai": "^4.50.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0",
+    "typescript": "^5.4.0"
+  }
+}

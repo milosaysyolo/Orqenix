@@ -25,8 +25,13 @@
     "verify-phase-1": "tsx scripts/verify-phase-1.ts",
     "verify-phase-2": "tsx scripts/verify-phase-2.ts",
     "verify-phase-3": "tsx scripts/verify-phase-3.ts",
+    "verify-phase-4": "tsx scripts/verify/verify-phase-4.ts",
+    "verify-phase-4-lifecycle": "pnpm --filter @orqenix/lifecycle test",
+    "verify-phase-4-embedding": "pnpm --filter @orqenix/embedding-* test",
+    "verify-phase-4-knowledge": "pnpm --filter @orqenix/kb-* test",
+    "verify-phase-4-marketplace": "pnpm --filter @orqenix/marketplace-client test",
     "postinstall": "tsx scripts/postinstall.ts",
-    "smoke": "pnpm build && tsx scripts/cross-platform-smoke.ts"
+    "smoke": "tsx scripts/smoke/run.ts"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",

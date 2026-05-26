@@ -1,0 +1,22 @@
+{
+  "name": "@orqenix/kb-query",
+  "version": "0.4.0",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@orqenix/kb-decisions": "workspace:*",
+    "@orqenix/kb-docs": "workspace:*",
+    "@orqenix/kb-code": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0",
+    "typescript": "^5.4.0"
+  }
+}
