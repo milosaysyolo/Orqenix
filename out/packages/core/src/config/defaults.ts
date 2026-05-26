@@ -1,0 +1,130 @@
+import type { OrqenixConfig } from "../types/config.js";
+
+export const DEFAULT_CONFIG: OrqenixConfig = {
+  version: "1.0",
+  providers: {},
+  routing: {
+    default: "anthropic/claude-sonnet-4-20250514",
+    fallback: "ollama/qwen2.5-coder",
+    perAgent: {},
+    rules: [],
+  },
+  embedding: {
+    primary: "openai/text-embedding-3-small",
+    fallback: "local/all-MiniLM-L6-v2",
+    localFirst: false,
+    cacheLocal: true,
+  },
+  storage: {
+    type: "sqlite",
+    path: "~/.local/share/orqenix",
+    wal: true,
+    vacuumInterval: "weekly",
+  },
+  memory: {
+    tiers: {
+      working: { ttl: null, maxSizeMB: 50 },
+      episodic: { ttl: "7d", maxSizeMB: 100, cleanup: "lru" },
+      semantic: { ttl: "90d", maxSizeMB: 500, cleanup: "importance" },
+      global: { enabled: false, ttl: "365d" },
+    },
+    cleanup: {
+      mode: "prompt",
+      schedule: "weekly",
+      showPreview: true,
+      dryRunFirst: true,
+      protectMarked: true,
+      protectCheckpoints: true,
+    },
+  },
+  knowledge: {
+    preTask: {
+      autoQuery: true,
+      maxBriefingTokens: 3000,
+      includeKbs: ["decisions", "docs", "code"],
+    },
+    postTask: {
+      autoReindex: true,
+      captureDecisions: true,
+      detectionMode: "filesystem",
+    },
+    indexing: {
+      mode: "incremental",
+      batchSize: 50,
+      parallelism: 4,
+      debounceMs: 5000,
+    },
+  },
+  context: {
+    lazyLoader: { enabled: true },
+    picker: { topN: 5, minScore: 0.3, diversity: true },
+    compressInput: {
+      enabled: true,
+      mode: "soft",
+      removeWhitespaceNoise: true,
+      deduplicate: true,
+      rewriteToPseudoCode: false,
+      instructConcision: true,
+      maxRewriteTokens: 200,
+      preserveCodeBlocks: true,
+      preserveQuotes: true,
+    },
+    compressOutput: {
+      enabled: true,
+      thresholdTokens: 2000,
+      typeAware: true,
+      preserveHandles: true,
+    },
+    compressContext: {
+      enabled: true,
+      mode: "smart",
+      minTokensTrigger: 20000,
+      maxTokensTrigger: 100000,
+      triggers: {
+        onTaskComplete: true,
+        onMilestone: true,
+        onContextPressure: true,
+        onTopicShift: true,
+        onIdle: false,
+      },
+      preserve: {
+        decisionKB: true,
+        docsKB: false,
+        codeKB: false,
+        userMessages: false,
+        checkpoints: true,
+        protectedTags: true,
+      },
+      protectPatterns: ["AGENTS.md", "*.spec.md", ".orqenix/**", "<protect>...</protect>"],
+    },
+  },
+  scope: {
+    sessionDetection: ["opencode", "claude-code", "cursor", "codex", "antigravity", "env"],
+    autoDetectGit: true,
+  },
+  sync: {
+    enabled: true,
+    mode: "auto",
+    syncOnSave: true,
+    syncOnStartup: true,
+    conflictResolution: "orqenix-wins",
+    preserveOpenCodeUserEdits: true,
+    outputMarker: true,
+  },
+  webui: {
+    enabled: true,
+    port: 39397,
+    host: "localhost",
+    domainBridge: "orqenix.dev",
+    openOnStart: false,
+  },
+  update: {
+    channel: "stable",
+    mode: "prompt",
+    checkInterval: "24h",
+  },
+  telemetry: {
+    enabled: false,
+    anonymizeId: true,
+  },
+};

@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Orqenix runtime data (only ignore at repo root; .orqenix in user projects is fine)
+/.orqenix/cache/
+/.orqenix/logs/
+/docs/implementation/
+/.orqenix/memory/
+/.orqenix/knowledge/
+
+# Bun / Node
+.next/
+.turbo/

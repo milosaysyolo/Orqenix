@@ -1,0 +1,45 @@
+{
+  "name": "orqenix-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Production-grade primary-agent orchestration engine",
+  "license": "Apache-2.0",
+  "author": "Milo Nguyen",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milosaysyolo/Orqenix.git"
+  },
+  "homepage": "https://orqenix.dev",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && npx rimraf node_modules",
+    "verify-phase-1": "tsx scripts/verify-phase-1.ts",
+    "verify-phase-2": "tsx scripts/verify-phase-2.ts",
+    "verify-phase-3": "tsx scripts/verify-phase-3.ts",
+    "verify-phase-4": "tsx scripts/verify/verify-phase-4.ts",
+    "verify-phase-4-lifecycle": "pnpm --filter @orqenix/lifecycle test",
+    "verify-phase-4-embedding": "pnpm --filter @orqenix/embedding-* test",
+    "verify-phase-4-knowledge": "pnpm --filter @orqenix/kb-* test",
+    "verify-phase-4-marketplace": "pnpm --filter @orqenix/marketplace-client test",
+    "postinstall": "tsx scripts/postinstall.ts",
+    "smoke": "tsx scripts/smoke/run.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "prettier": "^3.3.0",
+    "tsx": "^4.19.0",
+    "tsup": "^8.3.0",
+    "turbo": "^2.2.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

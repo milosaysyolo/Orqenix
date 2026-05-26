@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { verify } from "node:crypto";
 import { readFileSync } from "node:fs";
+import type { Registry } from "@orqenix/registry";
 
 export const PluginEntry = z.object({
   name: z.string(),
@@ -57,13 +58,59 @@ export function verifySignature(
   return verify(null, body, pubKey, Buffer.from(signatureBase64, "base64"));
 }
 
-export async function install(_ref: string): Promise<void> {
-  return;
+export interface InstallOpts {
+  registry: Registry;
+  policy?: {
+    requireSignature?: boolean;
+  };
+  publicKey?: string;
+}
+
+export async function install(ref: string, opts: InstallOpts): Promise<void> {
+  const [name, version] = ref.split("@");
+  if (!name || !version) {
+    throw new Error(`Invalid plugin reference: ${ref}`);
+  }
+
+  const conflicts = await opts.registry.checkConflicts({
+    id: ref,
+    name: name,
+    version: version,
+    type: "skill",
+    state: "ACTIVE",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  });
+
+  if (conflicts.length > 0) {
+    throw new Error(`Conflicts detected: ${conflicts.map(c => c.id).join(", ")}`);
+  }
+
+  await opts.registry.add({
+    id: ref,
+    name: name,
+    version: version,
+    type: "skill",
+    state: "ACTIVE",
+  });
 }
 
 export async function uninstall(
-  _ref: string,
-  _opts?: { purge?: boolean },
+  ref: string,
+  opts: { registry: Registry; purge?: boolean } = { registry: null as any },
 ): Promise<void> {
-  return;
+  if (!opts.registry) {
+    throw new Error("Registry required for uninstall");
+  }
+
+  const entry = await opts.registry.get(ref);
+  if (!entry) {
+    throw new Error(`Plugin not found: ${ref}`);
+  }
+
+  if (opts.purge) {
+    await opts.registry.remove(ref);
+  } else {
+    await opts.registry.update(ref, { state: "TRASH" });
+  }
 }

@@ -184,6 +184,9 @@ importers:
         specifier: ^0.22.0
         version: 0.22.6
     devDependencies:
+      '@types/better-sqlite3':
+        specifier: ^7.6.11
+        version: 7.6.13
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
@@ -203,6 +206,9 @@ importers:
         specifier: ^11.0.0
         version: 11.10.0
     devDependencies:
+      '@types/better-sqlite3':
+        specifier: ^7.6.11
+        version: 7.6.13
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
@@ -240,6 +246,9 @@ importers:
         specifier: ^11.0.0
         version: 11.0.5
     devDependencies:
+      '@types/better-sqlite3':
+        specifier: ^7.6.11
+        version: 7.6.13
       typescript:
         specifier: ^5.4.0
         version: 5.9.3
@@ -560,6 +569,9 @@ importers:
         specifier: ^11.0.0
         version: 11.10.0
     devDependencies:
+      '@types/better-sqlite3':
+        specifier: ^7.6.11
+        version: 7.6.13
       typescript:
         specifier: ^5.4.0
         version: 5.9.3

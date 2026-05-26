@@ -3,12 +3,13 @@ import { appendAudit } from "../audit/writer";
 import { generateKeyPairSync } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { rmSync, readFileSync } from "node:fs";
+import { rmSync, readFileSync, mkdirSync } from "node:fs";
 
 describe("audit", () => {
   it("should append audit entry with signature", async () => {
     const root = join(tmpdir(), "audit-test-1");
     rmSync(root, { recursive: true, force: true });
+    mkdirSync(root, { recursive: true });
     const auditPath = join(root, "audit.log");
 
     const { privateKey } = generateKeyPairSync("ed25519");
@@ -31,6 +32,7 @@ describe("audit", () => {
   it("should append multiple entries", async () => {
     const root = join(tmpdir(), "audit-test-2");
     rmSync(root, { recursive: true, force: true });
+    mkdirSync(root, { recursive: true });
     const auditPath = join(root, "audit.log");
 
     const { privateKey } = generateKeyPairSync("ed25519");
@@ -61,6 +63,7 @@ describe("audit", () => {
   it("should include details in audit entry", async () => {
     const root = join(tmpdir(), "audit-test-3");
     rmSync(root, { recursive: true, force: true });
+    mkdirSync(root, { recursive: true });
     const auditPath = join(root, "audit.log");
 
     const { privateKey } = generateKeyPairSync("ed25519");
