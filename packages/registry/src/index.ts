@@ -24,6 +24,10 @@ export class Registry {
     this.db = db;
   }
 
+  async close(): Promise<void> {
+    this.db.close();
+  }
+
   private initSchema(): void {
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS registry (
@@ -88,6 +92,10 @@ export class Registry {
   }
 
   async remove(id: string): Promise<void> {
+    await this.update(id, { state: "TRASH" });
+  }
+
+  async purge(id: string): Promise<void> {
     const stmt = this.db.prepare("DELETE FROM registry WHERE id = ?");
     stmt.run(id);
   }

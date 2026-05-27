@@ -31,7 +31,15 @@
     "verify-phase-4-knowledge": "pnpm --filter @orqenix/kb-* test",
     "verify-phase-4-marketplace": "pnpm --filter @orqenix/marketplace-client test",
     "postinstall": "tsx scripts/postinstall.ts",
-    "smoke": "tsx scripts/smoke/run.ts"
+    "smoke": "tsx scripts/smoke/run.ts",
+    "audit:charter": "tsx scripts/audit/00-charter-runner.ts",
+    "test:detach-roundtrip": "tsx scripts/test-detach-roundtrip.ts",
+    "test:audit-tamper": "tsx scripts/test-audit-tamper.ts"
+  },
+  "pnpm": {
+    "overrides": {
+      "protobufjs": "^7.5.8"
+    }
   },
   "devDependencies": {
     "@types/node": "^20.14.0",

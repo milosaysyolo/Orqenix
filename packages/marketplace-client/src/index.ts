@@ -109,8 +109,8 @@ export async function uninstall(
   }
 
   if (opts.purge) {
-    await opts.registry.remove(ref);
+    await opts.registry.purge(ref);
   } else {
-    await opts.registry.update(ref, { state: "TRASH" });
+    await opts.registry.remove(ref);
   }
 }

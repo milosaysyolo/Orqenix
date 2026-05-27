@@ -1,5 +1,7 @@
 import Database from "better-sqlite3";
 import { createHash } from "node:crypto";
+import { loadParser } from "./parser";
+import { extractSymbols as extractSymbolsFromParser } from "./symbols";
 
 export const LANGS = [
   "typescript",
@@ -97,15 +99,32 @@ export class CodeKB {
     const tx = this.db.transaction(() => {
       insertFile.run(fileId, path, lang, fileHash, new Date().toISOString());
       deleteSymbols.run(fileId);
-
-      const symbols = this.extractSymbols(content, lang);
-      for (const sym of symbols) {
-        const symId = createHash("sha256").update(`${fileId}:${sym.name}`).digest("hex");
-        insertSymbol.run(symId, fileId, sym.kind, sym.name, sym.startLine, sym.endLine, sym.signature);
-      }
     });
 
     tx();
+
+    try {
+      const parser = await loadParser(lang);
+      const symbols = extractSymbolsFromParser(parser, content, lang);
+      
+      const insertSymbolTx = this.db.transaction(() => {
+        for (const sym of symbols) {
+          const symId = createHash("sha256").update(`${fileId}:${sym.name}`).digest("hex");
+          insertSymbol.run(symId, fileId, sym.kind, sym.name, sym.startLine, sym.endLine, sym.signature);
+        }
+      });
+      insertSymbolTx();
+    } catch {
+      // Fall back to regex-based extraction if tree-sitter fails
+      const symbols = this.extractSymbolsRegex(content, lang);
+      const insertSymbolTx = this.db.transaction(() => {
+        for (const sym of symbols) {
+          const symId = createHash("sha256").update(`${fileId}:${sym.name}`).digest("hex");
+          insertSymbol.run(symId, fileId, sym.kind, sym.name, sym.startLine, sym.endLine, sym.signature);
+        }
+      });
+      insertSymbolTx();
+    }
   }
 
   async query(q: string, topK = 5): Promise<CodeResult[]> {
@@ -158,7 +177,7 @@ export class CodeKB {
     return map[ext] || "unknown";
   }
 
-  private extractSymbols(
+  private extractSymbolsRegex(
     content: string,
     lang: string,
   ): Array<{ kind: string; name: string; startLine: number; endLine: number; signature: string }> {

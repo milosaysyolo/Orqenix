@@ -82,6 +82,10 @@ export class DocsKB {
     this.db = db;
   }
 
+  async close(): Promise<void> {
+    this.db.close();
+  }
+
   private initSchema(): void {
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS docs (
