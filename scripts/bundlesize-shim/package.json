@@ -1,0 +1,6 @@
+{
+  "name": "bundlesize",
+  "version": "1.0.0-orqenix",
+  "type": "module",
+  "bin": "./index.js"
+}

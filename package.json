@@ -22,6 +22,7 @@
     "smoke": "tsx scripts/smoke/run.ts",
     "bundle:check": "pnpm build && node scripts/check-bundle-size.mjs",
     "bench:phase-4": "pnpm --filter @orqenix/bench bench:phase-4",
+    "bench:runner": "tsx bench/runner.ts",
     "charter": "bash charter/run.sh",
     "charter:docker": "docker build -t orqenix-charter -f charter/Dockerfile . && docker run --rm -v $PWD:/repo orqenix-charter"
   },

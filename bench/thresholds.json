@@ -1,0 +1,12 @@
+{
+  "orqenix-init": {
+    "p50Ms": 1500,
+    "p95Ms": 2000,
+    "iterations": 5
+  },
+  "knowledge-query": {
+    "p50Ms": 200,
+    "p95Ms": 300,
+    "iterations": 20
+  }
+}

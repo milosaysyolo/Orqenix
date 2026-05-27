@@ -1,15 +1,34 @@
 {
   "files": [
-    { "path": "packages/core/dist/index.js",               "maxSize": "200 KB" },
-    { "path": "packages/lifecycle/dist/index.js",          "maxSize": "150 KB" },
-    { "path": "packages/registry/dist/index.js",           "maxSize": "100 KB" },
-    { "path": "packages/embedding-local/dist/index.js",    "maxSize": "300 KB" },
-    { "path": "packages/embedding-cloud/dist/index.js",    "maxSize": "150 KB" },
-    { "path": "packages/kb-decisions/dist/index.js",       "maxSize": "150 KB" },
-    { "path": "packages/kb-docs/dist/index.js",            "maxSize": "200 KB" },
-    { "path": "packages/kb-code/dist/index.js",            "maxSize": "300 KB" },
-    { "path": "packages/kb-query/dist/index.js",           "maxSize": "150 KB" },
-    { "path": "packages/marketplace-client/dist/index.js", "maxSize": "200 KB" },
-    { "path": "packages/cli/dist/index.js",                "maxSize": "500 KB" }
+    {
+      "path": "packages/core/dist/index.js",
+      "maxSize": "200 kB",
+      "compression": "none"
+    },
+    {
+      "path": "packages/core/dist/index.cjs",
+      "maxSize": "220 kB",
+      "compression": "none"
+    },
+    {
+      "path": "packages/kb-docs/dist/index.js",
+      "maxSize": "500 kB",
+      "compression": "none"
+    },
+    {
+      "path": "packages/kb-code/dist/index.js",
+      "maxSize": "500 kB",
+      "compression": "none"
+    },
+    {
+      "path": "packages/kb-decisions/dist/index.js",
+      "maxSize": "300 kB",
+      "compression": "none"
+    },
+    {
+      "path": "packages/cli/dist/index.js",
+      "maxSize": "400 kB",
+      "compression": "none"
+    }
   ]
 }

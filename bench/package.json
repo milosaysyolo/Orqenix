@@ -2,9 +2,11 @@
   "name": "@orqenix/bench",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "bench": "vitest bench --run",
-    "bench:phase-4": "vitest bench --run --reporter=verbose"
+    "bench:phase-4": "tsx runner.ts",
+    "bench:runner": "tsx runner.ts"
   },
   "devDependencies": {
     "vitest": "^1.6.0",
@@ -14,6 +16,7 @@
     "@orqenix/core": "workspace:*",
     "@orqenix/kb-docs": "workspace:*",
     "@orqenix/kb-query": "workspace:*",
-    "@orqenix/embedding-local": "workspace:*"
+    "@orqenix/embedding-local": "workspace:*",
+    "execa": "^8.0.1"
   }
 }

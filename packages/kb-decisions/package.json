@@ -1,22 +1,28 @@
 {
   "name": "@orqenix/kb-decisions",
-  "version": "0.4.0",
-  "license": "Apache-2.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+  "version": "0.4.0-phase-4",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
-  "dependencies": {
-    "@orqenix/core": "workspace:*",
-    "@orqenix/embedding-local": "workspace:*",
-    "better-sqlite3": "^11.0.0"
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.11",
-    "vitest": "^1.6.0",
-    "typescript": "^5.4.0"
+    "@types/node": "^22.10.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   }
 }

@@ -1,7 +1,10 @@
 import Database from "better-sqlite3";
 import { createHash } from "node:crypto";
-import { loadParser } from "./parser";
-import { extractSymbols as extractSymbolsFromParser } from "./symbols";
+
+export { initParser, loadLanguage, createParser, parseSource, loadParser, detectLang } from "./parser.js";
+export type { SupportedLanguage } from "./parser.js";
+export { extractSymbols, extractSymbolsLegacy } from "./symbols.js";
+export type { Symbol } from "./symbols.js";
 
 export const LANGS = [
   "typescript",
@@ -104,18 +107,19 @@ export class CodeKB {
     tx();
 
     try {
+      const { loadParser } = await import("./parser.js");
+      const { extractSymbolsLegacy } = await import("./symbols.js");
       const parser = await loadParser(lang);
-      const symbols = extractSymbolsFromParser(parser, content, lang);
-      
+      const symbols = extractSymbolsLegacy(parser, content, lang);
+
       const insertSymbolTx = this.db.transaction(() => {
         for (const sym of symbols) {
           const symId = createHash("sha256").update(`${fileId}:${sym.name}`).digest("hex");
-          insertSymbol.run(symId, fileId, sym.kind, sym.name, sym.startLine, sym.endLine, sym.signature);
+          insertSymbol.run(symId, fileId, sym.kind, sym.name, sym.startLine, sym.endLine, "");
         }
       });
       insertSymbolTx();
     } catch {
-      // Fall back to regex-based extraction if tree-sitter fails
       const symbols = this.extractSymbolsRegex(content, lang);
       const insertSymbolTx = this.db.transaction(() => {
         for (const sym of symbols) {
