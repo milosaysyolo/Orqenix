@@ -1,0 +1,19 @@
+{
+  "name": "@orqenix/bench",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "bench": "vitest bench --run",
+    "bench:phase-4": "vitest bench --run --reporter=verbose"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0",
+    "tinybench": "^2.6.0"
+  },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@orqenix/kb-docs": "workspace:*",
+    "@orqenix/kb-query": "workspace:*",
+    "@orqenix/embedding-local": "workspace:*"
+  }
+}

@@ -1,120 +1,47 @@
-name: ci
+name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  push: { branches: [main, "feat/**"] }
+  pull_request: { branches: [main] }
 
 jobs:
-  verify:
-    name: ${{ matrix.os }} · node-${{ matrix.node }}
-    runs-on: ${{ matrix.os }}
-
+  test:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node: ['20', '22']
-
-    timeout-minutes: 20
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.12.0
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
-
-      # ✅ IMPORTANT FIX: remove npm config hacks
-      # GitHub runner already has everything needed
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm build
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Run tests
-        run: pnpm test
-
-      - name: Verify Phase 1
-        run: pnpm verify-phase-1
-
-      - name: Verify Phase 2
-        run: pnpm verify-phase-2
-
-      - name: Verify Phase 3
-        run: pnpm verify-phase-3
-
-      # ✅ Optional but highly valuable
-      - name: Smoke test (integration)
-        run: pnpm smoke
-
-      - name: Upload logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: logs-${{ matrix.os }}-node${{ matrix.node }}
-          path: |
-            **/*.log
-            packages/**/test-results
-          if-no-files-found: ignore
-          retention-days: 7
-
-  formatting:
-    name: formatting check
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
+        node-version: ['20', '22']
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.12.0
-
+      - uses: pnpm/action-setup@v3
+        with: { version: 9 }
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
+        with: { node-version: ${{ matrix.node-version }}, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      - run: pnpm exec prettier --check .
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm test
 
-      - name: Prettier check
-        run: pnpm exec prettier --check "**/*.{ts,tsx,js,json,md,yml,yaml}" --ignore-path .gitignore
-
-  ci-pass:
-    name: CI Pass Gate
-    needs: [verify, formatting]
+  charter:
+    needs: test
     runs-on: ubuntu-latest
-    if: always()
-
     steps:
-      - name: Ensure all jobs passed
+      - uses: actions/checkout@v4
+        with: { path: Orqenix }
+      - name: Clone Orqenix-Pro
+        env:
+          PRO_TOKEN: ${{ secrets.ORQENIX_PRO_READ_TOKEN }}
         run: |
-          if [ "${{ needs.verify.result }}" != "success" ]; then
-            echo "verify failed"
-            exit 1
-          fi
-          if [ "${{ needs.formatting.result }}" != "success" ]; then
-            echo "formatting failed"
-            exit 1
-          fi
-          echo "✅ All CI checks passed"
+          git clone https://x-access-token:${PRO_TOKEN}@github.com/milosaysyolo/Orqenix-Pro.git Orqenix-Pro
+      - name: Run Phase 4 charter in Docker
+        working-directory: Orqenix
+        run: |
+          docker build -t orqenix-charter -f charter/Dockerfile .
+          docker run --rm \
+            -v "${{ github.workspace }}/Orqenix:/repo" \
+            -v "${{ github.workspace }}/Orqenix-Pro:/Orqenix-Pro" \
+            -e ORQENIX_PRO_PATH=/Orqenix-Pro \
+            -e CHARTER_VERBOSE=1 \
+            orqenix-charter

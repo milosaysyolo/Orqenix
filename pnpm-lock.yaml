@@ -33,6 +33,28 @@ importers:
         specifier: ^2.1.0
         version: 2.1.9(@types/node@20.19.41)
 
+  bench:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../packages/core
+      '@orqenix/embedding-local':
+        specifier: workspace:*
+        version: link:../packages/embedding-local
+      '@orqenix/kb-docs':
+        specifier: workspace:*
+        version: link:../packages/kb-docs
+      '@orqenix/kb-query':
+        specifier: workspace:*
+        version: link:../packages/kb-query
+    devDependencies:
+      tinybench:
+        specifier: ^2.6.0
+        version: 2.9.0
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
   packages/cli:
     dependencies:
       '@inquirer/prompts':

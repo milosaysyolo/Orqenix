@@ -17,24 +17,13 @@
   "packageManager": "pnpm@9.12.0",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "clean": "turbo run clean && npx rimraf node_modules",
-    "verify-phase-1": "tsx scripts/verify-phase-1.ts",
-    "verify-phase-2": "tsx scripts/verify-phase-2.ts",
-    "verify-phase-3": "tsx scripts/verify-phase-3.ts",
-    "verify-phase-4": "tsx scripts/verify/verify-phase-4.ts",
-    "verify-phase-4-lifecycle": "pnpm --filter @orqenix/lifecycle test",
-    "verify-phase-4-embedding": "pnpm --filter @orqenix/embedding-* test",
-    "verify-phase-4-knowledge": "pnpm --filter @orqenix/kb-* test",
-    "verify-phase-4-marketplace": "pnpm --filter @orqenix/marketplace-client test",
-    "postinstall": "tsx scripts/postinstall.ts",
+    "test": "turbo run test",
     "smoke": "tsx scripts/smoke/run.ts",
-    "audit:charter": "tsx scripts/audit/00-charter-runner.ts",
-    "test:detach-roundtrip": "tsx scripts/test-detach-roundtrip.ts",
-    "test:audit-tamper": "tsx scripts/test-audit-tamper.ts"
+    "bundle:check": "pnpm build && node scripts/check-bundle-size.mjs",
+    "bench:phase-4": "pnpm --filter @orqenix/bench bench:phase-4",
+    "charter": "bash charter/run.sh",
+    "charter:docker": "docker build -t orqenix-charter -f charter/Dockerfile . && docker run --rm -v $PWD:/repo orqenix-charter"
   },
   "pnpm": {
     "overrides": {

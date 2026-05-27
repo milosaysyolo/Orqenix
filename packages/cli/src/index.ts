@@ -10,6 +10,8 @@ import { mcpCmd } from "./commands/mcp.js";
 import { memoryCmd } from "./commands/memory.js";
 import { gcCmd, trashCmd, historyCmd } from "./commands/lifecycle.js";
 import { knowledgeCmd, mpCmd, licenseCmd } from "./commands/phase4.js";
+import { audit } from "./commands/audit.js";
+import { detach } from "./commands/detach.js";
 
 const main = defineCommand({
   meta: {
@@ -33,6 +35,8 @@ const main = defineCommand({
     knowledge: knowledgeCmd,
     mp: mpCmd,
     license: licenseCmd,
+    audit,
+    detach,
   },
 });
 

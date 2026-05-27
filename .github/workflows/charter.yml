@@ -1,0 +1,25 @@
+name: Charter (Phase 4)
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  charter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: Orqenix }
+      - name: Clone Orqenix-Pro
+        env: { PRO_TOKEN: ${{ secrets.ORQENIX_PRO_READ_TOKEN }} }
+        run: |
+          git clone https://x-access-token:${PRO_TOKEN}@github.com/milosaysyolo/Orqenix-Pro.git Orqenix-Pro
+      - name: Run charter
+        working-directory: Orqenix
+        run: |
+          docker build -t orqenix-charter -f charter/Dockerfile .
+          docker run --rm \
+            -v "${{ github.workspace }}/Orqenix:/repo" \
+            -v "${{ github.workspace }}/Orqenix-Pro:/Orqenix-Pro" \
+            -e ORQENIX_PRO_PATH=/Orqenix-Pro \
+            orqenix-charter
