@@ -1,0 +1,22 @@
+{
+  "name": "@orqenix/integration",
+  "private": true,
+  "version": "0.4.0-phase-4",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@orqenix-pro/license": "file:../../Orqenix-Pro/packages/license",
+    "@orqenix/kb-code": "workspace:*",
+    "@orqenix/kb-decisions": "workspace:*",
+    "@orqenix/kb-docs": "workspace:*",
+    "@orqenix/plugin-snapshot": "workspace:*",
+    "@types/node": "^22.10.0",
+    "execa": "^9.5.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

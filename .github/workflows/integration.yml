@@ -1,0 +1,108 @@
+name: Cross-Repo Integration
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  integration:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: ["20", "22"]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout Orqenix
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: Orqenix
+
+      - name: Checkout Orqenix-Pro
+        uses: actions/checkout@v4
+        with:
+          repository: milosaysyolo/Orqenix-Pro
+          ref: v0.4.0-phase-4
+          path: Orqenix-Pro
+          token: ${{ secrets.ORQENIX_PRO_PAT }}
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v3
+        with: { version: 9.12.0 }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: "pnpm"
+
+      - name: Install Orqenix-Pro
+        working-directory: Orqenix-Pro
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm generate-test-keys
+          pnpm build
+
+      - name: Install Orqenix
+        working-directory: Orqenix
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Install Integration
+        working-directory: Orqenix/integration
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Cross-Repo Smoke (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        working-directory: Orqenix
+        run: bash smoke/cross-repo-smoke.sh
+
+      - name: Run Cross-Repo Smoke (Windows)
+        if: matrix.os == 'windows-latest'
+        working-directory: Orqenix
+        shell: pwsh
+        run: ./smoke/cross-repo-smoke.ps1
+
+      - name: Run Integration Suite
+        working-directory: Orqenix/integration
+        run: pnpm test
+
+      - name: Upload integration results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-results-${{ matrix.os }}-node${{ matrix.node }}
+          path: Orqenix/integration/integration-results.json
+
+  tag-verify:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    needs: integration
+    steps:
+      - name: Checkout Orqenix
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: Orqenix
+
+      - name: Checkout Orqenix-Pro
+        uses: actions/checkout@v4
+        with:
+          repository: milosaysyolo/Orqenix-Pro
+          ref: ${{ github.ref_name }}
+          path: Orqenix-Pro
+          token: ${{ secrets.ORQENIX_PRO_PAT }}
+          fetch-depth: 0
+
+      - name: Verify tag exists in both repos
+        run: |
+          cd Orqenix && git tag --list ${{ github.ref_name }} | grep -q ${{ github.ref_name }}
+          cd ../Orqenix-Pro && git tag --list ${{ github.ref_name }} | grep -q ${{ github.ref_name }}
+          echo "Tag ${{ github.ref_name }} present in both repos"

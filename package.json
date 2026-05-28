@@ -29,7 +29,10 @@
     "charter:phase-4": "pnpm audit:check && tsx scripts/run-charter.ts",
     "charter:g17": "echo 'detach round-trip placeholder' && exit 0",
     "charter:g18": "echo 'audit tamper placeholder' && exit 0",
-    "charter:docker": "docker build -t orqenix-charter -f charter/Dockerfile . && docker run --rm -v $PWD:/repo orqenix-charter"
+    "charter:docker": "docker build -t orqenix-charter -f charter/Dockerfile . && docker run --rm -v $PWD:/repo orqenix-charter",
+    "integration": "pnpm --filter @orqenix/integration test",
+    "smoke:cross-repo": "bash smoke/cross-repo-smoke.sh",
+    "smoke:cross-repo:windows": "pwsh ./smoke/cross-repo-smoke.ps1"
   },
   "pnpm": {
     "overrides": {
