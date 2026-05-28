@@ -2,11 +2,13 @@
   "orqenix-init": {
     "p50Ms": 1500,
     "p95Ms": 2000,
-    "iterations": 5
+    "iterations": 10,
+    "warmupIterations": 2
   },
   "knowledge-query": {
     "p50Ms": 200,
     "p95Ms": 300,
-    "iterations": 20
+    "iterations": 30,
+    "warmupIterations": 5
   }
 }

@@ -1,55 +1,114 @@
-import { readFileSync } from "node:fs";
-import { resolve, dirname } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { pathToFileURL } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, "..");
 
-interface ThresholdConfig {
+interface Threshold {
   p50Ms: number;
   p95Ms: number;
   iterations: number;
+  warmupIterations?: number;
 }
 
-type BenchFn = (iterations: number) => Promise<number[]>;
-
-function p50(xs: number[]): number {
-  const s = [...xs].sort((a, b) => a - b);
-  return s[Math.floor(s.length * 0.5)];
+interface Thresholds {
+  [key: string]: Threshold;
 }
 
-function p95(xs: number[]): number {
-  const s = [...xs].sort((a, b) => a - b);
-  return s[Math.floor(s.length * 0.95)];
+function percentile(samples: number[], p: number): number {
+  const sorted = [...samples].sort((a, b) => a - b);
+  const idx = Math.ceil((p / 100) * sorted.length) - 1;
+  return sorted[Math.max(0, idx)]!;
 }
 
-async function runAll(): Promise<boolean> {
-  const thresholds = JSON.parse(
-    readFileSync(resolve(__dirname, "thresholds.json"), "utf-8"),
-  ) as Record<string, ThresholdConfig>;
+interface Report {
+  name: string;
+  iterations: number;
+  warmupIterations: number;
+  p50: number;
+  p95: number;
+  threshold: Threshold;
+  passed: boolean;
+  rawSamples: number[];
+}
 
-  let allPass = true;
+async function runBench(
+  name: string,
+  threshold: Threshold
+): Promise<Report> {
+  const warmup = threshold.warmupIterations ?? 1;
+  const totalIterations = threshold.iterations + warmup;
 
-  for (const [benchName, cfg] of Object.entries(thresholds)) {
-    const mod = await import(pathToFileURL(resolve(__dirname, `${benchName}.bench.ts`)).href);
-    const fnKey = Object.keys(mod).find((k) => k.startsWith("bench"));
-    if (!fnKey) {
-      console.error(`No bench* export found in ${benchName}.bench.ts`);
-      allPass = false;
-      continue;
-    }
-    const fn = mod[fnKey] as BenchFn;
-    const samples = await fn(cfg.iterations);
-    const p50Val = p50(samples);
-    const p95Val = p95(samples);
-    const pass = p50Val <= cfg.p50Ms && p95Val <= cfg.p95Ms;
-    console.log(
-      `[${pass ? "PASS" : "FAIL"}] ${benchName}: p50=${p50Val.toFixed(1)}ms (≤${cfg.p50Ms}), p95=${p95Val.toFixed(1)}ms (≤${cfg.p95Ms})`,
-    );
-    if (!pass) allPass = false;
+  const benchUrl = pathToFileURL(
+    join(__dirname, `${name}.bench.ts`)
+  ).href;
+  const mod = await import(benchUrl);
+  const fnKey = Object.keys(mod).find((k) => k.startsWith("bench"));
+  if (!fnKey) {
+    throw new Error(`No bench export in ${name}.bench.ts`);
+  }
+  const fn = mod[fnKey]!;
+  if (typeof fn !== "function") {
+    throw new Error(`No bench export in ${name}.bench.ts`);
   }
 
-  return allPass;
+  console.log(
+    `Running ${name} x${totalIterations} (${warmup} warmup + ${threshold.iterations} measured)...`
+  );
+  const allSamples: number[] = await fn(totalIterations);
+  const measuredSamples = allSamples.slice(warmup);
+
+  const p50 = percentile(measuredSamples, 50);
+  const p95 = percentile(measuredSamples, 95);
+  const passed = p50 <= threshold.p50Ms && p95 <= threshold.p95Ms;
+
+  return {
+    name,
+    iterations: threshold.iterations,
+    warmupIterations: warmup,
+    p50,
+    p95,
+    threshold,
+    passed,
+    rawSamples: allSamples,
+  };
 }
 
-const ok = await runAll();
-process.exit(ok ? 0 : 1);
+async function main() {
+  const raw = await readFile(join(__dirname, "thresholds.json"), "utf8");
+  const thresholds: Thresholds = JSON.parse(raw);
+
+  const reports: Report[] = [];
+  for (const [name, threshold] of Object.entries(thresholds)) {
+    reports.push(await runBench(name, threshold));
+  }
+
+  await mkdir(join(ROOT, "bench-results"), { recursive: true });
+  await writeFile(
+    join(ROOT, "bench-results", "phase-4.json"),
+    JSON.stringify(reports, null, 2)
+  );
+
+  let failed = 0;
+  for (const r of reports) {
+    const status = r.passed ? "PASS" : "FAIL";
+    console.log(
+      `${status} ${r.name}: p50=${r.p50.toFixed(1)}ms (≤${r.threshold.p50Ms}) p95=${r.p95.toFixed(1)}ms (≤${r.threshold.p95Ms}) [${r.warmupIterations} warmup discarded]`
+    );
+    if (!r.passed) failed++;
+  }
+
+  if (failed > 0) {
+    console.error(`\n${failed} benchmark(s) over budget`);
+    process.exit(1);
+  }
+  console.log(`\nAll benchmarks within budget`);
+  process.exit(0);
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

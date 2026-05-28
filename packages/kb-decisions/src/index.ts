@@ -9,3 +9,5 @@ export {
 } from "./graph.js";
 export { ancestors, descendants, pathBetween } from "./traversal.js";
 export type { TraversalOptions } from "./traversal.js";
+export { DecisionKB } from "./kb.js";
+export type { DecisionEntry } from "./kb.js";

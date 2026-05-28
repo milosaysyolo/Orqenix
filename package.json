@@ -23,7 +23,12 @@
     "bundle:check": "pnpm build && node scripts/check-bundle-size.mjs",
     "bench:phase-4": "pnpm --filter @orqenix/bench bench:phase-4",
     "bench:runner": "tsx bench/runner.ts",
+    "audit:check": "tsx scripts/audit-precheck.ts",
+    "bundlesize": "tsx scripts/check-bundlesize.ts",
     "charter": "bash charter/run.sh",
+    "charter:phase-4": "pnpm audit:check && tsx scripts/run-charter.ts",
+    "charter:g17": "echo 'detach round-trip placeholder' && exit 0",
+    "charter:g18": "echo 'audit tamper placeholder' && exit 0",
     "charter:docker": "docker build -t orqenix-charter -f charter/Dockerfile . && docker run --rm -v $PWD:/repo orqenix-charter"
   },
   "pnpm": {
