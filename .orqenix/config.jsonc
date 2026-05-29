@@ -1,0 +1,6 @@
+{
+  "$schema": "https://orqenix.dev/schema/config.json",
+  "version": "1.0"
+  // Phase 2 will add provider, routing, and plugin templates here.
+  // For now, defaults apply. Edit this file to customize.
+}
