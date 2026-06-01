@@ -1,0 +1,43 @@
+{
+  "gateId": "G27",
+  "title": "Token Format Integrity",
+  "status": "partial",
+  "startedAt": "2026-06-01T09:46:03.078Z",
+  "finishedAt": "2026-06-01T09:46:04.305Z",
+  "durationMs": 1226,
+  "checks": [
+    {
+      "id": "G27.1",
+      "description": "unit tests pass",
+      "status": "fail",
+      "durationMs": 1193,
+      "error": {
+        "message": "Command failed: pnpm vitest run --project capability-tokens\n\u001b[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.\u001b[39m\n\u001b[2mprojects: \u001b[22m\u001b[33mcapability-tokens\u001b[39m\n\u001b[31m\nNo test files found, exiting with code 1\u001b[39m\n",
+        "stack": "Error: Command failed: pnpm vitest run --project capability-tokens\n\u001b[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.\u001b[39m\n\u001b[2mprojects: \u001b[22m\u001b[33mcapability-tokens\u001b[39m\n\u001b[31m\nNo test files found, exiting with code 1\u001b[39m\n\n    at genericNodeError (node:internal/errors:985:15)\n    at wrappedFn (node:internal/errors:539:14)\n    at checkExecSyncError (node:child_process:925:11)\n    at execSync (node:child_process:997:15)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G27-token-format-integrity.ts:38:9)\n    at G27.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G27.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G27-token-format-integrity.ts:37:18)\n    at G27.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:35)\n    at main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G27-token-format-integrity.ts:80:23)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G27-token-format-integrity.ts:84:1)"
+      }
+    },
+    {
+      "id": "G27.2",
+      "description": "500 base64url round-trips",
+      "status": "pass",
+      "durationMs": 4
+    },
+    {
+      "id": "G27.3",
+      "description": "200 token encode/decode round-trips",
+      "status": "pass",
+      "durationMs": 16
+    },
+    {
+      "id": "G27.4",
+      "description": "jti derivation deterministic across 200 runs",
+      "status": "pass",
+      "durationMs": 11
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 3,
+    "failed": 1
+  }
+}

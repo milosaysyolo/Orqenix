@@ -1,0 +1,11 @@
+schemaVersion: 1
+id: G32
+title: Token Revocation
+bsRef: docs/sdd/BS-003-capability-tokens.md
+dependsOn: [G1, G26, G27, G28]
+criteria:
+  - { id: G32.1, description: "revocation unit tests pass",                                         severity: blocking }
+  - { id: G32.2, description: "30 revoke + isRevoked roundtrips succeed",                           severity: blocking }
+  - { id: G32.3, description: "TokenVerifier rejects revoked token with TokenRevokedError",         severity: blocking }
+  - { id: G32.4, description: "listRevocations returns entries sorted by revokedAt ascending",      severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G32-*.json" }

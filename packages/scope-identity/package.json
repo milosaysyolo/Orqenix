@@ -1,0 +1,31 @@
+{
+  "name": "@orqenix/scope-identity",
+  "version": "0.5.0-phase-5",
+  "description": "Ed25519-based scope identity for Orqenix local-first mesh (CR v7.1 L4 Mesh+Identity)",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" },
+    "./keypair": { "types": "./dist/keypair.d.ts", "import": "./dist/keypair.js", "default": "./dist/keypair.js" },
+    "./scope-yaml": { "types": "./dist/scope-yaml.d.ts", "import": "./dist/scope-yaml.js", "default": "./dist/scope-yaml.js" },
+    "./scope-id": { "types": "./dist/scope-id.d.ts", "import": "./dist/scope-id.js", "default": "./dist/scope-id.js" }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@noble/ed25519": "^2.1.0",
+    "@noble/hashes": "^1.4.0",
+    "yaml": "^2.4.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.0",
+    "typescript": "^5.6.0"
+  },
+  "files": ["dist", "README.md", "LICENSE", "schema/scope.schema.json"]
+}

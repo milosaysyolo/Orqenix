@@ -1,0 +1,39 @@
+{
+  "gateId": "G27",
+  "title": "Token Format Integrity",
+  "status": "pass",
+  "startedAt": "2026-06-01T09:46:24.442Z",
+  "finishedAt": "2026-06-01T09:46:27.029Z",
+  "durationMs": 2587,
+  "checks": [
+    {
+      "id": "G27.1",
+      "description": "unit tests pass",
+      "status": "pass",
+      "durationMs": 2555
+    },
+    {
+      "id": "G27.2",
+      "description": "500 base64url round-trips",
+      "status": "pass",
+      "durationMs": 4
+    },
+    {
+      "id": "G27.3",
+      "description": "200 token encode/decode round-trips",
+      "status": "pass",
+      "durationMs": 16
+    },
+    {
+      "id": "G27.4",
+      "description": "jti derivation deterministic across 200 runs",
+      "status": "pass",
+      "durationMs": 12
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "gateId": "G26",
+  "title": "Scope Identity Integrity",
+  "status": "partial",
+  "startedAt": "2026-06-01T09:26:23.726Z",
+  "finishedAt": "2026-06-01T09:26:26.985Z",
+  "durationMs": 3258,
+  "checks": [
+    {
+      "id": "G26.1",
+      "description": "unit tests pass",
+      "status": "fail",
+      "durationMs": 2445,
+      "error": {
+        "message": "Command failed: pnpm vitest run --project scope-identity\n\u001b[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.\u001b[39m\n\u001b[2mprojects: \u001b[22m\u001b[33mscope-identity\u001b[39m\n\u001b[31m\nNo test files found, exiting with code 1\u001b[39m\n",
+        "stack": "Error: Command failed: pnpm vitest run --project scope-identity\n\u001b[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.\u001b[39m\n\u001b[2mprojects: \u001b[22m\u001b[33mscope-identity\u001b[39m\n\u001b[31m\nNo test files found, exiting with code 1\u001b[39m\n\n    at genericNodeError (node:internal/errors:985:15)\n    at wrappedFn (node:internal/errors:539:14)\n    at checkExecSyncError (node:child_process:925:11)\n    at execSync (node:child_process:997:15)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G26-scope-identity-integrity.ts:34:9)\n    at G26ScopeIdentityIntegrity.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G26ScopeIdentityIntegrity.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G26-scope-identity-integrity.ts:33:18)\n    at G26ScopeIdentityIntegrity.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:35)\n    at main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G26-scope-identity-integrity.ts:133:31)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G26-scope-identity-integrity.ts:138:1)"
+      }
+    },
+    {
+      "id": "G26.2",
+      "description": "JSON schema is valid Draft-07",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G26.3",
+      "description": "100 random scope.yaml round-trip",
+      "status": "pass",
+      "durationMs": 586
+    },
+    {
+      "id": "G26.4",
+      "description": "scopeId derivation is deterministic",
+      "status": "pass",
+      "durationMs": 3
+    },
+    {
+      "id": "G26.5",
+      "description": "50 random tampers all rejected",
+      "status": "pass",
+      "durationMs": 169
+    },
+    {
+      "id": "G26.6",
+      "description": "identity.key has mode 0600 after init",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G26.7",
+      "description": ".gitignore excludes identity.key",
+      "status": "pass",
+      "durationMs": 49
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 6,
+    "failed": 1
+  }
+}

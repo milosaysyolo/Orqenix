@@ -1,0 +1,46 @@
+schemaVersion: 1
+totalCount: 40
+bsRef: docs/sdd/BS-001-workspace-foundation.md
+
+packages:
+  # === OSS Tier (40 packages) ===
+  - { name: '@orqenix/core',                    path: packages/core,                    tier: oss, implementedIn: Part-1 }
+  - { name: '@orqenix/gate-runner-core',        path: packages/gate-runner-core,        tier: oss, implementedIn: Part-1 }
+  - { name: '@orqenix/scope-identity',          path: packages/scope-identity,          tier: oss, implementedIn: Part-2 }
+  - { name: '@orqenix/capability-tokens',       path: packages/capability-tokens,       tier: oss, implementedIn: Part-3 }
+  - { name: '@orqenix/kb-chat',                 path: packages/kb-chat,                 tier: oss, implementedIn: Part-4 }
+  - { name: '@orqenix/kb-docs',                 path: packages/kb-docs,                 tier: oss, implementedIn: Part-4 }
+  - { name: '@orqenix/kb-code',                 path: packages/kb-code,                 tier: oss, implementedIn: Part-4 }
+  - { name: '@orqenix/kb-decisions',            path: packages/kb-decisions,            tier: oss, implementedIn: Part-4 }
+  - { name: '@orqenix/storage-sqlite',          path: packages/storage-sqlite,          tier: oss, implementedIn: Part-4 }
+  - { name: '@orqenix/storage-diff',            path: packages/storage-diff,            tier: oss, implementedIn: Part-4 }
+  - { name: '@orqenix/memory-distiller',        path: packages/memory-distiller,        tier: oss, implementedIn: Part-5 }
+  - { name: '@orqenix/memory-tiers',            path: packages/memory-tiers,            tier: oss, implementedIn: Part-5 }
+  - { name: '@orqenix/prompt-rewriter',         path: packages/prompt-rewriter,         tier: oss, implementedIn: Part-6 }
+  - { name: '@orqenix/llm-adapter-ollama',      path: packages/llm-adapter-ollama,      tier: oss, implementedIn: Part-6 }
+  - { name: '@orqenix/llm-adapter-byok',        path: packages/llm-adapter-byok,        tier: oss, implementedIn: Part-6 }
+  - { name: '@orqenix/injection-strategies',    path: packages/injection-strategies,    tier: oss, implementedIn: Part-6 }
+  - { name: '@orqenix/plugin-compress-input',   path: packages/plugin-compress-input,   tier: oss, implementedIn: Phase-4 }
+  - { name: '@orqenix/plugin-compress-context', path: packages/plugin-compress-context, tier: oss, implementedIn: Part-7 }
+  - { name: '@orqenix/compress-strategies',     path: packages/compress-strategies,     tier: oss, implementedIn: Part-7 }
+  - { name: '@orqenix/smart-compression',       path: packages/smart-compression,       tier: oss, implementedIn: Part-7 }
+  - { name: '@orqenix/reindex-incremental',     path: packages/reindex-incremental,     tier: oss, implementedIn: Part-8 }
+  - { name: '@orqenix/file-watcher',            path: packages/file-watcher,            tier: oss, implementedIn: Part-8 }
+  - { name: '@orqenix/rtk-hooks',               path: packages/rtk-hooks,               tier: oss, implementedIn: Part-8 }
+  - { name: '@orqenix/mesh-routing',            path: packages/mesh-routing,            tier: oss, implementedIn: Part-9 }
+  - { name: '@orqenix/workspace',               path: packages/workspace,               tier: oss, implementedIn: Part-9 }
+  - { name: '@orqenix/provenance',              path: packages/provenance,              tier: oss, implementedIn: Part-9 }
+  - { name: '@orqenix/cli',                     path: packages/cli,                     tier: oss, implementedIn: Part-12 }
+  - { name: '@orqenix/sdk',                     path: packages/sdk,                     tier: oss, implementedIn: Part-12 }
+  - { name: '@orqenix/mcp-server',              path: packages/mcp-server,              tier: oss, implementedIn: Part-12 }
+  - { name: '@orqenix/hooks',                   path: packages/hooks,                   tier: oss, implementedIn: Part-7 }
+  - { name: '@orqenix/audit-log',               path: packages/audit-log,               tier: oss, implementedIn: Part-12 }
+  - { name: '@orqenix/detach',                  path: packages/detach,                  tier: oss, implementedIn: Part-12 }
+  - { name: '@orqenix/migration',               path: packages/migration,               tier: oss, implementedIn: Part-12 }
+  - { name: '@orqenix/config',                  path: packages/config,                  tier: oss, implementedIn: Part-1 }
+  - { name: '@orqenix/telemetry',               path: packages/telemetry,               tier: oss, implementedIn: Part-7 }
+  - { name: '@orqenix/security',                path: packages/security,                tier: oss, implementedIn: Part-3 }
+  - { name: '@orqenix/teams-built-in',          path: packages/teams-built-in,          tier: oss, implementedIn: Phase-4 }
+  - { name: '@orqenix/scope-link',              path: packages/scope-link,              tier: oss, implementedIn: Part-9 }
+  - { name: '@orqenix/schema',                  path: packages/schema,                  tier: oss, implementedIn: Part-1 }
+  - { name: '@orqenix/testing',                 path: packages/testing,                 tier: oss, implementedIn: Part-1 }

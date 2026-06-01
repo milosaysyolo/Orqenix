@@ -1,0 +1,11 @@
+schemaVersion: 1
+id: G27
+title: Token Format Integrity
+bsRef: docs/sdd/BS-003-capability-tokens.md
+dependsOn: [G1, G26]
+criteria:
+  - { id: G27.1, description: "all unit tests in packages/capability-tokens pass",                 severity: blocking }
+  - { id: G27.2, description: "500 random base64url round-trips lossless",                         severity: blocking }
+  - { id: G27.3, description: "200 token encode/decode round-trips preserve payload",              severity: blocking }
+  - { id: G27.4, description: "jti derivation is deterministic across 200 runs (same input)",      severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G27-*.json" }

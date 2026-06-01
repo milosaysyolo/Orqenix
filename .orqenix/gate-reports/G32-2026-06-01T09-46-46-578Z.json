@@ -1,0 +1,39 @@
+{
+  "gateId": "G32",
+  "title": "Token Revocation",
+  "status": "pass",
+  "startedAt": "2026-06-01T09:46:44.044Z",
+  "finishedAt": "2026-06-01T09:46:46.577Z",
+  "durationMs": 2532,
+  "checks": [
+    {
+      "id": "G32.1",
+      "description": "revocation tests pass",
+      "status": "pass",
+      "durationMs": 2141
+    },
+    {
+      "id": "G32.2",
+      "description": "30 revoke + isRevoked roundtrips",
+      "status": "pass",
+      "durationMs": 203
+    },
+    {
+      "id": "G32.3",
+      "description": "verifier rejects revoked token",
+      "status": "pass",
+      "durationMs": 15
+    },
+    {
+      "id": "G32.4",
+      "description": "revocation list ordering stable",
+      "status": "pass",
+      "durationMs": 173
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0
+  }
+}
