@@ -1,0 +1,51 @@
+{
+  "gateId": "G2",
+  "title": "Diff-Only Storage",
+  "status": "pass",
+  "startedAt": "2026-06-01T10:37:52.471Z",
+  "finishedAt": "2026-06-01T10:37:59.201Z",
+  "durationMs": 6730,
+  "checks": [
+    {
+      "id": "G2.1",
+      "description": "storage-sqlite tests pass",
+      "status": "pass",
+      "durationMs": 3929
+    },
+    {
+      "id": "G2.2",
+      "description": "storage-diff tests pass",
+      "status": "pass",
+      "durationMs": 2736
+    },
+    {
+      "id": "G2.3",
+      "description": "100 random full encode/decode roundtrips",
+      "status": "pass",
+      "durationMs": 24
+    },
+    {
+      "id": "G2.4",
+      "description": "50 random delta encode/apply roundtrips",
+      "status": "pass",
+      "durationMs": 26
+    },
+    {
+      "id": "G2.5",
+      "description": "20-entry chain reconstructs to final state",
+      "status": "pass",
+      "durationMs": 9
+    },
+    {
+      "id": "G2.6",
+      "description": "BLAKE3 content hash determinism (200 runs)",
+      "status": "pass",
+      "durationMs": 5
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "gateId": "G3",
+  "title": "KB Schema (Chat)",
+  "status": "partial",
+  "startedAt": "2026-06-01T10:37:53.491Z",
+  "finishedAt": "2026-06-01T10:37:58.189Z",
+  "durationMs": 4697,
+  "checks": [
+    {
+      "id": "G3.1",
+      "description": "kb-chat unit tests pass",
+      "status": "fail",
+      "durationMs": 4470,
+      "error": {
+        "message": "Command failed: pnpm --filter @orqenix/kb-chat test\n\u001b[31m⎯⎯⎯⎯⎯⎯⎯\u001b[1m\u001b[7m Failed Tests 1 \u001b[27m\u001b[22m⎯⎯⎯⎯⎯⎯⎯\u001b[39m\n\n\u001b[31m\u001b[1m\u001b[7m FAIL \u001b[27m\u001b[22m\u001b[39m \u001b[36m|kb-chat|\u001b[39m test/store.test.ts\u001b[2m > \u001b[22mChatStore (local mode, no verifier)\u001b[2m > \u001b[22mlistEntries returns in chronological order\n\u001b[31m\u001b[1mAssertionError\u001b[22m: expected [ 'b', 'a', 'c' ] to deeply equal [ 'a', 'b', 'c' ]\u001b[39m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"a\",\u001b[39m\n\u001b[2m    \"b\",\u001b[22m\n\u001b[31m+   \"a\",\u001b[39m\n\u001b[2m    \"c\",\u001b[22m\n\u001b[2m  ]\u001b[22m\n\n\u001b[36m \u001b[2m❯\u001b[22m test/store.test.ts:\u001b[2m60:43\u001b[22m\u001b[39m\n    \u001b[90m 58| \u001b[39m    \u001b[35mawait\u001b[39m store\u001b[33m.\u001b[39m\u001b[34mappendEntry\u001b[39m({ sessionId\u001b[33m:\u001b[39m s\u001b[33m.\u001b[39msessionId\u001b[33m,\u001b[39m role\u001b[33m:\u001b[39m \u001b[32m'user'\u001b[39m\u001b[33m,\u001b[39m co…\n    \u001b[90m 59| \u001b[39m    \u001b[35mconst\u001b[39m entries \u001b[33m=\u001b[39m store\u001b[33m.\u001b[39m\u001b[34mlistEntries\u001b[39m(s\u001b[33m.\u001b[39msessionId)\u001b[33m;\u001b[39m\n    \u001b[90m 60| \u001b[39m    \u001b[34mexpect\u001b[39m(entries\u001b[33m.\u001b[39m\u001b[34mmap\u001b[39m((e) \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcontent))\u001b[33m.\u001b[39m\u001b[34mtoEqual\u001b[39m([\u001b[32m'a'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'b'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'c'\u001b[39m])\u001b[33m;\u001b[39m\n    \u001b[90m   | \u001b[39m                                          \u001b[31m^\u001b[39m\n    \u001b[90m 61| \u001b[39m  })\u001b[33m;\u001b[39m\n    \u001b[90m 62| \u001b[39m\n\n\u001b[31m\u001b[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\u001b[22m\u001b[39m\n\n",
+        "stack": "Error: Command failed: pnpm --filter @orqenix/kb-chat test\n\u001b[31m⎯⎯⎯⎯⎯⎯⎯\u001b[1m\u001b[7m Failed Tests 1 \u001b[27m\u001b[22m⎯⎯⎯⎯⎯⎯⎯\u001b[39m\n\n\u001b[31m\u001b[1m\u001b[7m FAIL \u001b[27m\u001b[22m\u001b[39m \u001b[36m|kb-chat|\u001b[39m test/store.test.ts\u001b[2m > \u001b[22mChatStore (local mode, no verifier)\u001b[2m > \u001b[22mlistEntries returns in chronological order\n\u001b[31m\u001b[1mAssertionError\u001b[22m: expected [ 'b', 'a', 'c' ] to deeply equal [ 'a', 'b', 'c' ]\u001b[39m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"a\",\u001b[39m\n\u001b[2m    \"b\",\u001b[22m\n\u001b[31m+   \"a\",\u001b[39m\n\u001b[2m    \"c\",\u001b[22m\n\u001b[2m  ]\u001b[22m\n\n\u001b[36m \u001b[2m❯\u001b[22m test/store.test.ts:\u001b[2m60:43\u001b[22m\u001b[39m\n    \u001b[90m 58| \u001b[39m    \u001b[35mawait\u001b[39m store\u001b[33m.\u001b[39m\u001b[34mappendEntry\u001b[39m({ sessionId\u001b[33m:\u001b[39m s\u001b[33m.\u001b[39msessionId\u001b[33m,\u001b[39m role\u001b[33m:\u001b[39m \u001b[32m'user'\u001b[39m\u001b[33m,\u001b[39m co…\n    \u001b[90m 59| \u001b[39m    \u001b[35mconst\u001b[39m entries \u001b[33m=\u001b[39m store\u001b[33m.\u001b[39m\u001b[34mlistEntries\u001b[39m(s\u001b[33m.\u001b[39msessionId)\u001b[33m;\u001b[39m\n    \u001b[90m 60| \u001b[39m    \u001b[34mexpect\u001b[39m(entries\u001b[33m.\u001b[39m\u001b[34mmap\u001b[39m((e) \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcontent))\u001b[33m.\u001b[39m\u001b[34mtoEqual\u001b[39m([\u001b[32m'a'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'b'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'c'\u001b[39m])\u001b[33m;\u001b[39m\n    \u001b[90m   | \u001b[39m                                          \u001b[31m^\u001b[39m\n    \u001b[90m 61| \u001b[39m  })\u001b[33m;\u001b[39m\n    \u001b[90m 62| \u001b[39m\n\n\u001b[31m\u001b[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\u001b[22m\u001b[39m\n\n\n    at genericNodeError (node:internal/errors:985:15)\n    at wrappedFn (node:internal/errors:539:14)\n    at checkExecSyncError (node:child_process:925:11)\n    at execSync (node:child_process:997:15)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G3-kb-schema.ts:22:9)\n    at G3.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G3.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G3-kb-schema.ts:21:18)\n    at G3.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:35)\n    at main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G3-kb-schema.ts:84:23)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G3-kb-schema.ts:88:1)"
+      }
+    },
+    {
+      "id": "G3.2",
+      "description": "migrations are idempotent",
+      "status": "pass",
+      "durationMs": 74
+    },
+    {
+      "id": "G3.3",
+      "description": "expected tables and indexes exist",
+      "status": "pass",
+      "durationMs": 54
+    },
+    {
+      "id": "G3.4",
+      "description": "STRICT mode enforced on chat tables",
+      "status": "pass",
+      "durationMs": 47
+    },
+    {
+      "id": "G3.5",
+      "description": "checksum drift detected",
+      "status": "pass",
+      "durationMs": 48
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 4,
+    "failed": 1
+  }
+}

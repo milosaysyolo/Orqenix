@@ -1,7 +1,10 @@
 # @orqenix/storage-sqlite
 
-Storage sqlite for Orqenix (Part-4).
+SQLite + sqlite-vec adapter for Orqenix KBs.
 
-## Status
+- WAL journal mode, foreign keys on, 5s busy timeout, NORMAL synchronous
+- Migration runner with BLAKE3 checksum tracking (immutable history)
+- Optional sqlite-vec extension for vector similarity search
+- Pure adapter, no business logic
 
-Scaffold only. Implement in Part-4.
+Charter gate: **G2** Diff-Only Storage (shared with storage-diff).

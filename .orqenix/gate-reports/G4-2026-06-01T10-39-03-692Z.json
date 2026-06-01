@@ -1,0 +1,57 @@
+{
+  "gateId": "G4",
+  "title": "Chat KB Operations",
+  "status": "pass",
+  "startedAt": "2026-06-01T10:39:03.155Z",
+  "finishedAt": "2026-06-01T10:39:03.691Z",
+  "durationMs": 535,
+  "checks": [
+    {
+      "id": "G4.1",
+      "description": "append 50 entries and listEntries returns in order",
+      "status": "pass",
+      "durationMs": 144
+    },
+    {
+      "id": "G4.2",
+      "description": "verifyHashChain green on untampered chain",
+      "status": "pass",
+      "durationMs": 76
+    },
+    {
+      "id": "G4.3",
+      "description": "verifyHashChain catches tampered content",
+      "status": "pass",
+      "durationMs": 61
+    },
+    {
+      "id": "G4.4",
+      "description": "capability gate: write:kb-chat token accepted",
+      "status": "pass",
+      "durationMs": 113
+    },
+    {
+      "id": "G4.5",
+      "description": "capability gate: read-only token rejected",
+      "status": "pass",
+      "durationMs": 47
+    },
+    {
+      "id": "G4.6",
+      "description": "vector search finds nearest entry",
+      "status": "pass",
+      "durationMs": 43
+    },
+    {
+      "id": "G4.7",
+      "description": "session cascade delete removes entries",
+      "status": "pass",
+      "durationMs": 50
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  }
+}

@@ -1,8 +1,4 @@
-// SPDX-License-Identifier: Apache-2.0
-// Scaffold for Part-4
-// TODO_Part_4: implement Kb chat logic
-
-export const PACKAGE_VERSION = '0.5.0-phase-5';
-export const TODO = 'Part_4' as const;
-
-console.info('@orqenix/kb-chat: scaffold loaded, TODO: ' + TODO);
+export * from './contracts.js';
+export * from './schema.js';
+export * from './store.js';
+export const KB_CHAT_VERSION = '0.5.0-phase-5';

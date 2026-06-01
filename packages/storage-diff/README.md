@@ -1,7 +1,10 @@
 # @orqenix/storage-diff
 
-Storage diff for Orqenix (Part-4).
+Content-addressed, diff-only storage primitives.
 
-## Status
+- BLAKE3 content hashing (64-char hex, 32-byte digest)
+- zstd-compressed Myers delta encoding between snapshots
+- Diff-chain reconstruction with integrity verification
+- Snapshot policy heuristic (`shouldSnapshot`: every N entries or maxBytes cumulative)
 
-Scaffold only. Implement in Part-4.
+Charter gate: **G2** Diff-Only Storage.

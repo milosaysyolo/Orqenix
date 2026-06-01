@@ -1,23 +1,24 @@
 {
   "name": "@orqenix/storage-diff",
   "version": "0.5.0-phase-5",
-  "description": "Storage diff for Orqenix (Part-4)",
+  "description": "BLAKE3 content-addressed + zstd-delta diff storage for Orqenix KBs",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+    ".":        { "types": "./dist/index.d.ts",     "import": "./dist/index.js",     "default": "./dist/index.js" },
+    "./hash":   { "types": "./dist/hash.d.ts",      "import": "./dist/hash.js",      "default": "./dist/hash.js" },
+    "./delta":  { "types": "./dist/delta.d.ts",     "import": "./dist/delta.js",     "default": "./dist/delta.js" },
+    "./chain":  { "types": "./dist/chain.d.ts",     "import": "./dist/chain.js",     "default": "./dist/chain.js" }
   },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@mongodb-js/zstd": "^2.0.0",
+    "fast-myers-diff": "^3.2.0",
+    "zod": "^3.23.8"
   },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }
