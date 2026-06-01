@@ -23,4 +23,14 @@ export {
 } from "./util/paths.js";
 
 export { hashString, hashFile } from "./util/hash.js";
+
+// Phase 5 foundation utilities
+export * from "./blake3.js";
+export * from "./canonical-json.js";
+export * from "./result.js";
+export * from "./errors.js";
+export * from "./branded-types.js";
+
 export const ORQENIX_VERSION = "0.2.0-dev";
+export const ORQENIX_CORE_VERSION = "0.5.0-phase-5" as const;
+export const ORQENIX_PHASE = "phase-5" as const;

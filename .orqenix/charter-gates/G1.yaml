@@ -1,0 +1,26 @@
+schemaVersion: 1
+id: G1
+title: Workspace Foundation
+bsRef: docs/sdd/BS-001-workspace-foundation.md
+description: |
+  G1 validates that the Phase 5 monorepo workspace is buildable, dependency-clean,
+  and preserves all Phase 4 contracts. No downstream gate (G2 through G35) may run
+  until G1 is green.
+
+criteria:
+  - id: G1.1
+    description: pnpm-workspace.yaml resolves to >= 30 packages
+    severity: blocking
+  - id: G1.2
+    description: every package has a parseable package.json
+    severity: blocking
+  - id: G1.3
+    description: topological build succeeds
+    severity: blocking
+  - id: G1.4
+    description: Phase 5 _meta package present
+    severity: blocking
+
+artifacts:
+  reportDir: .orqenix/gate-reports/
+  reportPattern: "G1-*.json"
