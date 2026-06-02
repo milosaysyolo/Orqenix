@@ -1,42 +1,24 @@
 {
-  "name": "orqenix",
-  "version": "0.1.0-dev",
-  "description": "Orqenix CLI",
+  "name": "@orqenix/cli",
+  "version": "0.5.0-phase-5",
+  "description": "The orqenix command-line tool",
   "license": "Apache-2.0",
   "type": "module",
-  "bin": {
-    "orqenix": "./bin/orqenix.js"
-  },
-  "files": [
-    "bin",
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit",
-    "clean": "npx rimraf dist .turbo"
-  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": { "orqenix": "./dist/bin.js" },
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
   "dependencies": {
-    "@inquirer/prompts": "^7.0.0",
     "@orqenix/core": "workspace:*",
-    "@orqenix/memory-tiers": "workspace:*",
-    "@orqenix/plugin-host": "workspace:*",
-    "@orqenix/mcp-server": "workspace:*",
-    "citty": "^0.1.6",
-    "cli-table3": "^0.6.5",
-    "consola": "^3.2.3",
-    "jsonc-parser": "^3.3.1",
-    "isomorphic-git": "^1.27.0",
-    "kleur": "^4.1.5",
-    "tar": "^7.4.3"
+    "@orqenix/scope-identity": "workspace:*",
+    "@orqenix/scope-link": "workspace:*",
+    "@orqenix/workspace": "workspace:*",
+    "@orqenix/audit-log": "workspace:*",
+    "@orqenix/detach": "workspace:*",
+    "@orqenix/migration": "workspace:*",
+    "@orqenix/storage-sqlite": "workspace:*"
   },
-  "devDependencies": {
-    "@types/tar": "^6.1.13",
-    "tsup": "^8.3.0",
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }

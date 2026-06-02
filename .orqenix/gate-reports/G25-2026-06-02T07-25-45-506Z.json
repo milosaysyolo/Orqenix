@@ -1,0 +1,63 @@
+{
+  "gateId": "G25",
+  "title": "CLI Surface",
+  "status": "pass",
+  "startedAt": "2026-06-02T07:25:39.989Z",
+  "finishedAt": "2026-06-02T07:25:45.505Z",
+  "durationMs": 5515,
+  "checks": [
+    {
+      "id": "G25.1",
+      "description": "cli unit tests pass",
+      "status": "pass",
+      "durationMs": 4765
+    },
+    {
+      "id": "G25.2",
+      "description": "usage lists all command groups",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G25.3",
+      "description": "version command returns Phase 5 version",
+      "status": "pass",
+      "durationMs": 63
+    },
+    {
+      "id": "G25.4",
+      "description": "unknown command returns exit 1 with usage hint",
+      "status": "pass",
+      "durationMs": 61
+    },
+    {
+      "id": "G25.5",
+      "description": "link create + link list round-trip",
+      "status": "pass",
+      "durationMs": 158
+    },
+    {
+      "id": "G25.6",
+      "description": "workspace create + workspace list round-trip",
+      "status": "pass",
+      "durationMs": 187
+    },
+    {
+      "id": "G25.7",
+      "description": "audit verify works on empty log",
+      "status": "pass",
+      "durationMs": 218
+    },
+    {
+      "id": "G25.8",
+      "description": "required flag enforcement (scope init without --name)",
+      "status": "pass",
+      "durationMs": 61
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
+  }
+}

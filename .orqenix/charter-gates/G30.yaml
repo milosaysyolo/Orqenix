@@ -1,0 +1,14 @@
+```yaml
+schemaVersion: 1
+id: G30
+title: rm-rf .orqenix Safety
+bsRef: docs/sdd/BS-030-detach-safety.md
+dependsOn: [G1, G17, G26]
+criteria:
+  - { id: G30.1, description: "full-detach with default preserves identity.key",                 severity: blocking }
+  - { id: G30.2, description: "preserveIdentityKey=false fully clears .orqenix",                 severity: blocking }
+  - { id: G30.3, description: "destructive op requires valid confirmation token",                severity: blocking }
+  - { id: G30.4, description: "dryRun for full-detach does not remove any files",                severity: blocking }
+  - { id: G30.5, description: "unlink kind never touches .orqenix directory",                    severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G30-*.json" }
+```

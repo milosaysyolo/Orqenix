@@ -1,0 +1,57 @@
+{
+  "gateId": "G24",
+  "title": "Migration Tooling",
+  "status": "pass",
+  "startedAt": "2026-06-02T07:25:39.440Z",
+  "finishedAt": "2026-06-02T07:25:45.804Z",
+  "durationMs": 6362,
+  "checks": [
+    {
+      "id": "G24.1",
+      "description": "migration unit tests pass",
+      "status": "pass",
+      "durationMs": 5403
+    },
+    {
+      "id": "G24.2",
+      "description": "migrate applies all Phase 5 migrations in id order",
+      "status": "pass",
+      "durationMs": 179
+    },
+    {
+      "id": "G24.3",
+      "description": "migrate preserves Phase 4 legacy data",
+      "status": "pass",
+      "durationMs": 233
+    },
+    {
+      "id": "G24.4",
+      "description": "rollback restores from backup",
+      "status": "pass",
+      "durationMs": 266
+    },
+    {
+      "id": "G24.5",
+      "description": "rollback rejects corrupted backup",
+      "status": "pass",
+      "durationMs": 155
+    },
+    {
+      "id": "G24.6",
+      "description": "backup round-trip preserves bytes",
+      "status": "pass",
+      "durationMs": 125
+    },
+    {
+      "id": "G24.7",
+      "description": "restoreFromBackup throws BackupMissingError",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  }
+}
