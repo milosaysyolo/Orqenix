@@ -1,0 +1,45 @@
+{
+  "gateId": "G34",
+  "title": "Mesh Routing Quorum",
+  "status": "pass",
+  "startedAt": "2026-06-02T06:46:15.228Z",
+  "finishedAt": "2026-06-02T06:46:20.077Z",
+  "durationMs": 4848,
+  "checks": [
+    {
+      "id": "G34.1",
+      "description": "mesh-routing unit tests pass",
+      "status": "pass",
+      "durationMs": 4239
+    },
+    {
+      "id": "G34.2",
+      "description": "parallel fanout to all active outbound links",
+      "status": "pass",
+      "durationMs": 117
+    },
+    {
+      "id": "G34.3",
+      "description": "quorum = ceil(scopesQueried/2)",
+      "status": "pass",
+      "durationMs": 100
+    },
+    {
+      "id": "G34.4",
+      "description": "timeout outcome recorded per-target",
+      "status": "pass",
+      "durationMs": 252
+    },
+    {
+      "id": "G34.5",
+      "description": "broken provenance hits dropped silently",
+      "status": "pass",
+      "durationMs": 139
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

@@ -1,23 +1,24 @@
 {
   "name": "@orqenix/mesh-routing",
   "version": "0.5.0-phase-5",
-  "description": "Mesh routing for Orqenix (Part-9)",
+  "description": "Cross-scope mesh query coordinator with parallel fanout + timeouts + provenance (CR v7.1 Ch.13)",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@orqenix/scope-identity": "workspace:*",
+    "@orqenix/capability-tokens": "workspace:*",
+    "@orqenix/scope-link": "workspace:*",
+    "@orqenix/provenance": "workspace:*",
+    "@orqenix/hooks": "workspace:*",
+    "@orqenix/storage-sqlite": "workspace:*",
+    "@orqenix/telemetry": "workspace:*",
+    "zod": "^3.23.8"
   },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }

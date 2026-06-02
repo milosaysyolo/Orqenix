@@ -1,8 +1,4 @@
 // SPDX-License-Identifier: Apache-2.0
-// Scaffold for Part-9
-// TODO_Part_9: implement Provenance logic
-
-export const PACKAGE_VERSION = '0.5.0-phase-5';
-export const TODO = 'Part_9' as const;
-
-console.info('@orqenix/provenance: scaffold loaded, TODO: ' + TODO);
+export * from './contracts.js';
+export * from './chain.js';
+export const PROVENANCE_VERSION = '0.5.0-phase-5';

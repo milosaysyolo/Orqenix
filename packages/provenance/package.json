@@ -1,23 +1,20 @@
 {
   "name": "@orqenix/provenance",
   "version": "0.5.0-phase-5",
-  "description": "Provenance for Orqenix (Part-9)",
+  "description": "Provenance tagging + verification for cross-scope mesh data (CR v7.1 Ch.13)",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@orqenix/scope-identity": "workspace:*",
+    "@orqenix/capability-tokens": "workspace:*",
+    "@orqenix/storage-diff": "workspace:*",
+    "zod": "^3.23.8"
   },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }
