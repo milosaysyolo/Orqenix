@@ -1,23 +1,21 @@
 {
   "name": "@orqenix/reindex-incremental",
   "version": "0.5.0-phase-5",
-  "description": "Reindex incremental for Orqenix (Part-8)",
+  "description": "Watermark-based incremental reindex for Orqenix KBs (BLAKE3 content hash + path index)",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@orqenix/storage-sqlite": "workspace:*",
+    "@orqenix/storage-diff": "workspace:*",
+    "@orqenix/file-watcher": "workspace:*",
+    "@orqenix/hooks": "workspace:*",
+    "zod": "^3.23.8"
   },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }

@@ -1,0 +1,45 @@
+{
+  "gateId": "G20",
+  "title": "Incremental Reindex",
+  "status": "pass",
+  "startedAt": "2026-06-02T04:04:26.787Z",
+  "finishedAt": "2026-06-02T04:04:30.487Z",
+  "durationMs": 3699,
+  "checks": [
+    {
+      "id": "G20.1",
+      "description": "reindex-incremental unit tests pass",
+      "status": "pass",
+      "durationMs": 3650
+    },
+    {
+      "id": "G20.2",
+      "description": "scanFull adds, updates, removes, marks unchanged correctly",
+      "status": "pass",
+      "durationMs": 35
+    },
+    {
+      "id": "G20.3",
+      "description": "applyEvents is idempotent on re-apply",
+      "status": "pass",
+      "durationMs": 5
+    },
+    {
+      "id": "G20.4",
+      "description": "ignores .git and node_modules paths",
+      "status": "pass",
+      "durationMs": 8
+    },
+    {
+      "id": "G20.5",
+      "description": "content_hash drives update detection (mtime alone insufficient)",
+      "status": "pass",
+      "durationMs": 1
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

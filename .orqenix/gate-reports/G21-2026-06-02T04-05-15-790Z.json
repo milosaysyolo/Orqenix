@@ -1,0 +1,61 @@
+{
+  "gateId": "G21",
+  "title": "RTK Hooks Integration",
+  "status": "partial",
+  "startedAt": "2026-06-02T04:05:13.625Z",
+  "finishedAt": "2026-06-02T04:05:15.789Z",
+  "durationMs": 2164,
+  "checks": [
+    {
+      "id": "G21.1",
+      "description": "rtk-hooks unit tests pass",
+      "status": "pass",
+      "durationMs": 2101
+    },
+    {
+      "id": "G21.2",
+      "description": "blocks dangerous commands (rm, dd, shutdown, reboot, mkfs)",
+      "status": "pass",
+      "durationMs": 2
+    },
+    {
+      "id": "G21.3",
+      "description": "redacts API keys and Bearer tokens before output",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G21.4",
+      "description": "truncates stdout above configured cap",
+      "status": "fail",
+      "durationMs": 1,
+      "error": {
+        "message": "[\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1024,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be greater than or equal to 1024\",\n    \"path\": [\n      \"maxStdoutBytes\"\n    ]\n  }\n]",
+        "stack": "ZodError: [\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1024,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be greater than or equal to 1024\",\n    \"path\": [\n      \"maxStdoutBytes\"\n    ]\n  }\n]\n    at get error (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\node_modules\\.pnpm\\zod@3.25.76\\node_modules\\zod\\v3\\types.cjs:45:31)\n    at ZodObject.parse (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\node_modules\\.pnpm\\zod@3.25.76\\node_modules\\zod\\v3\\types.cjs:120:22)\n    at new RtkRunner (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\rtk-hooks\\dist\\runner.js:11:36)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G21-rtk-hooks-integration.ts:46:24)\n    at G21.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G21.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G21-rtk-hooks-integration.ts:45:18)\n    at async G21.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G21-rtk-hooks-integration.ts:97:36)"
+      }
+    },
+    {
+      "id": "G21.5",
+      "description": "records run counter and duration histogram metrics",
+      "status": "pass",
+      "durationMs": 57
+    },
+    {
+      "id": "G21.6",
+      "description": "extension formats output with exit code and truncation markers",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G21.7",
+      "description": "redact() helper ignores invalid regex patterns",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 6,
+    "failed": 1
+  }
+}

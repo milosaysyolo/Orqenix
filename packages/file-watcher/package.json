@@ -1,23 +1,14 @@
 {
   "name": "@orqenix/file-watcher",
   "version": "0.5.0-phase-5",
-  "description": "File watcher for Orqenix (Part-8)",
+  "description": "Debounced cross-platform file watcher (chokidar) for Orqenix reindex pipeline",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": { "@orqenix/core": "workspace:*", "chokidar": "^3.6.0", "zod": "^3.23.8" },
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }

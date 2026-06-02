@@ -1,7 +1,14 @@
 # @orqenix/reindex-incremental
 
-Reindex incremental for Orqenix (Part-8).
+Watermark-based incremental reindexing for Orqenix KBs. BLAKE3 content hash + path index, backed by `@orqenix/storage-sqlite`.
 
-## Status
+## Two modes
 
-Scaffold only. Implement in Part-8.
+| Mode | Use case | Cost |
+|------|----------|------|
+| `scanFull()` | Cold start, periodic verification | O(repo) — walks all files |
+| `applyEvents(events)` | Hot path from `@orqenix/file-watcher` | O(changes) — only touched files |
+
+Both methods produce a `ReindexStats` with `filesScanned/Added/Updated/Removed/Unchanged` + `durationMs`.
+
+Charter gate: **G20 Incremental Reindex**.
