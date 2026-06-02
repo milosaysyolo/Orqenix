@@ -318,6 +318,19 @@ importers:
         version: 2.1.9(@types/node@22.19.19)
 
   packages/injection-strategies:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@orqenix/llm-adapter-ollama':
+        specifier: workspace:*
+        version: link:../llm-adapter-ollama
+      '@orqenix/memory-tiers':
+        specifier: workspace:*
+        version: link:../memory-tiers
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
         specifier: ^5.6.0
@@ -488,6 +501,16 @@ importers:
         version: 1.6.1(@types/node@22.19.19)
 
   packages/llm-adapter-byok:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@orqenix/llm-adapter-ollama':
+        specifier: workspace:*
+        version: link:../llm-adapter-ollama
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
         specifier: ^5.6.0
@@ -497,6 +520,13 @@ importers:
         version: 2.1.9(@types/node@22.19.19)
 
   packages/llm-adapter-ollama:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
         specifier: ^5.6.0
@@ -899,6 +929,25 @@ importers:
         version: 2.1.9(@types/node@22.19.19)
 
   packages/prompt-rewriter:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@orqenix/injection-strategies':
+        specifier: workspace:*
+        version: link:../injection-strategies
+      '@orqenix/llm-adapter-ollama':
+        specifier: workspace:*
+        version: link:../llm-adapter-ollama
+      '@orqenix/memory-tiers':
+        specifier: workspace:*
+        version: link:../memory-tiers
+      '@orqenix/storage-sqlite':
+        specifier: workspace:*
+        version: link:../storage-sqlite
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
         specifier: ^5.6.0

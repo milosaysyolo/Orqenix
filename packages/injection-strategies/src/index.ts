@@ -1,8 +1,4 @@
 // SPDX-License-Identifier: Apache-2.0
-// Scaffold for Part-6
-// TODO_Part_6: implement Injection strategies logic
-
-export const PACKAGE_VERSION = '0.5.0-phase-5';
-export const TODO = 'Part_6' as const;
-
-console.info('@orqenix/injection-strategies: scaffold loaded, TODO: ' + TODO);
+export * from './contracts.js';
+export * from './strategies.js';
+export const INJECTION_STRATEGIES_VERSION = '0.5.0-phase-5';

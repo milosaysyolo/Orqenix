@@ -1,0 +1,13 @@
+schemaVersion: 1
+id: G12
+title: BYOK Fallback Chain
+bsRef: docs/sdd/BS-014-byok-fallback.md
+dependsOn: [G1, G8]
+criteria:
+  - { id: G12.1, description: "FallbackChain uses first healthy adapter",                         severity: blocking }
+  - { id: G12.2, description: "falls through LlmProviderError",                                   severity: blocking }
+  - { id: G12.3, description: "falls through LlmRateLimitError",                                  severity: blocking }
+  - { id: G12.4, description: "falls through LlmAuthError and LlmTimeoutError",                   severity: blocking }
+  - { id: G12.5, description: "aggregates errors when all adapters fail",                         severity: blocking }
+  - { id: G12.6, description: "empty adapters[] rejected at construction",                        severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G12-*.json" }

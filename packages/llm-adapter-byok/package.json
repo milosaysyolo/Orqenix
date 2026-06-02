@@ -1,23 +1,21 @@
 {
   "name": "@orqenix/llm-adapter-byok",
   "version": "0.5.0-phase-5",
-  "description": "Llm adapter byok for Orqenix (Part-6)",
+  "description": "BYOK LLM adapters (OpenAI, Anthropic, Google, DeepSeek) for Orqenix prompt rewriter",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+    ".":           { "types": "./dist/index.d.ts",        "import": "./dist/index.js",        "default": "./dist/index.js" },
+    "./openai":    { "types": "./dist/openai.d.ts",       "import": "./dist/openai.js",       "default": "./dist/openai.js" },
+    "./anthropic": { "types": "./dist/anthropic.d.ts",    "import": "./dist/anthropic.js",    "default": "./dist/anthropic.js" },
+    "./google":    { "types": "./dist/google.d.ts",       "import": "./dist/google.js",       "default": "./dist/google.js" },
+    "./deepseek":  { "types": "./dist/deepseek.d.ts",     "import": "./dist/deepseek.js",     "default": "./dist/deepseek.js" },
+    "./fallback":  { "types": "./dist/fallback.d.ts",     "import": "./dist/fallback.js",     "default": "./dist/fallback.js" }
   },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": { "@orqenix/core": "workspace:*", "@orqenix/llm-adapter-ollama": "workspace:*", "zod": "^3.23.8" },
+  "devDependencies": { "vitest": "^2.1.0", "typescript": "^5.6.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }

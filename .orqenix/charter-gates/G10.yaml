@@ -1,0 +1,14 @@
+schemaVersion: 1
+id: G10
+title: Prompt Rewriter Orchestration
+bsRef: docs/sdd/BS-012-prompt-rewriter.md
+dependsOn: [G1, G9, G11, G23]
+criteria:
+  - { id: G10.1, description: "prompt-rewriter unit tests pass",                                  severity: blocking }
+  - { id: G10.2, description: "default strategy is B",                                            severity: blocking }
+  - { id: G10.3, description: "rewrite injects matching memories into system message",            severity: blocking }
+  - { id: G10.4, description: "setStrategy switches at runtime",                                  severity: blocking }
+  - { id: G10.5, description: "rewriteFn not invoked unless enableRewriteFn=true",                severity: blocking }
+  - { id: G10.6, description: "rewriteFn consolidates system message when enabled",               severity: blocking }
+  - { id: G10.7, description: "adapter failure during rewriteFn degrades gracefully",             severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G10-*.json" }

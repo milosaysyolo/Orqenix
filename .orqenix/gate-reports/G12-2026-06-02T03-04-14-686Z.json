@@ -1,0 +1,51 @@
+{
+  "gateId": "G12",
+  "title": "BYOK Fallback Chain",
+  "status": "pass",
+  "startedAt": "2026-06-02T03:04:14.684Z",
+  "finishedAt": "2026-06-02T03:04:14.686Z",
+  "durationMs": 1,
+  "checks": [
+    {
+      "id": "G12.1",
+      "description": "uses first healthy adapter",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G12.2",
+      "description": "falls through LlmProviderError",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G12.3",
+      "description": "falls through LlmRateLimitError",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G12.4",
+      "description": "falls through LlmAuthError and LlmTimeoutError",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G12.5",
+      "description": "aggregates errors when all fail",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G12.6",
+      "description": "empty chain rejected at construction",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0
+  }
+}

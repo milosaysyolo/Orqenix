@@ -1,0 +1,33 @@
+{
+  "gateId": "G8",
+  "title": "LLM Adapter Contract",
+  "status": "pass",
+  "startedAt": "2026-06-02T03:04:04.765Z",
+  "finishedAt": "2026-06-02T03:04:08.904Z",
+  "durationMs": 4138,
+  "checks": [
+    {
+      "id": "G8.1",
+      "description": "ollama adapter tests pass",
+      "status": "pass",
+      "durationMs": 2052
+    },
+    {
+      "id": "G8.2",
+      "description": "byok adapter tests pass",
+      "status": "pass",
+      "durationMs": 2086
+    },
+    {
+      "id": "G8.3",
+      "description": "all 5 adapter classes export LlmAdapter shape",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0
+  }
+}

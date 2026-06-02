@@ -1,23 +1,14 @@
 {
   "name": "@orqenix/injection-strategies",
   "version": "0.5.0-phase-5",
-  "description": "Injection strategies for Orqenix (Part-6)",
+  "description": "5 memory injection strategies (A/B/C/D/E) per CR v7.1 Chapter 8",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": { "@orqenix/core": "workspace:*", "@orqenix/memory-tiers": "workspace:*", "@orqenix/llm-adapter-ollama": "workspace:*", "zod": "^3.23.8" },
+  "devDependencies": { "vitest": "^2.1.0", "typescript": "^5.6.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }
