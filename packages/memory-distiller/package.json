@@ -1,23 +1,28 @@
 {
   "name": "@orqenix/memory-distiller",
   "version": "0.5.0-phase-5",
-  "description": "Memory distiller for Orqenix (Part-5)",
+  "description": "Heuristic memory distiller for Orqenix (OSS tier, regex+sentence patterns + background worker)",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+    ".":           { "types": "./dist/index.d.ts",        "import": "./dist/index.js",        "default": "./dist/index.js" },
+    "./extractor": { "types": "./dist/extractor.d.ts",    "import": "./dist/extractor.js",    "default": "./dist/extractor.js" },
+    "./distiller": { "types": "./dist/distiller.d.ts",    "import": "./dist/distiller.js",    "default": "./dist/distiller.js" },
+    "./worker":    { "types": "./dist/worker.d.ts",       "import": "./dist/worker.js",       "default": "./dist/worker.js" },
+    "./throttle":  { "types": "./dist/throttle.d.ts",     "import": "./dist/throttle.js",     "default": "./dist/throttle.js" }
   },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": {
+    "@orqenix/core": "workspace:*",
+    "@orqenix/storage-sqlite": "workspace:*",
+    "@orqenix/storage-diff": "workspace:*",
+    "@orqenix/scope-identity": "workspace:*",
+    "@orqenix/memory-tiers": "workspace:*",
+    "@orqenix/kb-chat": "workspace:*",
+    "zod": "^3.23.8"
   },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }

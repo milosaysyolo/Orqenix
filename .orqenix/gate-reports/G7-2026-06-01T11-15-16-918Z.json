@@ -1,0 +1,45 @@
+{
+  "gateId": "G7",
+  "title": "Background CPU Throttling",
+  "status": "pass",
+  "startedAt": "2026-06-01T11:15:06.647Z",
+  "finishedAt": "2026-06-01T11:15:16.918Z",
+  "durationMs": 10270,
+  "checks": [
+    {
+      "id": "G7.1",
+      "description": "throttle unit tests pass",
+      "status": "pass",
+      "durationMs": 3749
+    },
+    {
+      "id": "G7.2",
+      "description": "does not sleep when idle",
+      "status": "pass",
+      "durationMs": 159
+    },
+    {
+      "id": "G7.3",
+      "description": "sleeps when busy loop over 10% target",
+      "status": "pass",
+      "durationMs": 1079
+    },
+    {
+      "id": "G7.4",
+      "description": "sleep is bounded (<= 5000ms)",
+      "status": "pass",
+      "durationMs": 5203
+    },
+    {
+      "id": "G7.5",
+      "description": "reset clears the baseline",
+      "status": "pass",
+      "durationMs": 80
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

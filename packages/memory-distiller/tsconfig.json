@@ -3,14 +3,16 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/*.test.ts"
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules", "**/*.test.ts"],
+  "references": [
+    { "path": "../storage-sqlite" },
+    { "path": "../storage-diff" },
+    { "path": "../scope-identity" },
+    { "path": "../memory-tiers" },
+    { "path": "../kb-chat" }
   ]
 }

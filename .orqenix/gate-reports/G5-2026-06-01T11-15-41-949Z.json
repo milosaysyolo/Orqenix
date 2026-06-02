@@ -1,0 +1,49 @@
+{
+  "gateId": "G5",
+  "title": "Memory Distiller Behavior",
+  "status": "partial",
+  "startedAt": "2026-06-01T11:15:34.258Z",
+  "finishedAt": "2026-06-01T11:15:41.948Z",
+  "durationMs": 7689,
+  "checks": [
+    {
+      "id": "G5.1",
+      "description": "memory-distiller unit tests pass",
+      "status": "pass",
+      "durationMs": 7399
+    },
+    {
+      "id": "G5.2",
+      "description": "extractor handles 50 mixed sentences without crash",
+      "status": "pass",
+      "durationMs": 2
+    },
+    {
+      "id": "G5.3",
+      "description": "distillBatch + watermark idempotency (20 entries)",
+      "status": "pass",
+      "durationMs": 77
+    },
+    {
+      "id": "G5.4",
+      "description": "idempotent across content_hash (no duplicate memories)",
+      "status": "pass",
+      "durationMs": 52
+    },
+    {
+      "id": "G5.5",
+      "description": "minConfidence filter respected",
+      "status": "fail",
+      "durationMs": 157,
+      "error": {
+        "message": "low-confidence extraction was admitted despite filter",
+        "stack": "Error: low-confidence extraction was admitted despite filter\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G5-distiller-behavior.ts:107:19)\n    at async G5.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:13)\n    at async G5.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G5-distiller-behavior.ts:93:7)\n    at async G5.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G5-distiller-behavior.ts:126:15)"
+      }
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 4,
+    "failed": 1
+  }
+}

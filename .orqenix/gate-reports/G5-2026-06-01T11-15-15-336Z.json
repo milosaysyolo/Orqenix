@@ -1,0 +1,49 @@
+{
+  "gateId": "G5",
+  "title": "Memory Distiller Behavior",
+  "status": "partial",
+  "startedAt": "2026-06-01T11:15:07.223Z",
+  "finishedAt": "2026-06-01T11:15:15.336Z",
+  "durationMs": 8112,
+  "checks": [
+    {
+      "id": "G5.1",
+      "description": "memory-distiller unit tests pass",
+      "status": "pass",
+      "durationMs": 7871
+    },
+    {
+      "id": "G5.2",
+      "description": "extractor handles 50 mixed sentences without crash",
+      "status": "pass",
+      "durationMs": 2
+    },
+    {
+      "id": "G5.3",
+      "description": "distillBatch + watermark idempotency (20 entries)",
+      "status": "pass",
+      "durationMs": 150
+    },
+    {
+      "id": "G5.4",
+      "description": "idempotent across content_hash (no duplicate memories)",
+      "status": "pass",
+      "durationMs": 64
+    },
+    {
+      "id": "G5.5",
+      "description": "minConfidence filter respected",
+      "status": "fail",
+      "durationMs": 25,
+      "error": {
+        "message": "EBUSY: resource busy or locked, unlink 'C:\\Users\\VNET-1~1\\AppData\\Local\\Temp\\g5-5-X5Ke8C\\g.sqlite'",
+        "stack": "Error: EBUSY: resource busy or locked, unlink 'C:\\Users\\VNET-1~1\\AppData\\Local\\Temp\\g5-5-X5Ke8C\\g.sqlite'"
+      }
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 4,
+    "failed": 1
+  }
+}

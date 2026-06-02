@@ -575,35 +575,60 @@ importers:
         version: 2.1.9(@types/node@22.19.19)
 
   packages/memory-distiller:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@orqenix/kb-chat':
+        specifier: workspace:*
+        version: link:../kb-chat
+      '@orqenix/memory-tiers':
+        specifier: workspace:*
+        version: link:../memory-tiers
+      '@orqenix/scope-identity':
+        specifier: workspace:*
+        version: link:../scope-identity
+      '@orqenix/storage-diff':
+        specifier: workspace:*
+        version: link:../storage-diff
+      '@orqenix/storage-sqlite':
+        specifier: workspace:*
+        version: link:../storage-sqlite
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
-        specifier: ^5.6.0
+        specifier: ^5.5.0
         version: 5.9.3
       vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@22.19.19)
 
   packages/memory-tiers:
     dependencies:
       '@orqenix/core':
         specifier: workspace:*
         version: link:../core
-      better-sqlite3:
-        specifier: ^11.3.0
-        version: 11.10.0
+      '@orqenix/scope-identity':
+        specifier: workspace:*
+        version: link:../scope-identity
+      '@orqenix/storage-diff':
+        specifier: workspace:*
+        version: link:../storage-diff
+      '@orqenix/storage-sqlite':
+        specifier: workspace:*
+        version: link:../storage-sqlite
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
-      '@types/better-sqlite3':
-        specifier: ^7.6.11
-        version: 7.6.13
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
       typescript:
-        specifier: ^5.6.0
+        specifier: ^5.5.0
         version: 5.9.3
       vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@22.19.19)
 
   packages/mesh-routing:
     devDependencies:

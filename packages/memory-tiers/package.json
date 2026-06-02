@@ -1,38 +1,25 @@
 {
   "name": "@orqenix/memory-tiers",
-  "version": "0.3.0-dev",
-  "description": "4-tier persistent memory system: working, episodic, semantic, global",
+  "version": "0.5.0-phase-5",
+  "description": "4-tier memory classification (working/episodic/semantic/procedural) for Orqenix Memory Matrix",
   "license": "Apache-2.0",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
+    ".":             { "types": "./dist/index.d.ts",         "import": "./dist/index.js",         "default": "./dist/index.js" },
+    "./classifier":  { "types": "./dist/classifier.d.ts",    "import": "./dist/classifier.js",    "default": "./dist/classifier.js" },
+    "./transitions": { "types": "./dist/transitions.d.ts",   "import": "./dist/transitions.js",   "default": "./dist/transitions.js" },
+    "./schema":      { "types": "./dist/schema.d.ts",        "import": "./dist/schema.js",        "default": "./dist/schema.js" }
   },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit",
-    "clean": "npx rimraf dist .turbo"
-  },
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
   "dependencies": {
     "@orqenix/core": "workspace:*",
-    "better-sqlite3": "^11.3.0"
+    "@orqenix/scope-identity": "workspace:*",
+    "@orqenix/storage-sqlite": "workspace:*",
+    "@orqenix/storage-diff": "workspace:*",
+    "zod": "^3.23.8"
   },
-  "devDependencies": {
-    "@types/better-sqlite3": "^7.6.11",
-    "tsup": "^8.3.0",
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }
