@@ -1,0 +1,13 @@
+schemaVersion: 1
+id: G16
+title: Compress Context v2 Migration
+bsRef: docs/sdd/BS-018-compress-context-v2.md
+dependsOn: [G1, G15]
+criteria:
+  - { id: G16.1, description: "plugin-compress-context unit tests pass",                       severity: blocking }
+  - { id: G16.2, description: "v1 default export shape unchanged (plugin.run + ConfigSchema)", severity: blocking }
+  - { id: G16.3, description: "v1 below-threshold passthrough behavior preserved",             severity: blocking }
+  - { id: G16.4, description: "v1 above-threshold compression preserved (compressed=true)",    severity: blocking }
+  - { id: G16.5, description: "v2 produces richer metrics with tier-0 preservation",           severity: blocking }
+  - { id: G16.6, description: "v2 with already-small input is a no-op",                        severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G16-*.json" }

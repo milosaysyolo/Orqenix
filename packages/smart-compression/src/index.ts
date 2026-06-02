@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
-// Scaffold for Part-7
-// TODO_Part_7: implement Smart compression logic
-
-export const PACKAGE_VERSION = '0.5.0-phase-5';
-export const TODO = 'Part_7' as const;
-
-console.info('@orqenix/smart-compression: scaffold loaded, TODO: ' + TODO);
+export * from './contracts.js';
+export * from './selector.js';
+export * from './engine.js';
+export * from './token-visibility.js';
+export const SMART_COMPRESSION_VERSION = '0.5.0-phase-5';

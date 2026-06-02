@@ -183,13 +183,26 @@ importers:
         version: 2.1.9(@types/node@22.19.19)
 
   packages/compress-strategies:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@orqenix/llm-adapter-ollama':
+        specifier: workspace:*
+        version: link:../llm-adapter-ollama
+      '@orqenix/memory-tiers':
+        specifier: workspace:*
+        version: link:../memory-tiers
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
-        specifier: ^5.6.0
+        specifier: ^5.5.0
         version: 5.9.3
       vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@22.19.19)
 
   packages/config:
     devDependencies:
@@ -309,13 +322,20 @@ importers:
         version: 2.1.9(@types/node@22.19.19)
 
   packages/hooks:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
-        specifier: ^5.6.0
+        specifier: ^5.5.0
         version: 5.9.3
       vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@22.19.19)
 
   packages/injection-strategies:
     dependencies:
@@ -696,19 +716,31 @@ importers:
 
   packages/plugin-compress-context:
     dependencies:
+      '@orqenix/compress-strategies':
+        specifier: workspace:*
+        version: link:../compress-strategies
       '@orqenix/core':
         specifier: workspace:*
         version: link:../core
+      '@orqenix/hooks':
+        specifier: workspace:*
+        version: link:../hooks
+      '@orqenix/smart-compression':
+        specifier: workspace:*
+        version: link:../smart-compression
+      '@orqenix/telemetry':
+        specifier: workspace:*
+        version: link:../telemetry
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
       typescript:
-        specifier: ^5.6.0
+        specifier: ^5.5.0
         version: 5.9.3
       vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@22.19.19)
 
   packages/plugin-compress-input:
     dependencies:
@@ -1095,13 +1127,29 @@ importers:
         version: 2.1.9(@types/node@22.19.19)
 
   packages/smart-compression:
+    dependencies:
+      '@orqenix/compress-strategies':
+        specifier: workspace:*
+        version: link:../compress-strategies
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
+      '@orqenix/hooks':
+        specifier: workspace:*
+        version: link:../hooks
+      '@orqenix/telemetry':
+        specifier: workspace:*
+        version: link:../telemetry
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
     devDependencies:
       typescript:
-        specifier: ^5.6.0
+        specifier: ^5.5.0
         version: 5.9.3
       vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@22.19.19)
 
   packages/storage-diff:
     dependencies:
@@ -1153,13 +1201,17 @@ importers:
   packages/teams-built-in: {}
 
   packages/telemetry:
+    dependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
       typescript:
-        specifier: ^5.6.0
+        specifier: ^5.5.0
         version: 5.9.3
       vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@22.19.19)
 
   packages/testing:
     devDependencies:

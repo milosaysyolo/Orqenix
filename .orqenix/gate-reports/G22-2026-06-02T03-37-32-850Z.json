@@ -1,0 +1,63 @@
+{
+  "gateId": "G22",
+  "title": "Token Visibility",
+  "status": "partial",
+  "startedAt": "2026-06-02T03:37:32.843Z",
+  "finishedAt": "2026-06-02T03:37:32.850Z",
+  "durationMs": 6,
+  "checks": [
+    {
+      "id": "G22.1",
+      "description": "summarizeMetrics returns formatted metric summary string",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G22.2",
+      "description": "formatRatioBar renders a bar at given ratio",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G22.3",
+      "description": "SmartCompressionEngine emits pre/post compress hooks",
+      "status": "fail",
+      "durationMs": 2,
+      "error": {
+        "message": "[\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1000,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be greater than or equal to 1000\",\n    \"path\": [\n      \"tokenBudget\"\n    ]\n  }\n]",
+        "stack": "ZodError: [\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1000,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be greater than or equal to 1000\",\n    \"path\": [\n      \"tokenBudget\"\n    ]\n  }\n]\n    at get error (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\node_modules\\.pnpm\\zod@3.25.76\\node_modules\\zod\\v3\\types.cjs:45:31)\n    at ZodObject.parse (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\node_modules\\.pnpm\\zod@3.25.76\\node_modules\\zod\\v3\\types.cjs:120:22)\n    at new SmartCompressionEngine (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\smart-compression\\dist\\engine.js:24:53)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:31:21)\n    at G22.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G22.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:30:18)\n    at async G22.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:76:15)"
+      }
+    },
+    {
+      "id": "G22.4",
+      "description": "SmartCompressionEngine records metrics on compress",
+      "status": "fail",
+      "durationMs": 0,
+      "error": {
+        "message": "[\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1000,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be greater than or equal to 1000\",\n    \"path\": [\n      \"tokenBudget\"\n    ]\n  }\n]",
+        "stack": "ZodError: [\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1000,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be greater than or equal to 1000\",\n    \"path\": [\n      \"tokenBudget\"\n    ]\n  }\n]\n    at get error (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\node_modules\\.pnpm\\zod@3.25.76\\node_modules\\zod\\v3\\types.cjs:45:31)\n    at ZodObject.parse (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\node_modules\\.pnpm\\zod@3.25.76\\node_modules\\zod\\v3\\types.cjs:120:22)\n    at new SmartCompressionEngine (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\smart-compression\\dist\\engine.js:24:53)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:42:21)\n    at G22.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G22.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:41:18)\n    at async G22.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:76:15)"
+      }
+    },
+    {
+      "id": "G22.5",
+      "description": "selectStrategy chooses correct strategy based on distribution",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G22.6",
+      "description": "OverflowError thrown when tokens exceed 105% budget",
+      "status": "fail",
+      "durationMs": 0,
+      "error": {
+        "message": "[\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1000,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be greater than or equal to 1000\",\n    \"path\": [\n      \"tokenBudget\"\n    ]\n  }\n]",
+        "stack": "ZodError: [\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1000,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be greater than or equal to 1000\",\n    \"path\": [\n      \"tokenBudget\"\n    ]\n  }\n]\n    at get error (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\node_modules\\.pnpm\\zod@3.25.76\\node_modules\\zod\\v3\\types.cjs:45:31)\n    at ZodObject.parse (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\node_modules\\.pnpm\\zod@3.25.76\\node_modules\\zod\\v3\\types.cjs:120:22)\n    at new SmartCompressionEngine (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\smart-compression\\dist\\engine.js:24:53)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:57:21)\n    at G22.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G22.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:56:18)\n    at async G22.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G22-token-visibility.ts:76:15)"
+      }
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 3,
+    "failed": 3
+  }
+}

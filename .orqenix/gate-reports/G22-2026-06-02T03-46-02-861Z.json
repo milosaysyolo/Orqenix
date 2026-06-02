@@ -1,0 +1,39 @@
+{
+  "gateId": "G22",
+  "title": "Token Visibility",
+  "status": "pass",
+  "startedAt": "2026-06-02T03:46:02.848Z",
+  "finishedAt": "2026-06-02T03:46:02.861Z",
+  "durationMs": 12,
+  "checks": [
+    {
+      "id": "G22.1",
+      "description": "METRIC_NAMES exports canonical strings",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G22.2",
+      "description": "summarizeMetrics aggregates per-strategy",
+      "status": "pass",
+      "durationMs": 12
+    },
+    {
+      "id": "G22.3",
+      "description": "formatRatioBar renders bar correctly",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G22.4",
+      "description": "empty registry returns sane defaults",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0
+  }
+}

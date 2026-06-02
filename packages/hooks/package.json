@@ -1,23 +1,14 @@
 {
   "name": "@orqenix/hooks",
   "version": "0.5.0-phase-5",
-  "description": "Hooks for Orqenix (Part-7)",
+  "description": "Typed event bus for Orqenix compress/distill lifecycle (preCompress, postCompress, postDistill, etc.)",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "scripts": {
-    "build": "tsc --build",
-    "test": "vitest run"
-  },
-  "devDependencies": {
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
-  }
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "scripts": { "build": "tsc --build", "test": "vitest run" },
+  "dependencies": { "@orqenix/core": "workspace:*", "zod": "^3.23.8" },
+  "devDependencies": { "vitest": "^1.6.0", "typescript": "^5.5.0" },
+  "files": ["dist", "README.md", "LICENSE"]
 }
