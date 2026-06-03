@@ -1,0 +1,41 @@
+name: "✨ Feature request"
+description: "Propose an enhancement to Orqenix"
+title: "[feature] "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the user journey or pain point, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Which tier should this land in?
+      options:
+        - OSS (@orqenix/*)
+        - Pro (@orqenix-pro/*)
+        - Cloud (@orqenix-cloud/*)
+        - Not sure
+    validations:
+      required: true
+  - type: checkboxes
+    id: rfc
+    attributes:
+      label: Scope check
+      options:
+        - label: I have read the ROADMAP and this is not already planned
+          required: true
+        - label: I am willing to help discuss the design in an RFC if needed
