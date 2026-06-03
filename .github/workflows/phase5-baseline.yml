@@ -20,6 +20,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout Orqenix-Pro
+        uses: actions/checkout@v4
+        with:
+          repository: milosaysyolo/Orqenix-Pro
+          ref: v0.5.0-phase-5
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          path: ../Orqenix-Pro
+          fetch-depth: 0
+
       - uses: pnpm/action-setup@v3
         with:
           version: 9
@@ -31,6 +40,9 @@ jobs:
 
       - name: Install (frozen lockfile)
         run: pnpm install --frozen-lockfile
+
+      - name: Approve native builds (allowlist only)
+        run: pnpm rebuild better-sqlite3 esbuild @swc/core --config.ignore-scripts=false
 
       - name: Build workspace
         run: pnpm build
