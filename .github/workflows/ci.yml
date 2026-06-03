@@ -28,7 +28,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile --config.ignore-scripts=false
       - name: Build allowlisted native dependencies
-        run: pnpm rebuild better-sqlite3 esbuild @swc/core --pending --config.ignore-scripts=false
+        run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core --pending --config.ignore-scripts=false
       - run: pnpm exec prettier --check .
       - run: pnpm build
       - run: pnpm typecheck

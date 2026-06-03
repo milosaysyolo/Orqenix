@@ -86,7 +86,7 @@ jobs:
       - name: Approve native builds (allowlist only)
         shell: bash
         working-directory: layout/Orqenix
-        run: pnpm rebuild better-sqlite3 esbuild @swc/core --pending --config.ignore-scripts=false
+        run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core --pending --config.ignore-scripts=false
 
       - name: Build
         shell: bash

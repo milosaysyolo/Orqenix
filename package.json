@@ -59,6 +59,7 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@mongodb-js/zstd",
       "better-sqlite3",
       "esbuild",
       "@swc/core"
