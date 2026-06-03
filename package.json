@@ -40,7 +40,17 @@
     "charter:docker": "docker build -t orqenix-charter -f charter/Dockerfile . && docker run --rm -v $PWD:/repo orqenix-charter",
     "integration": "pnpm --filter @orqenix/integration test",
     "smoke:cross-repo": "bash smoke/cross-repo-smoke.sh",
-    "smoke:cross-repo:windows": "pwsh ./smoke/cross-repo-smoke.ps1"
+    "smoke:cross-repo:windows": "pwsh ./smoke/cross-repo-smoke.ps1",
+    "lint": "pnpm -r --filter=\"./packages/*\" lint",
+    "clean": "pnpm -r --filter=\"./packages/*\" clean && rm -rf node_modules",
+    "pre-publish-check": "tsx scripts/pre-publish-check.ts",
+    "changeset": "changeset",
+    "changeset:status": "changeset status --verbose",
+    "version-packages": "changeset version && pnpm install --lockfile-only",
+    "release": "pnpm build && pnpm test && pnpm verify-phase-5 && changeset publish",
+    "ci:publish": "pnpm build && changeset publish",
+    "release:dry-run": "pnpm -r exec npm pack --dry-run",
+    "release:propose": "tsx scripts/release-propose.ts"
   },
   "pnpm": {
     "overrides": {
@@ -48,6 +58,8 @@
     }
   },
   "devDependencies": {
+    "@changesets/cli": "2.27.10",
+    "@changesets/changelog-github": "0.5.0",
     "@types/node": "^20.14.0",
     "prettier": "^3.3.0",
     "tsx": "^4.19.0",

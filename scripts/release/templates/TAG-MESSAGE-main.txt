@@ -1,0 +1,17 @@
+Phase 5: Memory Foundation Refactor — v0.5.0-phase-5
+
+27 packages, ~25,220 LOC, 31 charter gates, ~201 charter-gate checks, ~446 tests.
+ALL GREEN.
+
+Highlights:
+  - 4-tier memory matrix with content-hash idempotency
+  - Capability-token cross-scope mesh with parallel fanout and quorum
+  - Smart Compression Engine with Tier-0 preservation (105% overflow cap)
+  - Tamper-evident BLAKE3-chained audit log (16 event kinds)
+  - 2-step safe detach with random-salt confirmation token
+  - Phase 4 to Phase 5 migration tooling with automatic rollback
+  - CLI surface with 16 subcommands
+
+Phase 4 plugin contract preserved verbatim (Charter Gate G16).
+
+See CHANGELOG.md and RELEASE_NOTES.md for full detail.
