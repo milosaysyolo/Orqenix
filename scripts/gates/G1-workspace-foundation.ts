@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { GateRunner, type GateCheck, type GateReport } from "@orqenix/gate-runner-core";
+import { GateRunner, type GateCheck, type GateReport } from "./_gate-runner.js";
 import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
