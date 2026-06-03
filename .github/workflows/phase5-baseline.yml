@@ -38,7 +38,7 @@ jobs:
         run: pnpm install --frozen-lockfile --config.ignore-scripts=false
 
       - name: Approve native builds (allowlist only)
-        run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core --pending --config.ignore-scripts=false
+        run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --pending --config.ignore-scripts=false
 
       - name: Build workspace
         run: pnpm build

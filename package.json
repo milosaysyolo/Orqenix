@@ -62,7 +62,8 @@
       "@mongodb-js/zstd",
       "better-sqlite3",
       "esbuild",
-      "@swc/core"
+      "@swc/core",
+      "sharp"
     ],
     "overrides": {
       "protobufjs": "^7.5.8"
