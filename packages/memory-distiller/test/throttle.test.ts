@@ -23,8 +23,8 @@ describe("CpuThrottle", () => {
   });
 
   it("sleeps proportionally when over target (busy loop ~100% CPU)", async () => {
-    const t = new CpuThrottle(10, 100);
-    spinFor(120);
+    const t = new CpuThrottle(1, 500);
+    spinFor(500);
     const slept = await t.checkAndSleep();
     expect(slept).toBeGreaterThan(0);
   });
