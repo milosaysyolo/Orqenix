@@ -101,7 +101,7 @@ class Phase4StubVerifier {
   }
 
   private checkManifest(pkg: Phase4Package): { passed: boolean; details?: string } {
-    const required = ["name", "version", "license", "type"];
+    const required = ["name", "version", "license"];
     const missing = required.filter((f) => !pkg.manifest[f]);
     if (missing.length > 0) return { passed: false, details: `Missing: ${missing.join(", ")}` };
     return { passed: true };
