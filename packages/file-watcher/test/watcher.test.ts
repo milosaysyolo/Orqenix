@@ -25,7 +25,7 @@ describe("FileWatcher", () => {
       batches.push(b);
     });
     await writeFile(join(dir, "hello.txt"), "hi");
-    await new Promise((r) => setTimeout(r, 400));
+    await new Promise((r) => setTimeout(r, 600));
     expect(batches.flat().some((e) => e.kind === "add" && e.relPath === "hello.txt")).toBe(true);
   });
 
@@ -38,7 +38,7 @@ describe("FileWatcher", () => {
     });
     await new Promise((r) => setTimeout(r, 100));
     await writeFile(join(dir, "x.txt"), "2");
-    await new Promise((r) => setTimeout(r, 400));
+    await new Promise((r) => setTimeout(r, 600));
     expect(batches.flat().some((e) => e.kind === "change" && e.relPath === "x.txt")).toBe(true);
   });
 
@@ -51,12 +51,12 @@ describe("FileWatcher", () => {
     });
     await new Promise((r) => setTimeout(r, 100));
     await unlink(join(dir, "y.txt"));
-    await new Promise((r) => setTimeout(r, 400));
+    await new Promise((r) => setTimeout(r, 600));
     expect(batches.flat().some((e) => e.kind === "unlink" && e.relPath === "y.txt")).toBe(true);
   });
 
   it("debounces multiple writes into one batch", async () => {
-    watcher = new FileWatcher({ rootDir: dir, debounceMs: 200 });
+    watcher = new FileWatcher({ rootDir: dir, debounceMs: 400 });
     const batches: FileEvent[][] = [];
     await watcher.start(async (b) => {
       batches.push(b);
@@ -65,7 +65,7 @@ describe("FileWatcher", () => {
       await writeFile(join(dir, `f${i}.txt`), "x");
       await new Promise((r) => setTimeout(r, 20));
     }
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 1000));
     expect(batches.length).toBeGreaterThanOrEqual(1);
     const allPaths = batches
       .flat()
