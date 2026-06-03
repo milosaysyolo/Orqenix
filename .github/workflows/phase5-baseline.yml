@@ -21,13 +21,9 @@ jobs:
           fetch-depth: 0
 
       - name: Checkout Orqenix-Pro
-        uses: actions/checkout@v4
-        with:
-          repository: milosaysyolo/Orqenix-Pro
-          ref: v0.5.0-phase-5
-          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
-          path: ../Orqenix-Pro
-          fetch-depth: 0
+        env:
+          PRO_TOKEN: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+        run: git clone --depth 1 --branch v0.5.0-phase-5 https://x-access-token:${PRO_TOKEN}@github.com/milosaysyolo/Orqenix-Pro.git ../Orqenix-Pro
 
       - uses: pnpm/action-setup@v3
         with:

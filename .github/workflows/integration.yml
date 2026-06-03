@@ -88,9 +88,7 @@ jobs:
       - name: Approve native builds (allowlist only)
         shell: bash
         working-directory: layout/Orqenix
-        run: |
-          # Re-run install with build-from-source allowed ONLY for allowlisted packages
-          pnpm rebuild better-sqlite3 esbuild @swc/core || true
+        run: pnpm rebuild better-sqlite3 esbuild @swc/core --config.ignore-scripts=false
 
       - name: Build
         shell: bash
