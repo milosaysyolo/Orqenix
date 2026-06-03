@@ -1,13 +1,60 @@
 {
   "name": "@orqenix/embedding-cloud",
   "version": "0.4.0",
+  "description": "Orqenix embedding-cloud package",
   "license": "Apache-2.0",
+  "author": {
+    "name": "Milo Nguyen",
+    "email": "milo@orqenix.dev",
+    "url": "https://orqenix.dev"
+  },
+  "homepage": "https://orqenix.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "packages\\embedding-cloud"
+  },
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
+  "keywords": [
+    "orqenix",
+    "ai-agents",
+    "orchestration"
+  ],
+  "type": "module",
   "main": "dist/index.js",
+  "module": "./dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
   },
   "dependencies": {
     "@orqenix/core": "workspace:*",

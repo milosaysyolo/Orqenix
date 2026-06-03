@@ -53,6 +53,11 @@
     "release:propose": "tsx scripts/release-propose.ts"
   },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild",
+      "@swc/core"
+    ],
     "overrides": {
       "protobufjs": "^7.5.8"
     }
