@@ -1,0 +1,55 @@
+# Publishable Whitelist
+# Mode "all": publish all discovered packages matching @orqenix/* scope
+# Mode "whitelist": publish ONLY packages in the list below
+#
+# Recommendation: use "whitelist" mode for production safety.
+
+version: 1
+mode: whitelist
+
+packages:
+  # Core
+  - "@orqenix/core"
+  - "@orqenix/cli"
+
+  # Storage
+  - "@orqenix/storage-sqlite"
+  - "@orqenix/storage-diff"
+
+  # KB
+  - "@orqenix/kb-chat"
+  - "@orqenix/kb-code"
+  - "@orqenix/kb-decisions"
+  - "@orqenix/kb-docs"
+  - "@orqenix/kb-query"
+
+  # Memory
+  - "@orqenix/memory-tiers"
+  - "@orqenix/memory-distiller"
+
+  # Mesh + Identity
+  - "@orqenix/scope-identity"
+  - "@orqenix/capability-tokens"
+  - "@orqenix/mesh-routing"
+
+  # Compression
+  - "@orqenix/smart-compression"
+  - "@orqenix/compress-strategies"
+  - "@orqenix/reindex-incremental"
+
+  # Hooks + Audit
+  - "@orqenix/hooks"
+  - "@orqenix/audit-log"
+  - "@orqenix/detach"
+  - "@orqenix/migration"
+  - "@orqenix/lifecycle"
+  - "@orqenix/provenance"
+  - "@orqenix/registry"
+
+  # Tools
+  - "@orqenix/prompt-rewriter"
+  - "@orqenix/sdk"
+  - "@orqenix/schema"
+  - "@orqenix/config"
+  - "@orqenix/workspace"
+  - "@orqenix/scope-link"
