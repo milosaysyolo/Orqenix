@@ -3,6 +3,25 @@
   "version": "0.2.0-dev",
   "description": "Orqenix core runtime: scope, config, storage, sync engine",
   "license": "Apache-2.0",
+  "author": {
+    "name": "Milo Nguyen",
+    "email": "milo@orqenix.dev",
+    "url": "https://orqenix.dev"
+  },
+  "homepage": "https://orqenix.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "packages\\core"
+  },
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
+  "keywords": [
+    "orqenix",
+    "ai-agents",
+    "core"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -13,39 +32,31 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./scope": {
-      "types": "./dist/scope/index.d.ts",
-      "import": "./dist/scope/index.js"
-    },
-    "./config": {
-      "types": "./dist/config/index.d.ts",
-      "import": "./dist/config/index.js"
-    },
-    "./storage": {
-      "types": "./dist/storage/index.d.ts",
-      "import": "./dist/storage/index.js"
-    },
-    "./sync": {
-      "types": "./dist/sync/index.d.ts",
-      "import": "./dist/sync/index.js"
-    },
-    "./plugin": {
-      "types": "./dist/plugin/index.d.ts",
-      "import": "./dist/plugin/index.js"
-    }
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
     "test": "vitest run",
-    "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "clean": "npx rimraf dist .turbo"
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
+    "dev": "tsup --watch",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@noble/hashes": "^1.5.0",
@@ -63,5 +74,8 @@
     "tsup": "^8.3.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
+  },
+  "orqenix": {
+    "module": "./dist/index.js"
   }
 }

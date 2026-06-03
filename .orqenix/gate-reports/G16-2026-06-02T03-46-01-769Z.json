@@ -1,0 +1,51 @@
+{
+  "gateId": "G16",
+  "title": "Compress Context v2 Migration",
+  "status": "pass",
+  "startedAt": "2026-06-02T03:45:59.424Z",
+  "finishedAt": "2026-06-02T03:46:01.769Z",
+  "durationMs": 2345,
+  "checks": [
+    {
+      "id": "G16.1",
+      "description": "plugin-compress-context unit tests pass",
+      "status": "pass",
+      "durationMs": 2341
+    },
+    {
+      "id": "G16.2",
+      "description": "v1 default export shape unchanged (run + ConfigSchema)",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G16.3",
+      "description": "v1 below-threshold passthrough behavior preserved",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G16.4",
+      "description": "v1 above-threshold compression preserved (compressed=true, tokensOut < tokensIn)",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G16.5",
+      "description": "v2 path produces richer metrics with tier-0 preservation",
+      "status": "pass",
+      "durationMs": 3
+    },
+    {
+      "id": "G16.6",
+      "description": "v2 with already-small input is a no-op",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0
+  }
+}

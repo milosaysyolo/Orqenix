@@ -1,0 +1,14 @@
+```yaml
+schemaVersion: 1
+id: G18
+title: Audit Log Tamper Detection
+bsRef: docs/sdd/BS-029-audit-log.md
+dependsOn: [G1, G2]
+criteria:
+  - { id: G18.1, description: "audit-log unit tests pass",                                       severity: blocking }
+  - { id: G18.2, description: "verifyChain passes on 50-entry untampered log",                   severity: blocking }
+  - { id: G18.3, description: "30 random payload tampers all detected",                          severity: blocking }
+  - { id: G18.4, description: "broken prevHash linkage detected",                                severity: blocking }
+  - { id: G18.5, description: "two scopes have independent chains",                              severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G18-*.json" }
+```

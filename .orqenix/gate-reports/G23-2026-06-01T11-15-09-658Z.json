@@ -1,0 +1,57 @@
+{
+  "gateId": "G23",
+  "title": "Memory Tier Classification",
+  "status": "pass",
+  "startedAt": "2026-06-01T11:15:06.043Z",
+  "finishedAt": "2026-06-01T11:15:09.657Z",
+  "durationMs": 3614,
+  "checks": [
+    {
+      "id": "G23.1",
+      "description": "memory-tiers unit tests pass",
+      "status": "pass",
+      "durationMs": 3486
+    },
+    {
+      "id": "G23.2",
+      "description": "classifyInitialTier respects observation rule",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G23.3",
+      "description": "classifyInitialTier respects confidence floor",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G23.4",
+      "description": "promotion path working -> episodic -> semantic -> procedural",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G23.5",
+      "description": "canDemote + nextTier sanity",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G23.6",
+      "description": "MemoryTierStore enforces content_hash + scope idempotency (50 inserts -> 1 entry)",
+      "status": "pass",
+      "durationMs": 76
+    },
+    {
+      "id": "G23.7",
+      "description": "promote into procedural makes entry immutable",
+      "status": "pass",
+      "durationMs": 51
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  }
+}

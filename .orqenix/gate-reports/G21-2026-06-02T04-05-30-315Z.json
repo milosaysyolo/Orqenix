@@ -1,0 +1,57 @@
+{
+  "gateId": "G21",
+  "title": "RTK Hooks Integration",
+  "status": "pass",
+  "startedAt": "2026-06-02T04:05:27.951Z",
+  "finishedAt": "2026-06-02T04:05:30.315Z",
+  "durationMs": 2363,
+  "checks": [
+    {
+      "id": "G21.1",
+      "description": "rtk-hooks unit tests pass",
+      "status": "pass",
+      "durationMs": 2242
+    },
+    {
+      "id": "G21.2",
+      "description": "blocks dangerous commands (rm, dd, shutdown, reboot, mkfs)",
+      "status": "pass",
+      "durationMs": 2
+    },
+    {
+      "id": "G21.3",
+      "description": "redacts API keys and Bearer tokens before output",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G21.4",
+      "description": "truncates stdout above configured cap",
+      "status": "pass",
+      "durationMs": 65
+    },
+    {
+      "id": "G21.5",
+      "description": "records run counter and duration histogram metrics",
+      "status": "pass",
+      "durationMs": 53
+    },
+    {
+      "id": "G21.6",
+      "description": "extension formats output with exit code and truncation markers",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G21.7",
+      "description": "redact() helper ignores invalid regex patterns",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  }
+}

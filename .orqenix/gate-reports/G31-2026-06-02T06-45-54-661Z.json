@@ -1,0 +1,51 @@
+{
+  "gateId": "G31",
+  "title": "Workspace Membership",
+  "status": "pass",
+  "startedAt": "2026-06-02T06:45:49.763Z",
+  "finishedAt": "2026-06-02T06:45:54.661Z",
+  "durationMs": 4897,
+  "checks": [
+    {
+      "id": "G31.1",
+      "description": "workspace unit tests pass",
+      "status": "pass",
+      "durationMs": 4329
+    },
+    {
+      "id": "G31.2",
+      "description": "create inserts owner membership atomically",
+      "status": "pass",
+      "durationMs": 118
+    },
+    {
+      "id": "G31.3",
+      "description": "addMember rejects duplicates",
+      "status": "pass",
+      "durationMs": 142
+    },
+    {
+      "id": "G31.4",
+      "description": "removeMember refuses owner",
+      "status": "pass",
+      "durationMs": 110
+    },
+    {
+      "id": "G31.5",
+      "description": "transferOwnership swaps roles atomically",
+      "status": "pass",
+      "durationMs": 95
+    },
+    {
+      "id": "G31.6",
+      "description": "delete cascades to memberships",
+      "status": "pass",
+      "durationMs": 103
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0
+  }
+}

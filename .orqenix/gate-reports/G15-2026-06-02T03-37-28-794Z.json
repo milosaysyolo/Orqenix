@@ -1,0 +1,67 @@
+{
+  "gateId": "G15",
+  "title": "Compression Strategies",
+  "status": "partial",
+  "startedAt": "2026-06-02T03:37:26.686Z",
+  "finishedAt": "2026-06-02T03:37:28.794Z",
+  "durationMs": 2107,
+  "checks": [
+    {
+      "id": "G15.1",
+      "description": "@orqenix/compress-strategies unit tests pass",
+      "status": "pass",
+      "durationMs": 2100
+    },
+    {
+      "id": "G15.2",
+      "description": "DropStrategy never drops tier-0 messages",
+      "status": "pass",
+      "durationMs": 1
+    },
+    {
+      "id": "G15.3",
+      "description": "DropStrategy respects sticky flag",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G15.4",
+      "description": "SummarizeStrategy compresses contiguous tier>=2 runs",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G15.5",
+      "description": "DistillStrategy drops tier>=3 and extracts key facts",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G15.6",
+      "description": "DistillStrategy passes extracted facts to MemoryWriter",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G15.7",
+      "description": "CompressChainStrategy runs drop->distill->summarize in order",
+      "status": "fail",
+      "durationMs": 0,
+      "error": {
+        "message": "Cannot drop tier-0 messages",
+        "stack": "OrqenixError: Cannot drop tier-0 messages\n    at DropStrategy._findDropCandidate (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\compress-strategies\\dist\\drop.js:48:23)\n    at DropStrategy.compress (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\compress-strategies\\dist\\drop.js:22:30)\n    at CompressChainStrategy.compress (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\compress-strategies\\dist\\compress-chain.js:17:27)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G15-compression-strategies.ts:68:27)\n    at G15.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G15.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G15-compression-strategies.ts:65:18)\n    at async G15.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G15-compression-strategies.ts:94:15)"
+      }
+    },
+    {
+      "id": "G15.8",
+      "description": "estimateTokens / totalTokens helpers are exported",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "passed": 7,
+    "failed": 1
+  }
+}

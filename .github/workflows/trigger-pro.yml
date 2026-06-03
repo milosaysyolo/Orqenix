@@ -1,0 +1,71 @@
+name: Trigger Pro Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      oss_version:
+        description: "OSS version that Pro should depend on (e.g., 0.5.0)"
+        required: true
+        type: string
+      pro_dry_run:
+        description: "Pro publish dry run (validate only)"
+        type: boolean
+        default: true
+      reason:
+        description: "Reason for manual trigger (logged)"
+        required: false
+        type: string
+        default: "Manual trigger after OSS verification"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-oss-on-npm:
+    name: Verify OSS exists on npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/wait-for-npm
+        with:
+          package: "@orqenix/core"
+          version: ${{ inputs.oss_version }}
+          timeout-seconds: 60
+
+      - uses: ./.github/actions/wait-for-npm
+        with:
+          package: "@orqenix/cli"
+          version: ${{ inputs.oss_version }}
+          timeout-seconds: 60
+
+  dispatch-to-pro:
+    name: Dispatch to Pro repo
+    needs: verify-oss-on-npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Pro release.yml
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          repository: milosaysyolo/Orqenix-Pro
+          event-type: oss-published
+          client-payload: |
+            {
+              "oss_version": "${{ inputs.oss_version }}",
+              "trigger_run_id": "${{ github.run_id }}",
+              "trigger_sha": "${{ github.sha }}",
+              "triggered_by": "${{ github.actor }}",
+              "dry_run": ${{ inputs.pro_dry_run }},
+              "reason": ${{ toJSON(inputs.reason) }}
+            }
+
+      - name: Summary
+        run: |
+          echo "## Pro Release Triggered" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- OSS version: \`${{ inputs.oss_version }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Pro dry-run: \`${{ inputs.pro_dry_run }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Reason: ${{ inputs.reason }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Track Pro workflow: https://github.com/milosaysyolo/Orqenix-Pro/actions" >> "$GITHUB_STEP_SUMMARY"

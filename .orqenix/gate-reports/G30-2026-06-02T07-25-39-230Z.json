@@ -1,0 +1,45 @@
+{
+  "gateId": "G30",
+  "title": "rm-rf .orqenix Safety",
+  "status": "pass",
+  "startedAt": "2026-06-02T07:25:38.605Z",
+  "finishedAt": "2026-06-02T07:25:39.229Z",
+  "durationMs": 623,
+  "checks": [
+    {
+      "id": "G30.1",
+      "description": "full-detach with default preserves identity.key",
+      "status": "pass",
+      "durationMs": 137
+    },
+    {
+      "id": "G30.2",
+      "description": "preserveIdentityKey=false fully clears .orqenix",
+      "status": "pass",
+      "durationMs": 110
+    },
+    {
+      "id": "G30.3",
+      "description": "destructive op requires valid confirmation token",
+      "status": "pass",
+      "durationMs": 113
+    },
+    {
+      "id": "G30.4",
+      "description": "dryRun for full-detach does not remove any files",
+      "status": "pass",
+      "durationMs": 122
+    },
+    {
+      "id": "G30.5",
+      "description": "unlink kind never touches .orqenix directory",
+      "status": "pass",
+      "durationMs": 141
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "gateId": "G4",
+  "title": "Chat KB Operations",
+  "status": "partial",
+  "startedAt": "2026-06-01T10:37:54.396Z",
+  "finishedAt": "2026-06-01T10:37:55.270Z",
+  "durationMs": 874,
+  "checks": [
+    {
+      "id": "G4.1",
+      "description": "append 50 entries and listEntries returns in order",
+      "status": "fail",
+      "durationMs": 166,
+      "error": {
+        "message": "order broken at 10",
+        "stack": "Error: order broken at 10\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G4-chat-kb-operations.ts:50:58)\n    at async G4.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:13)\n    at async G4.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G4-chat-kb-operations.ts:35:7)\n    at async G4.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G4-chat-kb-operations.ts:170:15)"
+      }
+    },
+    {
+      "id": "G4.2",
+      "description": "verifyHashChain green on untampered chain",
+      "status": "fail",
+      "durationMs": 78,
+      "error": {
+        "message": "chat entry hash chain broken: expected prev null..., got edcdff33cae6...",
+        "stack": "OrqenixError: chat entry hash chain broken: expected prev null..., got edcdff33cae6...\n    at ChatStore.verifyHashChain (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\kb-chat\\dist\\store.js:137:23)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G4-chat-kb-operations.ts:62:23)\n    at async G4.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:13)\n    at async G4.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G4-chat-kb-operations.ts:55:7)\n    at async G4.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G4-chat-kb-operations.ts:170:15)"
+      }
+    },
+    {
+      "id": "G4.3",
+      "description": "verifyHashChain catches tampered content",
+      "status": "pass",
+      "durationMs": 64
+    },
+    {
+      "id": "G4.4",
+      "description": "capability gate: write:kb-chat token accepted",
+      "status": "pass",
+      "durationMs": 351
+    },
+    {
+      "id": "G4.5",
+      "description": "capability gate: read-only token rejected",
+      "status": "pass",
+      "durationMs": 73
+    },
+    {
+      "id": "G4.6",
+      "description": "vector search finds nearest entry",
+      "status": "pass",
+      "durationMs": 70
+    },
+    {
+      "id": "G4.7",
+      "description": "session cascade delete removes entries",
+      "status": "pass",
+      "durationMs": 66
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 5,
+    "failed": 2
+  }
+}

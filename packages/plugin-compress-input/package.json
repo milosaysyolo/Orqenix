@@ -3,6 +3,25 @@
   "version": "0.3.0-dev",
   "description": "Compress input to LLM: whitespace cleanup, dedup, optional pseudo-code, concision instructions",
   "license": "Apache-2.0",
+  "author": {
+    "name": "Milo Nguyen",
+    "email": "milo@orqenix.dev",
+    "url": "https://orqenix.dev"
+  },
+  "homepage": "https://orqenix.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "packages\\plugin-compress-input"
+  },
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
+  "keywords": [
+    "orqenix",
+    "ai-agents",
+    "plugin"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -12,18 +31,30 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "clean": "npx rimraf dist .turbo"
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
   },
   "dependencies": {
     "@orqenix/core": "workspace:*"
@@ -32,5 +63,8 @@
     "tsup": "^8.3.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
+  },
+  "orqenix": {
+    "module": "./dist/index.js"
   }
 }

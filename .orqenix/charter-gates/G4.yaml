@@ -1,0 +1,14 @@
+schemaVersion: 1
+id: G4
+title: Chat KB Operations
+bsRef: docs/sdd/BS-006-kb-chat-operations.md
+dependsOn: [G1, G2, G3, G26, G27, G28]
+criteria:
+  - { id: G4.1, description: "append 50 entries returns chronological list",                   severity: blocking }
+  - { id: G4.2, description: "verifyHashChain succeeds on untampered chain",                   severity: blocking }
+  - { id: G4.3, description: "verifyHashChain catches tampered content (HashChainBrokenError)", severity: blocking }
+  - { id: G4.4, description: "write:kb-chat token accepted by verifier-gated store",           severity: blocking }
+  - { id: G4.5, description: "read:kb-chat token rejected (ChatWriteUnauthorizedError)",       severity: blocking }
+  - { id: G4.6, description: "vector search returns nearest entry by embedding",               severity: blocking }
+  - { id: G4.7, description: "session delete cascades to entries via FK ON DELETE CASCADE",    severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G4-*.json" }

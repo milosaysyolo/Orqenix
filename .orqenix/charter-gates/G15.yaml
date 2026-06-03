@@ -1,0 +1,15 @@
+schemaVersion: 1
+id: G15
+title: Compression Strategies
+bsRef: docs/sdd/BS-017-compression-strategies.md
+dependsOn: [G1, G14]
+criteria:
+  - { id: G15.1, description: "compress-strategies unit tests pass",                 severity: blocking }
+  - { id: G15.2, description: "smart-compression unit tests pass",                   severity: blocking }
+  - { id: G15.3, description: "all 4 strategy ids registered (drop/distill/summarize/compress-chain)", severity: blocking }
+  - { id: G15.4, description: "drop preserves tier 0 under aggressive budget",       severity: blocking }
+  - { id: G15.5, description: "summarize respects tier 0-1 (untouched)",             severity: blocking }
+  - { id: G15.6, description: "distill captures drafts and drops originals",         severity: blocking }
+  - { id: G15.7, description: "selectStrategy auto routes by overshoot ratio",       severity: blocking }
+  - { id: G15.8, description: "engine raises on tier-0 forced violation / overflow", severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G15-*.json" }

@@ -1,0 +1,67 @@
+{
+  "gateId": "G1",
+  "title": "Workspace Foundation",
+  "status": "partial",
+  "startedAt": "2026-06-01T09:18:09.740Z",
+  "finishedAt": "2026-06-01T09:18:36.518Z",
+  "durationMs": 26777,
+  "checks": [
+    {
+      "id": "G1.1",
+      "description": "pnpm-workspace.yaml resolves >= 40 packages (OSS)",
+      "status": "pass",
+      "durationMs": 590
+    },
+    {
+      "id": "G1.2",
+      "description": "every package has a parseable package.json with required fields (name, version, license)",
+      "status": "fail",
+      "durationMs": 697,
+      "error": {
+        "message": "Command failed: pnpm -r exec node -e \"const fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\"\n[eval]:1\r\nconst fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\r\n                                                                             ^\r\n\r\nReferenceError: REQUIRED_PACKAGE_FIELDS is not defined\r\n    at [eval]:1:78\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/process/execution:295:3)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.15.0\r\n[eval]:1\r\nconst fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\r\n                                                                             ^\r\n\r\nReferenceError: REQUIRED_PACKAGE_FIELDS is not defined\r\n    at [eval]:1:78\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/process/execution:295:3)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.15.0\r\n[eval]:1\r\nconst fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\r\n                                                                             ^\r\n\r\nReferenceError: REQUIRED_PACKAGE_FIELDS is not defined\r\n    at [eval]:1:78\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/process/execution:295:3)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.15.0\r\n[eval]:1\r\nconst fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\r\n                                                                             ^\r\n\r\nReferenceError: REQUIRED_PACKAGE_FIELDS is not defined\r\n    at [eval]:1:78\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/process/execution:295:3)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.15.0\r\n",
+        "stack": "Error: Command failed: pnpm -r exec node -e \"const fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\"\n[eval]:1\r\nconst fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\r\n                                                                             ^\r\n\r\nReferenceError: REQUIRED_PACKAGE_FIELDS is not defined\r\n    at [eval]:1:78\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/process/execution:295:3)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.15.0\r\n[eval]:1\r\nconst fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\r\n                                                                             ^\r\n\r\nReferenceError: REQUIRED_PACKAGE_FIELDS is not defined\r\n    at [eval]:1:78\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/process/execution:295:3)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.15.0\r\n[eval]:1\r\nconst fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\r\n                                                                             ^\r\n\r\nReferenceError: REQUIRED_PACKAGE_FIELDS is not defined\r\n    at [eval]:1:78\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/process/execution:295:3)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.15.0\r\n[eval]:1\r\nconst fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json')); REQUIRED_PACKAGE_FIELDS.forEach(f=>{if(!p[f])throw new Error('missing '+f)})\r\n                                                                             ^\r\n\r\nReferenceError: REQUIRED_PACKAGE_FIELDS is not defined\r\n    at [eval]:1:78\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/process/execution:295:3)\r\n    at node:internal/main/eval_string:71:3\r\n\r\nNode.js v24.15.0\r\n\n    at genericNodeError (node:internal/errors:985:15)\n    at wrappedFn (node:internal/errors:539:14)\n    at checkExecSyncError (node:child_process:925:11)\n    at execSync (node:child_process:997:15)\n    at <anonymous> (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G1-workspace-foundation.ts:66:9)\n    at G1WorkspaceFoundation.check (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:6:19)\n    at G1WorkspaceFoundation.runChecks (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G1-workspace-foundation.ts:65:18)\n    at async G1WorkspaceFoundation.execute (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\packages\\gate-runner-core\\dist\\index.js:24:24)\n    at async main (C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G1-workspace-foundation.ts:150:18)"
+      }
+    },
+    {
+      "id": "G1.3",
+      "description": "no circular dependencies between packages (madge)",
+      "status": "pass",
+      "durationMs": 757
+    },
+    {
+      "id": "G1.4",
+      "description": "topological tsc --build succeeds for every package",
+      "status": "pass",
+      "durationMs": 8943
+    },
+    {
+      "id": "G1.5",
+      "description": "Phase 4 plugin-compress-input tests pass unchanged",
+      "status": "pass",
+      "durationMs": 10474
+    },
+    {
+      "id": "G1.6",
+      "description": "Phase 4 contract snapshot (compress-context v1) matches",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G1.7",
+      "description": "Phase 5 baseline integration test suite passes",
+      "status": "pass",
+      "durationMs": 5265
+    },
+    {
+      "id": "G1.8",
+      "description": "no OSS package imports any Pro package (depcruise)",
+      "status": "pass",
+      "durationMs": 44
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "passed": 7,
+    "failed": 1
+  }
+}

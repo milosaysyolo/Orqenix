@@ -1,0 +1,45 @@
+{
+  "gateId": "G29",
+  "title": "Scope Link Lifecycle",
+  "status": "pass",
+  "startedAt": "2026-06-02T06:45:33.911Z",
+  "finishedAt": "2026-06-02T06:45:42.187Z",
+  "durationMs": 8276,
+  "checks": [
+    {
+      "id": "G29.1",
+      "description": "scope-link unit tests pass",
+      "status": "pass",
+      "durationMs": 6193
+    },
+    {
+      "id": "G29.2",
+      "description": "duplicate (local, remote, direction) rejected",
+      "status": "pass",
+      "durationMs": 785
+    },
+    {
+      "id": "G29.3",
+      "description": "state machine: pending -> active -> revoked, no other paths",
+      "status": "pass",
+      "durationMs": 701
+    },
+    {
+      "id": "G29.4",
+      "description": "recordSync requires active state",
+      "status": "pass",
+      "durationMs": 439
+    },
+    {
+      "id": "G29.5",
+      "description": "self-link rejected at creation",
+      "status": "pass",
+      "durationMs": 157
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "gateId": "G14",
+  "title": "Hooks",
+  "status": "pass",
+  "startedAt": "2026-06-02T03:45:50.405Z",
+  "finishedAt": "2026-06-02T03:45:52.570Z",
+  "durationMs": 2164,
+  "checks": [
+    {
+      "id": "G14.1",
+      "description": "hooks unit tests pass",
+      "status": "pass",
+      "durationMs": 2126
+    },
+    {
+      "id": "G14.2",
+      "description": "all 7 events registrable",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G14.3",
+      "description": "listener error isolation works",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G14.4",
+      "description": "emit awaits async listeners",
+      "status": "pass",
+      "durationMs": 37
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0
+  }
+}

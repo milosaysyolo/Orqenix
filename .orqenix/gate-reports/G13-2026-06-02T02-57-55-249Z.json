@@ -1,0 +1,45 @@
+{
+  "gateId": "G13",
+  "title": "Adapter Provider Switching",
+  "status": "pass",
+  "startedAt": "2026-06-02T02:57:55.203Z",
+  "finishedAt": "2026-06-02T02:57:55.249Z",
+  "durationMs": 44,
+  "checks": [
+    {
+      "id": "G13.1",
+      "description": "each adapter reports correct provider label",
+      "status": "pass",
+      "durationMs": 1
+    },
+    {
+      "id": "G13.2",
+      "description": "each adapter uses CR v7.1 default model",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G13.3",
+      "description": "OpenAI rejects missing apiKey",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G13.4",
+      "description": "Ollama uses default baseUrl localhost:11434",
+      "status": "pass",
+      "durationMs": 42
+    },
+    {
+      "id": "G13.5",
+      "description": "custom baseUrl overrides default (OpenAI-compatible endpoint)",
+      "status": "pass",
+      "durationMs": 1
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

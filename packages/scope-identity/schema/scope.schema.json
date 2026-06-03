@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://orqenix.dev/schemas/scope-v1.json",
+  "title": "Orqenix Scope (v1)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "scopeId", "name", "publicKey", "createdAt", "parentScope"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "scopeId": { "type": "string", "pattern": "^scope:[A-Z2-7]{32}$" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "publicKey": { "type": "string", "pattern": "^[A-Za-z0-9+/]{43}=$" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "parentScope": { "oneOf": [{ "type": "string", "pattern": "^scope:[A-Z2-7]{32}$" }, { "type": "null" }] },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string", "maxLength": 512 },
+        "tags": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 64 }, "maxItems": 16 }
+      }
+    }
+  }
+}

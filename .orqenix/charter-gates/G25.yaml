@@ -1,0 +1,17 @@
+```yaml
+schemaVersion: 1
+id: G25
+title: CLI Surface
+bsRef: docs/sdd/BS-032-cli.md
+dependsOn: [G1, G17, G24, G29, G31]
+criteria:
+  - { id: G25.1, description: "cli unit tests pass",                                    severity: blocking }
+  - { id: G25.2, description: "usage lists all command groups",                         severity: blocking }
+  - { id: G25.3, description: "version command returns Phase 5 version",                severity: blocking }
+  - { id: G25.4, description: "unknown command returns exit 1 with usage hint",         severity: blocking }
+  - { id: G25.5, description: "link create + link list round-trip",                     severity: blocking }
+  - { id: G25.6, description: "workspace create + workspace list round-trip",           severity: blocking }
+  - { id: G25.7, description: "audit verify works on empty log",                        severity: blocking }
+  - { id: G25.8, description: "required flag enforcement returns exit 1 on missing arg",severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G25-*.json" }
+```

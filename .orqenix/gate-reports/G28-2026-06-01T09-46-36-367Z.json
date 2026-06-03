@@ -1,0 +1,45 @@
+{
+  "gateId": "G28",
+  "title": "Token Signature Verification",
+  "status": "pass",
+  "startedAt": "2026-06-01T09:46:33.817Z",
+  "finishedAt": "2026-06-01T09:46:36.366Z",
+  "durationMs": 2548,
+  "checks": [
+    {
+      "id": "G28.1",
+      "description": "signing tests pass",
+      "status": "pass",
+      "durationMs": 2182
+    },
+    {
+      "id": "G28.2",
+      "description": "50 fresh sign/verify roundtrips",
+      "status": "pass",
+      "durationMs": 264
+    },
+    {
+      "id": "G28.3",
+      "description": "50 tampers all rejected",
+      "status": "pass",
+      "durationMs": 89
+    },
+    {
+      "id": "G28.4",
+      "description": "delegation chain depth respected",
+      "status": "pass",
+      "durationMs": 5
+    },
+    {
+      "id": "G28.5",
+      "description": "expired token rejected with skew applied",
+      "status": "pass",
+      "durationMs": 9
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

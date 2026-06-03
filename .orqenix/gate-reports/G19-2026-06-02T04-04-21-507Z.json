@@ -1,0 +1,45 @@
+{
+  "gateId": "G19",
+  "title": "File Watcher",
+  "status": "pass",
+  "startedAt": "2026-06-02T04:04:14.716Z",
+  "finishedAt": "2026-06-02T04:04:21.506Z",
+  "durationMs": 6789,
+  "checks": [
+    {
+      "id": "G19.1",
+      "description": "file-watcher unit tests pass",
+      "status": "pass",
+      "durationMs": 5121
+    },
+    {
+      "id": "G19.2",
+      "description": "detects add+change+unlink end-to-end",
+      "status": "pass",
+      "durationMs": 391
+    },
+    {
+      "id": "G19.3",
+      "description": "debounce collapses bursts",
+      "status": "pass",
+      "durationMs": 778
+    },
+    {
+      "id": "G19.4",
+      "description": "ignores .git and node_modules",
+      "status": "pass",
+      "durationMs": 495
+    },
+    {
+      "id": "G19.5",
+      "description": "stop is idempotent + clean",
+      "status": "pass",
+      "durationMs": 4
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

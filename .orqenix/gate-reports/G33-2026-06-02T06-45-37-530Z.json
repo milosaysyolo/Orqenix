@@ -1,0 +1,39 @@
+{
+  "gateId": "G33",
+  "title": "Provenance Chain Integrity",
+  "status": "pass",
+  "startedAt": "2026-06-02T06:45:34.157Z",
+  "finishedAt": "2026-06-02T06:45:37.529Z",
+  "durationMs": 3371,
+  "checks": [
+    {
+      "id": "G33.1",
+      "description": "provenance unit tests pass",
+      "status": "pass",
+      "durationMs": 3236
+    },
+    {
+      "id": "G33.2",
+      "description": "100x random chains verify cleanly",
+      "status": "pass",
+      "durationMs": 127
+    },
+    {
+      "id": "G33.3",
+      "description": "50x tampered chains all detected",
+      "status": "pass",
+      "durationMs": 8
+    },
+    {
+      "id": "G33.4",
+      "description": "chainHash is deterministic across runs",
+      "status": "pass",
+      "durationMs": 1
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0
+  }
+}

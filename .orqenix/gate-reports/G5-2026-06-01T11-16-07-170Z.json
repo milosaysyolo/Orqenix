@@ -1,0 +1,45 @@
+{
+  "gateId": "G5",
+  "title": "Memory Distiller Behavior",
+  "status": "pass",
+  "startedAt": "2026-06-01T11:15:59.486Z",
+  "finishedAt": "2026-06-01T11:16:07.170Z",
+  "durationMs": 7683,
+  "checks": [
+    {
+      "id": "G5.1",
+      "description": "memory-distiller unit tests pass",
+      "status": "pass",
+      "durationMs": 7253
+    },
+    {
+      "id": "G5.2",
+      "description": "extractor handles 50 mixed sentences without crash",
+      "status": "pass",
+      "durationMs": 2
+    },
+    {
+      "id": "G5.3",
+      "description": "distillBatch + watermark idempotency (20 entries)",
+      "status": "pass",
+      "durationMs": 93
+    },
+    {
+      "id": "G5.4",
+      "description": "idempotent across content_hash (no duplicate memories)",
+      "status": "pass",
+      "durationMs": 150
+    },
+    {
+      "id": "G5.5",
+      "description": "minConfidence filter respected",
+      "status": "pass",
+      "durationMs": 185
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

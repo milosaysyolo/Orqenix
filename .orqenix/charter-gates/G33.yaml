@@ -1,0 +1,11 @@
+schemaVersion: 1
+id: G33
+title: Provenance Chain Integrity
+bsRef: docs/sdd/BS-025-provenance.md
+dependsOn: [G1, G2, G26, G27]
+criteria:
+  - { id: G33.1, description: "provenance unit tests pass",                                       severity: blocking }
+  - { id: G33.2, description: "100 random chains verify cleanly",                                 severity: blocking }
+  - { id: G33.3, description: "50 random tampers all detected by verifyChain",                    severity: blocking }
+  - { id: G33.4, description: "chainHash is deterministic across runs (same input)",              severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G33-*.json" }

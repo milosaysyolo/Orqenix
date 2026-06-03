@@ -1,0 +1,37 @@
+{
+  "gateId": "G8",
+  "title": "LLM Adapter Contract",
+  "status": "partial",
+  "startedAt": "2026-06-02T02:57:52.554Z",
+  "finishedAt": "2026-06-02T02:57:58.658Z",
+  "durationMs": 6103,
+  "checks": [
+    {
+      "id": "G8.1",
+      "description": "ollama adapter tests pass",
+      "status": "pass",
+      "durationMs": 3260
+    },
+    {
+      "id": "G8.2",
+      "description": "byok adapter tests pass",
+      "status": "pass",
+      "durationMs": 2839
+    },
+    {
+      "id": "G8.3",
+      "description": "all 5 adapter classes export LlmAdapter shape",
+      "status": "fail",
+      "durationMs": 3,
+      "error": {
+        "message": "Cannot find package '@orqenix/llm-adapter-ollama' imported from C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G8-llm-adapter-contract.ts\nDid you mean to import \"file:///C:/Users/vnet-1-vm-c1/Documents/GitHub/Orqenix/packages/llm-adapter-ollama/dist/index.js\"?",
+        "stack": "Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@orqenix/llm-adapter-ollama' imported from C:\\Users\\vnet-1-vm-c1\\Documents\\GitHub\\Orqenix\\scripts\\gates\\G8-llm-adapter-contract.ts\nDid you mean to import \"file:///C:/Users/vnet-1-vm-c1/Documents/GitHub/Orqenix/packages/llm-adapter-ollama/dist/index.js\"?\n    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:301:9)\n    at packageResolve (node:internal/modules/esm/resolve:764:81)\n    at moduleResolve (node:internal/modules/esm/resolve:855:18)\n    at defaultResolve (node:internal/modules/esm/resolve:988:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:697:20)\n    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:714:38)\n    at nextStep (node:internal/modules/customization_hooks:189:26)\n    at resolveBaseSync (file:///C:/Users/vnet-1-vm-c1/Documents/GitHub/Orqenix/node_modules/.pnpm/tsx@4.22.3/node_modules/tsx/dist/register-D_B8UL5H.mjs:2:8642)\n    at resolveDirectorySync (file:///C:/Users/vnet-1-vm-c1/Documents/GitHub/Orqenix/node_modules/.pnpm/tsx@4.22.3/node_modules/tsx/dist/register-D_B8UL5H.mjs:2:9781)\n    at resolveTsPathsSync (file:///C:/Users/vnet-1-vm-c1/Documents/GitHub/Orqenix/node_modules/.pnpm/tsx@4.22.3/node_modules/tsx/dist/register-D_B8UL5H.mjs:2:11014)"
+      }
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 2,
+    "failed": 1
+  }
+}

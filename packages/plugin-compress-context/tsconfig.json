@@ -1,5 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "rootDir": "./src", "outDir": "./dist" },
-  "include": ["src/**/*.ts"]
+  "compilerOptions": { "composite": true, "outDir": "./dist", "rootDir": "./src", "tsBuildInfoFile": "./dist/.tsbuildinfo" },
+  "include": ["src/**/*"], "exclude": ["dist", "node_modules", "**/*.test.ts"],
+  "references": [
+    { "path": "../compress-strategies" },
+    { "path": "../smart-compression" },
+    { "path": "../hooks" },
+    { "path": "../telemetry" }
+  ]
 }

@@ -1,0 +1,45 @@
+{
+  "gateId": "G18",
+  "title": "Audit Log Tamper Detection",
+  "status": "pass",
+  "startedAt": "2026-06-02T07:25:21.719Z",
+  "finishedAt": "2026-06-02T07:25:30.523Z",
+  "durationMs": 8803,
+  "checks": [
+    {
+      "id": "G18.1",
+      "description": "audit-log unit tests pass",
+      "status": "pass",
+      "durationMs": 3797
+    },
+    {
+      "id": "G18.2",
+      "description": "verifyChain passes on 50-entry untampered log",
+      "status": "pass",
+      "durationMs": 130
+    },
+    {
+      "id": "G18.3",
+      "description": "30 random payload tampers all detected",
+      "status": "pass",
+      "durationMs": 4615
+    },
+    {
+      "id": "G18.4",
+      "description": "broken prevHash linkage detected",
+      "status": "pass",
+      "durationMs": 162
+    },
+    {
+      "id": "G18.5",
+      "description": "two scopes have independent chains",
+      "status": "pass",
+      "durationMs": 98
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

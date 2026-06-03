@@ -1,0 +1,318 @@
+{
+  "mode": "oss",
+  "timestamp": "2026-06-03T03:48:41.322Z",
+  "total": 62,
+  "publishable": 61,
+  "packages": [
+    {
+      "name": "@orqenix/audit-log",
+      "path": "packages\\audit-log",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/capability-tokens",
+      "path": "packages\\capability-tokens",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/cli",
+      "path": "packages\\cli",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/compress-strategies",
+      "path": "packages\\compress-strategies",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/config",
+      "path": "packages\\config",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/core",
+      "path": "packages\\core",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/detach",
+      "path": "packages\\detach",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/embedding-cloud",
+      "path": "packages\\embedding-cloud",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/embedding-local",
+      "path": "packages\\embedding-local",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/file-watcher",
+      "path": "packages\\file-watcher",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/gate-runner-core",
+      "path": "packages\\gate-runner-core",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/hooks",
+      "path": "packages\\hooks",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/injection-strategies",
+      "path": "packages\\injection-strategies",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/kb-chat",
+      "path": "packages\\kb-chat",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/kb-code",
+      "path": "packages\\kb-code",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/kb-decisions",
+      "path": "packages\\kb-decisions",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/kb-docs",
+      "path": "packages\\kb-docs",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/kb-query",
+      "path": "packages\\kb-query",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/lifecycle",
+      "path": "packages\\lifecycle",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/llm-adapter-byok",
+      "path": "packages\\llm-adapter-byok",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/llm-adapter-ollama",
+      "path": "packages\\llm-adapter-ollama",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/marketplace-client",
+      "path": "packages\\marketplace-client",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/mcp-client",
+      "path": "packages\\mcp-client",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/mcp-server",
+      "path": "packages\\mcp-server",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/memory-distiller",
+      "path": "packages\\memory-distiller",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/memory-tiers",
+      "path": "packages\\memory-tiers",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/mesh-routing",
+      "path": "packages\\mesh-routing",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/migration",
+      "path": "packages\\migration",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/opencode-plugin",
+      "path": "packages\\opencode-plugin",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-compress-context",
+      "path": "packages\\plugin-compress-context",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-compress-input",
+      "path": "packages\\plugin-compress-input",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-compress-output",
+      "path": "packages\\plugin-compress-output",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-cost-tracker",
+      "path": "packages\\plugin-cost-tracker",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-detach",
+      "path": "packages\\plugin-detach",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-host",
+      "path": "packages\\plugin-host",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-knowledge-workflow",
+      "path": "packages\\plugin-knowledge-workflow",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-lazy-loader",
+      "path": "packages\\plugin-lazy-loader",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-marketplace",
+      "path": "packages\\plugin-marketplace",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-picker",
+      "path": "packages\\plugin-picker",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-sandbox",
+      "path": "packages\\plugin-sandbox",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-semantic-cache",
+      "path": "packages\\plugin-semantic-cache",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-snapshot",
+      "path": "packages\\plugin-snapshot",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/plugin-versioning",
+      "path": "packages\\plugin-versioning",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/prompt-rewriter",
+      "path": "packages\\prompt-rewriter",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/provenance",
+      "path": "packages\\provenance",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/registry",
+      "path": "packages\\registry",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/reindex-incremental",
+      "path": "packages\\reindex-incremental",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/rtk-hooks",
+      "path": "packages\\rtk-hooks",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/schema",
+      "path": "packages\\schema",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/scope-identity",
+      "path": "packages\\scope-identity",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/scope-link",
+      "path": "packages\\scope-link",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/sdk",
+      "path": "packages\\sdk",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/security",
+      "path": "packages\\security",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/skill-kit",
+      "path": "packages\\skill-kit",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/smart-compression",
+      "path": "packages\\smart-compression",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/storage-diff",
+      "path": "packages\\storage-diff",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/storage-sqlite",
+      "path": "packages\\storage-sqlite",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/teams-built-in",
+      "path": "packages\\teams-built-in",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/telemetry",
+      "path": "packages\\telemetry",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/testing",
+      "path": "packages\\testing",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/workspace",
+      "path": "packages\\workspace",
+      "classification": "publishable"
+    },
+    {
+      "name": "@orqenix/_meta",
+      "path": "packages\\_meta",
+      "classification": "internal"
+    }
+  ]
+}

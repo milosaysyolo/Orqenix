@@ -1,0 +1,45 @@
+name: Phase 5 Baseline
+
+on:
+  pull_request:
+    branches: [main, feat/phase-5-delivery]
+  push:
+    branches: [main, feat/phase-5-delivery]
+
+concurrency:
+  group: phase5-baseline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baseline:
+    name: "G1: Workspace Foundation"
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace
+        run: pnpm build
+
+      - name: Phase 4 stub verification
+        run: tsx scripts/verify-phase-4-stubs.ts
+
+      - name: Phase 5 baseline
+        run: pnpm vitest run tests/integration/phase5-baseline.test.ts
+
+      - name: Charter Gate G1
+        run: pnpm tsx scripts/gates/G1-workspace-foundation.ts

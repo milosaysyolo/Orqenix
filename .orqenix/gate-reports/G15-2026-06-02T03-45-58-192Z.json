@@ -1,0 +1,63 @@
+{
+  "gateId": "G15",
+  "title": "Compression Strategies",
+  "status": "pass",
+  "startedAt": "2026-06-02T03:45:53.691Z",
+  "finishedAt": "2026-06-02T03:45:58.192Z",
+  "durationMs": 4501,
+  "checks": [
+    {
+      "id": "G15.1",
+      "description": "compress-strategies unit tests pass",
+      "status": "pass",
+      "durationMs": 2259
+    },
+    {
+      "id": "G15.2",
+      "description": "smart-compression unit tests pass",
+      "status": "pass",
+      "durationMs": 2238
+    },
+    {
+      "id": "G15.3",
+      "description": "all 4 strategy ids registered",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G15.4",
+      "description": "drop preserves tier 0 under aggressive budget",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G15.5",
+      "description": "summarize respects tier 0-1",
+      "status": "pass",
+      "durationMs": 1
+    },
+    {
+      "id": "G15.6",
+      "description": "distill captures drafts and drops originals",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G15.7",
+      "description": "selectStrategy auto routes correctly",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G15.8",
+      "description": "engine raises on tier-0 forced violation / overflow",
+      "status": "pass",
+      "durationMs": 2
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
+  }
+}

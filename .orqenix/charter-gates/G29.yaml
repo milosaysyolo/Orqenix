@@ -1,0 +1,12 @@
+schemaVersion: 1
+id: G29
+title: Scope Link Lifecycle
+bsRef: docs/sdd/BS-023-scope-link.md
+dependsOn: [G1, G26, G27]
+criteria:
+  - { id: G29.1, description: "scope-link unit tests pass",                                       severity: blocking }
+  - { id: G29.2, description: "duplicate (local, remote, direction) rejected by PK",              severity: blocking }
+  - { id: G29.3, description: "state machine pending->active->revoked, illegal transitions blocked", severity: blocking }
+  - { id: G29.4, description: "recordSync requires active state",                                 severity: blocking }
+  - { id: G29.5, description: "self-link rejected at creation",                                   severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G29-*.json" }

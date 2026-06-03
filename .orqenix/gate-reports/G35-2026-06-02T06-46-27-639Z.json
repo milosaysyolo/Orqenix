@@ -1,0 +1,45 @@
+{
+  "gateId": "G35",
+  "title": "Auto-Link Suggestion",
+  "status": "pass",
+  "startedAt": "2026-06-02T06:46:27.099Z",
+  "finishedAt": "2026-06-02T06:46:27.639Z",
+  "durationMs": 539,
+  "checks": [
+    {
+      "id": "G35.1",
+      "description": "frequent-failure suggestion at >=60% failure rate over >=5 runs",
+      "status": "pass",
+      "durationMs": 105
+    },
+    {
+      "id": "G35.2",
+      "description": "high-relevance suggestion for top-quartile scopes",
+      "status": "pass",
+      "durationMs": 123
+    },
+    {
+      "id": "G35.3",
+      "description": "no suggestion under sample-size floor",
+      "status": "pass",
+      "durationMs": 95
+    },
+    {
+      "id": "G35.4",
+      "description": "empty history returns empty suggestions",
+      "status": "pass",
+      "durationMs": 123
+    },
+    {
+      "id": "G35.5",
+      "description": "high-failure scope is NOT suggested as high-relevance",
+      "status": "pass",
+      "durationMs": 94
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

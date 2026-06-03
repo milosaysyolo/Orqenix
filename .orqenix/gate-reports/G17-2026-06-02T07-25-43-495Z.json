@@ -1,0 +1,51 @@
+{
+  "gateId": "G17",
+  "title": "Detach Roundtrip",
+  "status": "pass",
+  "startedAt": "2026-06-02T07:25:37.590Z",
+  "finishedAt": "2026-06-02T07:25:43.494Z",
+  "durationMs": 5904,
+  "checks": [
+    {
+      "id": "G17.1",
+      "description": "detach unit tests pass",
+      "status": "pass",
+      "durationMs": 5030
+    },
+    {
+      "id": "G17.2",
+      "description": "planUnlink + execute revokes both directions",
+      "status": "pass",
+      "durationMs": 155
+    },
+    {
+      "id": "G17.3",
+      "description": "invalid confirmation token rejected",
+      "status": "pass",
+      "durationMs": 107
+    },
+    {
+      "id": "G17.4",
+      "description": "dry run does not mutate links but writes audit entry",
+      "status": "pass",
+      "durationMs": 142
+    },
+    {
+      "id": "G17.5",
+      "description": "detach event chained into audit log + verifyChain green",
+      "status": "pass",
+      "durationMs": 373
+    },
+    {
+      "id": "G17.6",
+      "description": "tokens differ across plans (salt randomness)",
+      "status": "pass",
+      "durationMs": 96
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0
+  }
+}

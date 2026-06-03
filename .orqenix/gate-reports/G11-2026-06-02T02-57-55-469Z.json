@@ -1,0 +1,51 @@
+{
+  "gateId": "G11",
+  "title": "Memory Recall",
+  "status": "pass",
+  "startedAt": "2026-06-02T02:57:54.625Z",
+  "finishedAt": "2026-06-02T02:57:55.467Z",
+  "durationMs": 841,
+  "checks": [
+    {
+      "id": "G11.1",
+      "description": "recall returns matches for keyword query",
+      "status": "pass",
+      "durationMs": 185
+    },
+    {
+      "id": "G11.2",
+      "description": "recall respects tier filter",
+      "status": "pass",
+      "durationMs": 108
+    },
+    {
+      "id": "G11.3",
+      "description": "higher confidence ranks higher for same keyword count",
+      "status": "pass",
+      "durationMs": 107
+    },
+    {
+      "id": "G11.4",
+      "description": "recall increments accessCount on returned memories",
+      "status": "pass",
+      "durationMs": 170
+    },
+    {
+      "id": "G11.5",
+      "description": "empty query returns empty result",
+      "status": "pass",
+      "durationMs": 133
+    },
+    {
+      "id": "G11.6",
+      "description": "recall returns at most k",
+      "status": "pass",
+      "durationMs": 137
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orqenix.dev/schemas/release-trigger.schema.json",
+  "title": "Orqenix Release Trigger Payload",
+  "description": "Payload sent via repository_dispatch from OSS workflow to Pro workflow",
+  "type": "object",
+  "required": ["oss_version", "trigger_run_id", "trigger_sha", "triggered_by"],
+  "properties": {
+    "oss_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.-]+)?$",
+      "description": "OSS semver version that Pro should depend on"
+    },
+    "trigger_run_id": {
+      "type": "string",
+      "description": "GitHub Actions run ID of the triggering workflow"
+    },
+    "trigger_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$",
+      "description": "Git SHA of the OSS release commit"
+    },
+    "triggered_by": {
+      "type": "string",
+      "description": "GitHub user who triggered the release"
+    },
+    "dry_run": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether Pro should publish or just validate"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Human-readable reason for trigger"
+    }
+  },
+  "additionalProperties": false
+}

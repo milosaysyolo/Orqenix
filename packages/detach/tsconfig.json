@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "composite": true, "outDir": "./dist", "rootDir": "./src", "tsBuildInfoFile": "./dist/.tsbuildinfo" },
+  "include": ["src/**/*"], "exclude": ["dist", "node_modules", "**/*.test.ts"],
+  "references": [
+    { "path": "../scope-identity" }, { "path": "../scope-link" },
+    { "path": "../workspace" }, { "path": "../audit-log" },
+    { "path": "../capability-tokens" }, { "path": "../storage-sqlite" }, { "path": "../storage-diff" }
+  ]
+}

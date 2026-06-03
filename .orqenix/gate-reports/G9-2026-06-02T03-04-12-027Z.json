@@ -1,0 +1,63 @@
+{
+  "gateId": "G9",
+  "title": "Injection Strategies",
+  "status": "pass",
+  "startedAt": "2026-06-02T03:04:10.026Z",
+  "finishedAt": "2026-06-02T03:04:12.027Z",
+  "durationMs": 2000,
+  "checks": [
+    {
+      "id": "G9.1",
+      "description": "injection-strategies unit tests pass",
+      "status": "pass",
+      "durationMs": 1998
+    },
+    {
+      "id": "G9.2",
+      "description": "all 5 strategies registered (A/B/C/D/E)",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G9.3",
+      "description": "default strategy is B (System Prologue Tiered)",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G9.4",
+      "description": "B excludes semantic+procedural from system block",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G9.5",
+      "description": "C annotates the last user message",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G9.6",
+      "description": "D injects assistant recall turn BEFORE the user message",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G9.7",
+      "description": "E ranks by confidence descending",
+      "status": "pass",
+      "durationMs": 0
+    },
+    {
+      "id": "G9.8",
+      "description": "all 5 strategies respect tokenBudget",
+      "status": "pass",
+      "durationMs": 0
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "gateId": "G3",
+  "title": "KB Schema (Chat)",
+  "status": "pass",
+  "startedAt": "2026-06-01T10:39:02.531Z",
+  "finishedAt": "2026-06-01T10:39:06.493Z",
+  "durationMs": 3961,
+  "checks": [
+    {
+      "id": "G3.1",
+      "description": "kb-chat unit tests pass",
+      "status": "pass",
+      "durationMs": 3764
+    },
+    {
+      "id": "G3.2",
+      "description": "migrations are idempotent",
+      "status": "pass",
+      "durationMs": 55
+    },
+    {
+      "id": "G3.3",
+      "description": "expected tables and indexes exist",
+      "status": "pass",
+      "durationMs": 51
+    },
+    {
+      "id": "G3.4",
+      "description": "STRICT mode enforced on chat tables",
+      "status": "pass",
+      "durationMs": 47
+    },
+    {
+      "id": "G3.5",
+      "description": "checksum drift detected",
+      "status": "pass",
+      "durationMs": 45
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0
+  }
+}

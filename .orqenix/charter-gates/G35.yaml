@@ -1,0 +1,12 @@
+schemaVersion: 1
+id: G35
+title: Auto-Link Suggestion
+bsRef: docs/sdd/BS-027-auto-link-suggestion.md
+dependsOn: [G1, G29, G34]
+criteria:
+  - { id: G35.1, description: "frequent-failure suggested at >=60% failure rate over >=5 runs",   severity: blocking }
+  - { id: G35.2, description: "high-relevance suggested for top-quartile avg score scopes",       severity: blocking }
+  - { id: G35.3, description: "no suggestion under sample-size floor (< 5 runs)",                 severity: blocking }
+  - { id: G35.4, description: "empty history returns empty suggestions",                          severity: blocking }
+  - { id: G35.5, description: "high-failure scope is NOT also suggested as high-relevance",       severity: blocking }
+artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G35-*.json" }

@@ -1,0 +1,57 @@
+{
+  "gateId": "G10",
+  "title": "Prompt Rewriter Orchestration",
+  "status": "pass",
+  "startedAt": "2026-06-02T03:04:16.834Z",
+  "finishedAt": "2026-06-02T03:04:20.496Z",
+  "durationMs": 3661,
+  "checks": [
+    {
+      "id": "G10.1",
+      "description": "prompt-rewriter unit tests pass",
+      "status": "pass",
+      "durationMs": 3022
+    },
+    {
+      "id": "G10.2",
+      "description": "default strategy is B",
+      "status": "pass",
+      "durationMs": 108
+    },
+    {
+      "id": "G10.3",
+      "description": "rewrite injects matching memories",
+      "status": "pass",
+      "durationMs": 138
+    },
+    {
+      "id": "G10.4",
+      "description": "setStrategy switches at runtime",
+      "status": "pass",
+      "durationMs": 95
+    },
+    {
+      "id": "G10.5",
+      "description": "rewriteFn not invoked unless enabled",
+      "status": "pass",
+      "durationMs": 93
+    },
+    {
+      "id": "G10.6",
+      "description": "rewriteFn consolidates system message when enabled",
+      "status": "pass",
+      "durationMs": 93
+    },
+    {
+      "id": "G10.7",
+      "description": "adapter failure gracefully degrades (rewriteApplied=false)",
+      "status": "pass",
+      "durationMs": 111
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  }
+}
