@@ -16,6 +16,10 @@
   },
   "packageManager": "pnpm@9.12.0",
   "scripts": {
+    "lockfile:check": "node scripts/release/check-lockfile-drift.mjs",
+    "lockfile:fix": "pnpm install --lockfile-only && node scripts/release/check-lockfile-drift.mjs",
+    "lockfile:verify-allowlist": "node scripts/release/verify-only-built-deps.mjs",
+    "lockfile:verify-diff": "node scripts/release/verify-lockfile-diff-scope.mjs",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
@@ -71,6 +75,7 @@
     "tsup": "^8.3.0",
     "turbo": "^2.2.0",
     "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
+    "vitest": "^2.1.0",
+    "yaml": "^2.5.0"
   }
 }
