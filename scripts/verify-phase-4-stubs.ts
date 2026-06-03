@@ -3,7 +3,12 @@
 import { execSync } from "node:child_process";
 import { readdirSync, existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import consola from "consola";
+
+const log = {
+  start: (message: string) => console.log(message),
+  info: (message: string) => console.log(message),
+  error: (message: string) => console.error(message),
+};
 
 interface Phase4Package {
   name: string;
@@ -23,10 +28,10 @@ class Phase4StubVerifier {
   private results: CheckResult[] = [];
 
   async run(): Promise<boolean> {
-    consola.start("Phase 4 Stub Wiring Verification\n");
+    log.start("Phase 4 Stub Wiring Verification\n");
 
     const packages = this.discoverPackages();
-    consola.info(`Found ${packages.length} packages\n`);
+    log.info(`Found ${packages.length} packages\n`);
 
     for (const pkg of packages) {
       await this.verifyPackage(pkg);
@@ -34,11 +39,11 @@ class Phase4StubVerifier {
 
     const passed = this.results.filter((r) => r.passed).length;
     const total = this.results.length;
-    consola.info(`\nResults: ${passed}/${total} checks passed`);
+    log.info(`\nResults: ${passed}/${total} checks passed`);
 
     const failedPackages = new Set(this.results.filter((r) => !r.passed).map((r) => r.pkg));
     if (failedPackages.size > 0) {
-      consola.error(`Failed packages: ${Array.from(failedPackages).join(", ")}`);
+      log.error(`Failed packages: ${Array.from(failedPackages).join(", ")}`);
     }
 
     return passed === total;
@@ -80,7 +85,7 @@ class Phase4StubVerifier {
       const duration = performance.now() - start;
       this.results.push({ pkg: pkgName, check: checkName, passed, duration, details });
       const icon = passed ? "✓" : "✗";
-      consola.info(
+      log.info(
         `  ${icon} [${passed ? "PASS" : "FAIL"}] ${pkgName} :: ${checkName} (${duration.toFixed(0)}ms)`,
       );
     } catch (err) {
@@ -91,7 +96,7 @@ class Phase4StubVerifier {
         duration: 0,
         details: String(err),
       });
-      consola.info(`  ✗ [ERROR] ${pkgName} :: ${checkName}: ${err}`);
+      log.info(`  ✗ [ERROR] ${pkgName} :: ${checkName}: ${err}`);
     }
   }
 

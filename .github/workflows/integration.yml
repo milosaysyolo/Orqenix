@@ -81,9 +81,7 @@ jobs:
       - name: Install (frozen)
         shell: bash
         working-directory: layout/Orqenix
-        env:
-          NPM_CONFIG_IGNORE_SCRIPTS: "true"
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --config.ignore-scripts=false
 
       - name: Approve native builds (allowlist only)
         shell: bash
