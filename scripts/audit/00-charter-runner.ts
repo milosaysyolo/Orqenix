@@ -13,7 +13,7 @@ function findTsFiles(dir: string, exclude: string[] = []): string[] {
     const entries = readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       const fullPath = join(dir, entry.name);
-      if (exclude.some(e => fullPath.includes(e))) continue;
+      if (exclude.some((e) => fullPath.includes(e))) continue;
       if (entry.isDirectory()) {
         files.push(...findTsFiles(fullPath, exclude));
       } else if (entry.name.endsWith(".ts") && !entry.name.endsWith(".test.ts")) {
@@ -84,18 +84,15 @@ function sh(cmd: string): { code: number; out: string } {
 
 // G6: export-only tests forbidden
 {
-  const r = sh(
-    `grep -RIn "toBeDefined()" packages/*/src/**/*.test.ts 2>/dev/null | wc -l`,
-  );
+  const r = sh(`grep -RIn "toBeDefined()" packages/*/src/**/*.test.ts 2>/dev/null | wc -l`);
   const n = Number(r.out.trim());
   record("G6", "no export-only tests", n <= 10, `${n} occurrences (budget 10)`);
 }
 
 // G7: real Tree-sitter for kb-code
 {
-  const ok = sh(
-    `grep -RIn "web-tree-sitter" packages/kb-code/src 2>/dev/null | grep -v test`,
-  ).code === 0;
+  const ok =
+    sh(`grep -RIn "web-tree-sitter" packages/kb-code/src 2>/dev/null | grep -v test`).code === 0;
   record("G7", "kb-code uses web-tree-sitter", ok);
 }
 
@@ -135,9 +132,15 @@ function sh(cmd: string): { code: number; out: string } {
   ];
   let allOk = true;
   for (const p of required) {
-    if (!existsSync(p)) { allOk = false; break; }
+    if (!existsSync(p)) {
+      allOk = false;
+      break;
+    }
     const lines = readFileSync(p, "utf8").split("\n").length;
-    if (lines < 200) { allOk = false; break; }
+    if (lines < 200) {
+      allOk = false;
+      break;
+    }
   }
   record("G11", "7 docs present, each ≥ 200 lines", allOk);
 }
@@ -148,10 +151,10 @@ function sh(cmd: string): { code: number; out: string } {
     ? readFileSync(".github/workflows/ci.yml", "utf8")
     : "";
   const hasUbuntu = /ubuntu-latest/.test(ci);
-  const hasMac    = /macos-latest/.test(ci);
-  const hasWin    = /windows-latest/.test(ci);
-  const has20     = /['"]20['"]/.test(ci);
-  const has22     = /['"]22['"]/.test(ci);
+  const hasMac = /macos-latest/.test(ci);
+  const hasWin = /windows-latest/.test(ci);
+  const has20 = /['"]20['"]/.test(ci);
+  const has22 = /['"]22['"]/.test(ci);
   const ok = hasUbuntu && hasMac && hasWin && has20 && has22;
   record("G12", "CI matrix 6 jobs", ok);
 }

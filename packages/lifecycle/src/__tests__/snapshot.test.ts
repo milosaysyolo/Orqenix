@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { SnapshotWriter } from "../snapshot/writer";
-import { CAS } from "../cas/store";
+import { SnapshotWriter } from "../snapshot/writer.js";
+import { CAS } from "../cas/store.js";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { rmSync } from "node:fs";

@@ -7,7 +7,15 @@
 
 import { execa } from "execa";
 
-export type ChangeKind = "feat" | "fix" | "docs" | "chore" | "refactor" | "test" | "breaking" | "unknown";
+export type ChangeKind =
+  | "feat"
+  | "fix"
+  | "docs"
+  | "chore"
+  | "refactor"
+  | "test"
+  | "breaking"
+  | "unknown";
 
 export interface ClassifyInput {
   sinceRef: string;
@@ -26,7 +34,8 @@ export interface PackageClassification {
   }>;
 }
 
-const CONVENTIONAL_RE = /^(feat|fix|docs|chore|refactor|test|perf|build|ci|style|revert)(\([^)]+\))?(!)?: (.+)$/;
+const CONVENTIONAL_RE =
+  /^(feat|fix|docs|chore|refactor|test|perf|build|ci|style|revert)(\([^)]+\))?(!)?: (.+)$/;
 const BREAKING_FOOTER_RE = /(?:^|\n)BREAKING CHANGE:/;
 
 function classifyCommit(title: string, body: string): { kind: ChangeKind; isBreaking: boolean } {
@@ -83,7 +92,7 @@ export async function run(input: ClassifyInput): Promise<PackageClassification[]
 
     const highestKind = commits.reduce<ChangeKind>(
       (acc, c) => (KIND_PRIORITY[c.kind] > KIND_PRIORITY[acc] ? c.kind : acc),
-      "unknown"
+      "unknown",
     );
 
     results.push({

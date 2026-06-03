@@ -2,12 +2,22 @@
 // @bc CS-013 Telemetry Contracts
 // @gate G14, G22
 
-import { OrqenixError } from '@orqenix/core';
+import { OrqenixError } from "@orqenix/core";
 
-export interface MetricLabels { readonly [key: string]: string }
+export interface MetricLabels {
+  readonly [key: string]: string;
+}
 
-export interface CounterSnapshot { readonly name: string; readonly value: number; readonly labels: MetricLabels }
-export interface GaugeSnapshot { readonly name: string; readonly value: number; readonly labels: MetricLabels }
+export interface CounterSnapshot {
+  readonly name: string;
+  readonly value: number;
+  readonly labels: MetricLabels;
+}
+export interface GaugeSnapshot {
+  readonly name: string;
+  readonly value: number;
+  readonly labels: MetricLabels;
+}
 export interface HistogramSnapshot {
   readonly name: string;
   readonly labels: MetricLabels;
@@ -33,5 +43,7 @@ export interface MetricSink {
 }
 
 export class TelemetryError extends OrqenixError {
-  constructor(reason: string) { super(`telemetry error: ${reason}`, 'TELEMETRY'); }
+  constructor(reason: string) {
+    super(`telemetry error: ${reason}`, "TELEMETRY");
+  }
 }

@@ -2,20 +2,26 @@
 // @bc CS-015 Engine
 // @gate G14.4, G15.6, G22.2
 
-import { HookBus, nowIso } from '@orqenix/hooks';
-import { MetricsRegistry, METRIC_NAMES } from '@orqenix/telemetry';
+import { HookBus, nowIso } from "@orqenix/hooks";
+import { MetricsRegistry, METRIC_NAMES } from "@orqenix/telemetry";
 import {
-  type CompressOutput, type CompressStrategy, type CompressStrategyId,
-  type Conversation, totalTokens,
-} from '@orqenix/compress-strategies';
+  type CompressOutput,
+  type CompressStrategy,
+  type CompressStrategyId,
+  type Conversation,
+  totalTokens,
+} from "@orqenix/compress-strategies";
 import {
-  OverflowError, SmartCompressionConfigSchema,
-  type EngineDecision, type SmartCompressionConfig,
-} from './contracts.js';
-import { selectStrategy } from './selector.js';
+  OverflowError,
+  SmartCompressionConfigSchema,
+  type EngineDecision,
+  type SmartCompressionConfig,
+} from "./contracts.js";
+import { selectStrategy } from "./selector.js";
 
 export interface SmartCompressionEngineOptions {
-  config: Partial<SmartCompressionConfig> & Pick<SmartCompressionConfig, 'targetTokens' | 'maxTokens'>;
+  config: Partial<SmartCompressionConfig> &
+    Pick<SmartCompressionConfig, "targetTokens" | "maxTokens">;
   strategies: Partial<Record<CompressStrategyId, CompressStrategy>>;
   bus?: HookBus;
   metrics?: MetricsRegistry;
@@ -40,7 +46,9 @@ export class SmartCompressionEngine {
     this.now = opts.now ?? nowIso;
   }
 
-  getConfig(): SmartCompressionConfig { return this.cfg; }
+  getConfig(): SmartCompressionConfig {
+    return this.cfg;
+  }
 
   setConfig(partial: Partial<SmartCompressionConfig>): void {
     this.cfg = SmartCompressionConfigSchema.parse({ ...this.cfg, ...partial });
@@ -57,15 +65,21 @@ export class SmartCompressionEngine {
 
     const inputTokens = totalTokens(conv.messages);
     if (this.bus) {
-      await this.bus.emit('preCompress', {
-        event: 'preCompress', scopeId: this.scopeId, timestamp: this.now(),
-        inputTokens, contextSize: conv.messages.length, strategyId: decision.strategyId,
+      await this.bus.emit("preCompress", {
+        event: "preCompress",
+        scopeId: this.scopeId,
+        timestamp: this.now(),
+        inputTokens,
+        contextSize: conv.messages.length,
+        strategyId: decision.strategyId,
       });
     }
 
     const out = await strategy.apply({
-      conversation: conv, targetTokens: this.cfg.targetTokens,
-      maxTokens: this.cfg.maxTokens, strategy: decision.strategyId,
+      conversation: conv,
+      targetTokens: this.cfg.targetTokens,
+      maxTokens: this.cfg.maxTokens,
+      strategy: decision.strategyId,
     });
 
     const capTokens = Math.ceil(this.cfg.targetTokens * (this.cfg.overflowCapPercent / 100));
@@ -74,9 +88,13 @@ export class SmartCompressionEngine {
     }
 
     if (this.bus) {
-      await this.bus.emit('postCompress', {
-        event: 'postCompress', scopeId: this.scopeId, timestamp: this.now(),
-        inputTokens, outputTokens: out.outputTokens, ratio: out.ratio,
+      await this.bus.emit("postCompress", {
+        event: "postCompress",
+        scopeId: this.scopeId,
+        timestamp: this.now(),
+        inputTokens,
+        outputTokens: out.outputTokens,
+        ratio: out.ratio,
         strategyId: out.strategyId,
         preservedTier0Count: out.preservedTier0Count,
         durationMs: out.durationMs,
@@ -89,7 +107,9 @@ export class SmartCompressionEngine {
       this.metrics.counter(METRIC_NAMES.COMPRESS_TOKENS_OUT, labels).inc(out.outputTokens);
       this.metrics.histogram(METRIC_NAMES.COMPRESS_RATIO, labels).observe(out.ratio);
       this.metrics.histogram(METRIC_NAMES.COMPRESS_DURATION_MS, labels).observe(out.durationMs);
-      this.metrics.gauge(METRIC_NAMES.COMPRESS_TIER0_PRESERVED, labels).set(out.preservedTier0Count);
+      this.metrics
+        .gauge(METRIC_NAMES.COMPRESS_TIER0_PRESERVED, labels)
+        .set(out.preservedTier0Count);
     }
 
     return out;

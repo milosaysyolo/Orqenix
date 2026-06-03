@@ -4,8 +4,12 @@ title: Hooks
 bsRef: docs/sdd/BS-016-hooks.md
 dependsOn: [G1]
 criteria:
-  - { id: G14.1, description: "hooks unit tests pass",                              severity: blocking }
-  - { id: G14.2, description: "all 7 hook events are registrable",                  severity: blocking }
-  - { id: G14.3, description: "listener errors are isolated (one throw, others run)", severity: blocking }
-  - { id: G14.4, description: "emit awaits async listeners before resolving",       severity: blocking }
+  - { id: G14.1, description: "hooks unit tests pass", severity: blocking }
+  - { id: G14.2, description: "all 7 hook events are registrable", severity: blocking }
+  - {
+      id: G14.3,
+      description: "listener errors are isolated (one throw, others run)",
+      severity: blocking,
+    }
+  - { id: G14.4, description: "emit awaits async listeners before resolving", severity: blocking }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G14-*.json" }

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { PluginRegistry } from "@orqenix/core/plugin";
+import { PluginRegistry } from "@orqenix/core";
 import plugin, { ledger } from "../src/index.js";
 import { computeCost } from "../src/pricing.js";
 

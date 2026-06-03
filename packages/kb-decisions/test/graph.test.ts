@@ -48,7 +48,7 @@ describe("kb-decisions graph", () => {
         decidedAt: 0,
         rationale: "",
         parents: ["missing"],
-      })
+      }),
     ).toThrow(/Parent missing not in graph/);
   });
 
@@ -68,8 +68,22 @@ describe("kb-decisions graph", () => {
 
   it("listByTag filters by tag", () => {
     const g = createGraph();
-    addDecision(g, { id: "1", title: "a", decidedAt: 0, rationale: "", parents: [], tags: ["arch"] });
-    addDecision(g, { id: "2", title: "b", decidedAt: 0, rationale: "", parents: [], tags: ["ops"] });
+    addDecision(g, {
+      id: "1",
+      title: "a",
+      decidedAt: 0,
+      rationale: "",
+      parents: [],
+      tags: ["arch"],
+    });
+    addDecision(g, {
+      id: "2",
+      title: "b",
+      decidedAt: 0,
+      rationale: "",
+      parents: [],
+      tags: ["ops"],
+    });
     expect(listByTag(g, "arch").map((n) => n.id)).toEqual(["1"]);
   });
 });

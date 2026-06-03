@@ -7,9 +7,4 @@ export {
   filterCreated,
   filterModified,
 } from "./ledger.js";
-export {
-  wrapFenced,
-  extractFenced,
-  removeFenced,
-  replaceFenced,
-} from "./fenced-blocks.js";
+export { wrapFenced, extractFenced, removeFenced, replaceFenced } from "./fenced-blocks.js";

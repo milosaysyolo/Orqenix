@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-cost-tracker
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-cost-tracker";
+import {} from /* exports */ "@orqenix/plugin-cost-tracker";
 ```
 
 ## API

@@ -94,10 +94,10 @@ whose SHA does not match the actual git object at install time.
 
 A scheduled CI job under `.github/workflows/marketplace-sha-bump.yml`:
 
-* Walks every external entry
-* Resolves the latest SHA on the declared ref
-* Opens a PR with the SHA bump
-* Includes a diff summary and link to the upstream commit range
+- Walks every external entry
+- Resolves the latest SHA on the declared ref
+- Opens a PR with the SHA bump
+- Includes a diff summary and link to the upstream commit range
 
 Bump PRs run the full policy scan plus MCP liveness check before merge.
 
@@ -105,9 +105,9 @@ Bump PRs run the full policy scan plus MCP liveness check before merge.
 
 Per CR v6.2 Ch 16, three CI pipelines run on every PR:
 
-* SHA bump validation
-* Policy scan: validates manifest, license, no forbidden patterns
-* MCP liveness: pings every declared MCP server URL
+- SHA bump validation
+- Policy scan: validates manifest, license, no forbidden patterns
+- MCP liveness: pings every declared MCP server URL
 
 If any pipeline fails, the PR is blocked.
 
@@ -119,7 +119,11 @@ A workspace can declare multiple marketplace sources in
 ```json
 {
   "marketplaces": [
-    { "name": "orqenix-default", "url": "https://github.com/orqenix/marketplace.git", "ref": "main" },
+    {
+      "name": "orqenix-default",
+      "url": "https://github.com/orqenix/marketplace.git",
+      "ref": "main"
+    },
     { "name": "company-internal", "url": "git@github.com:acme/skills.git", "ref": "main" },
     { "name": "personal", "url": "https://github.com/me/my-skills.git", "ref": "main" }
   ]
@@ -139,9 +143,9 @@ When the user runs `orqenix skill install foo`:
 
 Three tiers, declared per marketplace entry under `trust`:
 
-* `verified`: signed by orqenix and review-passed
-* `community`: signed but not reviewed
-* `untrusted`: unsigned, requires explicit `--allow-untrusted` flag
+- `verified`: signed by orqenix and review-passed
+- `community`: signed but not reviewed
+- `untrusted`: unsigned, requires explicit `--allow-untrusted` flag
 
 ### 5.1 Signing
 
@@ -153,25 +157,25 @@ serialization of the `plugins` array. Public keys are distributed via
 
 On every `orqenix marketplace sync`:
 
-* Download `marketplace.json` and `marketplace.json.sig`
-* Verify signature against the trusted key set
-* Reject if signature is missing or invalid
+- Download `marketplace.json` and `marketplace.json.sig`
+- Verify signature against the trusted key set
+- Reject if signature is missing or invalid
 
 ## 6. RBAC for private marketplaces
 
 For mid-size org use cases (CR v6.2 §1.7):
 
-* A marketplace can declare `access.role` per plugin
-* The CLI checks the user's role from the workspace identity
-* Plugins with mismatched roles are hidden, not displayed-and-denied
+- A marketplace can declare `access.role` per plugin
+- The CLI checks the user's role from the workspace identity
+- Plugins with mismatched roles are hidden, not displayed-and-denied
 
 This avoids leaking the existence of a plugin to users who cannot use it.
 
 ## 7. Key rotation
 
-* Marketplace owner publishes a new public key in `marketplace-keys.json`
-* A grace window of 14 days runs with both keys accepted
-* After the window, the old key is removed
+- Marketplace owner publishes a new public key in `marketplace-keys.json`
+- A grace window of 14 days runs with both keys accepted
+- After the window, the old key is removed
 
 The grace window lets downstream consumers refresh without breaking installs
 on the rotation day.
@@ -180,10 +184,10 @@ on the rotation day.
 
 In Phase 4, marketplace browsing is CLI-only. The Phase 6 web UI exposes:
 
-* Browse by category
-* Search by name and description
-* Show signature and trust tier
-* Diff between SHA pin and latest upstream
+- Browse by category
+- Search by name and description
+- Show signature and trust tier
+- Diff between SHA pin and latest upstream
 
 ## 9. CI integration
 
@@ -200,7 +204,7 @@ prompt in the CLI.
 
 ## 11. Threat model
 
-* Compromised partner repo: SHA pin prevents silent updates
-* Compromised marketplace owner key: detected by community signature, rotated
-* DNS or registry takeover: signatures verify, but availability impacted
-* Malicious skill content: policy scan and sandbox executor reduce blast radius
+- Compromised partner repo: SHA pin prevents silent updates
+- Compromised marketplace owner key: detected by community signature, rotated
+- DNS or registry takeover: signatures verify, but availability impacted
+- Malicious skill content: policy scan and sandbox executor reduce blast radius

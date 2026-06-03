@@ -1,4 +1,4 @@
-import type { OrqenixPlugin, ToolOutput } from "@orqenix/core/plugin";
+import type { OrqenixPlugin, PluginContext, ToolOutput } from "@orqenix/core";
 
 export interface CompressOutputConfig {
   enabled: boolean;
@@ -162,7 +162,7 @@ export function createPlugin(userConfig: Partial<CompressOutputConfig> = {}): Or
     priority: 70,
     capabilities: ["compression", "output-optimization"],
     hooks: {
-      "tool.execute.after": async (output: ToolOutput, _ctx) => {
+      "tool.execute.after": async (output: ToolOutput, _ctx: PluginContext) => {
         if (!config.enabled) return output;
         const serialized =
           typeof output.result === "string" ? output.result : JSON.stringify(output.result);

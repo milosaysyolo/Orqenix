@@ -4,19 +4,30 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const BEHAVIOR_PATTERNS = [
-  /\btoEqual\b/, /\btoBe\b/, /\btoContain\b/, /\btoThrow\b/, /\btoMatchObject\b/,
-  /\btoStrictEqual\b/, /\btoHaveBeenCalled/, /\btoBeGreaterThan\b/, /\toBeLessThan\b/,
-  /\bexpect\([^)]+\)\.resolves\b/, /\bexpect\([^)]+\)\.rejects\b/,
+  /\btoEqual\b/,
+  /\btoBe\b/,
+  /\btoContain\b/,
+  /\btoThrow\b/,
+  /\btoMatchObject\b/,
+  /\btoStrictEqual\b/,
+  /\btoHaveBeenCalled/,
+  /\btoBeGreaterThan\b/,
+  /\toBeLessThan\b/,
+  /\bexpect\([^)]+\)\.resolves\b/,
+  /\bexpect\([^)]+\)\.rejects\b/,
 ];
 
 const EXPORT_ONLY_PATTERNS = [
-  /toBeDefined\b/, /typeof\s+\w+\s*===\s*['"]function['"]/, /typeof\s+\w+\s*===\s*['"]object['"]/,
+  /toBeDefined\b/,
+  /typeof\s+\w+\s*===\s*['"]function['"]/,
+  /typeof\s+\w+\s*===\s*['"]object['"]/,
 ];
 
 function walk(dir, out = []) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
-    if (e.isDirectory() && !e.name.includes("node_modules") && !e.name.includes("dist")) walk(p, out);
+    if (e.isDirectory() && !e.name.includes("node_modules") && !e.name.includes("dist"))
+      walk(p, out);
     else if (/\.test\.(ts|js)$/.test(e.name)) out.push(p);
   }
 }

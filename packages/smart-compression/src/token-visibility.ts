@@ -2,14 +2,19 @@
 // @bc CS-015 Token Visibility
 // @gate G22.3, G22.4
 
-import { MetricsRegistry, METRIC_NAMES } from '@orqenix/telemetry';
+import { MetricsRegistry, METRIC_NAMES } from "@orqenix/telemetry";
 
 export interface CompressionSummary {
   totalIn: number;
   totalOut: number;
   avgRatio: number;
   p95DurationMs: number;
-  perStrategyBreakdown: Array<{ strategy: string; tokensIn: number; tokensOut: number; calls: number }>;
+  perStrategyBreakdown: Array<{
+    strategy: string;
+    tokensIn: number;
+    tokensOut: number;
+    calls: number;
+  }>;
 }
 
 export function summarizeMetrics(registry: MetricsRegistry): CompressionSummary {
@@ -22,15 +27,18 @@ export function summarizeMetrics(registry: MetricsRegistry): CompressionSummary 
   const totalIn = tokensInRows.reduce((a, r) => a + r.value, 0);
   const totalOut = tokensOutRows.reduce((a, r) => a + r.value, 0);
 
-  const perStrategy = new Map<string, { strategy: string; tokensIn: number; tokensOut: number; calls: number }>();
+  const perStrategy = new Map<
+    string,
+    { strategy: string; tokensIn: number; tokensOut: number; calls: number }
+  >();
   for (const row of tokensInRows) {
-    const s = row.labels.strategy ?? 'unknown';
+    const s = row.labels.strategy ?? "unknown";
     const cur = perStrategy.get(s) ?? { strategy: s, tokensIn: 0, tokensOut: 0, calls: 0 };
     cur.tokensIn += row.value;
     perStrategy.set(s, cur);
   }
   for (const row of tokensOutRows) {
-    const s = row.labels.strategy ?? 'unknown';
+    const s = row.labels.strategy ?? "unknown";
     const cur = perStrategy.get(s) ?? { strategy: s, tokensIn: 0, tokensOut: 0, calls: 0 };
     cur.tokensOut += row.value;
     perStrategy.set(s, cur);
@@ -54,5 +62,5 @@ export function formatRatioBar(ratio: number, width = 20): string {
   const pct = Math.max(0, Math.min(1, ratio));
   const filled = Math.round(pct * width);
   const empty = width - filled;
-  return `[${'#'.repeat(filled)}${'-'.repeat(empty)}] ${Math.round(pct * 100)}%`;
+  return `[${"#".repeat(filled)}${"-".repeat(empty)}] ${Math.round(pct * 100)}%`;
 }

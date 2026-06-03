@@ -33,7 +33,7 @@ async function withRetry<T>(fn: () => Promise<T>, max = 3): Promise<T> {
       return await fn();
     } catch (e) {
       lastErr = e;
-      await new Promise(r => setTimeout(r, 2 ** i * 250));
+      await new Promise((r) => setTimeout(r, 2 ** i * 250));
     }
   }
   throw lastErr;
@@ -51,7 +51,7 @@ async function openaiEmbedder(cfg: CloudEmbedderConfig): Promise<CloudEmbedder> 
           model,
           input: texts,
         });
-        return response.data.map(item => new Float32Array(item.embedding));
+        return response.data.map((item) => new Float32Array(item.embedding));
       }, cfg.maxRetries ?? 3);
     },
   };

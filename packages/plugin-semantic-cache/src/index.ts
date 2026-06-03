@@ -1,5 +1,5 @@
 import { hashString } from "@orqenix/core";
-import type { OrqenixPlugin } from "@orqenix/core/plugin";
+import type { LLMCall, LLMResponse, OrqenixPlugin, PluginContext } from "@orqenix/core";
 
 interface CacheEntry {
   call: { model: string; messages: { role: string; content: string }[] };
@@ -64,7 +64,7 @@ export const plugin: OrqenixPlugin = {
   priority: 60,
   capabilities: ["caching", "cost-savings"],
   hooks: {
-    "llm.call.after": async (call, response, ctx) => {
+    "llm.call.after": async (call: LLMCall, response: LLMResponse, ctx: PluginContext) => {
       cache.set(
         { model: call.model, messages: call.messages },
         { content: response.content, tokens: response.tokens },

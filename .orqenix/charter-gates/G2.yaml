@@ -4,10 +4,22 @@ title: Diff-Only Storage
 bsRef: docs/sdd/BS-004-storage-foundation.md
 dependsOn: [G1]
 criteria:
-  - { id: G2.1, description: "storage-sqlite unit tests pass",                       severity: blocking }
-  - { id: G2.2, description: "storage-diff unit tests pass",                         severity: blocking }
-  - { id: G2.3, description: "100 random full encode/decode roundtrips lossless",    severity: blocking }
-  - { id: G2.4, description: "50 random delta encode/apply roundtrips lossless",     severity: blocking }
-  - { id: G2.5, description: "20-entry diff chain reconstructs to final state",      severity: blocking }
-  - { id: G2.6, description: "BLAKE3 content hash deterministic across 200 runs",    severity: blocking }
+  - { id: G2.1, description: "storage-sqlite unit tests pass", severity: blocking }
+  - { id: G2.2, description: "storage-diff unit tests pass", severity: blocking }
+  - {
+      id: G2.3,
+      description: "100 random full encode/decode roundtrips lossless",
+      severity: blocking,
+    }
+  - {
+      id: G2.4,
+      description: "50 random delta encode/apply roundtrips lossless",
+      severity: blocking,
+    }
+  - { id: G2.5, description: "20-entry diff chain reconstructs to final state", severity: blocking }
+  - {
+      id: G2.6,
+      description: "BLAKE3 content hash deterministic across 200 runs",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G2-*.json" }

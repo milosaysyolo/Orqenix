@@ -69,7 +69,10 @@ function detectConfig(mode: "oss" | "pro"): DetectConfig {
   return { scopePrefix: "@orqenix/", forbiddenScopes: ["@orqenix-pro/", "@orqenix-cloud/"] };
 }
 
-function classify(pkg: Record<string, unknown>, config: DetectConfig): "publishable" | "internal" | "skip" {
+function classify(
+  pkg: Record<string, unknown>,
+  config: DetectConfig,
+): "publishable" | "internal" | "skip" {
   if (pkg.private === true) return "internal";
   if (pkg.doNotPublish === true) return "skip";
   if (typeof pkg.name !== "string") return "skip";
@@ -82,9 +85,8 @@ function classify(pkg: Record<string, unknown>, config: DetectConfig): "publisha
 
 async function loadContext(): Promise<CheckContext> {
   const mode = (args.mode as "oss" | "pro") ?? detectMode();
-  const policyPath = mode === "pro"
-    ? ".orqenix-pro/release-policy.yaml"
-    : ".orqenix/release-policy.yaml";
+  const policyPath =
+    mode === "pro" ? ".orqenix-pro/release-policy.yaml" : ".orqenix/release-policy.yaml";
 
   const policy = parseYaml(await readFile(policyPath, "utf-8")) as ReleasePolicy;
   const packages = await discoverPackages();
@@ -105,7 +107,9 @@ function buildReport(results: CheckResult[], ctx: CheckContext, totalMs: number)
   const failed = results.filter((r) => r.status === "fail").length;
   const warned = results.filter((r) => r.status === "warn").length;
   const skipped = results.filter((r) => r.status === "skip").length;
-  const blockingFailures = results.filter((r) => r.status === "fail" && r.severity === "blocking").length;
+  const blockingFailures = results.filter(
+    (r) => r.status === "fail" && r.severity === "blocking",
+  ).length;
 
   let verdict: PrePublishReport["verdict"];
   if (blockingFailures > 0) verdict = "no-go";
@@ -145,14 +149,19 @@ function printHumanReport(report: PrePublishReport): void {
     }
     if (r.details?.affectedPackages && r.details.affectedPackages.length > 0) {
       const preview = r.details.affectedPackages.slice(0, 5).join(", ");
-      const rest = r.details.affectedPackages.length > 5 ? ` (+${r.details.affectedPackages.length - 5} more)` : "";
+      const rest =
+        r.details.affectedPackages.length > 5
+          ? ` (+${r.details.affectedPackages.length - 5} more)`
+          : "";
       console.log(`     packages: ${preview}${rest}`);
     }
   }
 
   console.log("");
   console.log("=".repeat(70));
-  console.log(`Summary: ${report.passed} pass | ${report.failed} fail | ${report.warned} warn | ${report.skipped} skip`);
+  console.log(
+    `Summary: ${report.passed} pass | ${report.failed} fail | ${report.warned} warn | ${report.skipped} skip`,
+  );
   console.log(`Verdict: ${verdictBadge(report.verdict)}`);
   console.log("=".repeat(70));
 }
@@ -163,7 +172,9 @@ function verdictBadge(v: PrePublishReport["verdict"]): string {
 
 function detectMode(): "oss" | "pro" {
   try {
-    const pkg = JSON.parse(require("node:fs").readFileSync(`${process.cwd()}/package.json`, "utf-8"));
+    const pkg = JSON.parse(
+      require("node:fs").readFileSync(`${process.cwd()}/package.json`, "utf-8"),
+    );
     if (pkg.name?.includes("pro")) return "pro";
   } catch {}
   return "oss";
@@ -188,7 +199,7 @@ async function runChecks(checks: Check[], ctx: CheckContext): Promise<CheckResul
             message: `Check threw: ${(err as Error).message}`,
           };
         }
-      })
+      }),
     );
     results.push(...batchResults);
   }
@@ -214,10 +225,7 @@ async function main(): Promise<void> {
   const report = buildReport(results, ctx, Date.now() - start);
 
   const reportDir = ctx.mode === "pro" ? ".orqenix-pro" : ".orqenix";
-  await writeFile(
-    join(reportDir, "pre-publish-report.json"),
-    JSON.stringify(report, null, 2)
-  );
+  await writeFile(join(reportDir, "pre-publish-report.json"), JSON.stringify(report, null, 2));
 
   if (args["json-only"]) {
     console.log(JSON.stringify(report, null, 2));

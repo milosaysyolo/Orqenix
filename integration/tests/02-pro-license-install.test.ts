@@ -15,7 +15,9 @@ beforeAll(async () => {
   ws = await createWorkspace();
 });
 
-afterAll(async () => { await ws.cleanup(); });
+afterAll(async () => {
+  await ws.cleanup();
+});
 
 describe("E2E 02 Pro license install", () => {
   it("signed license verifies successfully against public key", async () => {
@@ -34,7 +36,9 @@ describe("E2E 02 Pro license install", () => {
   });
 
   it("license payload preserves declared features", async () => {
-    const lic = await makeLicense({ features: ["learning-loop", "knowledge-intel", "cross-project-retrieval"] });
+    const lic = await makeLicense({
+      features: ["learning-loop", "knowledge-intel", "cross-project-retrieval"],
+    });
     expect(lic.features).toContain("learning-loop");
     expect(lic.features).toContain("knowledge-intel");
     expect(lic.features).toContain("cross-project-retrieval");

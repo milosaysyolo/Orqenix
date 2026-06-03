@@ -13,7 +13,7 @@ pnpm add @orqenix/teams-built-in
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/teams-built-in";
+import {} from /* exports */ "@orqenix/teams-built-in";
 ```
 
 ## API

@@ -19,7 +19,7 @@ export async function runChecks(checks: Check[], ctx: CheckContext): Promise<Che
             message: `Check threw: ${(err as Error).message}`,
           };
         }
-      })
+      }),
     );
     results.push(...batchResults);
   }

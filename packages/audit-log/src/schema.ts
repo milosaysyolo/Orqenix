@@ -2,7 +2,7 @@
 // @bc CS-024 Audit Schema
 // @gate G18.1
 
-import type { MigrationRecord } from '@orqenix/storage-sqlite';
+import type { MigrationRecord } from "@orqenix/storage-sqlite";
 
 const M001 = `
 CREATE TABLE IF NOT EXISTS audit_log_entries (
@@ -24,5 +24,5 @@ CREATE INDEX IF NOT EXISTS audit_log_content_hash
 `;
 
 export const AUDIT_LOG_MIGRATIONS: MigrationRecord[] = [
-  { id: 30, name: 'audit_log_v1', sql: M001, checksum: '' },
+  { id: 30, name: "audit_log_v1", sql: M001, checksum: "" },
 ];

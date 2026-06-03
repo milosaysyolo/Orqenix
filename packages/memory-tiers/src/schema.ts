@@ -1,4 +1,4 @@
-import type { MigrationRecord } from '@orqenix/storage-sqlite';
+import type { MigrationRecord } from "@orqenix/storage-sqlite";
 
 const M001 = `
 CREATE TABLE IF NOT EXISTS memory_entries (
@@ -33,5 +33,5 @@ CREATE TABLE IF NOT EXISTS memory_distiller_watermarks (
 `;
 
 export const MEMORY_TIER_MIGRATIONS: MigrationRecord[] = [
-  { id: 2, name: 'memory_tiers_v1', sql: M001, checksum: '' },
+  { id: 2, name: "memory_tiers_v1", sql: M001, checksum: "" },
 ];

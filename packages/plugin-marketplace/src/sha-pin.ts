@@ -11,7 +11,7 @@ export interface ShaBumpProposal {
 
 export function proposeBumps(
   current: Array<{ name: string; sha: string; ref: string }>,
-  upstream: Map<string, string>
+  upstream: Map<string, string>,
 ): ShaBumpProposal[] {
   const out: ShaBumpProposal[] = [];
   for (const c of current) {

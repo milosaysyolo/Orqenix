@@ -20,7 +20,7 @@ export function planGc(
   snapshots: SnapshotMeta[],
   states: Record<string, { state: State; lastTouchedAt: number }>,
   policy: RetentionPolicy,
-  now: number = Date.now()
+  now: number = Date.now(),
 ): GcDecision[] {
   const out: GcDecision[] = [];
 
@@ -29,11 +29,26 @@ export function planGc(
     const daysSince = (now - st.lastTouchedAt) / 86400000;
 
     if (st.state === "active" && daysSince >= policy.idleAfterDays) {
-      out.push({ id: s.id, current: "active", next: "idle", reason: `${daysSince.toFixed(0)}d idle` });
+      out.push({
+        id: s.id,
+        current: "active",
+        next: "idle",
+        reason: `${daysSince.toFixed(0)}d idle`,
+      });
     } else if (st.state === "idle" && daysSince >= policy.deprecateAfterDays) {
-      out.push({ id: s.id, current: "idle", next: "deprecated", reason: `${daysSince.toFixed(0)}d idle` });
+      out.push({
+        id: s.id,
+        current: "idle",
+        next: "deprecated",
+        reason: `${daysSince.toFixed(0)}d idle`,
+      });
     } else if (st.state === "deprecated" && daysSince >= policy.deleteAfterDays) {
-      out.push({ id: s.id, current: "deprecated", next: "deleted", reason: `${daysSince.toFixed(0)}d deprecated` });
+      out.push({
+        id: s.id,
+        current: "deprecated",
+        next: "deleted",
+        reason: `${daysSince.toFixed(0)}d deprecated`,
+      });
     }
   }
 
@@ -45,7 +60,12 @@ export function planGc(
     for (const s of excess) {
       if (protectedIds.has(s.id)) continue;
       if (!out.find((d) => d.id === s.id)) {
-        out.push({ id: s.id, current: "active", next: "deleted", reason: "snapshotMaxCount exceeded" });
+        out.push({
+          id: s.id,
+          current: "active",
+          next: "deleted",
+          reason: "snapshotMaxCount exceeded",
+        });
       }
     }
   }

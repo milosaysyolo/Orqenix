@@ -18,12 +18,12 @@ scopes:
     license: BUSL-1.1
     access: public
     provenance: true
-    publishable_from_this_repo: false   # Pro lives in separate repo
+    publishable_from_this_repo: false # Pro lives in separate repo
 
   "@orqenix-cloud/*":
     license: BUSL-1.1
     access: restricted
-    publishable_from_this_repo: false   # Not implemented in Phase 5
+    publishable_from_this_repo: false # Not implemented in Phase 5
 
 policy:
   fixed_version_group:
@@ -31,7 +31,7 @@ policy:
 
   forbid_unpublish: true
   forbid_force_publish: true
-  forbid_publish_outside_ci: true        # Local publish disallowed
+  forbid_publish_outside_ci: true # Local publish disallowed
 
   semver_rules:
     breaking_keywords:

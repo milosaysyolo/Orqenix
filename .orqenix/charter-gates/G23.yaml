@@ -4,11 +4,23 @@ title: Memory Tier Classification
 bsRef: docs/sdd/BS-009-memory-tier-classification.md
 dependsOn: [G1, G2]
 criteria:
-  - { id: G23.1, description: "memory-tiers unit tests pass",                                     severity: blocking }
-  - { id: G23.2, description: "observation always classifies to working tier",                    severity: blocking }
-  - { id: G23.3, description: "confidence below 0.5 always classifies to working tier",           severity: blocking }
-  - { id: G23.4, description: "promotion path working -> episodic -> semantic -> procedural",     severity: blocking }
-  - { id: G23.5, description: "canDemote + nextTier sanity",                                      severity: blocking }
-  - { id: G23.6, description: "MemoryTierStore enforces content_hash+scope idempotency",          severity: blocking }
-  - { id: G23.7, description: "promote into procedural makes memory immutable",                   severity: blocking }
+  - { id: G23.1, description: "memory-tiers unit tests pass", severity: blocking }
+  - { id: G23.2, description: "observation always classifies to working tier", severity: blocking }
+  - {
+      id: G23.3,
+      description: "confidence below 0.5 always classifies to working tier",
+      severity: blocking,
+    }
+  - {
+      id: G23.4,
+      description: "promotion path working -> episodic -> semantic -> procedural",
+      severity: blocking,
+    }
+  - { id: G23.5, description: "canDemote + nextTier sanity", severity: blocking }
+  - {
+      id: G23.6,
+      description: "MemoryTierStore enforces content_hash+scope idempotency",
+      severity: blocking,
+    }
+  - { id: G23.7, description: "promote into procedural makes memory immutable", severity: blocking }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G23-*.json" }

@@ -14,7 +14,7 @@ interface GateResult {
 async function runCmd(
   cmd: string,
   args: string[],
-  cwd?: string
+  cwd?: string,
 ): Promise<{ ok: boolean; output: string }> {
   const r = await execa(cmd, args, {
     reject: false,
@@ -29,7 +29,7 @@ const PRO_ROOT = "../Orqenix-Pro";
 async function gate(
   id: string,
   name: string,
-  fn: () => Promise<{ ok: boolean; output: string }>
+  fn: () => Promise<{ ok: boolean; output: string }>,
 ): Promise<GateResult> {
   const t0 = Date.now();
   console.log(`\n=== ${id} ${name} ===`);
@@ -47,12 +47,18 @@ function walkSync(dir: string, exts: Set<string>): string[] {
       const full = join(dir, entry.name);
       if (entry.isDirectory()) {
         if (["node_modules", "dist", ".turbo"].includes(entry.name)) continue;
-        try { files.push(...walkSync(full, exts)); } catch { /* skip unreadable */ }
+        try {
+          files.push(...walkSync(full, exts));
+        } catch {
+          /* skip unreadable */
+        }
       } else if (entry.isFile() && exts.has(extname(entry.name))) {
         files.push(full);
       }
     }
-  } catch { /* skip */ }
+  } catch {
+    /* skip */
+  }
   return files;
 }
 
@@ -65,7 +71,9 @@ function countMatchingLines(files: string[], pattern: RegExp): number {
       for (const line of readFileSync(f, "utf8").split("\n")) {
         if (pattern.test(line)) count++;
       }
-    } catch { /* skip */ }
+    } catch {
+      /* skip */
+    }
   }
   return count;
 }
@@ -78,18 +86,23 @@ function findExportOnlyTestFiles(packagesDir: string): string[] {
       const pkgDir = join(packagesDir, e.name);
       for (const tdir of [join(pkgDir, "test"), join(pkgDir, "__tests__")]) {
         if (existsSync(tdir)) {
-          allTests.push(...walkSync(tdir, TS_EXTS).filter(f => f.endsWith(".test.ts")));
+          allTests.push(...walkSync(tdir, TS_EXTS).filter((f) => f.endsWith(".test.ts")));
         }
       }
     }
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 
-  const ASSERT_RE = /expect\(|assert\.|toBe[A-Z]|toEqual\(|toHaveLength\(|toContain\(|toMatch\(|toBeDefined\(|toBeGreaterThan\(|toBeLessThan\(|toBeCloseTo\(|toThrow\(|rejects\.|resolves\./;
+  const ASSERT_RE =
+    /expect\(|assert\.|toBe[A-Z]|toEqual\(|toHaveLength\(|toContain\(|toMatch\(|toBeDefined\(|toBeGreaterThan\(|toBeLessThan\(|toBeCloseTo\(|toThrow\(|rejects\.|resolves\./;
   const exportOnly: string[] = [];
   for (const f of allTests) {
     try {
       if (!ASSERT_RE.test(readFileSync(f, "utf8"))) exportOnly.push(f);
-    } catch { /* skip */ }
+    } catch {
+      /* skip */
+    }
   }
   return exportOnly;
 }
@@ -103,36 +116,42 @@ async function main() {
   results.push(
     await gate("G1", "no @ts-expect-error in src", async () => {
       const tsFiles = walkSync(packagesDir, TS_EXTS).filter(
-        f => !f.includes("node_modules") && !f.includes("dist") && !f.includes("test") && !f.includes("__tests__")
+        (f) =>
+          !f.includes("node_modules") &&
+          !f.includes("dist") &&
+          !f.includes("test") &&
+          !f.includes("__tests__"),
       );
       const count = countMatchingLines(tsFiles, /@ts-expect-error/);
       const ok = count === 0;
       return { ok, output: `@ts-expect-error found: ${count}` };
-    })
+    }),
   );
 
   // G2: no @ts-ignore in src
   results.push(
     await gate("G2", "no @ts-ignore in src", async () => {
       const tsFiles = walkSync(packagesDir, TS_EXTS).filter(
-        f => !f.includes("node_modules") && !f.includes("dist") && !f.includes("test") && !f.includes("__tests__")
+        (f) =>
+          !f.includes("node_modules") &&
+          !f.includes("dist") &&
+          !f.includes("test") &&
+          !f.includes("__tests__"),
       );
       const count = countMatchingLines(tsFiles, /@ts-ignore/);
       const ok = count === 0;
       return { ok, output: `@ts-ignore found: ${count}` };
-    })
+    }),
   );
 
   // G3: strict tsc clean
-  results.push(
-    await gate("G3", "strict tsc clean", async () => runCmd("pnpm", ["typecheck"]))
-  );
+  results.push(await gate("G3", "strict tsc clean", async () => runCmd("pnpm", ["typecheck"])));
 
   // G4: tests uncached run
   results.push(
     await gate("G4", "tests uncached run", async () =>
-      runCmd("pnpm", ["test", "--", "--no-cache"])
-    )
+      runCmd("pnpm", ["test", "--", "--no-cache"]),
+    ),
   );
 
   // G5: test count >= 230
@@ -147,7 +166,7 @@ async function main() {
         ok,
         output: `${r.output}\n\nParsed test count: ${count} (threshold 230)`,
       };
-    })
+    }),
   );
 
   // G6: no export-only tests
@@ -156,12 +175,12 @@ async function main() {
       const exportOnly = findExportOnlyTestFiles(packagesDir);
       const count = exportOnly.length;
       const ok = count <= 10;
-      const lines = exportOnly.map(f => `EXPORT-ONLY: ${relative(rootDir, f)}`);
+      const lines = exportOnly.map((f) => `EXPORT-ONLY: ${relative(rootDir, f)}`);
       return {
         ok,
         output: `Export-only test files: ${count}\n${lines.join("\n")}\n(budget: ≤10)`,
       };
-    })
+    }),
   );
 
   // G7: kb-code uses web-tree-sitter in non-test src
@@ -173,7 +192,7 @@ async function main() {
       const count = countMatchingLines(tsFiles, /web-tree-sitter/);
       const ok = count >= 1;
       return { ok, output: `web-tree-sitter references in src: ${count}` };
-    })
+    }),
   );
 
   // G8: kb-docs hybrid retrieval (vec0/sqlite-vec AND fts5/MATCH)
@@ -189,7 +208,7 @@ async function main() {
         ok,
         output: `vec0/sqlite-vec refs: ${vecCount}, fts5/MATCH refs: ${ftsCount}`,
       };
-    })
+    }),
   );
 
   // G9: Orqenix-Pro tier present
@@ -197,15 +216,11 @@ async function main() {
     await gate("G9", "Orqenix-Pro tier present", async () => {
       const ok = existsSync(PRO_ROOT);
       return { ok, output: `${PRO_ROOT} exists: ${ok}` };
-    })
+    }),
   );
 
   // G10: Pro tests pass
-  results.push(
-    await gate("G10", "Pro tests pass", async () =>
-      runCmd("pnpm", ["test"], PRO_ROOT)
-    )
-  );
+  results.push(await gate("G10", "Pro tests pass", async () => runCmd("pnpm", ["test"], PRO_ROOT)));
 
   // G11: 7 docs >= 200 lines
   results.push(
@@ -237,7 +252,7 @@ async function main() {
         }
       }
       return { ok: failed === 0, output: lines.join("\n") };
-    })
+    }),
   );
 
   // G12: CI matrix 6 jobs
@@ -253,54 +268,38 @@ async function main() {
         ok: hasMatrix && hasOs && hasNode,
         output: `matrix=${hasMatrix} os=${hasOs} node=${hasNode}`,
       };
-    })
+    }),
   );
 
   // G13: smoke passes locally
-  results.push(
-    await gate("G13", "smoke passes locally", async () => runCmd("pnpm", ["smoke"]))
-  );
+  results.push(await gate("G13", "smoke passes locally", async () => runCmd("pnpm", ["smoke"])));
 
   // G14: no high/critical CVE
   results.push(
-    await gate("G14", "no high/critical CVE", async () =>
-      runCmd("pnpm", ["audit:check"])
-    )
+    await gate("G14", "no high/critical CVE", async () => runCmd("pnpm", ["audit:check"])),
   );
 
   // G15: bundle size budget
-  results.push(
-    await gate("G15", "bundle size budget", async () =>
-      runCmd("pnpm", ["bundlesize"])
-    )
-  );
+  results.push(await gate("G15", "bundle size budget", async () => runCmd("pnpm", ["bundlesize"])));
 
   // G16: perf budget
-  results.push(
-    await gate("G16", "perf budget", async () =>
-      runCmd("pnpm", ["bench:phase-4"])
-    )
-  );
+  results.push(await gate("G16", "perf budget", async () => runCmd("pnpm", ["bench:phase-4"])));
 
   // G17: detach round-trip clean
   results.push(
-    await gate("G17", "detach round-trip clean", async () =>
-      runCmd("pnpm", ["charter:g17"])
-    )
+    await gate("G17", "detach round-trip clean", async () => runCmd("pnpm", ["charter:g17"])),
   );
 
   // G18: audit tamper detection
   results.push(
-    await gate("G18", "audit tamper detection", async () =>
-      runCmd("pnpm", ["charter:g18"])
-    )
+    await gate("G18", "audit tamper detection", async () => runCmd("pnpm", ["charter:g18"])),
   );
 
   // G19: license grace period
   results.push(
     await gate("G19", "license grace period", async () =>
-      runCmd("pnpm", ["test:license-grace"], PRO_ROOT)
-    )
+      runCmd("pnpm", ["test:license-grace"], PRO_ROOT),
+    ),
   );
 
   // G20: keystore correct
@@ -311,10 +310,9 @@ async function main() {
         return { ok: false, output: `${pubKey} missing` };
       }
       const content = await readFile(pubKey, "utf8");
-      const isEd25519 =
-        content.includes("BEGIN PUBLIC KEY") || content.includes("ED25519");
+      const isEd25519 = content.includes("BEGIN PUBLIC KEY") || content.includes("ED25519");
       return { ok: isEd25519, output: `keystore: ${pubKey} valid=${isEd25519}` };
-    })
+    }),
   );
 
   // Summary
@@ -337,8 +335,7 @@ async function main() {
     `| Gate | Name | Result | Duration |`,
     `| ---- | ---- | ------ | -------- |`,
     ...results.map(
-      (r) =>
-        `| ${r.id} | ${r.name} | ${r.passed ? "✅" : "❌"} | ${r.durationMs}ms |`
+      (r) => `| ${r.id} | ${r.name} | ${r.passed ? "✅" : "❌"} | ${r.durationMs}ms |`,
     ),
   ];
 

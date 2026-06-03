@@ -7,9 +7,15 @@ class TestRunner extends GateRunner {
   constructor(private readonly factory: (r: TestRunner) => Promise<GateCheck[]>) {
     super();
   }
-  protected loadSpec(): unknown { return {}; }
-  protected runChecks(): Promise<GateCheck[]> { return this.factory(this); }
-  protected writeReport(_: GateReport): void { /* noop */ }
+  protected loadSpec(): unknown {
+    return {};
+  }
+  protected runChecks(): Promise<GateCheck[]> {
+    return this.factory(this);
+  }
+  protected writeReport(_: GateReport): void {
+    /* noop */
+  }
   public exposeCheck(id: string, desc: string, fn: () => void | Promise<void>) {
     return this.check(id, desc, fn);
   }
@@ -28,7 +34,9 @@ describe("GateRunner", () => {
 
   it("reports fail when all checks fail", async () => {
     const r = new TestRunner(async (self) => [
-      await self.exposeCheck("a", "check a", () => { throw new Error("boom"); }),
+      await self.exposeCheck("a", "check a", () => {
+        throw new Error("boom");
+      }),
     ]);
     const report = await r.execute();
     expect(report.status).toBe("fail");
@@ -38,7 +46,9 @@ describe("GateRunner", () => {
   it("reports partial when mixed", async () => {
     const r = new TestRunner(async (self) => [
       await self.exposeCheck("a", "check a", () => {}),
-      await self.exposeCheck("b", "check b", () => { throw new Error("x"); }),
+      await self.exposeCheck("b", "check b", () => {
+        throw new Error("x");
+      }),
     ]);
     const report = await r.execute();
     expect(report.status).toBe("partial");

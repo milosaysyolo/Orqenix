@@ -13,7 +13,7 @@ pnpm add @orqenix/embedding-local
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/embedding-local";
+import {} from /* exports */ "@orqenix/embedding-local";
 ```
 
 ## API

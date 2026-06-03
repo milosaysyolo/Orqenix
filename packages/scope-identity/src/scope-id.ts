@@ -1,12 +1,12 @@
-import { blake3Bytes } from '@orqenix/core';
-import { type ScopeId, isScopeId, InvalidScopeIdError, SCOPE_ID_PATTERN } from './contracts.js';
+import { blake3Bytes } from "@orqenix/core";
+import { type ScopeId, isScopeId, InvalidScopeIdError, SCOPE_ID_PATTERN } from "./contracts.js";
 
-const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
 function encodeBase32(bytes: Uint8Array): string {
   let bits = 0;
   let value = 0;
-  let output = '';
+  let output = "";
   for (const byte of bytes) {
     value = (value << 8) | byte;
     bits += 8;

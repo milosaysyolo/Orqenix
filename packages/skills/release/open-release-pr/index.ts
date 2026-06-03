@@ -22,7 +22,9 @@ export interface OpenPROutput {
 }
 
 function buildPRBody(input: OpenPRInput): string {
-  const verdictIcon = { go: ":green:", "go-with-warnings": ":yellow:", "no-go": ":red:" }[input.verdict];
+  const verdictIcon = { go: ":green:", "go-with-warnings": ":yellow:", "no-go": ":red:" }[
+    input.verdict
+  ];
 
   const proposalTable = [
     "| Package | Bump |",
@@ -30,9 +32,10 @@ function buildPRBody(input: OpenPRInput): string {
     ...input.proposals.map((p) => `| \`${p.package}\` | ${p.bump} |`),
   ].join("\n");
 
-  const warningsBlock = input.warnings && input.warnings.length > 0
-    ? `\n## :warning: Warnings\n` + input.warnings.map((w) => `- ${w}`).join("\n")
-    : "";
+  const warningsBlock =
+    input.warnings && input.warnings.length > 0
+      ? `\n## :warning: Warnings\n` + input.warnings.map((w) => `- ${w}`).join("\n")
+      : "";
 
   return [
     `# Release Proposal: v${input.version}`,

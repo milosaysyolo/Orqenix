@@ -83,7 +83,7 @@ export async function install(ref: string, opts: InstallOpts): Promise<void> {
   });
 
   if (conflicts.length > 0) {
-    throw new Error(`Conflicts detected: ${conflicts.map(c => c.id).join(", ")}`);
+    throw new Error(`Conflicts detected: ${conflicts.map((c) => c.id).join(", ")}`);
   }
 
   await opts.registry.add({

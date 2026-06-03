@@ -1,4 +1,4 @@
-import type { OrqenixPlugin } from "@orqenix/core/plugin";
+import type { LLMCall, LLMResponse, OrqenixPlugin, PluginContext } from "@orqenix/core";
 import { computeCost, priceFor } from "./pricing.js";
 
 interface CostEntry {
@@ -61,7 +61,7 @@ export const plugin: OrqenixPlugin = {
   priority: 50,
   capabilities: ["cost-tracking", "transparency"],
   hooks: {
-    "llm.call.after": async (call, response, _ctx) => {
+    "llm.call.after": async (call: LLMCall, response: LLMResponse, _ctx: PluginContext) => {
       const cost = computeCost(call.model, response.tokens.input, response.tokens.output);
       ledger.add({
         timestamp: Date.now(),

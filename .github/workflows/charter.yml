@@ -9,9 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { path: Orqenix }
+        with:
+          path: Orqenix
       - name: Clone Orqenix-Pro
-        env: { PRO_TOKEN: ${{ secrets.ORQENIX_PRO_READ_TOKEN }} }
+        env:
+          PRO_TOKEN: ${{ secrets.ORQENIX_PRO_READ_TOKEN }}
         run: |
           git clone https://x-access-token:${PRO_TOKEN}@github.com/milosaysyolo/Orqenix-Pro.git Orqenix-Pro
       - name: Run charter

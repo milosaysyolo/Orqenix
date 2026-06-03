@@ -4,10 +4,18 @@ title: Memory Recall
 bsRef: docs/sdd/BS-013-memory-recall.md
 dependsOn: [G1, G23]
 criteria:
-  - { id: G11.1, description: "recall returns matches for keyword query",                         severity: blocking }
-  - { id: G11.2, description: "tier filter is honored",                                           severity: blocking }
-  - { id: G11.3, description: "higher confidence ranks higher for equal keyword hits",            severity: blocking }
-  - { id: G11.4, description: "recall increments accessCount on returned memories",               severity: blocking }
-  - { id: G11.5, description: "empty / too-short query returns empty result",                     severity: blocking }
-  - { id: G11.6, description: "recall returns at most k entries",                                 severity: blocking }
+  - { id: G11.1, description: "recall returns matches for keyword query", severity: blocking }
+  - { id: G11.2, description: "tier filter is honored", severity: blocking }
+  - {
+      id: G11.3,
+      description: "higher confidence ranks higher for equal keyword hits",
+      severity: blocking,
+    }
+  - {
+      id: G11.4,
+      description: "recall increments accessCount on returned memories",
+      severity: blocking,
+    }
+  - { id: G11.5, description: "empty / too-short query returns empty result", severity: blocking }
+  - { id: G11.6, description: "recall returns at most k entries", severity: blocking }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G11-*.json" }

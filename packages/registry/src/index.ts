@@ -66,11 +66,11 @@ export class Registry {
     if (type) {
       stmt = this.db.prepare("SELECT * FROM registry WHERE type = ? ORDER BY updated_at DESC");
       const rows = stmt.all(type) as any[];
-      return rows.map(r => this.rowToEntry(r));
+      return rows.map((r) => this.rowToEntry(r));
     } else {
       stmt = this.db.prepare("SELECT * FROM registry ORDER BY updated_at DESC");
       const rows = stmt.all() as any[];
-      return rows.map(r => this.rowToEntry(r));
+      return rows.map((r) => this.rowToEntry(r));
     }
   }
 
@@ -105,7 +105,7 @@ export class Registry {
       "SELECT * FROM registry WHERE name = ? AND id != ? AND state != ?",
     );
     const rows = stmt.all(entry.name, entry.id, "PURGED") as any[];
-    return rows.map(r => this.rowToEntry(r));
+    return rows.map((r) => this.rowToEntry(r));
   }
 
   private rowToEntry(row: any): RegistryEntry {

@@ -13,7 +13,7 @@ pnpm add @orqenix/lifecycle
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/lifecycle";
+import {} from /* exports */ "@orqenix/lifecycle";
 ```
 
 ## API

@@ -13,7 +13,7 @@ pnpm add @orqenix/kb-decisions
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/kb-decisions";
+import {} from /* exports */ "@orqenix/kb-decisions";
 ```
 
 ## API

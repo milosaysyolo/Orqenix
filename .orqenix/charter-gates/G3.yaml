@@ -4,9 +4,17 @@ title: KB Schema (Chat)
 bsRef: docs/sdd/BS-005-kb-chat-schema.md
 dependsOn: [G1, G2]
 criteria:
-  - { id: G3.1, description: "kb-chat unit tests pass",                              severity: blocking }
-  - { id: G3.2, description: "migrations are idempotent (re-run applies 0)",          severity: blocking }
-  - { id: G3.3, description: "required tables exist (sessions, entries, embeddings)", severity: blocking }
-  - { id: G3.4, description: "chat_entries declared STRICT mode",                     severity: blocking }
-  - { id: G3.5, description: "checksum drift on existing migration is rejected",      severity: blocking }
+  - { id: G3.1, description: "kb-chat unit tests pass", severity: blocking }
+  - { id: G3.2, description: "migrations are idempotent (re-run applies 0)", severity: blocking }
+  - {
+      id: G3.3,
+      description: "required tables exist (sessions, entries, embeddings)",
+      severity: blocking,
+    }
+  - { id: G3.4, description: "chat_entries declared STRICT mode", severity: blocking }
+  - {
+      id: G3.5,
+      description: "checksum drift on existing migration is rejected",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G3-*.json" }

@@ -34,16 +34,11 @@ interface Report {
   rawSamples: number[];
 }
 
-async function runBench(
-  name: string,
-  threshold: Threshold
-): Promise<Report> {
+async function runBench(name: string, threshold: Threshold): Promise<Report> {
   const warmup = threshold.warmupIterations ?? 1;
   const totalIterations = threshold.iterations + warmup;
 
-  const benchUrl = pathToFileURL(
-    join(__dirname, `${name}.bench.ts`)
-  ).href;
+  const benchUrl = pathToFileURL(join(__dirname, `${name}.bench.ts`)).href;
   const mod = await import(benchUrl);
   const fnKey = Object.keys(mod).find((k) => k.startsWith("bench"));
   if (!fnKey) {
@@ -55,7 +50,7 @@ async function runBench(
   }
 
   console.log(
-    `Running ${name} x${totalIterations} (${warmup} warmup + ${threshold.iterations} measured)...`
+    `Running ${name} x${totalIterations} (${warmup} warmup + ${threshold.iterations} measured)...`,
   );
   const allSamples: number[] = await fn(totalIterations);
   const measuredSamples = allSamples.slice(warmup);
@@ -86,16 +81,13 @@ async function main() {
   }
 
   await mkdir(join(ROOT, "bench-results"), { recursive: true });
-  await writeFile(
-    join(ROOT, "bench-results", "phase-4.json"),
-    JSON.stringify(reports, null, 2)
-  );
+  await writeFile(join(ROOT, "bench-results", "phase-4.json"), JSON.stringify(reports, null, 2));
 
   let failed = 0;
   for (const r of reports) {
     const status = r.passed ? "PASS" : "FAIL";
     console.log(
-      `${status} ${r.name}: p50=${r.p50.toFixed(1)}ms (≤${r.threshold.p50Ms}) p95=${r.p95.toFixed(1)}ms (≤${r.threshold.p95Ms}) [${r.warmupIterations} warmup discarded]`
+      `${status} ${r.name}: p50=${r.p50.toFixed(1)}ms (≤${r.threshold.p50Ms}) p95=${r.p95.toFixed(1)}ms (≤${r.threshold.p95Ms}) [${r.warmupIterations} warmup discarded]`,
     );
     if (!r.passed) failed++;
   }

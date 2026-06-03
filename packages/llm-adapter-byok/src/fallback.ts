@@ -3,9 +3,14 @@
 // @gate G12.1, G12.2
 
 import {
-  type LlmAdapter, type LlmRequest, type LlmResponse,
-  LlmProviderError, LlmRateLimitError, LlmTimeoutError, LlmAuthError,
-} from '@orqenix/llm-adapter-ollama';
+  type LlmAdapter,
+  type LlmRequest,
+  type LlmResponse,
+  LlmProviderError,
+  LlmRateLimitError,
+  LlmTimeoutError,
+  LlmAuthError,
+} from "@orqenix/llm-adapter-ollama";
 
 export interface FallbackChainOptions {
   adapters: LlmAdapter[];
@@ -18,9 +23,9 @@ export class FallbackChain implements LlmAdapter {
   private readonly adapters: LlmAdapter[];
 
   constructor(opts: FallbackChainOptions) {
-    if (opts.adapters.length === 0) throw new Error('FallbackChain requires at least one adapter');
+    if (opts.adapters.length === 0) throw new Error("FallbackChain requires at least one adapter");
     this.adapters = opts.adapters;
-    this.provider = `chain(${opts.adapters.map((a) => a.provider).join(',')})`;
+    this.provider = `chain(${opts.adapters.map((a) => a.provider).join(",")})`;
     this.model = opts.adapters[0]!.model;
   }
 
@@ -42,7 +47,7 @@ export class FallbackChain implements LlmAdapter {
     }
     throw new LlmProviderError(
       this.provider,
-      `all ${this.adapters.length} adapters failed: ${errors.map((x) => `${x.provider}:${x.error}`).join(' | ')}`,
+      `all ${this.adapters.length} adapters failed: ${errors.map((x) => `${x.provider}:${x.error}`).join(" | ")}`,
     );
   }
 

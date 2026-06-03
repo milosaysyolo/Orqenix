@@ -4,12 +4,12 @@
 
 ## Tiers
 
-| Tier | Purpose | Mutability |
-|------|---------|------------|
-| working | Recent observations, low-confidence notes | mutable, demotable |
-| episodic | Recurring facts, decisions, preferences | mutable, demotable |
-| semantic | Verified knowledge, high-confidence learnings | mutable, NOT demotable |
-| procedural | Skills and tasks promoted via repeated use | IMMUTABLE |
+| Tier       | Purpose                                       | Mutability             |
+| ---------- | --------------------------------------------- | ---------------------- |
+| working    | Recent observations, low-confidence notes     | mutable, demotable     |
+| episodic   | Recurring facts, decisions, preferences       | mutable, demotable     |
+| semantic   | Verified knowledge, high-confidence learnings | mutable, NOT demotable |
+| procedural | Skills and tasks promoted via repeated use    | IMMUTABLE              |
 
 ## Types (8 total)
 

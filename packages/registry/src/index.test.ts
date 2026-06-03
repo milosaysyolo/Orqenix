@@ -35,8 +35,13 @@ describe("Registry", () => {
   it("detects name conflict in ACTIVE state", async () => {
     await reg.add({ id: "s1", name: "skill-a", version: "1.0.0", type: "skill", state: "ACTIVE" });
     const conflicts = await reg.checkConflicts({
-      id: "s2", name: "skill-a", version: "2.0.0", type: "skill", state: "ACTIVE",
-      createdAt: "", updatedAt: "",
+      id: "s2",
+      name: "skill-a",
+      version: "2.0.0",
+      type: "skill",
+      state: "ACTIVE",
+      createdAt: "",
+      updatedAt: "",
     });
     expect(conflicts.length).toBe(1);
   });

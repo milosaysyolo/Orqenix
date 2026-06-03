@@ -25,7 +25,7 @@ async function walk(dir: string, base: string): Promise<string[]> {
 export async function createSnapshot(
   sourceDir: string,
   snapshotsDir: string,
-  label?: string
+  label?: string,
 ): Promise<SnapshotMeta> {
   const ts = Date.now();
   const id = `snap-${ts}-${Math.random().toString(36).slice(2, 8)}`;
@@ -59,9 +59,7 @@ export async function createSnapshot(
   return meta;
 }
 
-export async function listSnapshots(
-  snapshotsDir: string
-): Promise<SnapshotMeta[]> {
+export async function listSnapshots(snapshotsDir: string): Promise<SnapshotMeta[]> {
   try {
     const entries = await readdir(snapshotsDir, { withFileTypes: true });
     const out: SnapshotMeta[] = [];
@@ -80,10 +78,7 @@ export async function listSnapshots(
   }
 }
 
-export async function deleteSnapshot(
-  snapshotsDir: string,
-  id: string
-): Promise<boolean> {
+export async function deleteSnapshot(snapshotsDir: string, id: string): Promise<boolean> {
   const path = join(snapshotsDir, id);
   try {
     await stat(path);
@@ -94,14 +89,9 @@ export async function deleteSnapshot(
   }
 }
 
-export async function verifySnapshot(
-  snapshotsDir: string,
-  id: string
-): Promise<boolean> {
+export async function verifySnapshot(snapshotsDir: string, id: string): Promise<boolean> {
   const path = join(snapshotsDir, id);
-  const meta: SnapshotMeta = JSON.parse(
-    await readFile(join(path, "meta.json"), "utf8")
-  );
+  const meta: SnapshotMeta = JSON.parse(await readFile(join(path, "meta.json"), "utf8"));
   const files = (await walk(path, path)).filter((f) => f !== "meta.json");
   if (files.length !== meta.fileCount) return false;
   const hash = createHash("sha256");

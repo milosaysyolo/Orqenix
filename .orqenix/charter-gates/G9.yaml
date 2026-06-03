@@ -4,12 +4,24 @@ title: Injection Strategies
 bsRef: docs/sdd/BS-011-injection-strategies.md
 dependsOn: [G1, G23]
 criteria:
-  - { id: G9.1, description: "injection-strategies unit tests pass",                              severity: blocking }
-  - { id: G9.2, description: "all 5 strategies A/B/C/D/E registered with correct names",          severity: blocking }
-  - { id: G9.3, description: "default strategy is B (System Prologue Tiered)",                    severity: blocking }
-  - { id: G9.4, description: "B excludes semantic + procedural from system block",                severity: blocking }
-  - { id: G9.5, description: "C annotates the last user message",                                 severity: blocking }
-  - { id: G9.6, description: "D injects assistant recall turn before the user message",           severity: blocking }
-  - { id: G9.7, description: "E ranks by confidence descending and respects k",                   severity: blocking }
-  - { id: G9.8, description: "all 5 strategies respect tokenBudget",                              severity: blocking }
+  - { id: G9.1, description: "injection-strategies unit tests pass", severity: blocking }
+  - {
+      id: G9.2,
+      description: "all 5 strategies A/B/C/D/E registered with correct names",
+      severity: blocking,
+    }
+  - { id: G9.3, description: "default strategy is B (System Prologue Tiered)", severity: blocking }
+  - {
+      id: G9.4,
+      description: "B excludes semantic + procedural from system block",
+      severity: blocking,
+    }
+  - { id: G9.5, description: "C annotates the last user message", severity: blocking }
+  - {
+      id: G9.6,
+      description: "D injects assistant recall turn before the user message",
+      severity: blocking,
+    }
+  - { id: G9.7, description: "E ranks by confidence descending and respects k", severity: blocking }
+  - { id: G9.8, description: "all 5 strategies respect tokenBudget", severity: blocking }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G9-*.json" }

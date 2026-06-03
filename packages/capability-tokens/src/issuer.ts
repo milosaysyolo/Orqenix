@@ -5,16 +5,16 @@ import {
   type TokenHeader,
   type TokenPayload,
   CapabilitySchema,
-} from './contracts.js';
-import { computeJti, encodeToken } from './format.js';
-import { signToken } from './signing.js';
+} from "./contracts.js";
+import { computeJti, encodeToken } from "./format.js";
+import { signToken } from "./signing.js";
 import {
   canDelegate,
   matchesCapability,
   nextDelegationDepth,
   requireCapability,
-} from './permissions.js';
-import { z } from 'zod';
+} from "./permissions.js";
+import { z } from "zod";
 
 export interface IssueTokenOptions {
   issuerScopeId: string;
@@ -39,8 +39,8 @@ function nowSec(): number {
 
 export async function issueToken(opts: IssueTokenOptions): Promise<IssuedToken> {
   const capsParsed = z.array(CapabilitySchema).min(1).max(64).parse(opts.caps);
-  if (opts.ttlSeconds <= 0) throw new Error('ttlSeconds must be > 0');
-  if (opts.ttlSeconds > 365 * 24 * 3600) throw new Error('ttlSeconds must be <= 1 year');
+  if (opts.ttlSeconds <= 0) throw new Error("ttlSeconds must be > 0");
+  if (opts.ttlSeconds > 365 * 24 * 3600) throw new Error("ttlSeconds must be <= 1 year");
 
   const now = (opts.now ?? nowSec)();
   const nbfOffset = opts.notBeforeSeconds ?? 0;
@@ -48,7 +48,7 @@ export async function issueToken(opts: IssueTokenOptions): Promise<IssuedToken> 
   const nbf = now + nbfOffset;
   const maxDelegationDepth = opts.maxDelegationDepth ?? 0;
 
-  const header: TokenHeader = { alg: 'EdDSA', typ: 'ORQX', kid: opts.issuerScopeId };
+  const header: TokenHeader = { alg: "EdDSA", typ: "ORQX", kid: opts.issuerScopeId };
 
   const payloadWithoutJti = {
     iss: opts.issuerScopeId,
@@ -59,7 +59,7 @@ export async function issueToken(opts: IssueTokenOptions): Promise<IssuedToken> 
     exp,
     caps: capsParsed,
     maxDelegationDepth,
-  } as Omit<TokenPayload, 'jti'>;
+  } as Omit<TokenPayload, "jti">;
   const jti = computeJti(payloadWithoutJti);
   const payload: TokenPayload = { ...payloadWithoutJti, jti } as TokenPayload;
 
@@ -79,7 +79,7 @@ export interface DelegateTokenOptions {
 
 export async function delegateToken(opts: DelegateTokenOptions): Promise<IssuedToken> {
   if (!canDelegate(opts.parentToken)) {
-    throw new Error('parent token does not grant delegation or maxDelegationDepth is 0');
+    throw new Error("parent token does not grant delegation or maxDelegationDepth is 0");
   }
   for (const c of opts.caps) {
     const parentGrants = opts.parentToken.payload.caps.some((p) => matchesCapability(p, c));
@@ -91,7 +91,7 @@ export async function delegateToken(opts: DelegateTokenOptions): Promise<IssuedT
   const parentExp = opts.parentToken.payload.exp;
   const now = (opts.now ?? nowSec)();
   const cappedTtl = Math.min(opts.ttlSeconds, parentExp - now);
-  if (cappedTtl <= 0) throw new Error('parent token already expired or ttl is non-positive');
+  if (cappedTtl <= 0) throw new Error("parent token already expired or ttl is non-positive");
 
   return issueToken({
     issuerScopeId: opts.parentToken.payload.sub,

@@ -7,7 +7,7 @@ export interface GraderConfig {
 
 export function gradeAndDiversify(
   hits: HybridHit[],
-  config: GraderConfig = { minScore: 0.1, diversityPenalty: 0.2 }
+  config: GraderConfig = { minScore: 0.1, diversityPenalty: 0.2 },
 ): HybridHit[] {
   const filtered = hits.filter((h) => h.score >= config.minScore);
   const seenPaths = new Set<string>();

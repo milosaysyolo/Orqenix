@@ -12,7 +12,8 @@ export class CpuThrottle {
     public readonly targetPercent: number,
     public readonly measureWindowMs: number = 500,
   ) {
-    if (targetPercent <= 0 || targetPercent > 100) throw new Error(`invalid targetPercent: ${targetPercent}`);
+    if (targetPercent <= 0 || targetPercent > 100)
+      throw new Error(`invalid targetPercent: ${targetPercent}`);
   }
 
   reset(): void {

@@ -4,9 +4,21 @@ title: Adapter Provider Switching
 bsRef: docs/sdd/BS-015-adapter-provider-switching.md
 dependsOn: [G1, G8]
 criteria:
-  - { id: G13.1, description: "each adapter reports correct provider label",                     severity: blocking }
-  - { id: G13.2, description: "each adapter uses CR v7.1 default model identifier",              severity: blocking }
-  - { id: G13.3, description: "BYOK adapters reject missing apiKey at construction",             severity: blocking }
-  - { id: G13.4, description: "Ollama defaults to http://localhost:11434",                       severity: blocking }
-  - { id: G13.5, description: "custom baseUrl overrides default (OpenAI-compatible endpoints)",  severity: blocking }
+  - { id: G13.1, description: "each adapter reports correct provider label", severity: blocking }
+  - {
+      id: G13.2,
+      description: "each adapter uses CR v7.1 default model identifier",
+      severity: blocking,
+    }
+  - {
+      id: G13.3,
+      description: "BYOK adapters reject missing apiKey at construction",
+      severity: blocking,
+    }
+  - { id: G13.4, description: "Ollama defaults to http://localhost:11434", severity: blocking }
+  - {
+      id: G13.5,
+      description: "custom baseUrl overrides default (OpenAI-compatible endpoints)",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G13-*.json" }

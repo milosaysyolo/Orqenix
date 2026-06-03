@@ -13,6 +13,7 @@ pnpm changeset
 ```
 
 Follow the prompts:
+
 1. Select packages affected by your change
 2. Choose bump type per package (`major` / `minor` / `patch`)
 3. Write a clear summary that will appear in CHANGELOG.md
@@ -29,11 +30,11 @@ You do not need to manually bump versions or publish. The `release-lead` agent a
 
 ## Bump type guide
 
-| Type | When to use |
-|---|---|
+| Type    | When to use                                                                       |
+| ------- | --------------------------------------------------------------------------------- |
 | `major` | Breaking change: removed API, changed function signature, changed required config |
-| `minor` | New feature: new export, new optional config, backward-compatible enhancement |
-| `patch` | Bug fix: no API change, documentation, dependency update |
+| `minor` | New feature: new export, new optional config, backward-compatible enhancement     |
+| `patch` | Bug fix: no API change, documentation, dependency update                          |
 
 ## Pre-release strategy
 

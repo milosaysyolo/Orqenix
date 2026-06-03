@@ -13,9 +13,10 @@ export const C24_CharterGatesPass: Check = {
   async run(ctx: CheckContext): Promise<CheckResult> {
     const start = Date.now();
 
-    const requiredGates = ctx.mode === "pro"
-      ? ctx.policy?.policy?.required_gates?.phase_5_pro
-      : ctx.policy?.policy?.required_gates?.phase_5_oss;
+    const requiredGates =
+      ctx.mode === "pro"
+        ? ctx.policy?.policy?.required_gates?.phase_5_pro
+        : ctx.policy?.policy?.required_gates?.phase_5_oss;
 
     if (!requiredGates || requiredGates.length === 0) {
       return {

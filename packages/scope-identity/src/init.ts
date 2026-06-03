@@ -1,21 +1,21 @@
-import { mkdir, writeFile, readFile, access, appendFile, chmod } from 'node:fs/promises';
-import { join } from 'node:path';
+import { mkdir, writeFile, readFile, access, appendFile, chmod } from "node:fs/promises";
+import { join } from "node:path";
 import {
   type ScopeYaml,
   type ScopeId,
   type Ed25519KeyPair,
   KeyPairMismatchError,
   ScopeYamlCorruptError,
-} from './contracts.js';
+} from "./contracts.js";
 import {
   generateKeyPair,
   serializePrivateKey,
   deserializePrivateKey,
   serializePublicKey,
   verifyKeyPair,
-} from './keypair.js';
-import { deriveScopeId } from './scope-id.js';
-import { loadScopeYaml, saveScopeYaml, verifyScopeYamlConsistency } from './scope-yaml.js';
+} from "./keypair.js";
+import { deriveScopeId } from "./scope-id.js";
+import { loadScopeYaml, saveScopeYaml, verifyScopeYamlConsistency } from "./scope-yaml.js";
 
 export interface InitScopeOptions {
   rootDir: string;
@@ -30,26 +30,32 @@ export interface InitScopeResult {
   identityKeyPath: string;
 }
 
-const ORQENIX_DIR = '.orqenix';
-const SCOPE_YAML = 'scope.yaml';
-const IDENTITY_KEY = 'identity.key';
+const ORQENIX_DIR = ".orqenix";
+const SCOPE_YAML = "scope.yaml";
+const IDENTITY_KEY = "identity.key";
 const GITIGNORE_LINES = [
-  '# Orqenix identity (NEVER commit)',
-  '.orqenix/identity.key',
-  '.orqenix/*.tmp',
-  '.orqenix/gate-reports/',
+  "# Orqenix identity (NEVER commit)",
+  ".orqenix/identity.key",
+  ".orqenix/*.tmp",
+  ".orqenix/gate-reports/",
 ];
 
 async function fileExists(path: string): Promise<boolean> {
-  try { await access(path); return true; } catch { return false; }
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function ensureGitignore(rootDir: string): Promise<void> {
-  const gi = join(rootDir, '.gitignore');
-  const existing = (await fileExists(gi)) ? await readFile(gi, 'utf-8') : '';
+  const gi = join(rootDir, ".gitignore");
+  const existing = (await fileExists(gi)) ? await readFile(gi, "utf-8") : "";
   const toAdd = GITIGNORE_LINES.filter((line) => !existing.includes(line));
   if (toAdd.length > 0) {
-    const block = (existing.endsWith('\n') || existing === '' ? '' : '\n') + toAdd.join('\n') + '\n';
+    const block =
+      (existing.endsWith("\n") || existing === "" ? "" : "\n") + toAdd.join("\n") + "\n";
     await appendFile(gi, block);
   }
 }
@@ -87,12 +93,14 @@ export async function initScope(opts: InitScopeOptions): Promise<InitScopeResult
   return { scopeId, scopeYamlPath, identityKeyPath };
 }
 
-export async function loadScope(rootDir: string): Promise<{ scopeYaml: ScopeYaml; keyPair: Ed25519KeyPair }> {
+export async function loadScope(
+  rootDir: string,
+): Promise<{ scopeYaml: ScopeYaml; keyPair: Ed25519KeyPair }> {
   const orqDir = join(rootDir, ORQENIX_DIR);
   const scopeYaml = await loadScopeYaml(join(orqDir, SCOPE_YAML));
-  const pem = await readFile(join(orqDir, IDENTITY_KEY), 'utf-8');
+  const pem = await readFile(join(orqDir, IDENTITY_KEY), "utf-8");
   const privateKey = deserializePrivateKey(pem);
-  const { derivePublicKey } = await import('./keypair.js');
+  const { derivePublicKey } = await import("./keypair.js");
   const publicKey = await derivePublicKey(privateKey);
   const keyPair: Ed25519KeyPair = { publicKey, privateKey };
 

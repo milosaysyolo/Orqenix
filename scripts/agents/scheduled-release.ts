@@ -11,12 +11,16 @@ import { execa } from "execa";
 async function main(): Promise<void> {
   console.log("Orqenix Scheduled Release (Monday 09:00 ICT)");
 
-  const { exitCode, stdout, stderr } = await execa("pnpm", [
-    "tsx",
-    "scripts/agents/release-propose.ts",
-    "--bump=auto",
-    "--reason=Weekly scheduled cadence (Monday 09:00 ICT)",
-  ], { reject: false });
+  const { exitCode, stdout, stderr } = await execa(
+    "pnpm",
+    [
+      "tsx",
+      "scripts/agents/release-propose.ts",
+      "--bump=auto",
+      "--reason=Weekly scheduled cadence (Monday 09:00 ICT)",
+    ],
+    { reject: false },
+  );
 
   console.log(stdout);
 

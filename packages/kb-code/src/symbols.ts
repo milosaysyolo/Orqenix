@@ -36,7 +36,11 @@ function findNameNode(node: Parser.SyntaxNode): Parser.SyntaxNode | null {
   for (let i = 0; i < node.childCount; i++) {
     const c = node.child(i);
     if (!c) continue;
-    if (c.type === "identifier" || c.type === "property_identifier" || c.type === "type_identifier") {
+    if (
+      c.type === "identifier" ||
+      c.type === "property_identifier" ||
+      c.type === "type_identifier"
+    ) {
       return c;
     }
   }
@@ -51,10 +55,7 @@ function walk(node: Parser.SyntaxNode, visitor: (n: Parser.SyntaxNode) => void) 
   }
 }
 
-export async function extractSymbols(
-  source: string,
-  lang: SupportedLanguage
-): Promise<Symbol[]> {
+export async function extractSymbols(source: string, lang: SupportedLanguage): Promise<Symbol[]> {
   const tree = await parseSource(source, lang);
   const kinds = QUERY_NODE_TYPES[lang];
   const out: Symbol[] = [];
@@ -113,10 +114,10 @@ export function extractSymbolsLegacy(parser: Parser, source: string, lang: strin
   const symbols: Symbol[] = [];
 
   for (const m of matches) {
-    const node = m.captures.find(c => c.name !== "name")?.node;
-    const name = m.captures.find(c => c.name === "name")?.node.text;
+    const node = m.captures.find((c) => c.name !== "name")?.node;
+    const name = m.captures.find((c) => c.name === "name")?.node.text;
     if (!node || !name) continue;
-    const kind = m.captures.find(c => c.name !== "name")!.name as Symbol["kind"];
+    const kind = m.captures.find((c) => c.name !== "name")!.name as Symbol["kind"];
     symbols.push({
       kind,
       name,

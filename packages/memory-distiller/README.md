@@ -7,12 +7,12 @@ Heuristic extraction from chat entries, idempotent by `content_hash`, with a bac
 ## Quick start
 
 ```ts
-import { SqliteConnection, runMigrations } from '@orqenix/storage-sqlite';
-import { ChatStore, CHAT_KB_MIGRATIONS } from '@orqenix/kb-chat';
-import { MemoryTierStore, MEMORY_TIER_MIGRATIONS } from '@orqenix/memory-tiers';
-import { HeuristicDistiller, DistillerWorker } from '@orqenix/memory-distiller';
+import { SqliteConnection, runMigrations } from "@orqenix/storage-sqlite";
+import { ChatStore, CHAT_KB_MIGRATIONS } from "@orqenix/kb-chat";
+import { MemoryTierStore, MEMORY_TIER_MIGRATIONS } from "@orqenix/memory-tiers";
+import { HeuristicDistiller, DistillerWorker } from "@orqenix/memory-distiller";
 
-const conn = new SqliteConnection({ path: './kb.sqlite' });
+const conn = new SqliteConnection({ path: "./kb.sqlite" });
 runMigrations(conn, CHAT_KB_MIGRATIONS);
 runMigrations(conn, MEMORY_TIER_MIGRATIONS);
 
@@ -20,8 +20,8 @@ const memStore = new MemoryTierStore({ conn, scopeId: MY_SCOPE });
 const distiller = new HeuristicDistiller({ memStore, chatConn: conn, scopeId: MY_SCOPE });
 
 const worker = new DistillerWorker({ distiller, cpuLimitPercent: 20 });
-worker.on('batch', (stats) => console.log('batch', stats));
-worker.on('idle', () => console.log('caught up'));
+worker.on("batch", (stats) => console.log("batch", stats));
+worker.on("idle", () => console.log("caught up"));
 await worker.start();
 ```
 

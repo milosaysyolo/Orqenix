@@ -14,6 +14,7 @@ migrate. Phase 4 v1 plugin contract preserved end-to-end.
 ### Added
 
 #### Identity, tokens, storage foundation (Parts 2 through 4)
+
 - `@orqenix/scope-identity` — Ed25519 keypair + scope_id derivation via BLAKE3
 - `@orqenix/capability-tokens` — JWT-style format, 6 permission scenarios, revocation
 - `@orqenix/storage-sqlite` — better-sqlite3 wrapper with migrations + sqlite-vec
@@ -21,6 +22,7 @@ migrate. Phase 4 v1 plugin contract preserved end-to-end.
 - `@orqenix/kb-chat` — hash-chained ChatKB with capability-gated writes
 
 #### Memory + recall (Parts 5 through 6)
+
 - `@orqenix/memory-tiers` — 4-tier model (working/episodic/semantic/procedural)
 - `@orqenix/memory-distiller` — heuristic extraction with CPU throttling
 - `@orqenix/llm-adapter-ollama` — local LLM via Qwen 2.5 7B default
@@ -29,6 +31,7 @@ migrate. Phase 4 v1 plugin contract preserved end-to-end.
 - `@orqenix/prompt-rewriter` — keyword recall + injection orchestrator
 
 #### Compression + telemetry (Part 7)
+
 - `@orqenix/hooks` — typed event bus, 7 events, listener error isolation
 - `@orqenix/telemetry` — counters, gauges, histograms, MetricSink interface
 - `@orqenix/compress-strategies` — 4 strategies (Drop, Summarize, Distill, CompressChain)
@@ -36,17 +39,20 @@ migrate. Phase 4 v1 plugin contract preserved end-to-end.
 - `@orqenix/plugin-compress-context` v2 — Phase 4 v1 contract preserved verbatim
 
 #### File watcher + reindex + RTK (Part 8)
+
 - `@orqenix/file-watcher` — chokidar wrapper with 150ms debounce + ignore defaults
 - `@orqenix/reindex-incremental` — BLAKE3 content-hash-driven incremental reindex
 - `@orqenix/rtk-hooks` — shell command capture with redaction + size caps + timeout
 
 #### Mesh routing + cross-scope (Part 9)
+
 - `@orqenix/scope-link` — bidirectional trust edges with state machine
 - `@orqenix/provenance` — tamper-evident BLAKE3 chains
 - `@orqenix/workspace` — owner / contributor / observer roles + transferOwnership
 - `@orqenix/mesh-routing` — parallel fanout, quorum check, auto-link suggestions
 
 #### Audit + detach + migration + CLI (Part 12)
+
 - `@orqenix/audit-log` — append-only hash-chained log, 16 event kinds
 - `@orqenix/detach` — 2-step destructive pattern with confirmation token
 - `@orqenix/migration` — Phase 4 to Phase 5 migration with BLAKE3-verified rollback
@@ -78,10 +84,10 @@ use globally unique IDs (1 chat, 2 memory-tiers, 10 reindex, 20 scope-link,
 
 ### Phase Summary
 
-| Metric | Value |
-|--------|-------|
-| Packages | 27 |
-| LOC | ~25,220 |
-| Charter Gates | 31 |
-| Charter Gate Checks | ~201 |
-| Total Tests | ~446 |
+| Metric              | Value   |
+| ------------------- | ------- |
+| Packages            | 27      |
+| LOC                 | ~25,220 |
+| Charter Gates       | 31      |
+| Charter Gate Checks | ~201    |
+| Total Tests         | ~446    |

@@ -1,7 +1,7 @@
-import { blake3Bytes } from '@orqenix/core';
-import { Buffer } from 'node:buffer';
-import { SqliteMigrationError, type AppliedMigration, type MigrationRecord } from './contracts.js';
-import type { SqliteConnection } from './connection.js';
+import { blake3Bytes } from "@orqenix/core";
+import { Buffer } from "node:buffer";
+import { SqliteMigrationError, type AppliedMigration, type MigrationRecord } from "./contracts.js";
+import type { SqliteConnection } from "./connection.js";
 
 const BOOTSTRAP_SQL = `
 CREATE TABLE IF NOT EXISTS _orqenix_migrations (
@@ -13,14 +13,16 @@ CREATE TABLE IF NOT EXISTS _orqenix_migrations (
 `;
 
 function checksum(sql: string): string {
-  return Buffer.from(blake3Bytes(new TextEncoder().encode(sql))).toString('hex');
+  return Buffer.from(blake3Bytes(new TextEncoder().encode(sql))).toString("hex");
 }
 
 export function listApplied(conn: SqliteConnection): AppliedMigration[] {
   conn.exec(BOOTSTRAP_SQL);
-  const rows = conn.prepare<AppliedMigration>(
-    `SELECT id, name, checksum, applied_at as appliedAt FROM _orqenix_migrations ORDER BY id ASC`,
-  ).all() as AppliedMigration[];
+  const rows = conn
+    .prepare<AppliedMigration>(
+      `SELECT id, name, checksum, applied_at as appliedAt FROM _orqenix_migrations ORDER BY id ASC`,
+    )
+    .all() as AppliedMigration[];
   return rows;
 }
 
@@ -45,9 +47,9 @@ export function runMigrations(conn: SqliteConnection, migrations: MigrationRecor
     try {
       conn.transaction(() => {
         conn.exec(m.sql);
-        conn.prepare(
-          `INSERT INTO _orqenix_migrations (id, name, checksum) VALUES (?, ?, ?)`,
-        ).run(m.id, m.name, want);
+        conn
+          .prepare(`INSERT INTO _orqenix_migrations (id, name, checksum) VALUES (?, ?, ?)`)
+          .run(m.id, m.name, want);
       });
       count++;
     } catch (e) {

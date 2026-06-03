@@ -36,7 +36,10 @@ class G26ScopeIdentityIntegrity extends GateRunner {
 
       await this.check("G26.2", "JSON schema is valid Draft-07", () => {
         const schema = JSON.parse(
-          readFileSync(join(REPO_ROOT, "packages/scope-identity/schema/scope.schema.json"), "utf-8"),
+          readFileSync(
+            join(REPO_ROOT, "packages/scope-identity/schema/scope.schema.json"),
+            "utf-8",
+          ),
         );
         if (schema.$schema !== "http://json-schema.org/draft-07/schema#") {
           throw new Error("schema $schema must be Draft-07");
@@ -86,10 +89,18 @@ class G26ScopeIdentityIntegrity extends GateRunner {
           const idx = 6 + Math.floor(Math.random() * 32);
           const ch = yaml.scopeId[idx];
           const replacement = ch === "A" ? "B" : "A";
-          const tampered = { ...yaml, scopeId: (yaml.scopeId.slice(0, idx) + replacement + yaml.scopeId.slice(idx + 1)) as ScopeYaml["scopeId"] };
+          const tampered = {
+            ...yaml,
+            scopeId: (yaml.scopeId.slice(0, idx) +
+              replacement +
+              yaml.scopeId.slice(idx + 1)) as ScopeYaml["scopeId"],
+          };
           let caught = false;
-          try { verifyScopeYamlConsistency(tampered as ScopeYaml, publicKey); }
-          catch { caught = true; }
+          try {
+            verifyScopeYamlConsistency(tampered as ScopeYaml, publicKey);
+          } catch {
+            caught = true;
+          }
           if (!caught) throw new Error(`tamper not caught at iter ${i}`);
         }
       }),
@@ -101,7 +112,9 @@ class G26ScopeIdentityIntegrity extends GateRunner {
           const r = await initScope({ rootDir: tmp, name: "perm-check" });
           const s = await stat(r.identityKeyPath);
           if ((s.mode & 0o077) !== 0) {
-            throw new Error(`identity.key has overly permissive mode: ${(s.mode & 0o777).toString(8)}`);
+            throw new Error(
+              `identity.key has overly permissive mode: ${(s.mode & 0o777).toString(8)}`,
+            );
           }
         } finally {
           await rm(tmp, { recursive: true, force: true });
@@ -113,7 +126,8 @@ class G26ScopeIdentityIntegrity extends GateRunner {
         try {
           await initScope({ rootDir: tmp, name: "gi-check" });
           const gi = await readFile(join(tmp, ".gitignore"), "utf-8");
-          if (!gi.includes(".orqenix/identity.key")) throw new Error("identity.key not in .gitignore");
+          if (!gi.includes(".orqenix/identity.key"))
+            throw new Error("identity.key not in .gitignore");
         } finally {
           await rm(tmp, { recursive: true, force: true });
         }
@@ -135,4 +149,7 @@ async function main(): Promise<void> {
   process.exit(report.status === "pass" ? 0 : 1);
 }
 
-main().catch((e) => { console.error("G26 crashed:", e); process.exit(2); });
+main().catch((e) => {
+  console.error("G26 crashed:", e);
+  process.exit(2);
+});

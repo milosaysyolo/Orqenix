@@ -43,10 +43,7 @@ export async function createParser(lang: SupportedLanguage): Promise<Parser> {
   return parser;
 }
 
-export async function parseSource(
-  source: string,
-  lang: SupportedLanguage
-) {
+export async function parseSource(source: string, lang: SupportedLanguage) {
   const parser = await createParser(lang);
   return parser.parse(source);
 }
@@ -67,9 +64,17 @@ export async function loadParser(lang: string): Promise<Parser> {
 export function detectLang(path: string): string {
   const ext = path.split(".").pop()?.toLowerCase() ?? "";
   const map: Record<string, string> = {
-    ts: "typescript", tsx: "typescript", mts: "typescript", cts: "typescript",
-    js: "typescript", jsx: "typescript", mjs: "typescript", cjs: "typescript",
-    py: "python", rs: "rust", go: "go",
+    ts: "typescript",
+    tsx: "typescript",
+    mts: "typescript",
+    cts: "typescript",
+    js: "typescript",
+    jsx: "typescript",
+    mjs: "typescript",
+    cjs: "typescript",
+    py: "python",
+    rs: "rust",
+    go: "go",
   };
   return map[ext] ?? "typescript";
 }

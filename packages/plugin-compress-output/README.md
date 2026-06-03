@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-compress-output
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-compress-output";
+import {} from /* exports */ "@orqenix/plugin-compress-output";
 ```
 
 ## API

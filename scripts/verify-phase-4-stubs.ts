@@ -69,16 +69,28 @@ class Phase4StubVerifier {
     this.recordCheck(pkg.name, "required files", () => this.checkRequiredFiles(pkg));
   }
 
-  private recordCheck(pkgName: string, checkName: string, fn: () => { passed: boolean; details?: string }): void {
+  private recordCheck(
+    pkgName: string,
+    checkName: string,
+    fn: () => { passed: boolean; details?: string },
+  ): void {
     const start = performance.now();
     try {
       const { passed, details } = fn();
       const duration = performance.now() - start;
       this.results.push({ pkg: pkgName, check: checkName, passed, duration, details });
       const icon = passed ? "✓" : "✗";
-      consola.info(`  ${icon} [${passed ? "PASS" : "FAIL"}] ${pkgName} :: ${checkName} (${duration.toFixed(0)}ms)`);
+      consola.info(
+        `  ${icon} [${passed ? "PASS" : "FAIL"}] ${pkgName} :: ${checkName} (${duration.toFixed(0)}ms)`,
+      );
     } catch (err) {
-      this.results.push({ pkg: pkgName, check: checkName, passed: false, duration: 0, details: String(err) });
+      this.results.push({
+        pkg: pkgName,
+        check: checkName,
+        passed: false,
+        duration: 0,
+        details: String(err),
+      });
       consola.info(`  ✗ [ERROR] ${pkgName} :: ${checkName}: ${err}`);
     }
   }
@@ -99,4 +111,7 @@ class Phase4StubVerifier {
 }
 
 const verifier = new Phase4StubVerifier();
-verifier.run().then((passed) => process.exit(passed ? 0 : 1)).catch(() => process.exit(2));
+verifier
+  .run()
+  .then((passed) => process.exit(passed ? 0 : 1))
+  .catch(() => process.exit(2));

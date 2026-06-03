@@ -16,7 +16,9 @@ interface PackageJson {
 
 function getPackages(): PackageJson[] {
   const output = execSync("pnpm -r list --json --depth -1", {
-    cwd: REPO_ROOT, encoding: "utf-8", maxBuffer: 32 * 1024 * 1024,
+    cwd: REPO_ROOT,
+    encoding: "utf-8",
+    maxBuffer: 32 * 1024 * 1024,
   });
   const parsed = JSON.parse(output) as Array<{ path: string; name: string; version: string }>;
   return parsed

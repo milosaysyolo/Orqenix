@@ -51,8 +51,13 @@ export async function run(input: SmokeCheckInput): Promise<SmokeCheckOutput> {
 
     const tmpDir = await mkdtemp(join(tmpdir(), "smoke-"));
     try {
-      await writeFile(join(tmpDir, "package.json"), JSON.stringify({ name: "smoke-test", private: true }));
-      await execa("npm", ["install", `${pkg.name}@${pkg.version}`, "--no-fund", "--no-audit"], { cwd: tmpDir });
+      await writeFile(
+        join(tmpDir, "package.json"),
+        JSON.stringify({ name: "smoke-test", private: true }),
+      );
+      await execa("npm", ["install", `${pkg.name}@${pkg.version}`, "--no-fund", "--no-audit"], {
+        cwd: tmpDir,
+      });
       result.installedOk = true;
 
       try {

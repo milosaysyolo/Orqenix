@@ -16,13 +16,13 @@ maturity.
 
 ## Decision making
 
-| Type of decision | Process |
-|------------------|---------|
-| Bug fixes, docs, small features | Any maintainer can approve and merge |
+| Type of decision                 | Process                                                         |
+| -------------------------------- | --------------------------------------------------------------- |
+| Bug fixes, docs, small features  | Any maintainer can approve and merge                            |
 | New packages or breaking changes | RFC in Discussions, 7-day comment window, Project Lead approves |
-| License changes | Project Lead only, must be discussed publicly first |
-| Code of Conduct enforcement | Code of Conduct committee (currently the Project Lead) |
-| Roadmap shifts | RFC in Discussions, Project Lead decides |
+| License changes                  | Project Lead only, must be discussed publicly first             |
+| Code of Conduct enforcement      | Code of Conduct committee (currently the Project Lead)          |
+| Roadmap shifts                   | RFC in Discussions, Project Lead decides                        |
 
 ## Path to community governance
 

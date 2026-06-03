@@ -15,7 +15,9 @@ beforeAll(async () => {
   await writeFile(join(source, "config.json"), JSON.stringify({ v: 1 }));
 });
 
-afterAll(async () => { await rm(root, { recursive: true, force: true }); });
+afterAll(async () => {
+  await rm(root, { recursive: true, force: true });
+});
 
 describe("E2E 07 snapshot create verify restore", () => {
   it("snapshot create returns valid meta", async () => {

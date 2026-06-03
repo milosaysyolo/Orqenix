@@ -1,10 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  wrapFenced,
-  extractFenced,
-  removeFenced,
-  replaceFenced,
-} from "../src/index.js";
+import { wrapFenced, extractFenced, removeFenced, replaceFenced } from "../src/index.js";
 
 describe("fenced blocks", () => {
   it("wraps content with markers", () => {

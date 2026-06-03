@@ -8,7 +8,7 @@ describe("validateManifest", () => {
         name: "m",
         owner: { name: "o" },
         plugins: [{ name: "x", description: "d", source: "./x" }],
-      }).ok
+      }).ok,
     ).toBe(true);
   });
 

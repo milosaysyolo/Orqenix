@@ -12,17 +12,11 @@ export async function loadManifest(path: string): Promise<MarketplaceManifest> {
   return parsed as MarketplaceManifest;
 }
 
-export function findPlugin(
-  manifest: MarketplaceManifest,
-  name: string
-): PluginEntry | undefined {
+export function findPlugin(manifest: MarketplaceManifest, name: string): PluginEntry | undefined {
   return manifest.plugins.find((p) => p.name === name);
 }
 
-export function listByCategory(
-  manifest: MarketplaceManifest,
-  category: string
-): PluginEntry[] {
+export function listByCategory(manifest: MarketplaceManifest, category: string): PluginEntry[] {
   return manifest.plugins.filter((p) => p.category === category);
 }
 

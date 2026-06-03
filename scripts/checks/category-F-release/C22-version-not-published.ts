@@ -13,22 +13,24 @@ export const C22_VersionNotPublished: Check = {
 
     const publishable = ctx.packages.filter((p) => p.classification === "publishable");
 
-    await Promise.all(publishable.map(async (pkg) => {
-      const name = pkg.name;
-      const version = pkg.current.version as string;
+    await Promise.all(
+      publishable.map(async (pkg) => {
+        const name = pkg.name;
+        const version = pkg.current.version as string;
 
-      try {
-        const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(name)}`);
-        if (res.status === 404) return;
+        try {
+          const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(name)}`);
+          if (res.status === 404) return;
 
-        const data = await res.json() as { versions?: Record<string, unknown> };
-        if (data.versions && version in data.versions) {
-          conflicts.push({ pkg: name, version });
+          const data = (await res.json()) as { versions?: Record<string, unknown> };
+          if (data.versions && version in data.versions) {
+            conflicts.push({ pkg: name, version });
+          }
+        } catch {
+          // Network error, skip
         }
-      } catch {
-        // Network error, skip
-      }
-    }));
+      }),
+    );
 
     if (conflicts.length === 0) {
       return {

@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-snapshot
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-snapshot";
+import {} from /* exports */ "@orqenix/plugin-snapshot";
 ```
 
 ## API

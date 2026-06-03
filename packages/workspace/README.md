@@ -6,11 +6,11 @@ Workspace concept for grouping scope memberships in the Orqenix mesh.
 
 A **workspace** is a named container with exactly one **owner** scope and zero or more **contributor** or **observer** scopes. Workspaces are the unit of cross-scope query coordination (see `@orqenix/mesh-routing`).
 
-| Role | Can write KB? | Can query others' KB? | Can change membership? |
-|------|--------------|----------------------|------------------------|
-| owner | yes | yes | yes |
-| contributor | yes | yes | no |
-| observer | no | yes | no |
+| Role        | Can write KB? | Can query others' KB? | Can change membership? |
+| ----------- | ------------- | --------------------- | ---------------------- |
+| owner       | yes           | yes                   | yes                    |
+| contributor | yes           | yes                   | no                     |
+| observer    | no            | yes                   | no                     |
 
 ## Invariants
 

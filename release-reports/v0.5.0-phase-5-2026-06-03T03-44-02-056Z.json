@@ -2,11 +2,7 @@
   "repoKind": "main",
   "tagName": "v0.5.0-phase-5",
   "commitSha": "fcb63e92b244908e2cd17637965a4a56da61449d",
-  "changedFiles": [
-    "CHANGELOG.md",
-    "RELEASE_NOTES.md",
-    "README.md"
-  ],
+  "changedFiles": ["CHANGELOG.md", "RELEASE_NOTES.md", "README.md"],
   "pushedToOrigin": true,
   "dryRun": false,
   "durationMs": 5427,

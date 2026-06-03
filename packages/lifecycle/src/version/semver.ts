@@ -29,7 +29,7 @@ export function bumpRule(
     | "change_required_input"
     | "change_mcp_tool"
     | "change_output_schema"
-    | "change_enforcement_to_must"
+    | "change_enforcement_to_must",
 ): "patch" | "minor" | "major" {
   switch (change) {
     case "edit_prompt":

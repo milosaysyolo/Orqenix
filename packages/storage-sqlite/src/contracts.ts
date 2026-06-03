@@ -1,4 +1,4 @@
-import { OrqenixError } from '@orqenix/core';
+import { OrqenixError } from "@orqenix/core";
 
 export interface SqliteConnectionOptions {
   path: string;
@@ -28,19 +28,21 @@ export interface VectorRow {
 
 export class SqliteOpenError extends OrqenixError {
   constructor(path: string, cause: unknown) {
-    super(`failed to open SQLite at ${path}: ${(cause as Error)?.message ?? cause}`, 'SQLITE_OPEN');
+    super(`failed to open SQLite at ${path}: ${(cause as Error)?.message ?? cause}`, "SQLITE_OPEN");
   }
 }
 export class SqliteMigrationError extends OrqenixError {
   constructor(migrationId: number, reason: string) {
-    super(`migration ${migrationId} failed: ${reason}`, 'SQLITE_MIGRATION');
+    super(`migration ${migrationId} failed: ${reason}`, "SQLITE_MIGRATION");
   }
 }
 export class SqliteIntegrityError extends OrqenixError {
-  constructor(reason: string) { super(`integrity violation: ${reason}`, 'SQLITE_INTEGRITY'); }
+  constructor(reason: string) {
+    super(`integrity violation: ${reason}`, "SQLITE_INTEGRITY");
+  }
 }
 export class VecExtensionLoadError extends OrqenixError {
   constructor(cause: unknown) {
-    super(`sqlite-vec extension load failed: ${(cause as Error)?.message ?? cause}`, 'VEC_LOAD');
+    super(`sqlite-vec extension load failed: ${(cause as Error)?.message ?? cause}`, "VEC_LOAD");
   }
 }

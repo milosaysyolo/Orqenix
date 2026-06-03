@@ -18,17 +18,11 @@ interface Ledger {
   }>;
 }
 
-export async function recordCreated(
-  ledgerPath: string,
-  path: string,
-  content: Buffer,
-  by: string,
-) {
+export async function recordCreated(ledgerPath: string, path: string, content: Buffer, by: string) {
   const ledger = await loadLedger(ledgerPath);
   ledger.created.push({
     path,
-    hash_at_create:
-      "sha256:" + createHash("sha256").update(content).digest("hex"),
+    hash_at_create: "sha256:" + createHash("sha256").update(content).digest("hex"),
     at: new Date().toISOString(),
     by,
   });

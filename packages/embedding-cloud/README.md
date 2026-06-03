@@ -13,7 +13,7 @@ pnpm add @orqenix/embedding-cloud
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/embedding-cloud";
+import {} from /* exports */ "@orqenix/embedding-cloud";
 ```
 
 ## API

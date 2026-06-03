@@ -1,24 +1,24 @@
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { readFile, writeFile, rename } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
+import { readFile, writeFile, rename } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import {
   ScopeYamlSchema,
   type ScopeYaml,
   InvalidScopeYamlError,
   KeyPairMismatchError,
   ScopeYamlCorruptError,
-} from './contracts.js';
-import { deriveScopeId } from './scope-id.js';
-import { serializePublicKey } from './keypair.js';
+} from "./contracts.js";
+import { deriveScopeId } from "./scope-id.js";
+import { serializePublicKey } from "./keypair.js";
 
 const CANONICAL_KEY_ORDER: Array<keyof ScopeYaml> = [
-  'schemaVersion',
-  'scopeId',
-  'name',
-  'publicKey',
-  'createdAt',
-  'parentScope',
-  'metadata',
+  "schemaVersion",
+  "scopeId",
+  "name",
+  "publicKey",
+  "createdAt",
+  "parentScope",
+  "metadata",
 ];
 
 export function parseScopeYaml(raw: string): ScopeYaml {
@@ -42,14 +42,14 @@ export function serializeScopeYaml(value: ScopeYaml): string {
 }
 
 export async function loadScopeYaml(path: string): Promise<ScopeYaml> {
-  const raw = await readFile(path, 'utf-8');
+  const raw = await readFile(path, "utf-8");
   return parseScopeYaml(raw);
 }
 
 export async function saveScopeYaml(path: string, value: ScopeYaml): Promise<void> {
   const yaml = serializeScopeYaml(value);
   const tmp = join(dirname(path), `.${Date.now()}.scope.yaml.tmp`);
-  await writeFile(tmp, yaml, { encoding: 'utf-8', mode: 0o644 });
+  await writeFile(tmp, yaml, { encoding: "utf-8", mode: 0o644 });
   await rename(tmp, path);
 }
 

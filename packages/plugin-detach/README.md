@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-detach
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-detach";
+import {} from /* exports */ "@orqenix/plugin-detach";
 ```
 
 ## API

@@ -99,7 +99,7 @@ The default hybrid retrieval for DocsKB:
 3. Run vec0 MATCH against `docs_vec`, retrieve top N (default 20)
 4. Normalize FTS rank to [0,1] inverted (lower rank means better)
 5. Normalize vec distance to [0,1] inverted (lower distance means better)
-6. Final score = (1 - alpha) * fts_norm + alpha * vec_norm
+6. Final score = (1 - alpha) _ fts_norm + alpha _ vec_norm
 7. Apply document grader for diversity
 8. Return top M (default 10)
 
@@ -132,10 +132,10 @@ interface EmbeddingProvider {
 
 ### 6.2 Built-in providers
 
-* `openai`, text-embedding-3-small, 1536 dim
-* `azure-openai`, same model behind Azure
-* `voyage`, voyage-large-2, 1024 dim
-* `local-onnx`, bge-small-en, 384 dim, runs without network
+- `openai`, text-embedding-3-small, 1536 dim
+- `azure-openai`, same model behind Azure
+- `voyage`, voyage-large-2, 1024 dim
+- `local-onnx`, bge-small-en, 384 dim, runs without network
 
 Dimension mismatch between provider and database is a fatal error at startup,
 not a runtime warning.
@@ -155,8 +155,8 @@ cost into the existing cost-tracker plugin.
 
 Two-level cache:
 
-* In-memory LRU, default 1000 entries
-* On-disk persistent cache keyed by sha256(text) under `.orqenix/cache/embeddings/`
+- In-memory LRU, default 1000 entries
+- On-disk persistent cache keyed by sha256(text) under `.orqenix/cache/embeddings/`
 
 The on-disk cache survives across sessions. It saves both money and latency.
 
@@ -177,29 +177,29 @@ each KB, and joins on shared identifiers (file path, decision id).
 
 Every retrieved hit carries enough metadata to render a citation:
 
-* DocsKB: file path plus line range from snippet markup
-* CodeKB: file path plus symbol name and line range
-* DecisionKB: decision id plus title
+- DocsKB: file path plus line range from snippet markup
+- CodeKB: file path plus symbol name and line range
+- DecisionKB: decision id plus title
 
 The CLI renders citations as inline references. The MCP server returns them
 as structured fields so editors can deep-link.
 
 ## 10. Security boundaries
 
-* KB databases are local files, not network services
-* The MCP server enforces a read-only allowlist by default
-* Write access requires explicit hook profile permission (see sandbox doc)
+- KB databases are local files, not network services
+- The MCP server enforces a read-only allowlist by default
+- Write access requires explicit hook profile permission (see sandbox doc)
 
 ## 11. Performance targets
 
 Enforced by `pnpm bench:phase-4`:
 
-* Hybrid search on 1000 docs, p95 under 300 ms
-* Code symbol lookup, p95 under 50 ms
-* Decision traversal depth 10, p95 under 100 ms
+- Hybrid search on 1000 docs, p95 under 300 ms
+- Code symbol lookup, p95 under 50 ms
+- Decision traversal depth 10, p95 under 100 ms
 
 ## 12. Capacity targets
 
-* DocsKB tested up to 100k docs, 1.5 GB on disk
-* CodeKB tested up to 50k symbols across 5k files
-* DecisionKB tested up to 10k decisions with average 3 parents each
+- DocsKB tested up to 100k docs, 1.5 GB on disk
+- CodeKB tested up to 50k symbols across 5k files
+- DecisionKB tested up to 10k decisions with average 3 parents each

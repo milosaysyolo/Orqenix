@@ -19,7 +19,8 @@ export const C17_NoSecretInTarball: Check = {
   category: "security",
   severity: "blocking",
   description: "No secrets, keys, or credentials in any tarball that will be published",
-  rationale: "Leaked secrets in npm packages are permanent (cannot fully unpublish) and cause supply chain incidents",
+  rationale:
+    "Leaked secrets in npm packages are permanent (cannot fully unpublish) and cause supply chain incidents",
 
   async run(ctx: CheckContext): Promise<CheckResult> {
     const start = Date.now();

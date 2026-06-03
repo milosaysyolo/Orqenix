@@ -11,7 +11,7 @@ Debounced cross-platform file watcher for the Orqenix reindex pipeline.
 ## Quick start
 
 ```ts
-import { FileWatcher } from '@orqenix/file-watcher';
+import { FileWatcher } from "@orqenix/file-watcher";
 
 const watcher = new FileWatcher({ rootDir: process.cwd(), debounceMs: 150 });
 await watcher.start(async (batch) => {

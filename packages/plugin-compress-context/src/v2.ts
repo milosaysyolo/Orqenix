@@ -3,11 +3,13 @@
 // @gate G16.2, G16.3
 
 import {
-  type Conversation, type TaggedMessage, type PreservationTier,
+  type Conversation,
+  type TaggedMessage,
+  type PreservationTier,
   estimateTokens,
-} from '@orqenix/compress-strategies';
-import type { SmartCompressionEngine } from '@orqenix/smart-compression';
-import type { V1Message } from './v1.js';
+} from "@orqenix/compress-strategies";
+import type { SmartCompressionEngine } from "@orqenix/smart-compression";
+import type { V1Message } from "./v1.js";
 
 export interface V2Input {
   context: V1Message[];
@@ -37,8 +39,8 @@ export interface CreateV2PluginOptions {
 }
 
 function defaultTagger(msg: V1Message, idx: number, all: V1Message[]): PreservationTier {
-  if (idx === 0 && msg.role === 'system') return 0;
-  if (idx === all.length - 1 && msg.role === 'user') return 1;
+  if (idx === 0 && msg.role === "system") return 0;
+  if (idx === all.length - 1 && msg.role === "user") return 1;
   if (idx >= all.length - 4) return 2;
   return 3;
 }
@@ -48,7 +50,7 @@ export function createV2Plugin(opts: CreateV2PluginOptions) {
   return {
     async run(input: V2Input): Promise<V2Output> {
       const role = (r: string) =>
-        (r === 'system' || r === 'user' || r === 'assistant' || r === 'tool') ? r : 'assistant';
+        r === "system" || r === "user" || r === "assistant" || r === "tool" ? r : "assistant";
       const tagged: TaggedMessage[] = input.context.map((m, i) => ({
         id: `v2:${i}:${m.role}`,
         role: role(m.role),
@@ -58,7 +60,7 @@ export function createV2Plugin(opts: CreateV2PluginOptions) {
         createdAt: new Date(2026, 0, 1, 0, 0, 0, i).toISOString(),
       }));
       const conv: Conversation = {
-        scopeId: input.scopeId ?? 'scope:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+        scopeId: input.scopeId ?? "scope:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         sessionId: input.sessionId,
         messages: tagged,
       };
@@ -74,7 +76,10 @@ export function createV2Plugin(opts: CreateV2PluginOptions) {
       const decision = opts.engine.getDecision(conv);
       const out = await opts.engine.compress(conv);
       const compressed = out.outputTokens < out.inputTokens;
-      const restored: V1Message[] = out.conversation.messages.map((m) => ({ role: m.role, content: m.content }));
+      const restored: V1Message[] = out.conversation.messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
 
       return {
         context: restored,

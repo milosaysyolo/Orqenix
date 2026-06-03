@@ -41,14 +41,14 @@ to work unchanged.
 
 ## Cumulative project status
 
-| Metric | Value |
-|--------|-------|
-| Phases shipped | 1 through 5 |
-| Current tag | v0.5.0-phase-5 |
-| License | Apache 2.0 |
-| Charter Gates | 31 |
-| Test count | ~446 |
-| LOC | ~25,220 |
+| Metric         | Value          |
+| -------------- | -------------- |
+| Phases shipped | 1 through 5    |
+| Current tag    | v0.5.0-phase-5 |
+| License        | Apache 2.0     |
+| Charter Gates  | 31             |
+| Test count     | ~446           |
+| LOC            | ~25,220        |
 
 ## Acceptance recipe
 

@@ -2,14 +2,18 @@
 // @bc CS-024 Audit Log Store
 // @gate G18.2, G18.3
 
-import { canonicalJson } from '@orqenix/core';
-import { hashString, type ContentHash } from '@orqenix/storage-diff';
-import type { SqliteConnection } from '@orqenix/storage-sqlite';
+import { canonicalJson } from "@orqenix/core";
+import { hashString, type ContentHash } from "@orqenix/storage-diff";
+import type { SqliteConnection } from "@orqenix/storage-sqlite";
 import {
-  AppendAuditInputSchema, AuditEntrySchema,
-  AuditChainBrokenError, AuditEntryInvalidError,
-  type AppendAuditInput, type AuditEntry, type AuditEventKind,
-} from './contracts.js';
+  AppendAuditInputSchema,
+  AuditEntrySchema,
+  AuditChainBrokenError,
+  AuditEntryInvalidError,
+  type AppendAuditInput,
+  type AuditEntry,
+  type AuditEventKind,
+} from "./contracts.js";
 
 interface Row {
   rowid: number;
@@ -36,8 +40,12 @@ function toEntry(r: Row): AuditEntry {
 }
 
 function computeContentHash(args: {
-  scopeId: string; actorScopeId: string; eventKind: string;
-  payload: Record<string, unknown>; prevHash: string | null; createdAt: string;
+  scopeId: string;
+  actorScopeId: string;
+  eventKind: string;
+  payload: Record<string, unknown>;
+  prevHash: string | null;
+  createdAt: string;
 }): ContentHash {
   return hashString(canonicalJson(args)) as ContentHash;
 }
@@ -60,9 +68,13 @@ export class AuditLogStore {
   }
 
   private getLatestHashForScope(): string | null {
-    const row = this.conn.prepare<{ content_hash: string }>(
-      `SELECT content_hash FROM audit_log_entries WHERE scope_id = ? ORDER BY rowid DESC LIMIT 1`,
-    ).get(this.scopeId) as { content_hash: string } | undefined;
+    const row = this.conn
+      .prepare<{
+        content_hash: string;
+      }>(
+        `SELECT content_hash FROM audit_log_entries WHERE scope_id = ? ORDER BY rowid DESC LIMIT 1`,
+      )
+      .get(this.scopeId) as { content_hash: string } | undefined;
     return row?.content_hash ?? null;
   }
 
@@ -79,14 +91,21 @@ export class AuditLogStore {
       createdAt,
     });
 
-    const res = this.conn.prepare(
-      `INSERT INTO audit_log_entries
+    const res = this.conn
+      .prepare(
+        `INSERT INTO audit_log_entries
        (scope_id, actor_scope_id, event_kind, payload_json, prev_hash, content_hash, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    ).run(
-      this.scopeId, input.actorScopeId, input.eventKind,
-      JSON.stringify(input.payload), prevHash, contentHash, createdAt,
-    );
+      )
+      .run(
+        this.scopeId,
+        input.actorScopeId,
+        input.eventKind,
+        JSON.stringify(input.payload),
+        prevHash,
+        contentHash,
+        createdAt,
+      );
 
     const entry: AuditEntry = {
       rowid: Number(res.lastInsertRowid),
@@ -94,7 +113,9 @@ export class AuditLogStore {
       actorScopeId: input.actorScopeId,
       eventKind: input.eventKind,
       payload: input.payload,
-      prevHash, contentHash, createdAt,
+      prevHash,
+      contentHash,
+      createdAt,
     };
     AuditEntrySchema.parse(entry);
     return entry;
@@ -102,28 +123,35 @@ export class AuditLogStore {
 
   list(opts: { kind?: AuditEventKind; limit?: number } = {}): AuditEntry[] {
     const limit = Math.min(opts.limit ?? 500, 10_000);
-    const where: string[] = ['scope_id = ?'];
+    const where: string[] = ["scope_id = ?"];
     const params: unknown[] = [this.scopeId];
-    if (opts.kind) { where.push('event_kind = ?'); params.push(opts.kind); }
-    const rows = this.conn.prepare<Row>(
-      `SELECT rowid, scope_id, actor_scope_id, event_kind, payload_json, prev_hash, content_hash, created_at
-       FROM audit_log_entries WHERE ${where.join(' AND ')} ORDER BY rowid ASC LIMIT ?`,
-    ).all(...params, limit) as Row[];
+    if (opts.kind) {
+      where.push("event_kind = ?");
+      params.push(opts.kind);
+    }
+    const rows = this.conn
+      .prepare<Row>(
+        `SELECT rowid, scope_id, actor_scope_id, event_kind, payload_json, prev_hash, content_hash, created_at
+       FROM audit_log_entries WHERE ${where.join(" AND ")} ORDER BY rowid ASC LIMIT ?`,
+      )
+      .all(...params, limit) as Row[];
     return rows.map(toEntry);
   }
 
   count(): number {
-    const r = this.conn.prepare<{ c: number }>(
-      `SELECT COUNT(*) as c FROM audit_log_entries WHERE scope_id = ?`,
-    ).get(this.scopeId) as { c: number };
+    const r = this.conn
+      .prepare<{ c: number }>(`SELECT COUNT(*) as c FROM audit_log_entries WHERE scope_id = ?`)
+      .get(this.scopeId) as { c: number };
     return r.c;
   }
 
   getByContentHash(hash: string): AuditEntry | null {
-    const row = this.conn.prepare<Row>(
-      `SELECT rowid, scope_id, actor_scope_id, event_kind, payload_json, prev_hash, content_hash, created_at
+    const row = this.conn
+      .prepare<Row>(
+        `SELECT rowid, scope_id, actor_scope_id, event_kind, payload_json, prev_hash, content_hash, created_at
        FROM audit_log_entries WHERE content_hash = ? AND scope_id = ?`,
-    ).get(hash, this.scopeId) as Row | undefined;
+      )
+      .get(hash, this.scopeId) as Row | undefined;
     return row ? toEntry(row) : null;
   }
 
@@ -134,7 +162,7 @@ export class AuditLogStore {
       const e = entries[i]!;
       if (e.prevHash !== expectedPrev) {
         throw new AuditChainBrokenError(
-          `entry ${e.rowid}: prevHash mismatch (expected ${expectedPrev ?? 'null'}, got ${e.prevHash ?? 'null'})`,
+          `entry ${e.rowid}: prevHash mismatch (expected ${expectedPrev ?? "null"}, got ${e.prevHash ?? "null"})`,
         );
       }
       const recomputed = computeContentHash({
@@ -157,16 +185,21 @@ export class AuditLogStore {
 
   // Throws AuditEntryInvalidError if the entry exists but its hash does not match recomputed.
   verifyEntry(rowid: number): AuditEntry {
-    const row = this.conn.prepare<Row>(
-      `SELECT rowid, scope_id, actor_scope_id, event_kind, payload_json, prev_hash, content_hash, created_at
+    const row = this.conn
+      .prepare<Row>(
+        `SELECT rowid, scope_id, actor_scope_id, event_kind, payload_json, prev_hash, content_hash, created_at
        FROM audit_log_entries WHERE rowid = ? AND scope_id = ?`,
-    ).get(rowid, this.scopeId) as Row | undefined;
+      )
+      .get(rowid, this.scopeId) as Row | undefined;
     if (!row) throw new AuditEntryInvalidError(`entry ${rowid} not found`);
     const e = toEntry(row);
     const recomputed = computeContentHash({
-      scopeId: e.scopeId, actorScopeId: e.actorScopeId,
-      eventKind: e.eventKind, payload: e.payload,
-      prevHash: e.prevHash, createdAt: e.createdAt,
+      scopeId: e.scopeId,
+      actorScopeId: e.actorScopeId,
+      eventKind: e.eventKind,
+      payload: e.payload,
+      prevHash: e.prevHash,
+      createdAt: e.createdAt,
     });
     if (recomputed !== e.contentHash) {
       throw new AuditEntryInvalidError(`entry ${rowid} hash mismatch`);

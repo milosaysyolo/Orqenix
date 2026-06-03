@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { canTransition, transition } from "../state-machine/transitions";
+import { canTransition, transition } from "../state-machine/transitions.js";
 
 describe("state-machine transitions", () => {
   it("should allow ACTIVE -> STALE", () => {

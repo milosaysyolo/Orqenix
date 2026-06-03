@@ -41,7 +41,8 @@ check("BLAKE3 module exists", () => {
 });
 
 check("Canonical JSON module exists", () => {
-  if (!existsSync("packages/core/src/canonical-json.ts")) throw new Error("canonical-json.ts missing");
+  if (!existsSync("packages/core/src/canonical-json.ts"))
+    throw new Error("canonical-json.ts missing");
 });
 
 check("Result type exists", () => {
@@ -53,11 +54,13 @@ check("Error classes exist", () => {
 });
 
 check("Branded types exist", () => {
-  if (!existsSync("packages/core/src/branded-types.ts")) throw new Error("branded-types.ts missing");
+  if (!existsSync("packages/core/src/branded-types.ts"))
+    throw new Error("branded-types.ts missing");
 });
 
 check("Gate runner core exists", () => {
-  if (!existsSync("packages/gate-runner-core/src/index.ts")) throw new Error("gate-runner-core missing");
+  if (!existsSync("packages/gate-runner-core/src/index.ts"))
+    throw new Error("gate-runner-core missing");
 });
 
 check("Phase 5 metadata exists", () => {
@@ -65,7 +68,8 @@ check("Phase 5 metadata exists", () => {
 });
 
 check("Charter gate G1 exists", () => {
-  if (!existsSync("scripts/charter-gates/G1-phase4-stubs-wired.ts")) throw new Error("G1 script missing");
+  if (!existsSync("scripts/charter-gates/G1-phase4-stubs-wired.ts"))
+    throw new Error("G1 script missing");
 });
 
 if (!quick) {
@@ -85,7 +89,11 @@ for (const r of results) {
 }
 
 if (report) {
-  const reportData = { timestamp: new Date().toISOString(), checks: results, summary: { passed, total } };
+  const reportData = {
+    timestamp: new Date().toISOString(),
+    checks: results,
+    summary: { passed, total },
+  };
   console.log(`\nREPORT: ${JSON.stringify(reportData, null, 2)}`);
 }
 

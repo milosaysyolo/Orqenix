@@ -5,15 +5,21 @@ import { join } from "node:path";
 
 let dir: string;
 
-beforeAll(async () => { dir = await mkdtemp(join(tmpdir(), "kb-e2e-")); });
-afterAll(async () => { await rm(dir, { recursive: true, force: true }); });
+beforeAll(async () => {
+  dir = await mkdtemp(join(tmpdir(), "kb-e2e-"));
+});
+afterAll(async () => {
+  await rm(dir, { recursive: true, force: true });
+});
 
 describe("E2E 06 knowledge layer flow", () => {
   it("kb-docs FTS5 search returns inserted doc", async () => {
     const { openKbDocs } = await import("@orqenix/kb-docs");
     const handle = openKbDocs(join(dir, "docs.sqlite"));
     handle.insertDoc({
-      id: "1", path: "docs/a.md", title: "Hybrid Retrieval",
+      id: "1",
+      path: "docs/a.md",
+      title: "Hybrid Retrieval",
       content: "FTS5 plus vector embeddings combined via alpha weighting",
       updatedAt: Date.now(),
     });

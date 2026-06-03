@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { PluginRegistry } from "@orqenix/core/plugin";
+import { PluginRegistry } from "@orqenix/core";
 import { createKnowledgeWorkflowPlugin, noopDeps } from "../src/index.js";
 
 describe("knowledge-workflow plugin", () => {

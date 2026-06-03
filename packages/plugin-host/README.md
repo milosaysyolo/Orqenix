@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-host
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-host";
+import {} from /* exports */ "@orqenix/plugin-host";
 ```
 
 ## API

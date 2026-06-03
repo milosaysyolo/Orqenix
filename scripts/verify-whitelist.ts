@@ -29,7 +29,17 @@ import { parseArgs } from "node:util";
 import { parse as parseYaml } from "yaml";
 
 type Mode = "oss" | "pro";
-type Status = "ok" | "missing" | "private" | "wrong-scope" | "no-src" | "no-license" | "no-readme" | "no-changelog" | "invalid-json" | "no-package-json";
+type Status =
+  | "ok"
+  | "missing"
+  | "private"
+  | "wrong-scope"
+  | "no-src"
+  | "no-license"
+  | "no-readme"
+  | "no-changelog"
+  | "invalid-json"
+  | "no-package-json";
 
 interface PackageVerification {
   name: string;
@@ -86,7 +96,7 @@ function parseArguments() {
   return {
     json: values.json ?? false,
     strict: values.strict ?? false,
-    mode: (values.mode as Mode | undefined),
+    mode: values.mode as Mode | undefined,
   };
 }
 
@@ -103,9 +113,10 @@ async function detectMode(): Promise<Mode> {
 }
 
 async function loadWhitelist(mode: Mode): Promise<WhitelistFile> {
-  const path = mode === "pro"
-    ? ".orqenix-pro/publishable-whitelist.yaml"
-    : ".orqenix/publishable-whitelist.yaml";
+  const path =
+    mode === "pro"
+      ? ".orqenix-pro/publishable-whitelist.yaml"
+      : ".orqenix/publishable-whitelist.yaml";
   const content = await readFile(path, "utf-8");
   const parsed = parseYaml(content) as WhitelistFile;
   if (!parsed.packages || !Array.isArray(parsed.packages)) {
@@ -236,7 +247,13 @@ async function findOrphans(whitelist: string[], mode: Mode): Promise<string[]> {
 }
 
 function isBlocker(status: Status[]): boolean {
-  const blockerStatuses: Status[] = ["missing", "wrong-scope", "no-src", "invalid-json", "no-package-json"];
+  const blockerStatuses: Status[] = [
+    "missing",
+    "wrong-scope",
+    "no-src",
+    "invalid-json",
+    "no-package-json",
+  ];
   return status.some((s) => blockerStatuses.includes(s));
 }
 
@@ -260,9 +277,11 @@ function printTextReport(report: VerifyReport): void {
 
   console.log("Package Details:");
   for (const pkg of report.verifiedPackages) {
-    const statusIcon =
-      pkg.status.includes("ok") ? ":check:" :
-      isBlocker(pkg.status) ? ":x:" : ":warning:";
+    const statusIcon = pkg.status.includes("ok")
+      ? ":check:"
+      : isBlocker(pkg.status)
+        ? ":x:"
+        : ":warning:";
     const statusStr = pkg.status.filter((s) => s !== "ok").join(", ");
     console.log(`  ${statusIcon} ${pkg.name.padEnd(50)} ${statusStr}`);
   }
@@ -295,12 +314,13 @@ function printTextReport(report: VerifyReport): void {
 
 async function main(): Promise<void> {
   const args = parseArguments();
-  const mode = args.mode ?? await detectMode();
+  const mode = args.mode ?? (await detectMode());
 
   const whitelist = await loadWhitelist(mode);
-  const whitelistPath = mode === "pro"
-    ? ".orqenix-pro/publishable-whitelist.yaml"
-    : ".orqenix/publishable-whitelist.yaml";
+  const whitelistPath =
+    mode === "pro"
+      ? ".orqenix-pro/publishable-whitelist.yaml"
+      : ".orqenix/publishable-whitelist.yaml";
 
   const verifiedPackages: PackageVerification[] = [];
   for (const pkgName of whitelist.packages) {
@@ -308,9 +328,7 @@ async function main(): Promise<void> {
   }
 
   const orphans = await findOrphans(whitelist.packages, mode);
-  const missing = verifiedPackages
-    .filter((p) => !p.exists)
-    .map((p) => p.name);
+  const missing = verifiedPackages.filter((p) => !p.exists).map((p) => p.name);
 
   const ok = verifiedPackages.filter((p) => p.status.includes("ok")).length;
   const withIssues = verifiedPackages.length - ok;

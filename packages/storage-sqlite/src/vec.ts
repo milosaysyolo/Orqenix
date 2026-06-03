@@ -1,4 +1,4 @@
-import type { SqliteConnection } from './connection.js';
+import type { SqliteConnection } from "./connection.js";
 
 function toBlob(v: Float32Array): Buffer {
   return Buffer.from(v.buffer, v.byteOffset, v.byteLength);
@@ -10,12 +10,22 @@ export function createVecTable(conn: SqliteConnection, name: string, dim: number
   conn.exec(`CREATE VIRTUAL TABLE IF NOT EXISTS ${name} USING vec0(embedding float[${dim}])`);
 }
 
-export function insertVec(conn: SqliteConnection, table: string, rowid: number, embedding: Float32Array): void {
+export function insertVec(
+  conn: SqliteConnection,
+  table: string,
+  rowid: number,
+  embedding: Float32Array,
+): void {
   if (!Number.isInteger(rowid) || rowid < 1) throw new Error(`invalid rowid: ${rowid}`);
-  conn.prepare(`INSERT INTO ${table}(rowid, embedding) VALUES(?, ?)`).run(BigInt(rowid), toBlob(embedding));
+  conn
+    .prepare(`INSERT INTO ${table}(rowid, embedding) VALUES(?, ?)`)
+    .run(BigInt(rowid), toBlob(embedding));
 }
 
-export interface VecSearchHit { rowid: number; distance: number; }
+export interface VecSearchHit {
+  rowid: number;
+  distance: number;
+}
 
 export function searchVec(
   conn: SqliteConnection,
@@ -24,8 +34,10 @@ export function searchVec(
   k: number,
 ): VecSearchHit[] {
   if (!Number.isInteger(k) || k <= 0 || k > 1000) throw new Error(`invalid k: ${k}`);
-  const rows = conn.prepare<VecSearchHit>(
-    `SELECT rowid, distance FROM ${table} WHERE embedding MATCH ? ORDER BY distance LIMIT ?`,
-  ).all(toBlob(query), k) as VecSearchHit[];
+  const rows = conn
+    .prepare<VecSearchHit>(
+      `SELECT rowid, distance FROM ${table} WHERE embedding MATCH ? ORDER BY distance LIMIT ?`,
+    )
+    .all(toBlob(query), k) as VecSearchHit[];
   return rows;
 }

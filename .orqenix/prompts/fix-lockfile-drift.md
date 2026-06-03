@@ -1,9 +1,11 @@
 # Agent Task: Fix pnpm Lockfile Drift in Orqenix Monorepo
 
 ## Context
+
 You are a release-validator agent for the Orqenix monorepo (27 OSS + 7 Pro packages, 65 total workspace projects). The CI is failing with `ERR_PNPM_OUTDATED_LOCKFILE` because `pnpm-lock.yaml` is not in sync with the root `package.json`.
 
 ## Constraints (CRITICAL, do not violate)
+
 1. NEVER change CI to use `--no-frozen-lockfile`. Keep `--frozen-lockfile` in CI.
 2. NEVER bump versions of unrelated packages. Only the deps that are out of sync should appear in the lockfile diff.
 3. MUST preserve `.npmrc` settings: `ignore-scripts=true`, `auto-install-peers=true` (if set), and `pnpm.onlyBuiltDependencies` allowlist (`better-sqlite3`, `esbuild`, `@swc/core`).
@@ -11,12 +13,15 @@ You are a release-validator agent for the Orqenix monorepo (27 OSS + 7 Pro packa
 5. MUST NOT modify any package source files. Only `pnpm-lock.yaml` (and optionally root `package.json` if a version pin is missing) may be touched.
 
 ## Goal
+
 Regenerate `pnpm-lock.yaml` so it matches root `package.json`, verify integrity, and open a PR with a minimal, clean diff.
 
 ## Step-by-Step Procedure
 
 ### Step 1: Detect Drift
+
 Run:
+
 ```bash
 node scripts/release/check-lockfile-drift.mjs
 ```
@@ -101,11 +106,11 @@ Output a JSON report to stdout:
 
 ## Denied Actions
 
-* DO NOT run `pnpm install` without `--lockfile-only` until after Step 4 validates the lockfile.
-* DO NOT modify `.npmrc`.
-* DO NOT modify any workspace `package.json` files.
-* DO NOT bypass CI by adding `[skip ci]` or similar.
-* DO NOT delete and regenerate `pnpm-lock.yaml` from scratch (use `pnpm install --lockfile-only` which does incremental update).
+- DO NOT run `pnpm install` without `--lockfile-only` until after Step 4 validates the lockfile.
+- DO NOT modify `.npmrc`.
+- DO NOT modify any workspace `package.json` files.
+- DO NOT bypass CI by adding `[skip ci]` or similar.
+- DO NOT delete and regenerate `pnpm-lock.yaml` from scratch (use `pnpm install --lockfile-only` which does incremental update).
 
 ## Failure Handling
 

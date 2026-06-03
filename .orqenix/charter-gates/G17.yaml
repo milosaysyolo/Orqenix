@@ -1,15 +1,33 @@
-```yaml
 schemaVersion: 1
 id: G17
 title: Detach Roundtrip
 bsRef: docs/sdd/BS-028-detach.md
 dependsOn: [G1, G18, G29, G31]
 criteria:
-  - { id: G17.1, description: "detach unit tests pass",                                          severity: blocking }
-  - { id: G17.2, description: "planUnlink + execute revokes both directions of links",           severity: blocking }
-  - { id: G17.3, description: "invalid confirmation token rejected (state unchanged)",           severity: blocking }
-  - { id: G17.4, description: "dry run does not mutate state but records audit entry",           severity: blocking }
-  - { id: G17.5, description: "detach event chained into audit log + verifyChain green",         severity: blocking }
-  - { id: G17.6, description: "confirmation tokens differ across plans (salt randomness)",       severity: blocking }
+  - { id: G17.1, description: "detach unit tests pass", severity: blocking }
+  - {
+      id: G17.2,
+      description: "planUnlink + execute revokes both directions of links",
+      severity: blocking,
+    }
+  - {
+      id: G17.3,
+      description: "invalid confirmation token rejected (state unchanged)",
+      severity: blocking,
+    }
+  - {
+      id: G17.4,
+      description: "dry run does not mutate state but records audit entry",
+      severity: blocking,
+    }
+  - {
+      id: G17.5,
+      description: "detach event chained into audit log + verifyChain green",
+      severity: blocking,
+    }
+  - {
+      id: G17.6,
+      description: "confirmation tokens differ across plans (salt randomness)",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G17-*.json" }
-```

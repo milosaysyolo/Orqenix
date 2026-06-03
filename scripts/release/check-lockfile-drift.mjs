@@ -55,11 +55,7 @@ const pkgDeps = {
 
 const rootImporter = lock?.importers?.["."] ?? {};
 const lockSpecs = {};
-for (const section of [
-  "dependencies",
-  "devDependencies",
-  "optionalDependencies",
-]) {
+for (const section of ["dependencies", "devDependencies", "optionalDependencies"]) {
   const entries = rootImporter[section] ?? {};
   for (const [name, info] of Object.entries(entries)) {
     lockSpecs[name] = typeof info === "string" ? info : info?.specifier;

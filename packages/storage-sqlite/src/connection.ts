@@ -1,12 +1,16 @@
-import Database, { type Database as DB, type Statement } from 'better-sqlite3';
-import * as sqliteVec from 'sqlite-vec';
-import { SqliteOpenError, VecExtensionLoadError, type SqliteConnectionOptions } from './contracts.js';
+import Database, { type Database as DB, type Statement } from "better-sqlite3";
+import * as sqliteVec from "sqlite-vec";
+import {
+  SqliteOpenError,
+  VecExtensionLoadError,
+  type SqliteConnectionOptions,
+} from "./contracts.js";
 
 const DEFAULT_PRAGMAS: Record<string, string | number> = {
-  journal_mode: 'WAL',
-  foreign_keys: 'ON',
+  journal_mode: "WAL",
+  foreign_keys: "ON",
   busy_timeout: 5000,
-  synchronous: 'NORMAL',
+  synchronous: "NORMAL",
 };
 
 export class SqliteConnection {
@@ -32,7 +36,9 @@ export class SqliteConnection {
     }
   }
 
-  exec(sql: string): void { this.db.exec(sql); }
+  exec(sql: string): void {
+    this.db.exec(sql);
+  }
 
   prepare<T = unknown>(sql: string): Statement<unknown[], T> {
     return this.db.prepare(sql) as Statement<unknown[], T>;

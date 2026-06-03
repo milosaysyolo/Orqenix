@@ -13,7 +13,7 @@ pnpm add @orqenix/gate-runner-core
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/gate-runner-core";
+import {} from /* exports */ "@orqenix/gate-runner-core";
 ```
 
 ## API

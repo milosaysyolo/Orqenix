@@ -80,11 +80,14 @@ export abstract class GateRunner {
     const line = "─".repeat(80);
     console.log(line);
     console.log(`Gate ${report.gateId}: ${report.title}`);
-    console.log(`Status: ${report.status.toUpperCase()}  (${report.summary.passed}/${report.summary.total} passed, ${report.durationMs}ms)`);
+    console.log(
+      `Status: ${report.status.toUpperCase()}  (${report.summary.passed}/${report.summary.total} passed, ${report.durationMs}ms)`,
+    );
     console.log(line);
     for (const c of report.checks) {
       const id = c.id.padEnd(8);
-      const desc = c.description.length > 55 ? c.description.slice(0, 52) + "..." : c.description.padEnd(55);
+      const desc =
+        c.description.length > 55 ? c.description.slice(0, 52) + "..." : c.description.padEnd(55);
       const dur = `${c.durationMs}ms`.padStart(8);
       console.log(`${icon(c.status)} ${id} ${desc} ${dur}`);
       if (c.status === "fail" && c.error) {

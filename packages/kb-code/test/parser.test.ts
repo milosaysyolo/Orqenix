@@ -18,18 +18,12 @@ describe("kb-code TypeScript", () => {
   });
 
   it("extracts interface symbol", async () => {
-    const syms = await extractSymbols(
-      "interface Person { name: string }",
-      "typescript"
-    );
+    const syms = await extractSymbols("interface Person { name: string }", "typescript");
     expect(syms.find((s) => s.kind === "interface" && s.name === "Person")).toBeDefined();
   });
 
   it("extracts method inside class", async () => {
-    const syms = await extractSymbols(
-      "class X { greet() { return 1; } }",
-      "typescript"
-    );
+    const syms = await extractSymbols("class X { greet() { return 1; } }", "typescript");
     expect(syms.find((s) => s.kind === "method" && s.name === "greet")).toBeDefined();
   });
 

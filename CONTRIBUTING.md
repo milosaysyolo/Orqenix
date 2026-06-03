@@ -22,12 +22,14 @@ orqenix release propose --bump minor
 ```
 
 The `release-lead` agent will:
+
 1. Detect changed packages since last tag
 2. Generate changesets
 3. Open a "Version Packages" PR
 4. Wait for human approval
 
 After you merge the PR, CI will:
+
 1. Build all packages
 2. Run charter gates G1 to G35
 3. Publish to npm with SLSA provenance

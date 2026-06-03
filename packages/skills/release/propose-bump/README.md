@@ -15,17 +15,17 @@ const proposals = await run({
 
 ## Bump mapping
 
-| Change kind | Bump   |
-| ----------- | ------ |
-| breaking    | major  |
-| feat        | minor  |
-| fix         | patch  |
-| refactor    | patch  |
-| perf        | patch  |
-| test        | none   |
-| docs        | none   |
-| chore       | none   |
-| unknown     | none   |
+| Change kind | Bump  |
+| ----------- | ----- |
+| breaking    | major |
+| feat        | minor |
+| fix         | patch |
+| refactor    | patch |
+| perf        | patch |
+| test        | none  |
+| docs        | none  |
+| chore       | none  |
+| unknown     | none  |
 
 ## Fixed version groups
 

@@ -4,7 +4,19 @@
   "title": "Orqenix Pre-Publish Report",
   "description": "Output schema for pre-publish-check.ts orchestrator",
   "type": "object",
-  "required": ["timestamp", "mode", "totalChecks", "passed", "failed", "warned", "skipped", "durationMs", "blockingFailures", "results", "verdict"],
+  "required": [
+    "timestamp",
+    "mode",
+    "totalChecks",
+    "passed",
+    "failed",
+    "warned",
+    "skipped",
+    "durationMs",
+    "blockingFailures",
+    "results",
+    "verdict"
+  ],
   "properties": {
     "timestamp": { "type": "string", "format": "date-time" },
     "mode": { "type": "string", "enum": ["oss", "pro"] },

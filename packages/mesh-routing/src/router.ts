@@ -2,17 +2,23 @@
 // @bc CS-023 Router
 // @gate G34.2, G34.3, G35.1
 
-import type { ScopeLinkStore } from '@orqenix/scope-link';
-import type { HookBus } from '@orqenix/hooks';
-import { nowIso } from '@orqenix/hooks';
-import { type MetricsRegistry } from '@orqenix/telemetry';
-import { verifyChain, ProvenanceChainBrokenError } from '@orqenix/provenance';
+import type { ScopeLinkStore } from "@orqenix/scope-link";
+import type { HookBus } from "@orqenix/hooks";
+import { nowIso } from "@orqenix/hooks";
+import { type MetricsRegistry } from "@orqenix/telemetry";
+import { verifyChain, ProvenanceChainBrokenError } from "@orqenix/provenance";
 import {
-  MeshQuerySchema, MeshRoutingError,
-  type AutoLinkSuggestion, type MeshQuery, type MeshQueryHit, type MeshQueryResponse,
-  type MeshScopeFailure, type MeshScopeOutcome, type MeshScopeResult,
-} from './contracts.js';
-import type { MeshTransport } from './transport.js';
+  MeshQuerySchema,
+  MeshRoutingError,
+  type AutoLinkSuggestion,
+  type MeshQuery,
+  type MeshQueryHit,
+  type MeshQueryResponse,
+  type MeshScopeFailure,
+  type MeshScopeOutcome,
+  type MeshScopeResult,
+} from "./contracts.js";
+import type { MeshTransport } from "./transport.js";
 
 export interface MeshRouterOptions {
   localScopeId: string;
@@ -41,7 +47,7 @@ export class MeshRouter {
   }
 
   private resolveTargets(query: MeshQuery): Array<{ scopeId: string; tokenJti?: string }> {
-    const activeOutbound = this.linkStore.list({ status: 'active', direction: 'outbound' });
+    const activeOutbound = this.linkStore.list({ status: "active", direction: "outbound" });
     const map = new Map(activeOutbound.map((l) => [l.remoteScopeId, l.capabilityTokenJti]));
     if (query.targetScopeIds && query.targetScopeIds.length > 0) {
       const out: Array<{ scopeId: string; tokenJti?: string }> = [];
@@ -57,11 +63,13 @@ export class MeshRouter {
     if (!outcome.ok) return outcome;
     const validated: MeshQueryHit[] = [];
     for (const h of outcome.hits) {
-      try { verifyChain(h.provenance); validated.push(h); }
-      catch (e) {
+      try {
+        verifyChain(h.provenance);
+        validated.push(h);
+      } catch (e) {
         if (e instanceof ProvenanceChainBrokenError) {
           // drop the hit silently; record failure metric
-          this.metrics?.counter('orqenix.mesh.provenance_drops', { scope: outcome.scopeId }).inc();
+          this.metrics?.counter("orqenix.mesh.provenance_drops", { scope: outcome.scopeId }).inc();
           continue;
         }
         throw e;
@@ -75,42 +83,58 @@ export class MeshRouter {
     const totalStart = Date.now();
 
     if (this.bus) {
-      await this.bus.emit('preRecall', {
-        event: 'preRecall', scopeId: this.localScopeId, timestamp: this.now(),
-        query: query.text, k: query.k,
+      await this.bus.emit("preRecall", {
+        event: "preRecall",
+        scopeId: this.localScopeId,
+        timestamp: this.now(),
+        query: query.text,
+        k: query.k,
       });
     }
 
     const targets = this.resolveTargets(query);
     if (targets.length === 0) {
       const out: MeshQueryResponse = {
-        query, scopesQueried: 0, scopesSucceeded: 0,
-        hits: [], outcomes: [],
-        totalDurationMs: Date.now() - totalStart, quorumReached: false,
+        query,
+        scopesQueried: 0,
+        scopesSucceeded: 0,
+        hits: [],
+        outcomes: [],
+        totalDurationMs: Date.now() - totalStart,
+        quorumReached: false,
       };
       if (this.bus) {
-        await this.bus.emit('postRecall', {
-          event: 'postRecall', scopeId: this.localScopeId, timestamp: this.now(),
-          query: query.text, memoryIdsReturned: [], durationMs: out.totalDurationMs,
+        await this.bus.emit("postRecall", {
+          event: "postRecall",
+          scopeId: this.localScopeId,
+          timestamp: this.now(),
+          query: query.text,
+          memoryIdsReturned: [],
+          durationMs: out.totalDurationMs,
         });
       }
       return out;
     }
 
     const promises = targets.map((t) =>
-      this.transport.queryScope(t.scopeId, query, { tokenJti: t.tokenJti, timeoutMs: query.timeoutMs }),
+      this.transport.queryScope(t.scopeId, query, {
+        tokenJti: t.tokenJti,
+        timeoutMs: query.timeoutMs,
+      }),
     );
     const settled = await Promise.allSettled(promises);
     const outcomes: MeshScopeOutcome[] = [];
     for (let i = 0; i < settled.length; i++) {
       const t = targets[i]!;
       const s = settled[i]!;
-      if (s.status === 'fulfilled') {
+      if (s.status === "fulfilled") {
         outcomes.push(this.validateOutcome(s.value));
       } else {
         const failure: MeshScopeFailure = {
-          scopeId: t.scopeId, ok: false, reason: 'unknown',
-          message: (s.reason as Error)?.message ?? 'rejected',
+          scopeId: t.scopeId,
+          ok: false,
+          reason: "unknown",
+          message: (s.reason as Error)?.message ?? "rejected",
           durationMs: 0,
         };
         outcomes.push(failure);
@@ -129,39 +153,60 @@ export class MeshRouter {
 
     if (this.metrics) {
       const labels = { scope: this.localScopeId };
-      this.metrics.counter('orqenix.mesh.query_runs', labels).inc();
-      this.metrics.histogram('orqenix.mesh.query_duration_ms', labels).observe(totalDurationMs);
+      this.metrics.counter("orqenix.mesh.query_runs", labels).inc();
+      this.metrics.histogram("orqenix.mesh.query_duration_ms", labels).observe(totalDurationMs);
       for (const o of outcomes) {
         if (!o.ok) {
-          this.metrics.counter('orqenix.mesh.scope_failures', { scope: this.localScopeId, target: o.scopeId, reason: o.reason }).inc();
+          this.metrics
+            .counter("orqenix.mesh.scope_failures", {
+              scope: this.localScopeId,
+              target: o.scopeId,
+              reason: o.reason,
+            })
+            .inc();
         }
       }
     }
 
     if (this.bus) {
-      await this.bus.emit('postRecall', {
-        event: 'postRecall', scopeId: this.localScopeId, timestamp: this.now(),
-        query: query.text, memoryIdsReturned: [], durationMs: totalDurationMs,
+      await this.bus.emit("postRecall", {
+        event: "postRecall",
+        scopeId: this.localScopeId,
+        timestamp: this.now(),
+        query: query.text,
+        memoryIdsReturned: [],
+        durationMs: totalDurationMs,
       });
     }
 
     return {
-      query, scopesQueried: targets.length, scopesSucceeded,
-      hits: topK, outcomes, totalDurationMs, quorumReached,
+      query,
+      scopesQueried: targets.length,
+      scopesSucceeded,
+      hits: topK,
+      outcomes,
+      totalDurationMs,
+      quorumReached,
     };
   }
 
   suggestLinks(history: MeshQueryResponse[]): AutoLinkSuggestion[] {
     if (history.length === 0) return [];
 
-    const perScope = new Map<string, { runs: number; failures: number; scoreSum: number; hitCount: number }>();
+    const perScope = new Map<
+      string,
+      { runs: number; failures: number; scoreSum: number; hitCount: number }
+    >();
     for (const h of history) {
       for (const o of h.outcomes) {
         const cur = perScope.get(o.scopeId) ?? { runs: 0, failures: 0, scoreSum: 0, hitCount: 0 };
         cur.runs++;
         if (!o.ok) cur.failures++;
         else {
-          for (const hit of o.hits) { cur.scoreSum += hit.score; cur.hitCount++; }
+          for (const hit of o.hits) {
+            cur.scoreSum += hit.score;
+            cur.hitCount++;
+          }
         }
         perScope.set(o.scopeId, cur);
       }
@@ -173,7 +218,8 @@ export class MeshRouter {
       const failRatio = s.runs > 0 ? s.failures / s.runs : 0;
       if (s.runs >= 5 && failRatio >= 0.6) {
         suggestions.push({
-          scopeId: id, reason: 'frequent-failure',
+          scopeId: id,
+          reason: "frequent-failure",
           evidence: { sampleSize: s.runs, ratio: failRatio },
         });
       }
@@ -189,7 +235,8 @@ export class MeshRouter {
       // skip if already a frequent-failure
       if (failRatio >= 0.6) continue;
       suggestions.push({
-        scopeId: avgScores[i]!.id, reason: 'high-relevance',
+        scopeId: avgScores[i]!.id,
+        reason: "high-relevance",
         evidence: { sampleSize: s.hitCount, ratio: avgScores[i]!.avg },
       });
     }

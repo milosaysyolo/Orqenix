@@ -51,7 +51,7 @@ export type ValidationError =
   | { kind: "invalid-source"; name: string };
 
 export function validateManifest(
-  m: unknown
+  m: unknown,
 ): { ok: true } | { ok: false; errors: ValidationError[] } {
   const errors: ValidationError[] = [];
   if (typeof m !== "object" || m === null) {

@@ -84,23 +84,23 @@ flowchart LR
     Orch --> Mesh
     Mesh -.capability link.-> ScopeA
     Mesh -.capability link.-> ScopeB
-````
+```
 
-***
+---
 
 ## The Problem Space
 
-Before reading the rest of this README, it helps to share a mental model of *why* Orqenix is shaped the way it is. If you already know the pain, feel free to jump to the #quickstart.
+Before reading the rest of this README, it helps to share a mental model of _why_ Orqenix is shaped the way it is. If you already know the pain, feel free to jump to the #quickstart.
 
 ### Why current AI agents forget
 
-A large language model is a pure function. Given the same prompt, it returns roughly the same output. It has no memory of yesterday's debugging session, no awareness of a sibling project where you already solved the same problem, and no concept of *which* code conventions your team enforces this quarter. Every helpful behaviour you experience inside a chat session is the result of someone stuffing context into the prompt window.
+A large language model is a pure function. Given the same prompt, it returns roughly the same output. It has no memory of yesterday's debugging session, no awareness of a sibling project where you already solved the same problem, and no concept of _which_ code conventions your team enforces this quarter. Every helpful behaviour you experience inside a chat session is the result of someone stuffing context into the prompt window.
 
 This creates three concrete failure modes:
 
-* **Session amnesia.** When the context window fills, the oldest turns are evicted. Whatever lesson was learned in turn 3 is gone by turn 50.
-* **Project isolation.** Even if you persist state per project, each project is a silo. The agent helping you in `repo-A` cannot see the architectural decision you locked in `repo-B` last month.
-* **Tooling fragmentation.** Some IDEs persist chat. Some agents persist tool traces. Almost none persist *durable, structured* knowledge that survives a model upgrade, a tool change, or a teammate handoff.
+- **Session amnesia.** When the context window fills, the oldest turns are evicted. Whatever lesson was learned in turn 3 is gone by turn 50.
+- **Project isolation.** Even if you persist state per project, each project is a silo. The agent helping you in `repo-A` cannot see the architectural decision you locked in `repo-B` last month.
+- **Tooling fragmentation.** Some IDEs persist chat. Some agents persist tool traces. Almost none persist _durable, structured_ knowledge that survives a model upgrade, a tool change, or a teammate handoff.
 
 ```mermaid
 flowchart LR
@@ -121,10 +121,10 @@ flowchart LR
 
 The most common answer to "AI memory" today is to drop everything into a vector database and call it RAG. This works for chat-with-PDF demos. It breaks down for agent memory because:
 
-* **Noise dominates.** Without filtering, every chat turn, every tool call, and every error log becomes an embedding. Top-k retrieval drowns relevant signal in stale chatter.
-* **Causality is lost.** A vector index does not know that *Decision D was reverted because of Lesson L which was triggered by Bug B*. It only knows cosine similarity.
-* **No compression hierarchy.** Vector DBs treat all entries equally. A senior engineer's brain does not. It summarizes weekly, archives monthly, and forgets aggressively.
-* **No provenance.** A retrieved chunk has no signature, no origin, and no chain of custody. You cannot tell whether it came from a trusted teammate, an out-of-date doc, or a hallucinated answer that got written back.
+- **Noise dominates.** Without filtering, every chat turn, every tool call, and every error log becomes an embedding. Top-k retrieval drowns relevant signal in stale chatter.
+- **Causality is lost.** A vector index does not know that _Decision D was reverted because of Lesson L which was triggered by Bug B_. It only knows cosine similarity.
+- **No compression hierarchy.** Vector DBs treat all entries equally. A senior engineer's brain does not. It summarizes weekly, archives monthly, and forgets aggressively.
+- **No provenance.** A retrieved chunk has no signature, no origin, and no chain of custody. You cannot tell whether it came from a trusted teammate, an out-of-date doc, or a hallucinated answer that got written back.
 
 Orqenix uses vectors where they are appropriate (embedding-backed semantic search inside `@orqenix/storage-sqlite` via sqlite-vec) but treats them as one retrieval mode among many, behind a structured KB layer with provenance, hash-chains, and tiered compression.
 
@@ -132,11 +132,11 @@ Orqenix uses vectors where they are appropriate (embedding-backed semantic searc
 
 A natural temptation is to build a central memory server: one cloud endpoint, every agent talks to it, problem solved. Orqenix deliberately rejects that design.
 
-* **Privacy.** Your unreleased product roadmap, your client's source code, and your team's internal post-mortems do not belong on a third-party server by default.
-* **Ownership.** When your knowledge lives in a folder you can `git clone`, you own it. When it lives in a SaaS, you rent it.
-* **Latency.** Cross-scope queries that hit a local SQLite file return in single-digit milliseconds. A round-trip to a cloud server is one to two orders of magnitude slower.
-* **Offline-first.** Coding on a plane, in a tunnel, or on a corporate VPN with flaky egress should not break your agent.
-* **Git alignment.** Developers already version, branch, and review state with git. A scope that *is* a git folder slots into that workflow on day one.
+- **Privacy.** Your unreleased product roadmap, your client's source code, and your team's internal post-mortems do not belong on a third-party server by default.
+- **Ownership.** When your knowledge lives in a folder you can `git clone`, you own it. When it lives in a SaaS, you rent it.
+- **Latency.** Cross-scope queries that hit a local SQLite file return in single-digit milliseconds. A round-trip to a cloud server is one to two orders of magnitude slower.
+- **Offline-first.** Coding on a plane, in a tunnel, or on a corporate VPN with flaky egress should not break your agent.
+- **Git alignment.** Developers already version, branch, and review state with git. A scope that _is_ a git folder slots into that workflow on day one.
 
 ```mermaid
 flowchart TB
@@ -155,7 +155,7 @@ flowchart TB
 
 The result is a mesh in the original sense of the word: a set of peer scopes that link selectively, share with explicit permission, and remain useful in isolation.
 
-***
+---
 
 ## Why Orqenix?
 
@@ -163,20 +163,20 @@ Orqenix sits in a crowded landscape. Here is how it differentiates from the proj
 
 ### Comparison matrix
 
-| Project        | Local-first | Mesh routing | Memory tiers      | Polyglot storage | Capability auth  | Diff storage    | MCP native | Provenance   | Compression engine | License              | Primary target       | Maturity |
-| -------------- | ----------- | ------------ | ----------------- | ---------------- | ---------------- | --------------- | ---------- | ------------ | ------------------ | -------------------- | -------------------- | -------- |
-| **Orqenix**    | ✅           | ✅            | ✅ 4 tiers × 4 KBs | ✅ (Pro)          | ✅ Ed25519 + caps | ✅ BLAKE3 + zstd | ✅          | ✅ Full chain | ✅ 4 strategies     | Apache 2.0 + BSL 1.1 | Multi-project AI dev | Phase 5  |
-| Claude Cowork  | Partial     | ❌            | ⚠️ Single tier    | ❌                | ❌                | ❌               | ✅          | ⚠️ Partial   | ❌                  | Proprietary          | Solo dev             | Beta     |
-| Qoder Work     | Partial     | ❌            | ⚠️ Session-scoped | ❌                | ❌                | ❌               | ⚠️         | ❌            | ❌                  | Proprietary          | IDE users            | Early    |
-| Hermes Agent   | ❌           | ❌            | ✅ Custom          | ❌                | ❌                | ❌               | ⚠️         | ⚠️           | ⚠️                 | Source-available     | Agent runtime        | Alpha    |
-| OpenCode       | ✅           | ❌            | ⚠️ Project-local  | ❌                | ❌                | ❌               | ✅          | ❌            | ❌                  | MIT                  | CLI coding           | Active   |
-| CrewAI         | ❌           | ❌            | ⚠️ Plugin-based   | ❌                | ❌                | ❌               | ⚠️         | ❌            | ❌                  | MIT                  | Agent crews          | Mature   |
-| LangGraph      | ❌           | ❌            | ⚠️ Checkpointer   | ❌                | ❌                | ❌               | ⚠️         | ❌            | ❌                  | MIT                  | Graph workflows      | Mature   |
-| AG2 (AutoGen)  | ❌           | ❌            | ⚠️ Plugin-based   | ❌                | ❌                | ❌               | ⚠️         | ❌            | ❌                  | Apache 2.0           | Multi-agent chat     | Mature   |
-| Strands        | ❌           | ❌            | ⚠️ Built-in       | ❌                | ❌                | ❌               | ⚠️         | ❌            | ❌                  | Apache 2.0           | AWS agents           | Active   |
-| Microsoft APM  | ❌           | ❌            | ✅                 | ❌                | ❌                | ❌               | ⚠️         | ⚠️           | ❌                  | Proprietary          | Enterprise           | Preview  |
-| Mem0           | Partial     | ❌            | ✅ 2 tiers         | ❌                | ❌                | ❌               | ⚠️         | ❌            | ⚠️                 | Apache 2.0           | Memory layer         | Active   |
-| Letta (MemGPT) | Partial     | ❌            | ✅ Self-edit       | ❌                | ❌                | ❌               | ⚠️         | ❌            | ✅                  | Apache 2.0           | Research             | Active   |
+| Project        | Local-first | Mesh routing | Memory tiers       | Polyglot storage | Capability auth   | Diff storage     | MCP native | Provenance    | Compression engine | License              | Primary target       | Maturity |
+| -------------- | ----------- | ------------ | ------------------ | ---------------- | ----------------- | ---------------- | ---------- | ------------- | ------------------ | -------------------- | -------------------- | -------- |
+| **Orqenix**    | ✅          | ✅           | ✅ 4 tiers × 4 KBs | ✅ (Pro)         | ✅ Ed25519 + caps | ✅ BLAKE3 + zstd | ✅         | ✅ Full chain | ✅ 4 strategies    | Apache 2.0 + BSL 1.1 | Multi-project AI dev | Phase 5  |
+| Claude Cowork  | Partial     | ❌           | ⚠️ Single tier     | ❌               | ❌                | ❌               | ✅         | ⚠️ Partial    | ❌                 | Proprietary          | Solo dev             | Beta     |
+| Qoder Work     | Partial     | ❌           | ⚠️ Session-scoped  | ❌               | ❌                | ❌               | ⚠️         | ❌            | ❌                 | Proprietary          | IDE users            | Early    |
+| Hermes Agent   | ❌          | ❌           | ✅ Custom          | ❌               | ❌                | ❌               | ⚠️         | ⚠️            | ⚠️                 | Source-available     | Agent runtime        | Alpha    |
+| OpenCode       | ✅          | ❌           | ⚠️ Project-local   | ❌               | ❌                | ❌               | ✅         | ❌            | ❌                 | MIT                  | CLI coding           | Active   |
+| CrewAI         | ❌          | ❌           | ⚠️ Plugin-based    | ❌               | ❌                | ❌               | ⚠️         | ❌            | ❌                 | MIT                  | Agent crews          | Mature   |
+| LangGraph      | ❌          | ❌           | ⚠️ Checkpointer    | ❌               | ❌                | ❌               | ⚠️         | ❌            | ❌                 | MIT                  | Graph workflows      | Mature   |
+| AG2 (AutoGen)  | ❌          | ❌           | ⚠️ Plugin-based    | ❌               | ❌                | ❌               | ⚠️         | ❌            | ❌                 | Apache 2.0           | Multi-agent chat     | Mature   |
+| Strands        | ❌          | ❌           | ⚠️ Built-in        | ❌               | ❌                | ❌               | ⚠️         | ❌            | ❌                 | Apache 2.0           | AWS agents           | Active   |
+| Microsoft APM  | ❌          | ❌           | ✅                 | ❌               | ❌                | ❌               | ⚠️         | ⚠️            | ❌                 | Proprietary          | Enterprise           | Preview  |
+| Mem0           | Partial     | ❌           | ✅ 2 tiers         | ❌               | ❌                | ❌               | ⚠️         | ❌            | ⚠️                 | Apache 2.0           | Memory layer         | Active   |
+| Letta (MemGPT) | Partial     | ❌           | ✅ Self-edit       | ❌               | ❌                | ❌               | ⚠️         | ❌            | ✅                 | Apache 2.0           | Research             | Active   |
 
 Legend: ✅ first-class, ⚠️ partial or via plugin, ❌ absent.
 
@@ -196,13 +196,13 @@ Legend: ✅ first-class, ⚠️ partial or via plugin, ❌ absent.
 
 ### Non-goals (anti-patterns we reject)
 
-* **Orqenix is not an agent framework.** It does not plan, it does not call tools, it does not orchestrate LLMs. Use LangGraph, CrewAI, AG2, or your own runtime for that. Orqenix is the memory and knowledge layer those frameworks call into.
-* **Orqenix is not a vector database.** It uses vectors where appropriate (sqlite-vec) but treats them as a retrieval mode behind a structured KB, not as the primary storage abstraction.
-* **Orqenix is not a SaaS-first product.** The OSS tier is fully featured for local mesh. The Cloud tier (Phase 7) adds multi-machine convenience, not a fundamental capability that was paywalled.
-* **Orqenix is not a global P2P network.** There is no DHT, no node discovery, no public address book. Mesh is point-to-point and capability-gated by design.
-* **Orqenix is not a replacement for git.** It complements git. Your `.orqenix/` folder is committed (or `.gitignore`d) alongside your code, by your choice.
+- **Orqenix is not an agent framework.** It does not plan, it does not call tools, it does not orchestrate LLMs. Use LangGraph, CrewAI, AG2, or your own runtime for that. Orqenix is the memory and knowledge layer those frameworks call into.
+- **Orqenix is not a vector database.** It uses vectors where appropriate (sqlite-vec) but treats them as a retrieval mode behind a structured KB, not as the primary storage abstraction.
+- **Orqenix is not a SaaS-first product.** The OSS tier is fully featured for local mesh. The Cloud tier (Phase 7) adds multi-machine convenience, not a fundamental capability that was paywalled.
+- **Orqenix is not a global P2P network.** There is no DHT, no node discovery, no public address book. Mesh is point-to-point and capability-gated by design.
+- **Orqenix is not a replacement for git.** It complements git. Your `.orqenix/` folder is committed (or `.gitignore`d) alongside your code, by your choice.
 
-***
+---
 
 ## Quickstart
 
@@ -314,7 +314,7 @@ After restart, your agent gains tools such as `orqenix.recall`, `orqenix.decide`
 
 Troubleshooting note: if tools do not appear, check the MCP server log at `~/.orqenix/logs/mcp.log` and confirm Node 20 or newer is on PATH.
 
-***
+---
 
 ## Core Concepts
 
@@ -324,8 +324,8 @@ This section is the conceptual reference for everything that follows. Each sub-s
 
 A **scope** is the unit of ownership and addressing in Orqenix. Concretely, a scope is:
 
-* a git repository, plus
-* a `.orqenix/` folder at the repo root that contains the local SQLite database, the Ed25519 identity, capability tokens, and mesh configuration.
+- a git repository, plus
+- a `.orqenix/` folder at the repo root that contains the local SQLite database, the Ed25519 identity, capability tokens, and mesh configuration.
 
 Every scope has a deterministic `scope_id` derived from its Ed25519 public key:
 
@@ -354,11 +354,11 @@ storage:
 
 Identity lifecycle:
 
-* **Create** on `orqenix init`. The private key is stored in `.orqenix/identity/scope.key` with `0600` permissions.
-* **Rotate** with `orqenix security rotate-identity`. Old key is archived; capability tokens issued under the old key are revoked and reissued.
-* **Revoke** with `orqenix security revoke --scope <id>`. Peer scopes that hold a link to this scope receive a revocation marker on next sync.
+- **Create** on `orqenix init`. The private key is stored in `.orqenix/identity/scope.key` with `0600` permissions.
+- **Rotate** with `orqenix security rotate-identity`. Old key is archived; capability tokens issued under the old key are revoked and reissued.
+- **Revoke** with `orqenix security revoke --scope <id>`. Peer scopes that hold a link to this scope receive a revocation marker on next sync.
 
-Compared to a git remote, a scope is closer to a *git repo plus a signed identity card*. The signed identity is what makes capability-based mesh linking possible.
+Compared to a git remote, a scope is closer to a _git repo plus a signed identity card_. The signed identity is what makes capability-based mesh linking possible.
 
 ### 6.2 The Memory Matrix
 
@@ -401,10 +401,10 @@ Retention semantics:
 
 When to use which:
 
-* **Recall a recent debugging session** → query Working + Episodic ChatKB.
-* **Look up an architectural decision from last quarter** → query Semantic DecisionKB.
-* **Pull a hard-won lesson from a teammate's scope** → query Global LessonKB through the mesh.
-* **Ask "what does this function do?" in a fresh repo** → query Semantic CodeKB, then fall back to Global if the link is set up.
+- **Recall a recent debugging session** → query Working + Episodic ChatKB.
+- **Look up an architectural decision from last quarter** → query Semantic DecisionKB.
+- **Pull a hard-won lesson from a teammate's scope** → query Global LessonKB through the mesh.
+- **Ask "what does this function do?" in a fresh repo** → query Semantic CodeKB, then fall back to Global if the link is set up.
 
 ### 6.3 Knowledge Bases
 
@@ -460,10 +460,10 @@ signature: Ed25519(...)
 
 Properties:
 
-* **Directional.** Scope A granting B does not imply B grants A.
-* **Narrowable.** Tags, KB kinds, recursion depth, and time bounds can all be restricted.
-* **Revocable.** Issuer can revoke; subject receives a revocation marker on next sync.
-* **Delegable (Pro).** Subject can re-issue narrower tokens to a third scope, up to a max delegation depth of 8.
+- **Directional.** Scope A granting B does not imply B grants A.
+- **Narrowable.** Tags, KB kinds, recursion depth, and time bounds can all be restricted.
+- **Revocable.** Issuer can revoke; subject receives a revocation marker on next sync.
+- **Delegable (Pro).** Subject can re-issue narrower tokens to a third scope, up to a max delegation depth of 8.
 
 Cross-scope routing in 3 scopes:
 
@@ -498,14 +498,14 @@ Four strategies, picked per-KB and per-tier:
 
 Trigger conditions:
 
-* Capacity threshold reached (default 50% of configured tier budget).
-* Token count threshold reached (default 100K tokens of raw content).
-* Manual `orqenix distill --tier episodic`.
+- Capacity threshold reached (default 50% of configured tier budget).
+- Token count threshold reached (default 100K tokens of raw content).
+- Manual `orqenix distill --tier episodic`.
 
 Resource caps:
 
-* Background distillation pinned to 20% CPU by default.
-* Overflow tolerance up to 105% before write rejection, giving the distiller a runway.
+- Background distillation pinned to 20% CPU by default.
+- Overflow tolerance up to 105% before write rejection, giving the distiller a runway.
 
 The result is that recall always queries a compact, high-signal store, while raw content remains accessible via the diff log for audit.
 
@@ -513,11 +513,11 @@ The result is that recall always queries a compact, high-signal store, while raw
 
 Storage is **diff-only** and **content-addressed**.
 
-* A document is stored as a base snapshot plus a chain of deltas.
-* Deltas are computed via Myers diff (`fast-myers-diff`) and encoded with a custom binary opcode format: `EQ`, `ADD`, `DEL`, `END`, each prefixed by a uvarint count.
-* Deltas are compressed with zstd level 19.
-* Base snapshots are inserted automatically every 20 deltas or 64KB of cumulative delta size, whichever comes first (configurable).
-* Every content blob is addressed by its 64-hex BLAKE3 hash. Reconstruction verifies the final hash against the expected target.
+- A document is stored as a base snapshot plus a chain of deltas.
+- Deltas are computed via Myers diff (`fast-myers-diff`) and encoded with a custom binary opcode format: `EQ`, `ADD`, `DEL`, `END`, each prefixed by a uvarint count.
+- Deltas are compressed with zstd level 19.
+- Base snapshots are inserted automatically every 20 deltas or 64KB of cumulative delta size, whichever comes first (configurable).
+- Every content blob is addressed by its 64-hex BLAKE3 hash. Reconstruction verifies the final hash against the expected target.
 
 ```mermaid
 flowchart LR
@@ -530,16 +530,16 @@ flowchart LR
     V4 -.snapshot trigger.-> S2["v4 (new base)"]
 ```
 
-Result: storage cost scales with *change*, not with *history length*. A document edited 1000 times can occupy a fraction of a naive append-only log.
+Result: storage cost scales with _change_, not with _history length_. A document edited 1000 times can occupy a fraction of a naive append-only log.
 
 ### 6.7 Migrations and Versioning
 
 Migrations are first-class. Every schema change ships as a migration with:
 
-* A globally unique numeric ID (OSS uses 1 to 99, Pro 100 to 199, Cloud 200 to 299).
-* A BLAKE3 checksum of its SQL body.
-* Up and down direction.
-* A registration entry in `_orqenix_migrations`.
+- A globally unique numeric ID (OSS uses 1 to 99, Pro 100 to 199, Cloud 200 to 299).
+- A BLAKE3 checksum of its SQL body.
+- Up and down direction.
+- A registration entry in `_orqenix_migrations`.
 
 Drift detection runs on every open:
 
@@ -553,7 +553,7 @@ SqliteMigrationError: checksum drift
 
 Phase 4 to Phase 5 migration ships in `@orqenix/migrations` and `@orqenix-pro/pro-migration`, with explicit rollback support and a dry-run mode.
 
-***
+---
 
 ## Architecture
 
@@ -677,7 +677,7 @@ flowchart TB
 
 **Performance targets.** Cold-start CLI <150ms, MCP tool dispatch <20ms overhead.
 
-***
+---
 
 ## Features Matrix
 
@@ -688,60 +688,60 @@ The guiding principle is plain: **we never paywall basic mesh, scope identity, o
 | Capability                                        | OSS (Apache 2.0) | Pro (BSL 1.1) | Cloud (commercial, Phase 7) |
 | ------------------------------------------------- | :--------------: | :-----------: | :-------------------------: |
 | **Storage layer**                                 |                  |               |                             |
-| SQLite default backend                            |         ✅        |       ✅       |              ✅              |
-| Diff-only content-addressed storage               |         ✅        |       ✅       |              ✅              |
-| Audit log (tamper-evident)                        |         ✅        |       ✅       |              ✅              |
-| LMDB backend                                      |         ❌        |       ✅       |              ✅              |
-| Kuzu (graph) backend                              |         ❌        |       ✅       |              ✅              |
-| LanceDB (columnar vector) backend                 |         ❌        |       ✅       |              ✅              |
+| SQLite default backend                            |        ✅        |      ✅       |             ✅              |
+| Diff-only content-addressed storage               |        ✅        |      ✅       |             ✅              |
+| Audit log (tamper-evident)                        |        ✅        |      ✅       |             ✅              |
+| LMDB backend                                      |        ❌        |      ✅       |             ✅              |
+| Kuzu (graph) backend                              |        ❌        |      ✅       |             ✅              |
+| LanceDB (columnar vector) backend                 |        ❌        |      ✅       |             ✅              |
 | **Knowledge bases**                               |                  |               |                             |
-| ChatKB, CodeKB, DecisionKB, LessonKB              |         ✅        |       ✅       |              ✅              |
-| Token store (BYOK key management)                 |         ❌        |       ✅       |              ✅              |
+| ChatKB, CodeKB, DecisionKB, LessonKB              |        ✅        |      ✅       |             ✅              |
+| Token store (BYOK key management)                 |        ❌        |      ✅       |             ✅              |
 | **Memory**                                        |                  |               |                             |
-| 4-tier × 4-KB memory matrix                       |         ✅        |       ✅       |              ✅              |
-| Truncate, Summarize, Hierarchical distill         |         ✅        |       ✅       |              ✅              |
-| Local LLM rewriter (Qwen 2.5 7B default)          |         ✅        |       ✅       |              ✅              |
-| Pro LLM distiller (BYOK adaptive routing)         |         ❌        |       ✅       |              ✅              |
-| 5 injection strategies                            |         ✅        |       ✅       |              ✅              |
+| 4-tier × 4-KB memory matrix                       |        ✅        |      ✅       |             ✅              |
+| Truncate, Summarize, Hierarchical distill         |        ✅        |      ✅       |             ✅              |
+| Local LLM rewriter (Qwen 2.5 7B default)          |        ✅        |      ✅       |             ✅              |
+| Pro LLM distiller (BYOK adaptive routing)         |        ❌        |      ✅       |             ✅              |
+| 5 injection strategies                            |        ✅        |      ✅       |             ✅              |
 | **Mesh and identity**                             |                  |               |                             |
-| Ed25519 scope identity                            |         ✅        |       ✅       |              ✅              |
-| Capability tokens (signed, narrowable, revocable) |         ✅        |       ✅       |              ✅              |
-| Directional mesh links                            |         ✅        |       ✅       |              ✅              |
-| Cross-scope query routing                         |         ✅        |       ✅       |              ✅              |
-| Provenance tagging on every result                |         ✅        |       ✅       |              ✅              |
-| Multi-hop delegation chains (depth 1 to 8)        |         ❌        |       ✅       |              ✅              |
-| Blast-radius quotas (5 quota kinds, STRICT)       |         ❌        |       ✅       |              ✅              |
-| Mesh detach with audit (CR v7.1 two-step)         |         ✅        |       ✅       |              ✅              |
+| Ed25519 scope identity                            |        ✅        |      ✅       |             ✅              |
+| Capability tokens (signed, narrowable, revocable) |        ✅        |      ✅       |             ✅              |
+| Directional mesh links                            |        ✅        |      ✅       |             ✅              |
+| Cross-scope query routing                         |        ✅        |      ✅       |             ✅              |
+| Provenance tagging on every result                |        ✅        |      ✅       |             ✅              |
+| Multi-hop delegation chains (depth 1 to 8)        |        ❌        |      ✅       |             ✅              |
+| Blast-radius quotas (5 quota kinds, STRICT)       |        ❌        |      ✅       |             ✅              |
+| Mesh detach with audit (CR v7.1 two-step)         |        ✅        |      ✅       |             ✅              |
 | **Orchestration**                                 |                  |               |                             |
-| Distiller scheduling                              |         ✅        |       ✅       |              ✅              |
-| Prompt rewriter (local default)                   |         ✅        |       ✅       |              ✅              |
-| Prompt rewriter (BYOK adaptive)                   |         ❌        |       ✅       |              ✅              |
-| Light reindex (3-tier)                            |         ✅        |       ✅       |              ✅              |
-| Hook system (7 events)                            |         ✅        |       ✅       |              ✅              |
+| Distiller scheduling                              |        ✅        |      ✅       |             ✅              |
+| Prompt rewriter (local default)                   |        ✅        |      ✅       |             ✅              |
+| Prompt rewriter (BYOK adaptive)                   |        ❌        |      ✅       |             ✅              |
+| Light reindex (3-tier)                            |        ✅        |      ✅       |             ✅              |
+| Hook system (7 events)                            |        ✅        |      ✅       |             ✅              |
 | **Interface**                                     |                  |               |                             |
-| CLI with full command tree                        |         ✅        |       ✅       |              ✅              |
-| MCP server                                        |         ✅        |       ✅       |              ✅              |
-| TypeScript SDK                                    |         ✅        |       ✅       |              ✅              |
-| Pro CLI subcommands (Phase 6)                     |         ❌        |       ✅       |              ✅              |
+| CLI with full command tree                        |        ✅        |      ✅       |             ✅              |
+| MCP server                                        |        ✅        |      ✅       |             ✅              |
+| TypeScript SDK                                    |        ✅        |      ✅       |             ✅              |
+| Pro CLI subcommands (Phase 6)                     |        ❌        |      ✅       |             ✅              |
 | **Cloud-only (Phase 7)**                          |                  |               |                             |
-| Multi-machine mesh transport                      |         ❌        |       ❌       |              ✅              |
-| Web UI inspector                                  |         ❌        |       ❌       |              ✅              |
-| Hosted SaaS option                                |         ❌        |       ❌       |              ✅              |
+| Multi-machine mesh transport                      |        ❌        |      ❌       |             ✅              |
+| Web UI inspector                                  |        ❌        |      ❌       |             ✅              |
+| Hosted SaaS option                                |        ❌        |      ❌       |             ✅              |
 | **Migrations**                                    |                  |               |                             |
-| Migration tooling and rollback                    |         ✅        |       ✅       |              ✅              |
-| Polyglot backend conformance suite                |         ❌        |       ✅       |              ✅              |
+| Migration tooling and rollback                    |        ✅        |      ✅       |             ✅              |
+| Polyglot backend conformance suite                |        ❌        |      ✅       |             ✅              |
 
 ### License summary
 
 | Tier                                | License    | Source available? | Convert to Apache 2.0?         | Commercial competition restricted? |
 | ----------------------------------- | ---------- | :---------------: | ------------------------------ | :--------------------------------: |
-| OSS (`@orqenix/*`)                  | Apache 2.0 |         ✅         | n/a (already permissive)       |                  ❌                 |
-| Pro (`@orqenix-pro/*`)              | BSL 1.1    |         ✅         | Yes, after 4 years per release |          ✅ during BSL term         |
-| Cloud (`@orqenix-cloud/*`, Phase 7) | Commercial |        TBD        | TBD                            |                  ✅                 |
+| OSS (`@orqenix/*`)                  | Apache 2.0 |        ✅         | n/a (already permissive)       |                 ❌                 |
+| Pro (`@orqenix-pro/*`)              | BSL 1.1    |        ✅         | Yes, after 4 years per release |         ✅ during BSL term         |
+| Cloud (`@orqenix-cloud/*`, Phase 7) | Commercial |        TBD        | TBD                            |                 ✅                 |
 
 Pro source is public at [milosaysyolo/Orqenix-Pro](https://github.com/milosaysyolo/Orqenix-Pro). See #license for the full terms summary.
 
-***
+---
 
 ## CLI Reference
 
@@ -854,7 +854,7 @@ The two-step detach implements the CR v7.1 safety guarantee: no link is removed 
 
 Full man-page-style reference lives in docs/cli-reference.md.
 
-***
+---
 
 ## Programmatic API
 
@@ -903,7 +903,7 @@ for (const r of results) {
 ```typescript
 const report = await client.distill.run({
   tier: "episodic",
-  strategy: "hierarchical",   // truncate | summarize | hierarchical | llm
+  strategy: "hierarchical", // truncate | summarize | hierarchical | llm
   budget: { cpuPercent: 20, tokens: 100_000 },
 });
 console.log(report.compressedRatio, report.entriesPromoted);
@@ -954,13 +954,13 @@ Register Orqenix as an MCP server in any compatible host (Claude Desktop, Cline,
 
 Tools exposed by the MCP server:
 
-* `orqenix.recall` — semantic + structured search with provenance
-* `orqenix.decide` — record an ADR
-* `orqenix.lesson` — record a lesson
-* `orqenix.distill` — request a distillation pass
-* `orqenix.mesh.list` — list linked scopes
-* `orqenix.mesh.route` — explain a recall's routing path
-* `orqenix.audit.tail` — tail recent audit entries
+- `orqenix.recall` — semantic + structured search with provenance
+- `orqenix.decide` — record an ADR
+- `orqenix.lesson` — record a lesson
+- `orqenix.distill` — request a distillation pass
+- `orqenix.mesh.list` — list linked scopes
+- `orqenix.mesh.route` — explain a recall's routing path
+- `orqenix.audit.tail` — tail recent audit entries
 
 Permission scoping is governed by the local capability table. The MCP layer never bypasses it; if a tool returns "capability denied," issue or narrow the appropriate token via the CLI.
 
@@ -968,7 +968,7 @@ Permission scoping is governed by the local capability table. The MCP layer neve
 
 Phase 6 adds an optional local REST surface for non-Node integrations. Phase 7 Cloud will add a gRPC transport for multi-machine mesh. Today, the SDK and MCP are the supported integration paths.
 
-***
+---
 
 ## Performance and Benchmarks
 
@@ -988,31 +988,31 @@ Orqenix ships with explicit performance targets and a reproducible benchmark sui
 
 ### Storage efficiency
 
-* **Diff-only ratio.** Typical document edited 100 times stores at 8 to 15% of the naive append-only size.
-* **zstd-19 compression ratio.** 3.2x to 5.7x on typical Myers-diff payloads.
-* **RTK noise reduction.** 89% reduction in irrelevant retrieval candidates compared to flat vector search baselines.
+- **Diff-only ratio.** Typical document edited 100 times stores at 8 to 15% of the naive append-only size.
+- **zstd-19 compression ratio.** 3.2x to 5.7x on typical Myers-diff payloads.
+- **RTK noise reduction.** 89% reduction in irrelevant retrieval candidates compared to flat vector search baselines.
 
 ### Test coverage
 
-* **400+ tests** across unit, integration, and end-to-end suites.
-* **\~242 charter gate checks** spanning 35 OSS gates plus 4 Pro gates.
-* **Coverage target ≥85%** on core packages; current 87% average.
-* **CI matrix** (Phase 6): macOS arm64, Linux x64, Linux arm64, Windows x64.
+- **400+ tests** across unit, integration, and end-to-end suites.
+- **\~242 charter gate checks** spanning 35 OSS gates plus 4 Pro gates.
+- **Coverage target ≥85%** on core packages; current 87% average.
+- **CI matrix** (Phase 6): macOS arm64, Linux x64, Linux arm64, Windows x64.
 
 ### Codebase metrics (Phase 5)
 
-* 34 packages (27 OSS + 7 Pro)
-* \~32,330 LOC of TypeScript
-* 35 charter gates passing
-* \~242 gate checks green
+- 34 packages (27 OSS + 7 Pro)
+- \~32,330 LOC of TypeScript
+- 35 charter gates passing
+- \~242 gate checks green
 
 ### Reference hardware
 
 Benchmarks above were collected on:
 
-* Apple M2 Mac (8c CPU, 16 GB RAM, macOS 14)
-* Intel i7-12700 (12c, 32 GB RAM, Ubuntu 24.04)
-* AMD Ryzen 7950X (16c, 64 GB RAM, Ubuntu 24.04)
+- Apple M2 Mac (8c CPU, 16 GB RAM, macOS 14)
+- Intel i7-12700 (12c, 32 GB RAM, Ubuntu 24.04)
+- AMD Ryzen 7950X (16c, 64 GB RAM, Ubuntu 24.04)
 
 Reproduce with:
 
@@ -1022,7 +1022,7 @@ npm run bench:phase-5
 
 See docs/operator-guide/benchmarks.md for full methodology.
 
-***
+---
 
 ## Package Catalog
 
@@ -1096,52 +1096,52 @@ This runs all 35 OSS gates plus the 4 Pro gates (if the Pro repo is also checked
 
 ### OSS charter gates (G1 through G35)
 
-| ID | Name | Layer | Sample acceptance criteria |
-|---|---|---|---|
-| G1 | Foundation Setup | L1 | All 27 OSS packages build, lint, and pass `tsc --noEmit` on Node 20 and 22 |
-| G2 | Diff-Only Storage | L1 | Round-trip 1K random documents through diff store; verify final BLAKE3 matches |
-| G3 | KB Schema Integrity | L2 | STRICT tables enforce types; FK cascade deletes verified; idempotent migrations |
-| G4 | Chat KB Operations | L2 | Hash chain tamper detection; cap accept/reject; vector search recall@10 ≥0.9 |
-| G5 | Code KB Operations | L2 | Symbol indexing, cross-reference graph, embedding search |
-| G6 | Distiller Behavior | L3 | All 4 strategies; trigger conditions honored; CPU cap enforced |
-| G7 | Decision KB Operations | L2 | ADR lifecycle (proposed → accepted → superseded); supersession DAG correct |
-| G8 | Lesson KB Operations | L2 | Lesson schema validation; promotion to Global tier; provenance preserved |
-| G9 | Injection Strategies | L3 | All 5 strategies produce stable outputs for stable inputs |
-| G10 | Scope Identity | L4 | Ed25519 keypair generation, BLAKE3 scope_id derivation, rotation flow |
-| G11 | Capability Tokens | L4 | Sign/verify; narrowing applied; revocation propagated |
-| G12 | Mesh Routing | L4 | 1-hop and 2-hop routing with timeout enforcement and provenance assembly |
-| G13 | Light Reindex | L5 | 3-tier reindex; reindex-before-compress ordering verified |
-| G14 | Rewriter Adaptation | L5 | Local rewriter outputs valid; BYOK adapter path callable (mocked) |
-| G15 | Hook Events | L5 | All 7 events emitted with correct payloads; subscriber error isolation |
-| G16 | CLI Surface | L6 | Every documented command parses, executes, and exits with documented code |
-| G17 | MCP Compliance | L6 | MCP protocol handshake; tool schemas validate; permission enforcement |
-| G18 | KB Conformance | L2 | Cross-KB invariants (provenance, cascade, capability gating) |
-| G19 | Audit Log | L1 | Tamper-evident chain; verifyChain detects mutation; append performance |
-| G20 | Migration Tooling | L1 | Up/down/verify; checksum drift detection; dry-run mode |
-| G21 | Memory Tier Eviction | L3 | Eviction policies honor time and capacity bounds |
-| G22 | Capability Narrowing | L4 | Tag, KB, depth, time narrowing all enforced on routed queries |
-| G23 | Provenance Chain | L4 | Multi-hop provenance preserved end-to-end |
-| G24 | Detach Safety (CR v7.1) | L4 | Two-step detach; freeze before remove; audit entries on both phases |
-| G25 | Storage Backend Adapter | L1 | Adapter contract test suite passes for SQLite (Pro: LMDB/Kuzu/LanceDB) |
-| G26 | Error Catalog | shared | Every thrown error maps to a structured code in `@orqenix/errors` |
-| G27 | Logging Discipline | shared | No `console.*` in core packages; all logs go through `@orqenix/logger` |
-| G28 | Config Validation | shared | Zod schemas reject malformed config with actionable messages |
-| G29 | Concurrency Safety | L1, L2 | WAL + busy_timeout verified under concurrent write load |
-| G30 | Backpressure | L3 | Overflow at 105% triggers rejection with structured error |
-| G31 | Determinism | L1, L2 | Same inputs produce byte-identical diff outputs across runs |
-| G32 | Idempotency | L1, L2 | Re-running migrations or distill batches is a no-op |
-| G33 | Resource Caps | L3 | CPU 20% cap on background distiller; memory bounds on rewriter |
-| G34 | Cross-Package Boundary | all | No circular deps; no package imports an internal path of another |
-| G35 | SDK Stability | L6 | Public SDK surface matches `@orqenix/sdk` CS doc; semver guarded |
+| ID  | Name                    | Layer  | Sample acceptance criteria                                                      |
+| --- | ----------------------- | ------ | ------------------------------------------------------------------------------- |
+| G1  | Foundation Setup        | L1     | All 27 OSS packages build, lint, and pass `tsc --noEmit` on Node 20 and 22      |
+| G2  | Diff-Only Storage       | L1     | Round-trip 1K random documents through diff store; verify final BLAKE3 matches  |
+| G3  | KB Schema Integrity     | L2     | STRICT tables enforce types; FK cascade deletes verified; idempotent migrations |
+| G4  | Chat KB Operations      | L2     | Hash chain tamper detection; cap accept/reject; vector search recall@10 ≥0.9    |
+| G5  | Code KB Operations      | L2     | Symbol indexing, cross-reference graph, embedding search                        |
+| G6  | Distiller Behavior      | L3     | All 4 strategies; trigger conditions honored; CPU cap enforced                  |
+| G7  | Decision KB Operations  | L2     | ADR lifecycle (proposed → accepted → superseded); supersession DAG correct      |
+| G8  | Lesson KB Operations    | L2     | Lesson schema validation; promotion to Global tier; provenance preserved        |
+| G9  | Injection Strategies    | L3     | All 5 strategies produce stable outputs for stable inputs                       |
+| G10 | Scope Identity          | L4     | Ed25519 keypair generation, BLAKE3 scope_id derivation, rotation flow           |
+| G11 | Capability Tokens       | L4     | Sign/verify; narrowing applied; revocation propagated                           |
+| G12 | Mesh Routing            | L4     | 1-hop and 2-hop routing with timeout enforcement and provenance assembly        |
+| G13 | Light Reindex           | L5     | 3-tier reindex; reindex-before-compress ordering verified                       |
+| G14 | Rewriter Adaptation     | L5     | Local rewriter outputs valid; BYOK adapter path callable (mocked)               |
+| G15 | Hook Events             | L5     | All 7 events emitted with correct payloads; subscriber error isolation          |
+| G16 | CLI Surface             | L6     | Every documented command parses, executes, and exits with documented code       |
+| G17 | MCP Compliance          | L6     | MCP protocol handshake; tool schemas validate; permission enforcement           |
+| G18 | KB Conformance          | L2     | Cross-KB invariants (provenance, cascade, capability gating)                    |
+| G19 | Audit Log               | L1     | Tamper-evident chain; verifyChain detects mutation; append performance          |
+| G20 | Migration Tooling       | L1     | Up/down/verify; checksum drift detection; dry-run mode                          |
+| G21 | Memory Tier Eviction    | L3     | Eviction policies honor time and capacity bounds                                |
+| G22 | Capability Narrowing    | L4     | Tag, KB, depth, time narrowing all enforced on routed queries                   |
+| G23 | Provenance Chain        | L4     | Multi-hop provenance preserved end-to-end                                       |
+| G24 | Detach Safety (CR v7.1) | L4     | Two-step detach; freeze before remove; audit entries on both phases             |
+| G25 | Storage Backend Adapter | L1     | Adapter contract test suite passes for SQLite (Pro: LMDB/Kuzu/LanceDB)          |
+| G26 | Error Catalog           | shared | Every thrown error maps to a structured code in `@orqenix/errors`               |
+| G27 | Logging Discipline      | shared | No `console.*` in core packages; all logs go through `@orqenix/logger`          |
+| G28 | Config Validation       | shared | Zod schemas reject malformed config with actionable messages                    |
+| G29 | Concurrency Safety      | L1, L2 | WAL + busy_timeout verified under concurrent write load                         |
+| G30 | Backpressure            | L3     | Overflow at 105% triggers rejection with structured error                       |
+| G31 | Determinism             | L1, L2 | Same inputs produce byte-identical diff outputs across runs                     |
+| G32 | Idempotency             | L1, L2 | Re-running migrations or distill batches is a no-op                             |
+| G33 | Resource Caps           | L3     | CPU 20% cap on background distiller; memory bounds on rewriter                  |
+| G34 | Cross-Package Boundary  | all    | No circular deps; no package imports an internal path of another                |
+| G35 | SDK Stability           | L6     | Public SDK surface matches `@orqenix/sdk` CS doc; semver guarded                |
 
 ### Pro charter gates
 
-| ID | Name | Layer | Sample acceptance criteria |
-|---|---|---|---|
-| G6-pro | LLM Distiller Behavior | L3 | BYOK adapter routes to selected provider; fallback chain honored; PII redaction |
-| G18-pro | Polyglot Backend Conformance | L1 | LMDB, Kuzu, and LanceDB adapters pass the full L1 contract suite |
-| G36-pro | Mesh Delegation Chain | L4 | Depth 1 to 8 delegation; cap narrowing on each hop; remaining-hops enforced |
-| G37-pro | Blast Radius Containment | L4 | 5 quota kinds enforced; windowed usage; `resetWindow` audited |
+| ID      | Name                         | Layer | Sample acceptance criteria                                                      |
+| ------- | ---------------------------- | ----- | ------------------------------------------------------------------------------- |
+| G6-pro  | LLM Distiller Behavior       | L3    | BYOK adapter routes to selected provider; fallback chain honored; PII redaction |
+| G18-pro | Polyglot Backend Conformance | L1    | LMDB, Kuzu, and LanceDB adapters pass the full L1 contract suite                |
+| G36-pro | Mesh Delegation Chain        | L4    | Depth 1 to 8 delegation; cap narrowing on each hop; remaining-hops enforced     |
+| G37-pro | Blast Radius Containment     | L4    | 5 quota kinds enforced; windowed usage; `resetWindow` audited                   |
 
 </details>
 
@@ -1225,20 +1225,20 @@ A short asciinema cast will be embedded here once the recording lands: docs/medi
 
 ## Documentation Hub
 
-| Doc | Path | What you will find |
-|---|---|---|
-| Getting Started | docs/getting-started.md | OS-specific install, first scope, first recall |
-| Architecture Deep Dive | docs/architecture/phase-5/ | 13 architecture docs covering L1 through L6 |
-| SDD Methodology | docs/sdd/ | BS, CS, TS templates and the SDD workflow guide |
-| Operator Guide | docs/operator-guide/ | Day-2 ops, backups, benchmarks, troubleshooting |
-| Migration Guide | docs/operator-guide/migrations.md | Phase 4 → Phase 5 with rollback runbook |
-| AGENTS.md | AGENTS.md | AI agent operating manual (read this first if you are an agent) |
-| Conventions | .orqenix/conventions.md | TypeScript style, naming, mesh-awareness rules |
-| CLI Reference | docs/cli-reference.md | Full man-page-style command reference |
-| SDK Reference | docs/sdk-reference.md | Public API surface, semver guarantees |
-| MCP Reference | docs/mcp-reference.md | Tool schemas, permission model |
-| Security Policy | SECURITY.md | Threat model, disclosure process, supported versions |
-| FAQ | docs/faq.md | Extended FAQ beyond what is in this README |
+| Doc                    | Path                              | What you will find                                              |
+| ---------------------- | --------------------------------- | --------------------------------------------------------------- |
+| Getting Started        | docs/getting-started.md           | OS-specific install, first scope, first recall                  |
+| Architecture Deep Dive | docs/architecture/phase-5/        | 13 architecture docs covering L1 through L6                     |
+| SDD Methodology        | docs/sdd/                         | BS, CS, TS templates and the SDD workflow guide                 |
+| Operator Guide         | docs/operator-guide/              | Day-2 ops, backups, benchmarks, troubleshooting                 |
+| Migration Guide        | docs/operator-guide/migrations.md | Phase 4 → Phase 5 with rollback runbook                         |
+| AGENTS.md              | AGENTS.md                         | AI agent operating manual (read this first if you are an agent) |
+| Conventions            | .orqenix/conventions.md           | TypeScript style, naming, mesh-awareness rules                  |
+| CLI Reference          | docs/cli-reference.md             | Full man-page-style command reference                           |
+| SDK Reference          | docs/sdk-reference.md             | Public API surface, semver guarantees                           |
+| MCP Reference          | docs/mcp-reference.md             | Tool schemas, permission model                                  |
+| Security Policy        | SECURITY.md                       | Threat model, disclosure process, supported versions            |
+| FAQ                    | docs/faq.md                       | Extended FAQ beyond what is in this README                      |
 
 ---
 
@@ -1424,17 +1424,17 @@ Security is a first-class concern for Orqenix because the project's value depend
 ### Threat model assumptions
 
 - **Local trust boundary.** The host machine and its filesystem are trusted. Orqenix does not defend against a fully compromised local OS.
-- **Mesh trust boundary.** Peer scopes are *not* trusted by default. Every cross-scope query is gated by a signed, narrowable capability token. A misbehaving peer can refuse to answer or return wrong data but cannot exceed the capabilities it was granted.
+- **Mesh trust boundary.** Peer scopes are _not_ trusted by default. Every cross-scope query is gated by a signed, narrowable capability token. A misbehaving peer can refuse to answer or return wrong data but cannot exceed the capabilities it was granted.
 - **Capability tokens** are the unit of authority. Token rotation is supported; revocation propagates on next sync.
 - **Audit log** is tamper-evident (BLAKE3 hash-chained). External archiving of audit log snapshots is supported for non-repudiation.
 
 ### Supported versions
 
-| Version | Status | Security updates until |
-|---|---|---|
-| 0.5.x (Phase 5) | Current | Until Phase 6 GA + 6 months |
-| 0.4.x (Phase 4) | Maintenance | Until Phase 6 GA |
-| ≤0.3.x | End of life | n/a |
+| Version         | Status      | Security updates until      |
+| --------------- | ----------- | --------------------------- |
+| 0.5.x (Phase 5) | Current     | Until Phase 6 GA + 6 months |
+| 0.4.x (Phase 4) | Maintenance | Until Phase 6 GA            |
+| ≤0.3.x          | End of life | n/a                         |
 
 ### Reporting a vulnerability
 
@@ -1467,7 +1467,7 @@ Project maintainer: [@milosaysyolo](https://github.com/milosaysyolo).
 Vector DBs are excellent at one job: approximate nearest neighbor over embeddings. Orqenix uses vectors (via sqlite-vec) as one retrieval mode behind a structured KB layer. The KB adds schema, hash-chained provenance, causality (decision supersedes decision, lesson references incident), and tiered compression, none of which a pure vector DB provides. If your use case is "chat with one large corpus," a vector DB is fine. If your use case is "durable, queryable memory for AI agents across projects," you want what Orqenix offers.
 
 **Q2. How is Orqenix different from LangGraph or CrewAI?**
-LangGraph and CrewAI are agent *runtimes*: they orchestrate LLM calls, tool use, and control flow. Orqenix is the *memory and knowledge layer* underneath. They are complementary, not competing. You can run a CrewAI crew that uses Orqenix as its memory backend via the SDK or MCP server.
+LangGraph and CrewAI are agent _runtimes_: they orchestrate LLM calls, tool use, and control flow. Orqenix is the _memory and knowledge layer_ underneath. They are complementary, not competing. You can run a CrewAI crew that uses Orqenix as its memory backend via the SDK or MCP server.
 
 **Q3. Which LLM providers does Orqenix support?**
 OSS ships a local default (Qwen 2.5 7B) for the prompt rewriter and distiller. The Pro tier adds adaptive BYOK routing to OpenAI (GPT-4o-mini), Anthropic (Haiku), Google (Gemini Flash), and DeepSeek (V3). New providers can be added through the rewriter adapter contract.
@@ -1501,11 +1501,11 @@ For more questions, see docs/faq.md or open a Discussion.
 
 Orqenix is dual-licensed across two source-available tiers, with a future commercial Cloud tier.
 
-| Component | License | Source repo |
-|---|---|---|
-| `@orqenix/*` (OSS) | Apache License 2.0 | [milosaysyolo/orqenix](https://github.com/milosaysyolo/orqenix) |
-| `@orqenix-pro/*` (Pro) | Business Source License 1.1 | [milosaysyolo/Orqenix-Pro](https://github.com/milosaysyolo/Orqenix-Pro) |
-| `@orqenix-cloud/*` (Cloud, Phase 7) | Commercial (TBD) | n/a |
+| Component                           | License                     | Source repo                                                             |
+| ----------------------------------- | --------------------------- | ----------------------------------------------------------------------- |
+| `@orqenix/*` (OSS)                  | Apache License 2.0          | [milosaysyolo/orqenix](https://github.com/milosaysyolo/orqenix)         |
+| `@orqenix-pro/*` (Pro)              | Business Source License 1.1 | [milosaysyolo/Orqenix-Pro](https://github.com/milosaysyolo/Orqenix-Pro) |
+| `@orqenix-cloud/*` (Cloud, Phase 7) | Commercial (TBD)            | n/a                                                                     |
 
 ### BSL 1.1 in plain English
 

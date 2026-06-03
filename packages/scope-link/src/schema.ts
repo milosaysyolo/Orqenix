@@ -2,7 +2,7 @@
 // @bc CS-020 Scope Link Schema
 // @gate G29.1
 
-import type { MigrationRecord } from '@orqenix/storage-sqlite';
+import type { MigrationRecord } from "@orqenix/storage-sqlite";
 
 const M001 = `
 CREATE TABLE IF NOT EXISTS scope_links (
@@ -23,5 +23,5 @@ CREATE INDEX IF NOT EXISTS scope_links_status
 `;
 
 export const SCOPE_LINK_MIGRATIONS: MigrationRecord[] = [
-  { id: 20, name: 'scope_links_v1', sql: M001, checksum: '' },
+  { id: 20, name: "scope_links_v1", sql: M001, checksum: "" },
 ];

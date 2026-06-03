@@ -1,7 +1,14 @@
 import Database from "better-sqlite3";
 import { createHash } from "node:crypto";
 
-export { initParser, loadLanguage, createParser, parseSource, loadParser, detectLang } from "./parser.js";
+export {
+  initParser,
+  loadLanguage,
+  createParser,
+  parseSource,
+  loadParser,
+  detectLang,
+} from "./parser.js";
 export type { SupportedLanguage } from "./parser.js";
 export { extractSymbols, extractSymbolsLegacy } from "./symbols.js";
 export type { Symbol } from "./symbols.js";
@@ -124,7 +131,15 @@ export class CodeKB {
       const insertSymbolTx = this.db.transaction(() => {
         for (const sym of symbols) {
           const symId = createHash("sha256").update(`${fileId}:${sym.name}`).digest("hex");
-          insertSymbol.run(symId, fileId, sym.kind, sym.name, sym.startLine, sym.endLine, sym.signature);
+          insertSymbol.run(
+            symId,
+            fileId,
+            sym.kind,
+            sym.name,
+            sym.startLine,
+            sym.endLine,
+            sym.signature,
+          );
         }
       });
       insertSymbolTx();
@@ -135,7 +150,7 @@ export class CodeKB {
     const rows = this.db.prepare("SELECT * FROM symbols").all() as any[];
     const tokens = q.toLowerCase().split(/\s+/).filter(Boolean);
     const scored = rows
-      .map(row => {
+      .map((row) => {
         const haystack = `${row.name} ${row.signature || ""}`.toLowerCase();
         const score = tokens.reduce((sum, token) => sum + (haystack.includes(token) ? 1 : 0), 0);
         return {
@@ -146,7 +161,7 @@ export class CodeKB {
           score,
         } satisfies CodeResult;
       })
-      .filter(row => row.score > 0)
+      .filter((row) => row.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, topK);
 
@@ -185,11 +200,18 @@ export class CodeKB {
     content: string,
     lang: string,
   ): Array<{ kind: string; name: string; startLine: number; endLine: number; signature: string }> {
-    const symbols: Array<{ kind: string; name: string; startLine: number; endLine: number; signature: string }> = [];
+    const symbols: Array<{
+      kind: string;
+      name: string;
+      startLine: number;
+      endLine: number;
+      signature: string;
+    }> = [];
     const lines = content.split("\n");
 
     if (lang === "typescript" || lang === "javascript" || lang === "tsx") {
-      const fnRegex = /^\s*(export\s+)?(async\s+)?function\s+(\w+)|^\s*const\s+(\w+)\s*=|^\s*class\s+(\w+)/;
+      const fnRegex =
+        /^\s*(export\s+)?(async\s+)?function\s+(\w+)|^\s*const\s+(\w+)\s*=|^\s*class\s+(\w+)/;
       lines.forEach((line, idx) => {
         const match = line.match(fnRegex);
         if (match) {

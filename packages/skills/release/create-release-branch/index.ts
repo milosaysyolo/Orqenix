@@ -26,17 +26,14 @@ export async function run(input: CreateBranchInput): Promise<CreateBranchOutput>
     reject: false,
   });
   if (exitCode === 0) {
-    throw new Error(`Branch ${branchName} already exists. Delete first or pick a different version.`);
+    throw new Error(
+      `Branch ${branchName} already exists. Delete first or pick a different version.`,
+    );
   }
 
   await execa("git", ["checkout", "-b", branchName]);
   await execa("git", ["add", input.changesetPath]);
-  await execa("git", [
-    "commit",
-    "-m",
-    `chore(release): propose v${input.version}`,
-    "--no-verify",
-  ]);
+  await execa("git", ["commit", "-m", `chore(release): propose v${input.version}`, "--no-verify"]);
 
   const { stdout: commitSha } = await execa("git", ["rev-parse", "HEAD"]);
 

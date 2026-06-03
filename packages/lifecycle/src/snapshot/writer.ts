@@ -26,9 +26,7 @@ export class SnapshotWriter {
   async nextGenerationNumber(): Promise<number> {
     try {
       const dirs = await readdir(this.genRoot);
-      const nums = dirs
-        .filter(d => d.startsWith("gen-"))
-        .map(d => Number(d.slice(4)));
+      const nums = dirs.filter((d) => d.startsWith("gen-")).map((d) => Number(d.slice(4)));
       return nums.length === 0 ? 1 : Math.max(...nums) + 1;
     } catch {
       return 1;

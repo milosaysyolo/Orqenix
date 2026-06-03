@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-knowledge-workflow
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-knowledge-workflow";
+import {} from /* exports */ "@orqenix/plugin-knowledge-workflow";
 ```
 
 ## API

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { applyFencedBlock, removeFencedBlock } from "../detach/fenced-block";
+import { applyFencedBlock, removeFencedBlock } from "../detach/fenced-block.js";
 
 describe("fenced-block", () => {
   it("should apply fenced block to empty file", () => {

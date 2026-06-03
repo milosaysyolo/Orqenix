@@ -1,4 +1,4 @@
-import type { OrqenixPlugin, Task, TaskResult } from "@orqenix/core/plugin";
+import type { OrqenixPlugin, PluginContext, Task, TaskResult } from "@orqenix/core";
 
 interface AgentManifest {
   knowledge_briefing?: boolean;
@@ -41,7 +41,7 @@ export function createKnowledgeWorkflowPlugin(deps: KnowledgeWorkflowDeps): Orqe
     priority: 80,
     capabilities: ["knowledge-workflow", "agent-agnostic"],
     hooks: {
-      "agent.task.before": async (task: Task, ctx) => {
+      "agent.task.before": async (task: Task, ctx: PluginContext) => {
         const manifest = deps.agents.getManifest(task.agentName) ?? {};
         if (manifest.knowledge_briefing === false) return;
         const kbs = manifest.briefing_kbs ?? ["decisions", "docs", "code"];
@@ -64,7 +64,7 @@ export function createKnowledgeWorkflowPlugin(deps: KnowledgeWorkflowDeps): Orqe
         }
       },
 
-      "agent.task.after": async (task: Task, result: TaskResult, ctx) => {
+      "agent.task.after": async (task: Task, result: TaskResult, ctx: PluginContext) => {
         const manifest = deps.agents.getManifest(task.agentName) ?? {};
         const policy = manifest.reindex_after ?? "auto";
         if (policy === "none") return;

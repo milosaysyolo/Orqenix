@@ -23,7 +23,7 @@ export interface SandboxResult {
 export function checkOperation(
   profile: SandboxProfile,
   op: Operation,
-  now: number = Date.now()
+  now: number = Date.now(),
 ): SandboxResult {
   let allowed = true;
   let reason: string | undefined;

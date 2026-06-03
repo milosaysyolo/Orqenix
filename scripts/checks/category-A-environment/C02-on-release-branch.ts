@@ -13,7 +13,8 @@ export const C02_OnReleaseBranch: Check = {
     try {
       const { stdout } = await execa("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
       const branch = stdout.trim();
-      const allowed = branch === "main" || branch.startsWith("release/") || branch.startsWith("release-setup/");
+      const allowed =
+        branch === "main" || branch.startsWith("release/") || branch.startsWith("release-setup/");
 
       if (allowed) {
         return {

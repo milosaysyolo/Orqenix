@@ -3,8 +3,12 @@ import { createWorkspace, type WorkspaceContext } from "../helpers/workspace.js"
 
 let ws: WorkspaceContext;
 
-beforeAll(async () => { ws = await createWorkspace(); });
-afterAll(async () => { await ws.cleanup(); });
+beforeAll(async () => {
+  ws = await createWorkspace();
+});
+afterAll(async () => {
+  await ws.cleanup();
+});
 
 describe("E2E 01 init and doctor", () => {
   it("orqenix init exits 0", async () => {

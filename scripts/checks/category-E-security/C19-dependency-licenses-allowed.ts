@@ -2,8 +2,14 @@ import { execa } from "execa";
 import type { Check, CheckContext, CheckResult } from "../types";
 
 const ALLOWED_LICENSES = [
-  "MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause",
-  "ISC", "CC0-1.0", "Unlicense", "Python-2.0",
+  "MIT",
+  "Apache-2.0",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "ISC",
+  "CC0-1.0",
+  "Unlicense",
+  "Python-2.0",
   "0BSD",
 ];
 

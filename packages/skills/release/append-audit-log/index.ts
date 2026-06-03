@@ -44,7 +44,10 @@ async function getLastHash(logPath: string): Promise<{ prev: string; pos: number
   }
 
   const content = await readFile(logPath, "utf-8");
-  const lines = content.trim().split("\n").filter((l) => l.length > 0);
+  const lines = content
+    .trim()
+    .split("\n")
+    .filter((l) => l.length > 0);
   if (lines.length === 0) return { prev: "0".repeat(64), pos: 0 };
 
   const lastLine = lines[lines.length - 1];
@@ -86,9 +89,14 @@ export async function run(input: AppendInput): Promise<AppendOutput> {
 /**
  * Verify the entire chain is intact.
  */
-export async function verifyChain(logPath: string): Promise<{ valid: boolean; tamperedAt?: number }> {
+export async function verifyChain(
+  logPath: string,
+): Promise<{ valid: boolean; tamperedAt?: number }> {
   const content = await readFile(logPath, "utf-8");
-  const lines = content.trim().split("\n").filter((l) => l.length > 0);
+  const lines = content
+    .trim()
+    .split("\n")
+    .filter((l) => l.length > 0);
 
   let expectedPrev = "0".repeat(64);
   let expectedPos = 0;

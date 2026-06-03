@@ -1,5 +1,5 @@
-import type { MigrationRecord } from '@orqenix/storage-sqlite';
-import { createVecTable, type SqliteConnection } from '@orqenix/storage-sqlite';
+import type { MigrationRecord } from "@orqenix/storage-sqlite";
+import { createVecTable, type SqliteConnection } from "@orqenix/storage-sqlite";
 
 const M001 = `
 CREATE TABLE IF NOT EXISTS chat_sessions (
@@ -31,9 +31,9 @@ CREATE INDEX IF NOT EXISTS chat_entries_content_hash
 `;
 
 export const CHAT_KB_MIGRATIONS: MigrationRecord[] = [
-  { id: 1, name: 'chat_kb_v1', sql: M001, checksum: '' },
+  { id: 1, name: "chat_kb_v1", sql: M001, checksum: "" },
 ];
 
 export function createChatVecTable(conn: SqliteConnection, dim = 384): void {
-  createVecTable(conn, 'chat_embeddings', dim);
+  createVecTable(conn, "chat_embeddings", dim);
 }

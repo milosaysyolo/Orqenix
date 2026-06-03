@@ -1,11 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  createGraph,
-  addDecision,
-  ancestors,
-  descendants,
-  pathBetween,
-} from "../src/index.js";
+import { createGraph, addDecision, ancestors, descendants, pathBetween } from "../src/index.js";
 
 function setup() {
   const g = createGraph();

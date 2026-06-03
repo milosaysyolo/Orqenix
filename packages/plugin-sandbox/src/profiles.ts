@@ -48,10 +48,7 @@ export function getProfile(name: ProfileName): SandboxProfile {
   return { ...PROFILES[name] };
 }
 
-export function isPathAllowed(
-  profile: SandboxProfile,
-  path: string
-): boolean {
+export function isPathAllowed(profile: SandboxProfile, path: string): boolean {
   for (const blocked of profile.blockedFsPaths) {
     if (path.startsWith(blocked)) return false;
   }

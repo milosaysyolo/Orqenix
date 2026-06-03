@@ -3,12 +3,16 @@
 // @gate G15.1
 
 import {
-  type CompressInput, type CompressOutput, type CompressStrategy,
-  type TaggedMessage, totalTokens, Tier0ViolationError,
-} from './contracts.js';
+  type CompressInput,
+  type CompressOutput,
+  type CompressStrategy,
+  type TaggedMessage,
+  totalTokens,
+  Tier0ViolationError,
+} from "./contracts.js";
 
 export class DropStrategy implements CompressStrategy {
-  readonly id = 'drop' as const;
+  readonly id = "drop" as const;
 
   async apply(input: CompressInput): Promise<CompressOutput> {
     const started = Date.now();
@@ -40,7 +44,8 @@ export class DropStrategy implements CompressStrategy {
     const outputTokens = totalTokens(kept);
     return {
       conversation: { ...input.conversation, messages: kept },
-      inputTokens, outputTokens,
+      inputTokens,
+      outputTokens,
       ratio: inputTokens === 0 ? 1 : outputTokens / inputTokens,
       preservedTier0Count: tier0In.length,
       droppedMessageIds: droppedIds,

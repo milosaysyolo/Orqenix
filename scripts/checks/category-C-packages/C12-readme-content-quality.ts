@@ -36,13 +36,19 @@ export const C12_ReadmeContentQuality: Check = {
         const trimmed = content.trim();
 
         if (trimmed.length < MIN_README_LENGTH) {
-          issues.push({ pkg: pkg.name, reason: `README too short (${trimmed.length} chars < ${MIN_README_LENGTH})` });
+          issues.push({
+            pkg: pkg.name,
+            reason: `README too short (${trimmed.length} chars < ${MIN_README_LENGTH})`,
+          });
           continue;
         }
 
         for (const pattern of SUSPICIOUS_PATTERNS) {
           if (pattern.test(trimmed)) {
-            issues.push({ pkg: pkg.name, reason: `README contains suspicious text matching: ${pattern.source}` });
+            issues.push({
+              pkg: pkg.name,
+              reason: `README contains suspicious text matching: ${pattern.source}`,
+            });
             break;
           }
         }

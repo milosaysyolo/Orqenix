@@ -4,8 +4,10 @@ export const C10_CrossScopeDepsResolved: Check = {
   id: "C10",
   category: "packages",
   severity: "blocking",
-  description: "workspace:* and workspace:^ deps must resolve to published versions when crossing scopes",
-  rationale: "When publishing @orqenix-pro/* that depends on @orqenix/*, the dep version must already exist on npm",
+  description:
+    "workspace:* and workspace:^ deps must resolve to published versions when crossing scopes",
+  rationale:
+    "When publishing @orqenix-pro/* that depends on @orqenix/*, the dep version must already exist on npm",
 
   async run(ctx: CheckContext): Promise<CheckResult> {
     const start = Date.now();
@@ -30,7 +32,8 @@ export const C10_CrossScopeDepsResolved: Check = {
           pkg: pkg.name,
           dep,
           spec,
-          reason: "Cross-repo workspace: dep cannot be resolved at publish time. Must use regular version range.",
+          reason:
+            "Cross-repo workspace: dep cannot be resolved at publish time. Must use regular version range.",
         });
       }
     }

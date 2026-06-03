@@ -15,7 +15,10 @@ describe("E2E 03 Pro feature gating", () => {
   });
 
   it("enterprise plan retains all listed features", async () => {
-    const lic = await makeLicense({ plan: "enterprise", features: ["learning-loop", "knowledge-intel", "embedded-marketplace"] });
+    const lic = await makeLicense({
+      plan: "enterprise",
+      features: ["learning-loop", "knowledge-intel", "embedded-marketplace"],
+    });
     const r = await verifyLicense(lic, { publicKeyPath: PUBLIC_KEY_PATH });
     expect(r.valid).toBe(true);
     expect(hasFeature(lic, "embedded-marketplace")).toBe(true);

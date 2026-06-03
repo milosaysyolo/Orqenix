@@ -11,7 +11,12 @@ export const PHASE_5_REQUIREMENTS = {
   charterGates: Array.from({ length: 35 }, (_, i) => `G${i + 1}`),
   memoryTiers: ["working", "episodic", "semantic", "global"] as const,
   knowledgeBases: ["docs", "code", "decisions", "chat"] as const,
-  compressionStrategies: ["rtk-refilter", "semantic-summary", "reference-replace", "emergency-purge"] as const,
+  compressionStrategies: [
+    "rtk-refilter",
+    "semantic-summary",
+    "reference-replace",
+    "emergency-purge",
+  ] as const,
   injectionStrategies: ["A", "B", "C", "D", "E"] as const,
 } as const;
 
@@ -41,7 +46,9 @@ export function checkPhase5Compatibility(manifest: Record<string, unknown>): Pha
 
   const license = manifest.license as string;
   if (license && !PHASE_5_REQUIREMENTS.allowedLicenses.includes(license as any)) {
-    errors.push(`Invalid license: ${license}. Allowed: ${PHASE_5_REQUIREMENTS.allowedLicenses.join(", ")}`);
+    errors.push(
+      `Invalid license: ${license}. Allowed: ${PHASE_5_REQUIREMENTS.allowedLicenses.join(", ")}`,
+    );
   }
 
   const version = manifest.version as string;

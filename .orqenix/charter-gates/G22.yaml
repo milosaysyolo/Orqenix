@@ -4,8 +4,20 @@ title: Token Visibility
 bsRef: docs/sdd/BS-019-token-visibility.md
 dependsOn: [G1, G14]
 criteria:
-  - { id: G22.1, description: "METRIC_NAMES exports canonical strings for compress metrics",   severity: blocking }
-  - { id: G22.2, description: "summarizeMetrics aggregates per-strategy breakdown",            severity: blocking }
-  - { id: G22.3, description: "formatRatioBar renders correctly (0/50/100/clamped)",           severity: blocking }
-  - { id: G22.4, description: "empty registry returns sane defaults",                          severity: blocking }
+  - {
+      id: G22.1,
+      description: "METRIC_NAMES exports canonical strings for compress metrics",
+      severity: blocking,
+    }
+  - {
+      id: G22.2,
+      description: "summarizeMetrics aggregates per-strategy breakdown",
+      severity: blocking,
+    }
+  - {
+      id: G22.3,
+      description: "formatRatioBar renders correctly (0/50/100/clamped)",
+      severity: blocking,
+    }
+  - { id: G22.4, description: "empty registry returns sane defaults", severity: blocking }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G22-*.json" }

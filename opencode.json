@@ -1,7 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [
-    "@orqenix/opencode-plugin"
-  ],
+  "plugin": ["@orqenix/opencode-plugin"],
   "default_agent": "dev-team-lead"
 }

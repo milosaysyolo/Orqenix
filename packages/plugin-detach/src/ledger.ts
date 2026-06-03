@@ -22,7 +22,7 @@ export function recordTouch(
   path: string,
   action: "created" | "modified",
   sha: string,
-  now: number = Date.now()
+  now: number = Date.now(),
 ): void {
   const existing = ledger.entries.findIndex((e) => e.path === path);
   const entry: LedgerEntry = { path, action, sha, touchedAt: now };

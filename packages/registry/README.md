@@ -13,7 +13,7 @@ pnpm add @orqenix/registry
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/registry";
+import {} from /* exports */ "@orqenix/registry";
 ```
 
 ## API

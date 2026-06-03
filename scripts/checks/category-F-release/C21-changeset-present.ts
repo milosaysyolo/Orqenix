@@ -7,7 +7,8 @@ export const C21_ChangesetPresent: Check = {
   category: "release",
   severity: "blocking",
   description: "At least one changeset present",
-  rationale: "Changesets drive version bumps and changelog generation; missing changeset means no version change",
+  rationale:
+    "Changesets drive version bumps and changelog generation; missing changeset means no version change",
 
   async run(ctx: CheckContext): Promise<CheckResult> {
     const start = Date.now();

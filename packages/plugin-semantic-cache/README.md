@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-semantic-cache
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-semantic-cache";
+import {} from /* exports */ "@orqenix/plugin-semantic-cache";
 ```
 
 ## API

@@ -7,11 +7,9 @@ import { join } from "node:path";
 const target = Number(process.argv[2] ?? 230);
 const out = ".charter/test-results.json";
 
-spawnSync(
-  "pnpm",
-  ["-r", "exec", "vitest", "run", "--reporter=json", `--outputFile=${out}`],
-  { stdio: "inherit" },
-);
+spawnSync("pnpm", ["-r", "exec", "vitest", "run", "--reporter=json", `--outputFile=${out}`], {
+  stdio: "inherit",
+});
 
 let total = 0;
 const fs = await import("node:fs");

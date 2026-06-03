@@ -12,9 +12,10 @@ export const C09_PublishabilityConfirmed: Check = {
 
   async run(ctx: CheckContext): Promise<CheckResult> {
     const start = Date.now();
-    const policyPath = ctx.mode === "pro"
-      ? ".orqenix-pro/publishable-whitelist.yaml"
-      : ".orqenix/publishable-whitelist.yaml";
+    const policyPath =
+      ctx.mode === "pro"
+        ? ".orqenix-pro/publishable-whitelist.yaml"
+        : ".orqenix/publishable-whitelist.yaml";
 
     let whitelist: string[] | "all" = "all";
     try {
@@ -32,7 +33,9 @@ export const C09_PublishabilityConfirmed: Check = {
     if (whitelist === "all") {
       const suspicious = discovered.filter((name) => {
         const base = name.split("/")[1] ?? "";
-        return /^(example|test|fixture|demo|sample|playground|internal|private|tmp|scratch)/i.test(base);
+        return /^(example|test|fixture|demo|sample|playground|internal|private|tmp|scratch)/i.test(
+          base,
+        );
       });
 
       if (suspicious.length > 0) {
@@ -44,7 +47,8 @@ export const C09_PublishabilityConfirmed: Check = {
           message: `Found ${suspicious.length} suspicious package name(s) likely not meant for publish`,
           details: {
             affectedPackages: suspicious,
-            recommendation: "Create a publishable-whitelist.yaml or mark these as private:true in package.json",
+            recommendation:
+              "Create a publishable-whitelist.yaml or mark these as private:true in package.json",
             docsUrl: "https://orqenix.dev/docs/release/publishable-whitelist",
           },
         };
@@ -57,7 +61,8 @@ export const C09_PublishabilityConfirmed: Check = {
         durationMs: Date.now() - start,
         message: `Whitelist mode: 'all'. Will publish ${discovered.length} package(s) without explicit approval`,
         details: {
-          recommendation: "For production safety, create publishable-whitelist.yaml with explicit package list",
+          recommendation:
+            "For production safety, create publishable-whitelist.yaml with explicit package list",
         },
       };
     }

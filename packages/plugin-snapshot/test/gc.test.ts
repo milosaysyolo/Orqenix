@@ -26,7 +26,7 @@ describe("gc planner", () => {
       [snap("a", 35)],
       { a: { state: "active", lastTouchedAt: NOW - 35 * 86400000 } },
       POLICY,
-      NOW
+      NOW,
     );
     expect(decisions[0]).toMatchObject({ id: "a", next: "idle" });
   });
@@ -36,7 +36,7 @@ describe("gc planner", () => {
       [snap("a", 70)],
       { a: { state: "idle", lastTouchedAt: NOW - 70 * 86400000 } },
       POLICY,
-      NOW
+      NOW,
     );
     expect(decisions[0]?.next).toBe("deprecated");
   });
@@ -46,7 +46,7 @@ describe("gc planner", () => {
       [snap("a", 100)],
       { a: { state: "deprecated", lastTouchedAt: NOW - 100 * 86400000 } },
       POLICY,
-      NOW
+      NOW,
     );
     expect(decisions[0]?.next).toBe("deleted");
   });

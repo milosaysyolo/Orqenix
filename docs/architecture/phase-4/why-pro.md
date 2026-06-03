@@ -18,29 +18,29 @@ The boundary between OSS and Pro is the line between "agents that run" and
 
 ## 2. Feature matrix
 
-| Feature | OSS | Pro | Cloud |
-|---|---|---|---|
-| Orchestrator engine | yes | yes | yes |
-| 4-tier persistent memory | yes | yes | yes |
-| Plugin system | yes | yes | yes |
-| MCP client and server | yes | yes | yes |
-| Skill loader (npm, local, URL, GitHub) | yes | yes | yes |
-| Compression plugins (input, output, context) | yes | yes | yes |
-| Skill marketplace consumer | yes | yes | yes |
-| DocsKB hybrid retrieval | yes | yes | yes |
-| CodeKB symbol index | yes | yes | yes |
-| DecisionKB graph | yes | yes | yes |
-| Continuous learning loop | no | yes | yes |
-| Cross-project retrieval ranking | no | yes | yes |
-| Decision graph causal traversal | no | yes | yes |
-| Skill author signing | no | yes | yes |
-| License gating | no | yes | yes |
-| Lifecycle versioning, snapshot, GC | yes | yes (advanced) | yes |
-| Sandbox executor (3 profiles) | yes (strict only) | yes (all) | yes (all) |
-| Multi-tenant SaaS | no | no | yes |
-| Managed embedding | no | no | yes |
-| Hosted marketplace | no | no | yes |
-| Customer-facing dashboard | no | no | yes |
+| Feature                                      | OSS               | Pro            | Cloud     |
+| -------------------------------------------- | ----------------- | -------------- | --------- |
+| Orchestrator engine                          | yes               | yes            | yes       |
+| 4-tier persistent memory                     | yes               | yes            | yes       |
+| Plugin system                                | yes               | yes            | yes       |
+| MCP client and server                        | yes               | yes            | yes       |
+| Skill loader (npm, local, URL, GitHub)       | yes               | yes            | yes       |
+| Compression plugins (input, output, context) | yes               | yes            | yes       |
+| Skill marketplace consumer                   | yes               | yes            | yes       |
+| DocsKB hybrid retrieval                      | yes               | yes            | yes       |
+| CodeKB symbol index                          | yes               | yes            | yes       |
+| DecisionKB graph                             | yes               | yes            | yes       |
+| Continuous learning loop                     | no                | yes            | yes       |
+| Cross-project retrieval ranking              | no                | yes            | yes       |
+| Decision graph causal traversal              | no                | yes            | yes       |
+| Skill author signing                         | no                | yes            | yes       |
+| License gating                               | no                | yes            | yes       |
+| Lifecycle versioning, snapshot, GC           | yes               | yes (advanced) | yes       |
+| Sandbox executor (3 profiles)                | yes (strict only) | yes (all)      | yes (all) |
+| Multi-tenant SaaS                            | no                | no             | yes       |
+| Managed embedding                            | no                | no             | yes       |
+| Hosted marketplace                           | no                | no             | yes       |
+| Customer-facing dashboard                    | no                | no             | yes       |
 
 ## 3. Why these particular features are Pro
 

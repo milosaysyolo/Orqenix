@@ -22,6 +22,7 @@ gh run watch
 ```
 
 Expected:
+
 - pre-flight: pass (verdict = "go" or "go-with-warnings")
 - build-and-verify: pass
 - publish: SKIPPED (dry_run=true)
@@ -43,11 +44,13 @@ git push origin main
 ```
 
 This triggers `release.yml` automatically. It will:
+
 1. Pre-flight check
 2. Open "chore(release): version packages" PR
 3. Wait for human merge
 
 Review the PR carefully:
+
 - Check version bumps (all → 0.5.0)
 - Check CHANGELOG entries
 - Check no unexpected file changes
@@ -57,6 +60,7 @@ Merge the PR when ready.
 ## Phase 3: OSS publishes
 
 After merging the version PR, `release.yml` runs again. This time:
+
 1. Pre-flight + build + verify pass
 2. `changesets/action` detects version bump, runs `pnpm ci:publish`
 3. 27 packages published to npm with provenance
@@ -101,6 +105,7 @@ gh run watch
 ```
 
 This dispatches to Pro repo. Pro will:
+
 1. Wait for `@orqenix/core@0.5.0` (already on npm, instant)
 2. Convert `workspace:*` → `^0.5.0` for 26 deps
 3. Re-install
@@ -120,6 +125,7 @@ gh workflow run trigger-pro.yml \
 ```
 
 Pro will:
+
 1. Same as Phase 5 but actually publish
 2. 7 packages published to npm
 3. Git tag `v0.5.0-phase-5` created in Pro repo

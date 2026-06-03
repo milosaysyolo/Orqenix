@@ -17,11 +17,7 @@
   "bugs": {
     "url": "https://github.com/milosaysyolo/Orqenix/issues"
   },
-  "keywords": [
-    "orqenix",
-    "ai-agents",
-    "<auto-from-pkg-domain>"
-  ],
+  "keywords": ["orqenix", "ai-agents", "<auto-from-pkg-domain>"],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -34,12 +30,7 @@
     },
     "./package.json": "./package.json"
   },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md"
-  ],
+  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/",

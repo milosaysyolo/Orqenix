@@ -55,7 +55,9 @@ describe("Canonical JSON", () => {
         ],
         count: 2,
       };
-      expect(canonicalJson(input)).toBe('{"count":2,"users":[{"age":30,"name":"Alice"},{"age":25,"name":"Bob"}]}');
+      expect(canonicalJson(input)).toBe(
+        '{"count":2,"users":[{"age":30,"name":"Alice"},{"age":25,"name":"Bob"}]}',
+      );
     });
 
     it("skips undefined values in objects", () => {

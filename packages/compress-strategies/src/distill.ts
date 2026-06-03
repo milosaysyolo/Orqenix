@@ -3,10 +3,13 @@
 // @gate G15.3
 
 import {
-  type CompressInput, type CompressOutput, type CompressStrategy,
+  type CompressInput,
+  type CompressOutput,
+  type CompressStrategy,
   type TaggedMessage,
-  totalTokens, Tier0ViolationError,
-} from './contracts.js';
+  totalTokens,
+  Tier0ViolationError,
+} from "./contracts.js";
 
 export interface DistilledDraft {
   type: string;
@@ -22,9 +25,9 @@ export interface DistillStrategyOptions {
 }
 
 export class DistillStrategy implements CompressStrategy {
-  readonly id = 'distill' as const;
-  private readonly extract: DistillStrategyOptions['extract'];
-  private readonly memoryWriter?: DistillStrategyOptions['memoryWriter'];
+  readonly id = "distill" as const;
+  private readonly extract: DistillStrategyOptions["extract"];
+  private readonly memoryWriter?: DistillStrategyOptions["memoryWriter"];
   private readonly minConfidence: number;
 
   constructor(opts: DistillStrategyOptions) {
@@ -50,7 +53,9 @@ export class DistillStrategy implements CompressStrategy {
       for (const c of candidates) {
         if (totalTokens(kept) <= input.targetTokens) break;
         if (c.tier === 0) throw new Tier0ViolationError(c.id);
-        const drafts = this.extract(c.content, c.id).filter((d) => d.confidence >= this.minConfidence);
+        const drafts = this.extract(c.content, c.id).filter(
+          (d) => d.confidence >= this.minConfidence,
+        );
         allDrafts.push(...drafts);
         kept = kept.filter((m) => m.id !== c.id);
         droppedIds.push(c.id);
@@ -58,7 +63,11 @@ export class DistillStrategy implements CompressStrategy {
     }
 
     if (allDrafts.length > 0 && this.memoryWriter) {
-      try { await this.memoryWriter(allDrafts); } catch { /* swallow per CR v7.1: distillation is best-effort */ }
+      try {
+        await this.memoryWriter(allDrafts);
+      } catch {
+        /* swallow per CR v7.1: distillation is best-effort */
+      }
     }
 
     for (const id of tier0Set) {
@@ -68,7 +77,8 @@ export class DistillStrategy implements CompressStrategy {
     const outputTokens = totalTokens(kept);
     return {
       conversation: { ...input.conversation, messages: kept },
-      inputTokens, outputTokens,
+      inputTokens,
+      outputTokens,
       ratio: inputTokens === 0 ? 1 : outputTokens / inputTokens,
       preservedTier0Count: tier0Set.size,
       droppedMessageIds: droppedIds,

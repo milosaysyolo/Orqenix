@@ -1,4 +1,9 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
 export default defineConfig({
-  test: { name: 'memory-distiller', include: ['test/**/*.test.ts'], environment: 'node', testTimeout: 30_000 },
+  test: {
+    name: "memory-distiller",
+    include: ["test/**/*.test.ts"],
+    environment: "node",
+    testTimeout: 30_000,
+  },
 });

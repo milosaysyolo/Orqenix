@@ -1,6 +1,6 @@
 import { readFile, stat } from "node:fs/promises";
 import { hashString } from "@orqenix/core";
-import type { OrqenixPlugin } from "@orqenix/core/plugin";
+import type { OrqenixPlugin, PluginContext, Session } from "@orqenix/core";
 
 export interface LazyLoaderConfig {
   enabled: boolean;
@@ -127,7 +127,7 @@ export function createPlugin(userConfig: Partial<LazyLoaderConfig> = {}): Orqeni
     priority: 95,
     capabilities: ["lazy-loading", "context-management"],
     hooks: {
-      "session.start": async (_session, ctx) => {
+      "session.start": async (_session: Session, ctx: PluginContext) => {
         ctx.log.debug("lazy-loader: ready", {
           cacheMaxBytes: config.cacheMaxBytes,
           hashCheckOnRead: config.hashCheckOnRead,

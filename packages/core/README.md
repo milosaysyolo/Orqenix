@@ -13,7 +13,7 @@ pnpm add @orqenix/core
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/core";
+import {} from /* exports */ "@orqenix/core";
 ```
 
 ## API

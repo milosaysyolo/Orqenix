@@ -31,8 +31,9 @@ function slugify(text: string): string {
 }
 
 function randomId(): string {
-  return Array.from({ length: 8 }, () =>
-    "abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 26)]
+  return Array.from(
+    { length: 8 },
+    () => "abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 26)],
   ).join("");
 }
 
@@ -51,9 +52,10 @@ export async function run(input: GenerateChangesetInput): Promise<GenerateChange
       .filter((c) => ["feat", "fix", "breaking"].includes(c.kind))
       .map((c) => `- ${c.title}`)
       .slice(0, 10);
-    summary = titles.length > 0
-      ? `Release includes:\n\n${titles.join("\n")}`
-      : "Release with multiple improvements.";
+    summary =
+      titles.length > 0
+        ? `Release includes:\n\n${titles.join("\n")}`
+        : "Release with multiple improvements.";
   }
 
   const content = frontmatterLines.join("\n") + summary + "\n";

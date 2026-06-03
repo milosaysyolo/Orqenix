@@ -81,11 +81,11 @@ capability tokens permit `read:kb-chat` or `read:kb-code`.
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---------|--------------|-----|
-| `Error: native module not found (better-sqlite3)` | Node ABI mismatch | `pnpm rebuild better-sqlite3` |
-| `Capability denied: read:kb-chat` | Link token missing the cap | Re-issue the link with `--caps read:kb-chat` |
-| `Scope already initialized` | `.orqenix/` exists | Use `orqenix scope info` to inspect |
+| Symptom                                           | Likely cause               | Fix                                          |
+| ------------------------------------------------- | -------------------------- | -------------------------------------------- |
+| `Error: native module not found (better-sqlite3)` | Node ABI mismatch          | `pnpm rebuild better-sqlite3`                |
+| `Capability denied: read:kb-chat`                 | Link token missing the cap | Re-issue the link with `--caps read:kb-chat` |
+| `Scope already initialized`                       | `.orqenix/` exists         | Use `orqenix scope info` to inspect          |
 
 If you hit something not listed here, please
 [open a Q&A discussion](https://github.com/milosaysyolo/Orqenix/discussions/categories/q-a).

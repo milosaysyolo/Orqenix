@@ -12,7 +12,7 @@ Read-Through Kernel shell hooks: capture stdout/stderr of shell commands into Ch
 ## Use with plugin-compress-input
 
 ```ts
-import { RtkRunner, createRtkCompressInputExtension } from '@orqenix/rtk-hooks';
+import { RtkRunner, createRtkCompressInputExtension } from "@orqenix/rtk-hooks";
 
 const runner = new RtkRunner({
   scopeId: MY_SCOPE,
@@ -20,7 +20,7 @@ const runner = new RtkRunner({
 });
 
 const ext = createRtkCompressInputExtension({ runner });
-const { injected, result } = await ext({ cmd: 'ls', args: ['-la'] });
+const { injected, result } = await ext({ cmd: "ls", args: ["-la"] });
 // injected -> can be passed as the next user message to the LLM
 ```
 

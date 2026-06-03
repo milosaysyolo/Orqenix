@@ -115,7 +115,11 @@ function classify(pkg: Record<string, unknown>): "publishable" | "internal" | "s
   return "publishable";
 }
 
-function normalize(pkg: PackageInfo): { content: Record<string, unknown>; changes: string[]; warnings: string[] } {
+function normalize(pkg: PackageInfo): {
+  content: Record<string, unknown>;
+  changes: string[];
+  warnings: string[];
+} {
   const pkgName = basename(pkg.path);
   const current = pkg.current;
   const changes: string[] = [];
@@ -182,7 +186,9 @@ function normalize(pkg: PackageInfo): { content: Record<string, unknown>; change
 
   const baseKeywords = ["orqenix", "ai-agents"];
   const currentKeywords = Array.isArray(current.keywords) ? current.keywords : [];
-  const mergedKeywords = Array.from(new Set([...baseKeywords, ...currentKeywords, deriveKeyword(pkgName)]));
+  const mergedKeywords = Array.from(
+    new Set([...baseKeywords, ...currentKeywords, deriveKeyword(pkgName)]),
+  );
   if (JSON.stringify(currentKeywords) !== JSON.stringify(mergedKeywords)) {
     normalized.keywords = mergedKeywords;
     changes.push(`Updated keywords: ${mergedKeywords.join(", ")}`);
@@ -238,8 +244,8 @@ function normalize(pkg: PackageInfo): { content: Record<string, unknown>; change
   }
 
   const allDeps = {
-    ...(current.dependencies as Record<string, string> ?? {}),
-    ...(current.peerDependencies as Record<string, string> ?? {}),
+    ...((current.dependencies as Record<string, string>) ?? {}),
+    ...((current.peerDependencies as Record<string, string>) ?? {}),
   };
   for (const dep of Object.keys(allDeps)) {
     for (const forbidden of CONFIG.forbiddenScopes) {
@@ -269,13 +275,30 @@ async function writePackageJson(path: string, content: Record<string, unknown>):
 
 function orderFields(pkg: Record<string, unknown>): Record<string, unknown> {
   const order = [
-    "name", "version", "description", "license", "author", "homepage",
-    "repository", "bugs", "keywords",
-    "type", "main", "module", "types", "exports", "files", "sideEffects",
-    "publishConfig", "engines",
+    "name",
+    "version",
+    "description",
+    "license",
+    "author",
+    "homepage",
+    "repository",
+    "bugs",
+    "keywords",
+    "type",
+    "main",
+    "module",
+    "types",
+    "exports",
+    "files",
+    "sideEffects",
+    "publishConfig",
+    "engines",
     "scripts",
-    "dependencies", "peerDependencies", "devDependencies",
-    "publishable", "private",
+    "dependencies",
+    "peerDependencies",
+    "devDependencies",
+    "publishable",
+    "private",
   ];
   const result: Record<string, unknown> = {};
   for (const key of order) {
@@ -295,20 +318,26 @@ async function main(): Promise<void> {
 
   console.log(`\nDiscovery: ${packages.length} total, ${publishable.length} publishable`);
 
-  const reportPath = MODE === "pro"
-    ? ".orqenix-pro/discovery-report.json"
-    : ".orqenix/discovery-report.json";
-  await writeFile(reportPath, JSON.stringify({
-    mode: MODE,
-    timestamp: new Date().toISOString(),
-    total: packages.length,
-    publishable: publishable.length,
-    packages: packages.map((p) => ({
-      name: p.name,
-      path: p.path,
-      classification: p.classification,
-    })),
-  }, null, 2));
+  const reportPath =
+    MODE === "pro" ? ".orqenix-pro/discovery-report.json" : ".orqenix/discovery-report.json";
+  await writeFile(
+    reportPath,
+    JSON.stringify(
+      {
+        mode: MODE,
+        timestamp: new Date().toISOString(),
+        total: packages.length,
+        publishable: publishable.length,
+        packages: packages.map((p) => ({
+          name: p.name,
+          path: p.path,
+          classification: p.classification,
+        })),
+      },
+      null,
+      2,
+    ),
+  );
 
   if (args.report) {
     console.log(`Report written to ${reportPath}`);

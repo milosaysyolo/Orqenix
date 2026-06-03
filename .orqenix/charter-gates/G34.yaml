@@ -4,9 +4,21 @@ title: Mesh Routing Quorum
 bsRef: docs/sdd/BS-026-mesh-routing.md
 dependsOn: [G1, G29, G33]
 criteria:
-  - { id: G34.1, description: "mesh-routing unit tests pass",                                     severity: blocking }
-  - { id: G34.2, description: "parallel fanout reaches all active outbound links",                severity: blocking }
-  - { id: G34.3, description: "quorum = ceil(scopesQueried/2) successes",                         severity: blocking }
-  - { id: G34.4, description: "timeout outcome recorded per-target with reason='timeout'",        severity: blocking }
-  - { id: G34.5, description: "hits with broken provenance chain dropped silently",               severity: blocking }
+  - { id: G34.1, description: "mesh-routing unit tests pass", severity: blocking }
+  - {
+      id: G34.2,
+      description: "parallel fanout reaches all active outbound links",
+      severity: blocking,
+    }
+  - { id: G34.3, description: "quorum = ceil(scopesQueried/2) successes", severity: blocking }
+  - {
+      id: G34.4,
+      description: "timeout outcome recorded per-target with reason='timeout'",
+      severity: blocking,
+    }
+  - {
+      id: G34.5,
+      description: "hits with broken provenance chain dropped silently",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G34-*.json" }

@@ -2,13 +2,15 @@
 // @bc CS-011 Rewriter
 // @gate G10.1, G10.2, G10.3
 
-import type { ChatMessage, LlmAdapter } from '@orqenix/llm-adapter-ollama';
-import type { MemoryId } from '@orqenix/memory-tiers';
+import type { ChatMessage, LlmAdapter } from "@orqenix/llm-adapter-ollama";
+import type { MemoryId } from "@orqenix/memory-tiers";
 import {
-  DEFAULT_STRATEGY, STRATEGIES,
-  type InjectionStrategy, type InjectionStrategyName,
-} from '@orqenix/injection-strategies';
-import { KeywordRecall } from './recall.js';
+  DEFAULT_STRATEGY,
+  STRATEGIES,
+  type InjectionStrategy,
+  type InjectionStrategyName,
+} from "@orqenix/injection-strategies";
+import { KeywordRecall } from "./recall.js";
 
 export interface PromptRewriterOptions {
   recall: KeywordRecall;
@@ -54,34 +56,44 @@ export class PromptRewriter {
   }
 
   async rewrite(input: RewriteInput): Promise<RewriteOutput> {
-    const lastUser = [...input.messages].reverse().find((m) => m.role === 'user');
-    const userQuery = input.userQuery ?? lastUser?.content ?? '';
+    const lastUser = [...input.messages].reverse().find((m) => m.role === "user");
+    const userQuery = input.userQuery ?? lastUser?.content ?? "";
     const memories = userQuery ? this.recall.recall(userQuery, { k: input.k ?? 5 }) : [];
     const injected = this.strategy.apply({
-      messages: input.messages, memories,
-      tokenBudget: input.tokenBudget, k: input.k,
+      messages: input.messages,
+      memories,
+      tokenBudget: input.tokenBudget,
+      k: input.k,
     });
 
     let messages = injected.messages;
     let rewriteApplied = false;
     if (this.enableRewriteFn && this.adapter && messages.length > 0) {
       try {
-        const sys = messages.find((m) => m.role === 'system');
+        const sys = messages.find((m) => m.role === "system");
         if (sys && sys.content.length > 0) {
           const r = await this.adapter.complete({
             messages: [
-              { role: 'system', content: 'Consolidate the following system prompt into one concise paragraph, preserving every fact, preference, and instruction. Output only the rewritten prompt.' },
-              { role: 'user', content: sys.content },
+              {
+                role: "system",
+                content:
+                  "Consolidate the following system prompt into one concise paragraph, preserving every fact, preference, and instruction. Output only the rewritten prompt.",
+              },
+              { role: "user", content: sys.content },
             ],
             temperature: 0.2,
             maxTokens: 1024,
           });
           if (r.content.trim().length > 0) {
-            messages = messages.map((m) => (m.role === 'system' ? { role: 'system', content: r.content.trim() } : m));
+            messages = messages.map((m) =>
+              m.role === "system" ? { role: "system", content: r.content.trim() } : m,
+            );
             rewriteApplied = true;
           }
         }
-      } catch { /* graceful: keep original */ }
+      } catch {
+        /* graceful: keep original */
+      }
     }
 
     return {

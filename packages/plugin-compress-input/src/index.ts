@@ -1,4 +1,4 @@
-import type { LLMCall, OrqenixPlugin } from "@orqenix/core/plugin";
+import type { LLMCall, OrqenixPlugin, PluginContext } from "@orqenix/core";
 
 export type CompressInputMode = "soft" | "rewrite" | "aggressive";
 
@@ -90,7 +90,7 @@ export function createPlugin(userConfig: Partial<CompressInputConfig> = {}): Orq
     priority: 70,
     capabilities: ["compression", "input-optimization"],
     hooks: {
-      "llm.call.before": async (call: LLMCall, _ctx) => {
+      "llm.call.before": async (call: LLMCall, _ctx: PluginContext) => {
         if (!config.enabled) return call;
         let messages = call.messages;
 

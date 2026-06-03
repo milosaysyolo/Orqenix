@@ -11,12 +11,24 @@ dependsOn: [G1]
 
 criteria:
   - { id: G26.1, description: "all unit tests in packages/scope-identity pass", severity: blocking }
-  - { id: G26.2, description: "JSON schema is valid Draft-07 and requires scopeId", severity: blocking }
-  - { id: G26.3, description: "100 random scope.yaml documents round-trip without loss", severity: blocking }
+  - {
+      id: G26.2,
+      description: "JSON schema is valid Draft-07 and requires scopeId",
+      severity: blocking,
+    }
+  - {
+      id: G26.3,
+      description: "100 random scope.yaml documents round-trip without loss",
+      severity: blocking,
+    }
   - { id: G26.4, description: "deriveScopeId is deterministic across 50 runs", severity: blocking }
   - { id: G26.5, description: "50 random tampers to scopeId are all rejected", severity: blocking }
   - { id: G26.6, description: "identity.key has mode 0600 after initScope", severity: blocking }
-  - { id: G26.7, description: ".gitignore excludes .orqenix/identity.key after initScope", severity: blocking }
+  - {
+      id: G26.7,
+      description: ".gitignore excludes .orqenix/identity.key after initScope",
+      severity: blocking,
+    }
 
 artifacts:
   reportDir: .orqenix/gate-reports/

@@ -248,9 +248,7 @@ full terms and conditions.
 
 async function main(): Promise<void> {
   const mode = process.env.MODE === "pro" ? "pro" : "oss";
-  const licenseText = mode === "pro"
-    ? generateBUSL11(getChangeDate())
-    : APACHE_2_0_TEXT;
+  const licenseText = mode === "pro" ? generateBUSL11(getChangeDate()) : APACHE_2_0_TEXT;
 
   const packages = await readdir("packages");
   let created = 0;

@@ -1,4 +1,4 @@
-# @orqenix/_meta
+# @orqenix/\_meta
 
 Internal Phase 5 metadata and compatibility helpers (not published)
 
@@ -13,7 +13,7 @@ pnpm add @orqenix/_meta
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/_meta";
+import {} from /* exports */ "@orqenix/_meta";
 ```
 
 ## API

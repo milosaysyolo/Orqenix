@@ -8,7 +8,8 @@ export const C03_NodeVersion: Check = {
   category: "environment",
   severity: "blocking",
   description: "Node.js >= 20.0.0",
-  rationale: "Package engines.node requires >=20.0.0; older versions may produce incompatible builds",
+  rationale:
+    "Package engines.node requires >=20.0.0; older versions may produce incompatible builds",
 
   async run(_: CheckContext): Promise<CheckResult> {
     const start = Date.now();

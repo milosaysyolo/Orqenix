@@ -4,9 +4,17 @@ title: File Watcher
 bsRef: docs/sdd/BS-020-file-watcher.md
 dependsOn: [G1]
 criteria:
-  - { id: G19.1, description: "file-watcher unit tests pass",                        severity: blocking }
-  - { id: G19.2, description: "detects add+change+unlink end-to-end via real fs",    severity: blocking }
-  - { id: G19.3, description: "debounce collapses bursts into batches",              severity: blocking }
-  - { id: G19.4, description: "ignores .git and node_modules by default",            severity: blocking }
-  - { id: G19.5, description: "stop is idempotent + watcher status is 'stopped'",    severity: blocking }
+  - { id: G19.1, description: "file-watcher unit tests pass", severity: blocking }
+  - {
+      id: G19.2,
+      description: "detects add+change+unlink end-to-end via real fs",
+      severity: blocking,
+    }
+  - { id: G19.3, description: "debounce collapses bursts into batches", severity: blocking }
+  - { id: G19.4, description: "ignores .git and node_modules by default", severity: blocking }
+  - {
+      id: G19.5,
+      description: "stop is idempotent + watcher status is 'stopped'",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G19-*.json" }

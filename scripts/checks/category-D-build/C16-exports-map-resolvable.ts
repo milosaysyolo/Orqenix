@@ -7,7 +7,8 @@ export const C16_ExportsMapResolvable: Check = {
   category: "build",
   severity: "blocking",
   description: "exports map paths resolvable",
-  rationale: "If exports map points to missing files, Node.js and bundlers will fail to resolve the package",
+  rationale:
+    "If exports map points to missing files, Node.js and bundlers will fail to resolve the package",
 
   async run(ctx: CheckContext): Promise<CheckResult> {
     const start = Date.now();
@@ -23,9 +24,10 @@ export const C16_ExportsMapResolvable: Check = {
       for (const [key, value] of Object.entries(exportsMap)) {
         if (key === "./package.json") continue;
 
-        const paths = typeof value === "string"
-          ? [value]
-          : Object.values((value || {}) as Record<string, string>);
+        const paths =
+          typeof value === "string"
+            ? [value]
+            : Object.values((value || {}) as Record<string, string>);
 
         for (const exportPath of paths) {
           const resolved = join(ctx.repoRoot, pkg.path, exportPath);

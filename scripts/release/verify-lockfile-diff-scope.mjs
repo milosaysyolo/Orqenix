@@ -24,5 +24,7 @@ if (unauthorized.length === 0) {
 console.error("DIFF_SCOPE_VIOLATION");
 console.error("Unauthorized files in staged diff:");
 unauthorized.forEach((f) => console.error(`  - ${f}`));
-console.error("\nOnly pnpm-lock.yaml and root package.json may be modified by the lockfile-sync agent.");
+console.error(
+  "\nOnly pnpm-lock.yaml and root package.json may be modified by the lockfile-sync agent.",
+);
 process.exit(1);

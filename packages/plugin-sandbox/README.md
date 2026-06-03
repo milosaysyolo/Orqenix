@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-sandbox
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-sandbox";
+import {} from /* exports */ "@orqenix/plugin-sandbox";
 ```
 
 ## API

@@ -1,12 +1,12 @@
-import * as ed from '@noble/ed25519';
-import { sha512 } from '@noble/hashes/sha512';
+import * as ed from "@noble/ed25519";
+import { sha512 } from "@noble/hashes/sha512";
 import {
   type CapabilityToken,
   type TokenHeader,
   type TokenPayload,
   InvalidSignatureError,
-} from './contracts.js';
-import { canonicalSigningInput } from './format.js';
+} from "./contracts.js";
+import { canonicalSigningInput } from "./format.js";
 
 ed.etc.sha512Sync = (...msgs) => sha512(ed.etc.concatBytes(...msgs));
 

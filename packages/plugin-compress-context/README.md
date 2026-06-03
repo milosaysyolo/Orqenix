@@ -2,10 +2,10 @@
 
 Phase 5 v2 of the context-compression plugin. **Two entry points**:
 
-| Entry | Surface |
-|-------|---------|
-| `import plugin from '@orqenix/plugin-compress-context'` | Phase 4 v1 contract (frozen — snapshot-tested in G1.6) |
-| `import { createV2Plugin } from '@orqenix/plugin-compress-context/v2'` | Phase 5 v2 backed by `SmartCompressionEngine` |
+| Entry                                                                  | Surface                                                |
+| ---------------------------------------------------------------------- | ------------------------------------------------------ |
+| `import plugin from '@orqenix/plugin-compress-context'`                | Phase 4 v1 contract (frozen — snapshot-tested in G1.6) |
+| `import { createV2Plugin } from '@orqenix/plugin-compress-context/v2'` | Phase 5 v2 backed by `SmartCompressionEngine`          |
 
 ## v2 over v1
 

@@ -8,7 +8,11 @@ export function createClock(initial: number = Date.now()): MockClock {
   let t = initial;
   return {
     now: () => t,
-    advance: (ms) => { t += ms; },
-    set: (newT) => { t = newT; },
+    advance: (ms) => {
+      t += ms;
+    },
+    set: (newT) => {
+      t = newT;
+    },
   };
 }

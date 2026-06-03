@@ -4,11 +4,15 @@ export function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.length > 0;
 }
 
-export function brand<T extends Brand<unknown, string>>(value: T extends Brand<infer U, string> ? U : never): T {
+export function brand<T extends Brand<unknown, string>>(
+  value: T extends Brand<infer U, string> ? U : never,
+): T {
   return value as unknown as T;
 }
 
-export function unbrand<T extends Brand<unknown, string>>(value: T): T extends Brand<infer U, string> ? U : never {
+export function unbrand<T extends Brand<unknown, string>>(
+  value: T,
+): T extends Brand<infer U, string> ? U : never {
   return value as T extends Brand<infer U, string> ? U : never;
 }
 

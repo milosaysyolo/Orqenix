@@ -4,9 +4,21 @@ title: Token Signature Verification
 bsRef: docs/sdd/BS-003-capability-tokens.md
 dependsOn: [G1, G26, G27]
 criteria:
-  - { id: G28.1, description: "signing unit tests pass",                                            severity: blocking }
-  - { id: G28.2, description: "50 fresh sign/verify roundtrips succeed",                            severity: blocking }
-  - { id: G28.3, description: "50 random tampers to encoded token all rejected",                    severity: blocking }
-  - { id: G28.4, description: "delegation depth decrements correctly across chain",                 severity: blocking }
-  - { id: G28.5, description: "expired token rejected even with 30s clock skew",                    severity: blocking }
+  - { id: G28.1, description: "signing unit tests pass", severity: blocking }
+  - { id: G28.2, description: "50 fresh sign/verify roundtrips succeed", severity: blocking }
+  - {
+      id: G28.3,
+      description: "50 random tampers to encoded token all rejected",
+      severity: blocking,
+    }
+  - {
+      id: G28.4,
+      description: "delegation depth decrements correctly across chain",
+      severity: blocking,
+    }
+  - {
+      id: G28.5,
+      description: "expired token rejected even with 30s clock skew",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G28-*.json" }

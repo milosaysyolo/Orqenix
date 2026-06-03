@@ -12,9 +12,12 @@ Phase 4 → Phase 5 migration tooling with automatic rollback (CR v7.1 Ch.18).
 ## Rollback
 
 ```ts
-import { PhaseFourToFiveMigrator } from '@orqenix/migration';
+import { PhaseFourToFiveMigrator } from "@orqenix/migration";
 
-const migrator = new PhaseFourToFiveMigrator({ dbPath: './kb.sqlite', backupDir: './.orqenix/backups' });
+const migrator = new PhaseFourToFiveMigrator({
+  dbPath: "./kb.sqlite",
+  backupDir: "./.orqenix/backups",
+});
 
 const report = await migrator.migrate();
 // later, if something went wrong:

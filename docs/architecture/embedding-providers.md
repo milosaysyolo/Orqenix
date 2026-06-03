@@ -275,13 +275,11 @@ See `packages/` source for current behavior. This document
 will be filled with prose explanations, code examples,
 tables, and decision rationale before v0.5.0.
 
-
 ## References
 
 - CR v6.2
 - Phase 4 Delivery Report
 - ../implementation/DELIVERY_4_FULL.md
-
 
 ## Future work
 

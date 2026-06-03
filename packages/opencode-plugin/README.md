@@ -13,7 +13,7 @@ pnpm add @orqenix/opencode-plugin
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/opencode-plugin";
+import {} from /* exports */ "@orqenix/opencode-plugin";
 ```
 
 ## API

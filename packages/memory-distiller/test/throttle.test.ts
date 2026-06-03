@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { CpuThrottle } from '../src/throttle';
+import { describe, it, expect } from "vitest";
+import { CpuThrottle } from "../src/throttle";
 
 function spinFor(ms: number): void {
   const end = Date.now() + ms;
@@ -8,13 +8,13 @@ function spinFor(ms: number): void {
   }
 }
 
-describe('CpuThrottle', () => {
-  it('rejects invalid target', () => {
+describe("CpuThrottle", () => {
+  it("rejects invalid target", () => {
     expect(() => new CpuThrottle(0)).toThrow();
     expect(() => new CpuThrottle(101)).toThrow();
   });
 
-  it('does not sleep when under target', () => {
+  it("does not sleep when under target", () => {
     const t = new CpuThrottle(90, 50);
     t.reset();
     const slept = t.checkAndSleep();
@@ -22,14 +22,14 @@ describe('CpuThrottle', () => {
     return expect(slept).resolves.toBe(0);
   });
 
-  it('sleeps proportionally when over target (busy loop ~100% CPU)', async () => {
+  it("sleeps proportionally when over target (busy loop ~100% CPU)", async () => {
     const t = new CpuThrottle(10, 100);
     spinFor(120);
     const slept = await t.checkAndSleep();
     expect(slept).toBeGreaterThan(0);
   });
 
-  it('measure returns reasonable shape', () => {
+  it("measure returns reasonable shape", () => {
     const t = new CpuThrottle(20);
     spinFor(50);
     const m = t.measure();
@@ -38,7 +38,7 @@ describe('CpuThrottle', () => {
     expect(m.percent).toBeGreaterThanOrEqual(0);
   });
 
-  it('reset clears baseline', () => {
+  it("reset clears baseline", () => {
     const t = new CpuThrottle(20);
     spinFor(50);
     t.reset();

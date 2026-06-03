@@ -28,11 +28,7 @@ function normalize(values: number[], invert: boolean): Map<number, number> {
   return out;
 }
 
-export function hybridRank(
-  ftsHits: FtsHit[],
-  vecHits: VecHit[],
-  alpha: number = 0.6
-): HybridHit[] {
+export function hybridRank(ftsHits: FtsHit[], vecHits: VecHit[], alpha: number = 0.6): HybridHit[] {
   const ftsRanks = ftsHits.map((h) => h.rank);
   const ftsNorm = normalize(ftsRanks, true);
 
@@ -79,7 +75,7 @@ export async function hybridSearch(
   handle: KbDocsHandle,
   input: HybridSearchInput,
   embedder: EmbeddingProvider | undefined,
-  opts: HybridRetrievalOptions = {}
+  opts: HybridRetrievalOptions = {},
 ): Promise<HybridHit[]> {
   const alpha = opts.alpha ?? 0.6;
   const ftsLimit = opts.ftsLimit ?? 20;

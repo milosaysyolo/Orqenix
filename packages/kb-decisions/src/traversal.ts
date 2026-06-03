@@ -7,14 +7,12 @@ export interface TraversalOptions {
 export function ancestors(
   graph: DecisionGraph,
   fromId: string,
-  opts: TraversalOptions = {}
+  opts: TraversalOptions = {},
 ): DecisionNode[] {
   const max = opts.maxDepth ?? Infinity;
   const out: DecisionNode[] = [];
   const seen = new Set<string>();
-  const queue: Array<{ id: string; depth: number }> = [
-    { id: fromId, depth: 0 },
-  ];
+  const queue: Array<{ id: string; depth: number }> = [{ id: fromId, depth: 0 }];
   while (queue.length) {
     const { id, depth } = queue.shift()!;
     if (seen.has(id) || depth > max) continue;
@@ -32,7 +30,7 @@ export function ancestors(
 export function descendants(
   graph: DecisionGraph,
   fromId: string,
-  opts: TraversalOptions = {}
+  opts: TraversalOptions = {},
 ): DecisionNode[] {
   const max = opts.maxDepth ?? Infinity;
   const childrenOf = new Map<string, string[]>();
@@ -45,9 +43,7 @@ export function descendants(
   }
   const out: DecisionNode[] = [];
   const seen = new Set<string>();
-  const queue: Array<{ id: string; depth: number }> = [
-    { id: fromId, depth: 0 },
-  ];
+  const queue: Array<{ id: string; depth: number }> = [{ id: fromId, depth: 0 }];
   while (queue.length) {
     const { id, depth } = queue.shift()!;
     if (seen.has(id) || depth > max) continue;
@@ -65,7 +61,7 @@ export function descendants(
 export function pathBetween(
   graph: DecisionGraph,
   fromId: string,
-  toId: string
+  toId: string,
 ): DecisionNode[] | null {
   const prev = new Map<string, string | null>();
   const queue: string[] = [fromId];
@@ -79,9 +75,7 @@ export function pathBetween(
         path.unshift(cur);
         cur = prev.get(cur) ?? null;
       }
-      return path
-        .map((p) => graph.nodes.get(p))
-        .filter((n): n is DecisionNode => !!n);
+      return path.map((p) => graph.nodes.get(p)).filter((n): n is DecisionNode => !!n);
     }
     const node = graph.nodes.get(id);
     if (!node) continue;

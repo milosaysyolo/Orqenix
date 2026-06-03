@@ -8,14 +8,42 @@ description: |
   until G1 is green.
 
 criteria:
-  - { id: G1.1, description: "pnpm-workspace.yaml resolves >= 40 packages (OSS)", severity: blocking }
-  - { id: G1.2, description: "every package has a parseable package.json with required fields (name, version, license)", severity: blocking }
-  - { id: G1.3, description: "no circular dependencies between packages (madge)", severity: blocking }
-  - { id: G1.4, description: "topological tsc --build succeeds for every package", severity: blocking }
-  - { id: G1.5, description: "Phase 4 plugin-compress-input tests pass unchanged", severity: blocking }
-  - { id: G1.6, description: "Phase 4 contract snapshot (compress-context v1) matches", severity: blocking }
+  - {
+      id: G1.1,
+      description: "pnpm-workspace.yaml resolves >= 40 packages (OSS)",
+      severity: blocking,
+    }
+  - {
+      id: G1.2,
+      description: "every package has a parseable package.json with required fields (name, version, license)",
+      severity: blocking,
+    }
+  - {
+      id: G1.3,
+      description: "no circular dependencies between packages (madge)",
+      severity: blocking,
+    }
+  - {
+      id: G1.4,
+      description: "topological tsc --build succeeds for every package",
+      severity: blocking,
+    }
+  - {
+      id: G1.5,
+      description: "Phase 4 plugin-compress-input tests pass unchanged",
+      severity: blocking,
+    }
+  - {
+      id: G1.6,
+      description: "Phase 4 contract snapshot (compress-context v1) matches",
+      severity: blocking,
+    }
   - { id: G1.7, description: "Phase 5 baseline integration test suite passes", severity: blocking }
-  - { id: G1.8, description: "no OSS package imports any Pro package (depcruise)", severity: blocking }
+  - {
+      id: G1.8,
+      description: "no OSS package imports any Pro package (depcruise)",
+      severity: blocking,
+    }
 
 artifacts:
   reportDir: .orqenix/gate-reports/

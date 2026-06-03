@@ -1,7 +1,7 @@
-import { blake3Bytes } from '@orqenix/core';
-import type { SqliteConnection } from '@orqenix/storage-sqlite';
-import { searchVec, insertVec } from '@orqenix/storage-sqlite';
-import { hashString } from '@orqenix/storage-diff';
+import { blake3Bytes } from "@orqenix/core";
+import type { SqliteConnection } from "@orqenix/storage-sqlite";
+import { searchVec, insertVec } from "@orqenix/storage-sqlite";
+import { hashString } from "@orqenix/storage-diff";
 import {
   TokenVerifier,
   InsufficientCapabilityError,
@@ -9,7 +9,7 @@ import {
   TokenRevokedError,
   InvalidSignatureError,
   UnknownIssuerError,
-} from '@orqenix/capability-tokens';
+} from "@orqenix/capability-tokens";
 import {
   AppendChatEntryInputSchema,
   CreateSessionInputSchema,
@@ -23,18 +23,21 @@ import {
   type CreateSessionInput,
   type Role,
   type SessionId,
-} from './contracts.js';
+} from "./contracts.js";
 
-const BASE32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+const BASE32 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
 function encodeBase32(bytes: Uint8Array): string {
   let bits = 0;
   let value = 0;
-  let out = '';
+  let out = "";
   for (const b of bytes) {
     value = (value << 8) | b;
     bits += 8;
-    while (bits >= 5) { out += BASE32[(value >>> (bits - 5)) & 0x1f]; bits -= 5; }
+    while (bits >= 5) {
+      out += BASE32[(value >>> (bits - 5)) & 0x1f];
+      bits -= 5;
+    }
   }
   if (bits > 0) out += BASE32[(value << (5 - bits)) & 0x1f];
   return out;
@@ -122,27 +125,39 @@ export class ChatStore {
     const parsed = CreateSessionInputSchema.parse(input);
     const now = this.now();
     const sessionId = newSessionId(parsed.scopeId, parsed.title, now, ++this.salt);
-    this.conn.prepare(
-      `INSERT INTO chat_sessions (session_id, scope_id, title, created_at, last_entry_at, entry_count)
+    this.conn
+      .prepare(
+        `INSERT INTO chat_sessions (session_id, scope_id, title, created_at, last_entry_at, entry_count)
        VALUES (?, ?, ?, ?, NULL, 0)`,
-    ).run(sessionId, parsed.scopeId, parsed.title, now);
-    return { sessionId, scopeId: parsed.scopeId, title: parsed.title, createdAt: now, lastEntryAt: null, entryCount: 0 };
+      )
+      .run(sessionId, parsed.scopeId, parsed.title, now);
+    return {
+      sessionId,
+      scopeId: parsed.scopeId,
+      title: parsed.title,
+      createdAt: now,
+      lastEntryAt: null,
+      entryCount: 0,
+    };
   }
 
   getSession(sessionId: SessionId): ChatSession {
-    const row = this.conn.prepare<SessionRow>(
-      `SELECT session_id, scope_id, title, created_at, last_entry_at, entry_count
+    const row = this.conn
+      .prepare<SessionRow>(
+        `SELECT session_id, scope_id, title, created_at, last_entry_at, entry_count
        FROM chat_sessions WHERE session_id = ?`,
-    ).get(sessionId) as SessionRow | undefined;
+      )
+      .get(sessionId) as SessionRow | undefined;
     if (!row) throw new SessionNotFoundError(sessionId);
     return toSession(row);
   }
 
   private async authorize(encodedToken?: string): Promise<void> {
     if (!this.verifier) return;
-    if (!encodedToken) throw new ChatWriteUnauthorizedError('no token provided to verifier-gated ChatStore');
+    if (!encodedToken)
+      throw new ChatWriteUnauthorizedError("no token provided to verifier-gated ChatStore");
     try {
-      await this.verifier.verify(encodedToken, 'write:kb-chat');
+      await this.verifier.verify(encodedToken, "write:kb-chat");
     } catch (e) {
       if (
         e instanceof InsufficientCapabilityError ||
@@ -157,7 +172,10 @@ export class ChatStore {
     }
   }
 
-  async appendEntry(input: AppendChatEntryInput, opts: { encodedToken?: string } = {}): Promise<ChatEntry> {
+  async appendEntry(
+    input: AppendChatEntryInput,
+    opts: { encodedToken?: string } = {},
+  ): Promise<ChatEntry> {
     await this.authorize(opts.encodedToken);
     const parsed = AppendChatEntryInputSchema.parse(input);
     this.getSession(parsed.sessionId as SessionId); // throws SessionNotFoundError if missing
@@ -166,43 +184,63 @@ export class ChatStore {
     const contentHash = hashString(`${parsed.role}\n${parsed.content}`);
     const entryId = newEntryId(parsed.sessionId, parsed.content, now, ++this.salt);
 
-    const prevRow = this.conn.prepare<{ content_hash: string }>(
-      `SELECT content_hash FROM chat_entries
+    const prevRow = this.conn
+      .prepare<{ content_hash: string }>(
+        `SELECT content_hash FROM chat_entries
        WHERE session_id = ? ORDER BY rowid DESC LIMIT 1`,
-    ).get(parsed.sessionId) as { content_hash: string } | undefined;
+      )
+      .get(parsed.sessionId) as { content_hash: string } | undefined;
     const prevEntryHash = prevRow?.content_hash ?? null;
 
     this.conn.transaction(() => {
-      this.conn.prepare(
-        `INSERT INTO chat_entries
+      this.conn
+        .prepare(
+          `INSERT INTO chat_entries
          (entry_id, session_id, role, content, tokens, content_hash, prev_entry_hash, created_at, metadata_json)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      ).run(
-        entryId, parsed.sessionId, parsed.role, parsed.content,
-        parsed.tokens ?? null, contentHash, prevEntryHash, now,
-        JSON.stringify(parsed.metadata),
-      );
-      this.conn.prepare(
-        `UPDATE chat_sessions SET entry_count = entry_count + 1, last_entry_at = ?
+        )
+        .run(
+          entryId,
+          parsed.sessionId,
+          parsed.role,
+          parsed.content,
+          parsed.tokens ?? null,
+          contentHash,
+          prevEntryHash,
+          now,
+          JSON.stringify(parsed.metadata),
+        );
+      this.conn
+        .prepare(
+          `UPDATE chat_sessions SET entry_count = entry_count + 1, last_entry_at = ?
          WHERE session_id = ?`,
-      ).run(now, parsed.sessionId);
+        )
+        .run(now, parsed.sessionId);
     });
 
     return {
-      entryId, sessionId: parsed.sessionId as SessionId, role: parsed.role,
-      content: parsed.content, tokens: parsed.tokens ?? null,
-      contentHash, prevEntryHash, createdAt: now, metadata: parsed.metadata,
+      entryId,
+      sessionId: parsed.sessionId as SessionId,
+      role: parsed.role,
+      content: parsed.content,
+      tokens: parsed.tokens ?? null,
+      contentHash,
+      prevEntryHash,
+      createdAt: now,
+      metadata: parsed.metadata,
     };
   }
 
   listEntries(sessionId: SessionId, opts: { limit?: number } = {}): ChatEntry[] {
     const limit = Math.min(opts.limit ?? 100, 1000);
-    const rows = this.conn.prepare<EntryRow>(
-      `SELECT entry_id, session_id, role, content, tokens, content_hash, prev_entry_hash, created_at, metadata_json
+    const rows = this.conn
+      .prepare<EntryRow>(
+        `SELECT entry_id, session_id, role, content, tokens, content_hash, prev_entry_hash, created_at, metadata_json
        FROM chat_entries WHERE session_id = ?
         ORDER BY rowid ASC
        LIMIT ?`,
-    ).all(sessionId, limit) as EntryRow[];
+      )
+      .all(sessionId, limit) as EntryRow[];
     return rows.map(toEntry);
   }
 
@@ -211,7 +249,7 @@ export class ChatStore {
     let expectedPrev: string | null = null;
     for (const e of entries) {
       if (e.prevEntryHash !== expectedPrev) {
-        throw new HashChainBrokenError(expectedPrev ?? 'null', e.prevEntryHash ?? 'null');
+        throw new HashChainBrokenError(expectedPrev ?? "null", e.prevEntryHash ?? "null");
       }
       const computed = hashString(`${e.role}\n${e.content}`);
       if (computed !== e.contentHash) {
@@ -222,21 +260,23 @@ export class ChatStore {
   }
 
   indexEmbedding(entryId: ChatEntryId, embedding: Float32Array): void {
-    const row = this.conn.prepare<{ rowid: number }>(
-      `SELECT rowid FROM chat_entries WHERE entry_id = ?`,
-    ).get(entryId) as { rowid: number } | undefined;
+    const row = this.conn
+      .prepare<{ rowid: number }>(`SELECT rowid FROM chat_entries WHERE entry_id = ?`)
+      .get(entryId) as { rowid: number } | undefined;
     if (!row) throw new SessionNotFoundError(entryId);
-    insertVec(this.conn, 'chat_embeddings', row.rowid, embedding);
+    insertVec(this.conn, "chat_embeddings", row.rowid, embedding);
   }
 
   searchByEmbedding(query: Float32Array, k: number): Array<{ entry: ChatEntry; distance: number }> {
-    const hits = searchVec(this.conn, 'chat_embeddings', query, k);
+    const hits = searchVec(this.conn, "chat_embeddings", query, k);
     const out: Array<{ entry: ChatEntry; distance: number }> = [];
     for (const h of hits) {
-      const row = this.conn.prepare<EntryRow>(
-        `SELECT entry_id, session_id, role, content, tokens, content_hash, prev_entry_hash, created_at, metadata_json
+      const row = this.conn
+        .prepare<EntryRow>(
+          `SELECT entry_id, session_id, role, content, tokens, content_hash, prev_entry_hash, created_at, metadata_json
          FROM chat_entries WHERE rowid = ?`,
-      ).get(h.rowid) as EntryRow | undefined;
+        )
+        .get(h.rowid) as EntryRow | undefined;
       if (row) out.push({ entry: toEntry(row), distance: h.distance });
     }
     return out;

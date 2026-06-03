@@ -11,7 +11,7 @@ describe("conflict detection", () => {
       detectConflicts([
         { name: "x", version: "1.0.0", source: "a" },
         { name: "x", version: "1.0.0", source: "a" },
-      ])
+      ]),
     ).toEqual([]);
   });
 

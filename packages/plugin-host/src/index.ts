@@ -1,5 +1,5 @@
 import { Plugin } from "@orqenix/core";
-import type { OrqenixPlugin, PluginContext } from "@orqenix/core/plugin";
+import type { OrqenixPlugin, PluginContext } from "@orqenix/core";
 
 export interface PluginHostOptions {
   projectRoot?: string;

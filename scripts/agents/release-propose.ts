@@ -33,28 +33,29 @@ const AUDIT_LOG = ".orqenix/release-audit.log";
 
 async function getLastReleaseTag(): Promise<string> {
   if (args["since-ref"]) return args["since-ref"];
-  const { stdout } = await execa("git", [
-    "describe",
-    "--tags",
-    "--match",
-    "v*-phase-*",
-    "--abbrev=0",
-  ], { reject: false });
+  const { stdout } = await execa(
+    "git",
+    ["describe", "--tags", "--match", "v*-phase-*", "--abbrev=0"],
+    { reject: false },
+  );
   return stdout.trim() || "HEAD~50";
 }
 
 async function detectMode(): Promise<"oss" | "pro"> {
   try {
-    await import("node:fs/promises").then((fs) =>
-      fs.access(".orqenix-pro/release-policy.yaml")
-    );
+    await import("node:fs/promises").then((fs) => fs.access(".orqenix-pro/release-policy.yaml"));
     return "pro";
   } catch {
     return "oss";
   }
 }
 
-async function audit(action: string, inputs: Record<string, unknown>, outputs?: Record<string, unknown>, error?: string) {
+async function audit(
+  action: string,
+  inputs: Record<string, unknown>,
+  outputs?: Record<string, unknown>,
+  error?: string,
+) {
   await auditLog.run({
     logPath: AUDIT_LOG,
     entry: {
@@ -73,7 +74,8 @@ async function main(): Promise<void> {
   console.log(`Bump: ${args.bump} | Reason: ${args.reason} | Dry-run: ${args["dry-run"]}`);
 
   const mode = await detectMode();
-  const policyPath = mode === "pro" ? ".orqenix-pro/release-policy.yaml" : ".orqenix/release-policy.yaml";
+  const policyPath =
+    mode === "pro" ? ".orqenix-pro/release-policy.yaml" : ".orqenix/release-policy.yaml";
   const policy = parseYaml(await readFile(policyPath, "utf-8"));
 
   await audit("agent-start", { args, mode, policyPath });
@@ -152,7 +154,11 @@ async function main(): Promise<void> {
   ]);
   const checkReport = JSON.parse(checkOutput);
   console.log(`  Verdict: ${checkReport.verdict}`);
-  await audit("pre-publish-check", {}, { verdict: checkReport.verdict, blockers: checkReport.blockingFailures });
+  await audit(
+    "pre-publish-check",
+    {},
+    { verdict: checkReport.verdict, blockers: checkReport.blockingFailures },
+  );
 
   if (checkReport.verdict === "no-go") {
     console.log("\nPre-publish check NO-GO. Stopping.");
@@ -166,11 +172,17 @@ async function main(): Promise<void> {
     version: newVersion,
     proposals,
     verdict: checkReport.verdict,
-    warnings: checkReport.results.filter((r: any) => r.status === "warn").map((r: any) => `[${r.id}] ${r.message}`),
+    warnings: checkReport.results
+      .filter((r: any) => r.status === "warn")
+      .map((r: any) => `[${r.id}] ${r.message}`),
     reason: args.reason,
   });
   console.log(`  PR: ${pr.prUrl}`);
-  await audit("open-release-pr", { version: newVersion }, { prNumber: pr.prNumber, prUrl: pr.prUrl });
+  await audit(
+    "open-release-pr",
+    { version: newVersion },
+    { prNumber: pr.prNumber, prUrl: pr.prUrl },
+  );
 
   console.log("\n" + "=".repeat(70));
   console.log(`:check: Release proposal ready: ${pr.prUrl}`);

@@ -4,6 +4,7 @@ export * as Config from "./config/index.js";
 export * as Storage from "./storage/index.js";
 export * as Sync from "./sync/index.js";
 export * as Plugin from "./plugin/index.js";
+export * from "./plugin/index.js";
 export * as Util from "./util/logger.js";
 
 // Direct re-exports for plugin/parent usage

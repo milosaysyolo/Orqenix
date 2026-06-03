@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { appendAudit } from "../audit/writer";
+import { appendAudit } from "../audit/writer.js";
 import { generateKeyPairSync } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";

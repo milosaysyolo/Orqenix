@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { PluginHost } from "../src/index.js";
-import type { OrqenixPlugin } from "@orqenix/core/plugin";
+import type { OrqenixPlugin } from "@orqenix/core";
 
 describe("PluginHost", () => {
   it("loads built-in plugins", async () => {

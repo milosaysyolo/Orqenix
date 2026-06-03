@@ -4,9 +4,9 @@ title: Background CPU Throttling
 bsRef: docs/sdd/BS-008-cpu-throttling.md
 dependsOn: [G1]
 criteria:
-  - { id: G7.1, description: "throttle unit tests pass",                                          severity: blocking }
-  - { id: G7.2, description: "no sleep when idle (under target)",                                 severity: blocking }
-  - { id: G7.3, description: "sleeps when busy loop exceeds 10% target",                          severity: blocking }
-  - { id: G7.4, description: "sleep is bounded at 5000ms (no runaway pause)",                     severity: blocking }
-  - { id: G7.5, description: "reset clears the measurement baseline",                             severity: blocking }
+  - { id: G7.1, description: "throttle unit tests pass", severity: blocking }
+  - { id: G7.2, description: "no sleep when idle (under target)", severity: blocking }
+  - { id: G7.3, description: "sleeps when busy loop exceeds 10% target", severity: blocking }
+  - { id: G7.4, description: "sleep is bounded at 5000ms (no runaway pause)", severity: blocking }
+  - { id: G7.5, description: "reset clears the measurement baseline", severity: blocking }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G7-*.json" }

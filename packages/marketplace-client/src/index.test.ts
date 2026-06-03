@@ -6,7 +6,13 @@ const mockRegistry = {
   remove: vi.fn(async () => {}),
   purge: vi.fn(async () => {}),
   checkConflicts: vi.fn(async () => [] as any),
-  get: vi.fn(async (id: string) => ({ id, name: id, version: "1.0.0", type: "skill", state: "ACTIVE" })),
+  get: vi.fn(async (id: string) => ({
+    id,
+    name: id,
+    version: "1.0.0",
+    type: "skill",
+    state: "ACTIVE",
+  })),
 };
 
 const opts = { registry: mockRegistry as any, policy: { requireSignature: false } };

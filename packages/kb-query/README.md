@@ -13,7 +13,7 @@ pnpm add @orqenix/kb-query
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/kb-query";
+import {} from /* exports */ "@orqenix/kb-query";
 ```
 
 ## API

@@ -4,10 +4,22 @@ title: Workspace Membership
 bsRef: docs/sdd/BS-024-workspace.md
 dependsOn: [G1, G29]
 criteria:
-  - { id: G31.1, description: "workspace unit tests pass",                                        severity: blocking }
-  - { id: G31.2, description: "create inserts owner membership atomically in same transaction",   severity: blocking }
-  - { id: G31.3, description: "addMember rejects duplicates (PK conflict)",                       severity: blocking }
-  - { id: G31.4, description: "removeMember refuses owner (must transferOwnership first)",        severity: blocking }
-  - { id: G31.5, description: "transferOwnership swaps roles atomically",                         severity: blocking }
-  - { id: G31.6, description: "delete cascades to all memberships via FK ON DELETE CASCADE",      severity: blocking }
+  - { id: G31.1, description: "workspace unit tests pass", severity: blocking }
+  - {
+      id: G31.2,
+      description: "create inserts owner membership atomically in same transaction",
+      severity: blocking,
+    }
+  - { id: G31.3, description: "addMember rejects duplicates (PK conflict)", severity: blocking }
+  - {
+      id: G31.4,
+      description: "removeMember refuses owner (must transferOwnership first)",
+      severity: blocking,
+    }
+  - { id: G31.5, description: "transferOwnership swaps roles atomically", severity: blocking }
+  - {
+      id: G31.6,
+      description: "delete cascades to all memberships via FK ON DELETE CASCADE",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G31-*.json" }

@@ -2,12 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import {
-  createSnapshot,
-  listSnapshots,
-  deleteSnapshot,
-  verifySnapshot,
-} from "../src/index.js";
+import { createSnapshot, listSnapshots, deleteSnapshot, verifySnapshot } from "../src/index.js";
 
 let dir: string;
 let source: string;

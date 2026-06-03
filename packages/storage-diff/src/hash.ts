@@ -1,10 +1,10 @@
-import { blake3Bytes } from '@orqenix/core';
-import { Buffer } from 'node:buffer';
-import { CONTENT_HASH_PATTERN, ContentHashMismatchError, type ContentHash } from './contracts.js';
+import { blake3Bytes } from "@orqenix/core";
+import { Buffer } from "node:buffer";
+import { CONTENT_HASH_PATTERN, ContentHashMismatchError, type ContentHash } from "./contracts.js";
 
 export function hashBytes(bytes: Uint8Array): ContentHash {
   const digest = blake3Bytes(bytes);
-  return Buffer.from(digest).toString('hex') as ContentHash;
+  return Buffer.from(digest).toString("hex") as ContentHash;
 }
 
 export function hashString(s: string): ContentHash {
@@ -12,7 +12,7 @@ export function hashString(s: string): ContentHash {
 }
 
 export function isContentHash(v: unknown): v is ContentHash {
-  return typeof v === 'string' && CONTENT_HASH_PATTERN.test(v);
+  return typeof v === "string" && CONTENT_HASH_PATTERN.test(v);
 }
 
 export function verifyContentHash(bytes: Uint8Array, expected: ContentHash): void {

@@ -12,11 +12,11 @@ local_scope --[parallel fanout]--> remote_scope_B
               [validate chains] [aggregate top-k] [quorum check]
 ```
 
-* **Parallel fanout** via `Promise.allSettled`
-* **Per-target timeout** (default 5s)
-* **Provenance verification** drops hits with broken chains
-* **Quorum** = `ceil(scopesQueried / 2)` successful scopes
-* **Auto-link suggestions** based on failure ratios and relevance scores
+- **Parallel fanout** via `Promise.allSettled`
+- **Per-target timeout** (default 5s)
+- **Provenance verification** drops hits with broken chains
+- **Quorum** = `ceil(scopesQueried / 2)` successful scopes
+- **Auto-link suggestions** based on failure ratios and relevance scores
 
 ## Transport agnostic
 

@@ -58,9 +58,7 @@ async function main() {
 
     const max = parseSize(entry.maxSize);
     if (size > max) {
-      console.error(
-        `FAIL ${entry.path}: ${fmtBytes(size)} > ${entry.maxSize}`
-      );
+      console.error(`FAIL ${entry.path}: ${fmtBytes(size)} > ${entry.maxSize}`);
       failed++;
     } else {
       const pct = ((size / max) * 100).toFixed(0);

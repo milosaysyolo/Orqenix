@@ -1,7 +1,5 @@
 import { describe, it, expect } from "vitest";
 import { execa } from "execa";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { ORQENIX_ROOT, PRO_ROOT } from "../helpers/workspace.js";
 
 const EXPECTED_TAG = "v0.4.0-phase-4";

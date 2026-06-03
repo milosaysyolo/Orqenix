@@ -13,10 +13,10 @@ CR v7.1 chooses Qwen 2.5 7B via Ollama as the OSS default because:
 ## Quick start
 
 ```ts
-import { OllamaAdapter } from '@orqenix/llm-adapter-ollama';
+import { OllamaAdapter } from "@orqenix/llm-adapter-ollama";
 
-const llm = new OllamaAdapter({ model: 'qwen2.5:7b' });
-const r = await llm.complete({ messages: [{ role: 'user', content: 'hi' }] });
+const llm = new OllamaAdapter({ model: "qwen2.5:7b" });
+const r = await llm.complete({ messages: [{ role: "user", content: "hi" }] });
 console.log(r.content);
 ```
 

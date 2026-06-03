@@ -2,13 +2,16 @@
 // @bc CS-012 Hooks Contracts
 // @gate G14
 
-import { OrqenixError } from '@orqenix/core';
+import { OrqenixError } from "@orqenix/core";
 
 export const HOOK_NAMES = [
-  'preCompress', 'postCompress',
-  'preDistill', 'postDistill',
-  'preRecall', 'postRecall',
-  'preInject',
+  "preCompress",
+  "postCompress",
+  "preDistill",
+  "postDistill",
+  "preRecall",
+  "postRecall",
+  "preInject",
 ] as const;
 export type HookName = (typeof HOOK_NAMES)[number];
 
@@ -18,14 +21,14 @@ export interface BaseHookPayload {
 }
 
 export interface PreCompressPayload extends BaseHookPayload {
-  readonly event: 'preCompress';
+  readonly event: "preCompress";
   readonly inputTokens: number;
   readonly contextSize: number;
   readonly strategyId: string;
 }
 
 export interface PostCompressPayload extends BaseHookPayload {
-  readonly event: 'postCompress';
+  readonly event: "postCompress";
   readonly inputTokens: number;
   readonly outputTokens: number;
   readonly ratio: number;
@@ -35,33 +38,33 @@ export interface PostCompressPayload extends BaseHookPayload {
 }
 
 export interface PreDistillPayload extends BaseHookPayload {
-  readonly event: 'preDistill';
+  readonly event: "preDistill";
   readonly batchSize: number;
 }
 
 export interface PostDistillPayload extends BaseHookPayload {
-  readonly event: 'postDistill';
+  readonly event: "postDistill";
   readonly entriesScanned: number;
   readonly memoriesCreated: number;
   readonly durationMs: number;
 }
 
 export interface PreRecallPayload extends BaseHookPayload {
-  readonly event: 'preRecall';
+  readonly event: "preRecall";
   readonly query: string;
   readonly k: number;
 }
 
 export interface PostRecallPayload extends BaseHookPayload {
-  readonly event: 'postRecall';
+  readonly event: "postRecall";
   readonly query: string;
   readonly memoryIdsReturned: readonly string[];
   readonly durationMs: number;
 }
 
 export interface PreInjectPayload extends BaseHookPayload {
-  readonly event: 'preInject';
-  readonly strategyName: 'A' | 'B' | 'C' | 'D' | 'E';
+  readonly event: "preInject";
+  readonly strategyName: "A" | "B" | "C" | "D" | "E";
   readonly memoryCount: number;
 }
 
@@ -78,5 +81,7 @@ export type HookPayloadMap = {
 export type HookListener<T extends HookName> = (payload: HookPayloadMap[T]) => void | Promise<void>;
 
 export class HookError extends OrqenixError {
-  constructor(reason: string) { super(`hook error: ${reason}`, 'HOOK'); }
+  constructor(reason: string) {
+    super(`hook error: ${reason}`, "HOOK");
+  }
 }

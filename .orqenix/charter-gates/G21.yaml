@@ -4,11 +4,27 @@ title: RTK Hooks Integration
 bsRef: docs/sdd/BS-022-rtk-hooks.md
 dependsOn: [G1, G14]
 criteria:
-  - { id: G21.1, description: "rtk-hooks unit tests pass",                                          severity: blocking }
-  - { id: G21.2, description: "blocks dangerous commands (rm, dd, shutdown, reboot, mkfs)",         severity: blocking }
-  - { id: G21.3, description: "redacts API keys and Bearer tokens before output",                   severity: blocking }
-  - { id: G21.4, description: "truncates stdout above configured cap",                              severity: blocking }
-  - { id: G21.5, description: "records run counter and duration histogram metrics",                 severity: blocking }
-  - { id: G21.6, description: "extension formats output with exit code and truncation markers",     severity: blocking }
-  - { id: G21.7, description: "redact() helper ignores invalid regex patterns",                     severity: blocking }
+  - { id: G21.1, description: "rtk-hooks unit tests pass", severity: blocking }
+  - {
+      id: G21.2,
+      description: "blocks dangerous commands (rm, dd, shutdown, reboot, mkfs)",
+      severity: blocking,
+    }
+  - {
+      id: G21.3,
+      description: "redacts API keys and Bearer tokens before output",
+      severity: blocking,
+    }
+  - { id: G21.4, description: "truncates stdout above configured cap", severity: blocking }
+  - {
+      id: G21.5,
+      description: "records run counter and duration histogram metrics",
+      severity: blocking,
+    }
+  - {
+      id: G21.6,
+      description: "extension formats output with exit code and truncation markers",
+      severity: blocking,
+    }
+  - { id: G21.7, description: "redact() helper ignores invalid regex patterns", severity: blocking }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G21-*.json" }

@@ -22,11 +22,8 @@ export const C18_ForbiddenFilesExcluded: Check = {
         for (const f of files) {
           for (const pattern of forbidden) {
             const regex = new RegExp(
-              pattern
-                .replace(/\*\*/g, ".*")
-                .replace(/\*/g, "[^/]*")
-                .replace(/\./g, "\\."),
-              "i"
+              pattern.replace(/\*\*/g, ".*").replace(/\*/g, "[^/]*").replace(/\./g, "\\."),
+              "i",
             );
             if (regex.test(f.path)) {
               tarballContains.push({ pkg: pkg.name, file: f.path });

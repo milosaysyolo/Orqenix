@@ -10,15 +10,20 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node-version: ['20', '22']
+        node-version: ["20", "22"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v3
-        with: { version: 9 }
+        with:
+          version: 9
       - uses: actions/setup-node@v4
-        with: { node-version: ${{ matrix.node-version }}, cache: pnpm }
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Build allowlisted native dependencies
+        run: pnpm rebuild better-sqlite3 esbuild @swc/core --config.ignore-scripts=false
       - run: pnpm exec prettier --check .
       - run: pnpm build
       - run: pnpm typecheck
@@ -29,7 +34,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { path: Orqenix }
+        with:
+          path: Orqenix
       - name: Clone Orqenix-Pro
         env:
           PRO_TOKEN: ${{ secrets.ORQENIX_PRO_READ_TOKEN }}

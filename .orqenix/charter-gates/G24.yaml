@@ -1,16 +1,30 @@
-```yaml
 schemaVersion: 1
 id: G24
 title: Migration Tooling
 bsRef: docs/sdd/BS-031-migration.md
 dependsOn: [G1, G2, G3, G18]
 criteria:
-  - { id: G24.1, description: "migration unit tests pass",                              severity: blocking }
-  - { id: G24.2, description: "migrate applies all Phase 5 migrations in id order",     severity: blocking }
-  - { id: G24.3, description: "migrate preserves Phase 4 legacy data unchanged",        severity: blocking }
-  - { id: G24.4, description: "rollback restores DB to Phase 4 from backup",            severity: blocking }
-  - { id: G24.5, description: "rollback rejects corrupted backup",                      severity: blocking }
-  - { id: G24.6, description: "backup round-trip preserves bytes (BLAKE3 verified)",    severity: blocking }
-  - { id: G24.7, description: "restoreFromBackup throws BackupMissingError on missing", severity: blocking }
+  - { id: G24.1, description: "migration unit tests pass", severity: blocking }
+  - {
+      id: G24.2,
+      description: "migrate applies all Phase 5 migrations in id order",
+      severity: blocking,
+    }
+  - {
+      id: G24.3,
+      description: "migrate preserves Phase 4 legacy data unchanged",
+      severity: blocking,
+    }
+  - { id: G24.4, description: "rollback restores DB to Phase 4 from backup", severity: blocking }
+  - { id: G24.5, description: "rollback rejects corrupted backup", severity: blocking }
+  - {
+      id: G24.6,
+      description: "backup round-trip preserves bytes (BLAKE3 verified)",
+      severity: blocking,
+    }
+  - {
+      id: G24.7,
+      description: "restoreFromBackup throws BackupMissingError on missing",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G24-*.json" }
-```

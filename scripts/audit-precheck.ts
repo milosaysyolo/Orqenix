@@ -18,11 +18,9 @@ interface AuditResult {
 }
 
 async function main() {
-  const { stdout, exitCode } = await execa(
-    "pnpm",
-    ["audit", "--json", "--audit-level=high"],
-    { reject: false }
-  );
+  const { stdout, exitCode } = await execa("pnpm", ["audit", "--json", "--audit-level=high"], {
+    reject: false,
+  });
 
   let result: AuditResult;
   try {
@@ -41,7 +39,7 @@ async function main() {
   };
 
   console.log(
-    `audit summary: low=${vulns.low} moderate=${vulns.moderate} high=${vulns.high} critical=${vulns.critical}`
+    `audit summary: low=${vulns.low} moderate=${vulns.moderate} high=${vulns.high} critical=${vulns.critical}`,
   );
 
   if (vulns.high > 0 || vulns.critical > 0) {

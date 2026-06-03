@@ -13,25 +13,27 @@ export const C23_VersionMonotonic: Check = {
 
     const publishable = ctx.packages.filter((p) => p.classification === "publishable");
 
-    await Promise.all(publishable.map(async (pkg) => {
-      const name = pkg.name;
-      const newVersion = pkg.current.version as string;
+    await Promise.all(
+      publishable.map(async (pkg) => {
+        const name = pkg.name;
+        const newVersion = pkg.current.version as string;
 
-      try {
-        const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(name)}`);
-        if (res.status === 404) return;
+        try {
+          const res = await fetch(`https://registry.npmjs.org/${encodeURIComponent(name)}`);
+          if (res.status === 404) return;
 
-        const data = await res.json() as { "dist-tags"?: Record<string, string> };
-        const latest = data["dist-tags"]?.latest;
-        if (!latest) return;
+          const data = (await res.json()) as { "dist-tags"?: Record<string, string> };
+          const latest = data["dist-tags"]?.latest;
+          if (!latest) return;
 
-        if (compareVersions(newVersion, latest) < 0) {
-          downgrades.push({ pkg: name, newVersion, publishedVersion: latest });
+          if (compareVersions(newVersion, latest) < 0) {
+            downgrades.push({ pkg: name, newVersion, publishedVersion: latest });
+          }
+        } catch {
+          // Network error, skip
         }
-      } catch {
-        // Network error, skip
-      }
-    }));
+      }),
+    );
 
     if (downgrades.length === 0) {
       return {
@@ -50,7 +52,9 @@ export const C23_VersionMonotonic: Check = {
       durationMs: Date.now() - start,
       message: `${downgrades.length} package(s) would be downgraded`,
       details: {
-        affectedPackages: downgrades.map((d) => `${d.pkg}: ${d.newVersion} < ${d.publishedVersion}`),
+        affectedPackages: downgrades.map(
+          (d) => `${d.pkg}: ${d.newVersion} < ${d.publishedVersion}`,
+        ),
         recommendation: "Bump version via changeset to be greater than published latest",
       },
     };
@@ -58,8 +62,14 @@ export const C23_VersionMonotonic: Check = {
 };
 
 function compareVersions(a: string, b: string): number {
-  const aParts = a.replace(/[^0-9.]/g, "").split(".").map(Number);
-  const bParts = b.replace(/[^0-9.]/g, "").split(".").map(Number);
+  const aParts = a
+    .replace(/[^0-9.]/g, "")
+    .split(".")
+    .map(Number);
+  const bParts = b
+    .replace(/[^0-9.]/g, "")
+    .split(".")
+    .map(Number);
   for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
     const aNum = aParts[i] ?? 0;
     const bNum = bParts[i] ?? 0;

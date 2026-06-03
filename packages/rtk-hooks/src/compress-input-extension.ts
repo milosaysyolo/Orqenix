@@ -1,5 +1,5 @@
-import type { RtkCommandResult } from './contracts.js';
-import type { RtkRunner } from './runner.js';
+import type { RtkCommandResult } from "./contracts.js";
+import type { RtkRunner } from "./runner.js";
 
 export interface RtkInput {
   cmd?: string;
@@ -16,14 +16,14 @@ export type RtkResultFormatter = (r: RtkCommandResult) => string;
 
 export function defaultFormatter(r: RtkCommandResult): string {
   const lines: string[] = [];
-  lines.push(`$ ${r.cmd} ${r.args.join(' ')}`.trim());
+  lines.push(`$ ${r.cmd} ${r.args.join(" ")}`.trim());
   if (r.stdout) lines.push(r.stdout.trimEnd());
   if (r.truncatedStdout) lines.push(`[stdout truncated]`);
   if (r.stderr) lines.push(`[stderr]\n${r.stderr.trimEnd()}`);
   if (r.truncatedStderr) lines.push(`[stderr truncated]`);
   if (r.timedOut) lines.push(`[timed out]`);
-  else lines.push(`[exit ${r.exitCode ?? '?'}]`);
-  return lines.join('\n');
+  else lines.push(`[exit ${r.exitCode ?? "?"}]`);
+  return lines.join("\n");
 }
 
 export interface CreateRtkExtensionOptions {

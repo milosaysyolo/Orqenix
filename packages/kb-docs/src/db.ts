@@ -44,15 +44,13 @@ export function openKbDocs(path: string, dimension: number = 1536): KbDocsHandle
   `);
 
   const insertDocStmt = db.prepare(
-    "INSERT OR REPLACE INTO docs (id, path, title, content, updated_at) VALUES (?, ?, ?, ?, ?)"
+    "INSERT OR REPLACE INTO docs (id, path, title, content, updated_at) VALUES (?, ?, ?, ?, ?)",
   );
   const insertFtsStmt = db.prepare(
-    "INSERT INTO docs_fts (id, path, title, content) VALUES (?, ?, ?, ?)"
+    "INSERT INTO docs_fts (id, path, title, content) VALUES (?, ?, ?, ?)",
   );
   const deleteFtsStmt = db.prepare("DELETE FROM docs_fts WHERE id = ?");
-  const insertVecStmt = db.prepare(
-    "INSERT INTO docs_vec (id, embedding) VALUES (?, ?)"
-  );
+  const insertVecStmt = db.prepare("INSERT INTO docs_vec (id, embedding) VALUES (?, ?)");
   const deleteVecStmt = db.prepare("DELETE FROM docs_vec WHERE id = ?");
   const deleteDocStmt = db.prepare("DELETE FROM docs WHERE id = ?");
 
@@ -83,7 +81,7 @@ export function openKbDocs(path: string, dimension: number = 1536): KbDocsHandle
       const rows = db
         .prepare(
           `SELECT id, path, title, snippet(docs_fts, 3, '<b>', '</b>', '...', 16) AS snippet, rank
-           FROM docs_fts WHERE docs_fts MATCH ? ORDER BY rank LIMIT ?`
+           FROM docs_fts WHERE docs_fts MATCH ? ORDER BY rank LIMIT ?`,
         )
         .all(query, limit) as FtsHit[];
       return rows;
@@ -93,7 +91,7 @@ export function openKbDocs(path: string, dimension: number = 1536): KbDocsHandle
       const rows = db
         .prepare(
           `SELECT id, distance FROM docs_vec
-           WHERE embedding MATCH ? ORDER BY distance LIMIT ?`
+           WHERE embedding MATCH ? ORDER BY distance LIMIT ?`,
         )
         .all(Buffer.from(embedding.buffer), limit) as VecHit[];
       return rows;
@@ -105,7 +103,7 @@ export function openKbDocs(path: string, dimension: number = 1536): KbDocsHandle
           `SELECT d.id, d.path, d.title,
                   snippet(docs_fts, 3, '<b>', '</b>', '...', 16) AS snippet, rank
            FROM docs_fts JOIN docs d ON d.id = docs_fts.id
-           WHERE docs_fts MATCH ? ORDER BY rank LIMIT ?`
+           WHERE docs_fts MATCH ? ORDER BY rank LIMIT ?`,
         )
         .all(queryStr, topK) as Array<FtsHit>;
       return hits.map((h) => ({

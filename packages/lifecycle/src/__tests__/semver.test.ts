@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseRange, bumpRule } from "../version/semver";
+import { parseRange, bumpRule } from "../version/semver.js";
 
 describe("semver", () => {
   it("should parse valid semver range", () => {

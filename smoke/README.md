@@ -1,11 +1,13 @@
 # Cross-Repo Smoke Test
 
 ## Linux/macOS
+
 ```bash
 bash smoke/cross-repo-smoke.sh
 ```
 
 ## Windows
+
 ```pwsh
 ./smoke/cross-repo-smoke.ps1
 ```

@@ -24,6 +24,7 @@ const { valid, tamperedAt } = await verifyChain(logPath);
 ## Hash chain format
 
 Each entry contains:
+
 - All original fields
 - `prev`: hash of previous entry (64 hex chars, `0x64` for genesis)
 - `pos`: position in chain (1-based)
@@ -32,6 +33,7 @@ Each entry contains:
 ## Tamper detection
 
 `verifyChain()` replays all entries checking:
+
 1. Correct `prev` reference
 2. Correct `pos` sequence
 3. Re-computed hash matches stored hash

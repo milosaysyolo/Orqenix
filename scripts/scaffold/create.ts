@@ -37,17 +37,27 @@ function parseArgs(): { name: string; dir: string; license: string; todo: string
   const defaults = { name: "", dir: "", license: "Apache-2.0", todo: "Part-X" };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case "--name": defaults.name = args[++i]; break;
-      case "--path": defaults.dir = args[++i]; break;
-      case "--license": defaults.license = args[++i]; break;
-      case "--todo": defaults.todo = args[++i]; break;
+      case "--name":
+        defaults.name = args[++i];
+        break;
+      case "--path":
+        defaults.dir = args[++i];
+        break;
+      case "--license":
+        defaults.license = args[++i];
+        break;
+      case "--todo":
+        defaults.todo = args[++i];
+        break;
     }
   }
   return defaults;
 }
 
 function capitalize(s: string): string {
-  return s.replace(/[-_](.)/g, (_, c) => " " + c.toUpperCase()).replace(/^./, (c) => c.toUpperCase());
+  return s
+    .replace(/[-_](.)/g, (_, c) => " " + c.toUpperCase())
+    .replace(/^./, (c) => c.toUpperCase());
 }
 
 const packages: PackageScaffold[] = [];
@@ -60,30 +70,38 @@ if (args.includes("--name") && args.includes("--path")) {
   const isPro = opts.name.startsWith("@orqenix-pro/");
   const dirName = opts.dir;
   const srcName = opts.name;
-  const inject = isPro ? '' : `import { defineConfig } from "vitest/config";`;
+  const inject = isPro ? "" : `import { defineConfig } from "vitest/config";`;
 
   packages.push({
     name: srcName,
     dir: dirName,
     files: {
-      "package.json": JSON.stringify({
-        name: srcName,
-        version: "0.5.0-phase-5",
-        description: `${desc} for Orqenix (${opts.todo})`,
-        license: opts.license,
-        type: "module",
-        main: "./dist/index.js",
-        types: "./dist/index.d.ts",
-        exports: { ".": { types: "./dist/index.d.ts", import: "./dist/index.js" } },
-        scripts: { build: "tsc --build", test: "vitest run" },
-        devDependencies: { typescript: "^5.6.0", vitest: "^2.1.0" },
-      }, null, 2),
-      "tsconfig.json": JSON.stringify({
-        extends: isPro ? "../../../tsconfig.base.json" : "../../tsconfig.base.json",
-        compilerOptions: { composite: true, outDir: "./dist", rootDir: "./src" },
-        include: ["src/**/*"],
-        exclude: ["dist", "node_modules", "**/*.test.ts"],
-      }, null, 2),
+      "package.json": JSON.stringify(
+        {
+          name: srcName,
+          version: "0.5.0-phase-5",
+          description: `${desc} for Orqenix (${opts.todo})`,
+          license: opts.license,
+          type: "module",
+          main: "./dist/index.js",
+          types: "./dist/index.d.ts",
+          exports: { ".": { types: "./dist/index.d.ts", import: "./dist/index.js" } },
+          scripts: { build: "tsc --build", test: "vitest run" },
+          devDependencies: { typescript: "^5.6.0", vitest: "^2.1.0" },
+        },
+        null,
+        2,
+      ),
+      "tsconfig.json": JSON.stringify(
+        {
+          extends: isPro ? "../../../tsconfig.base.json" : "../../tsconfig.base.json",
+          compilerOptions: { composite: true, outDir: "./dist", rootDir: "./src" },
+          include: ["src/**/*"],
+          exclude: ["dist", "node_modules", "**/*.test.ts"],
+        },
+        null,
+        2,
+      ),
       "src/index.ts": `// SPDX-License-Identifier: ${opts.license}
 // Scaffold for ${opts.todo}
 // TODO_${opts.todo.replace(/-/g, "_")}: implement ${desc} logic
@@ -115,18 +133,22 @@ export default defineConfig({
     name: "@orqenix/gate-runner-core",
     dir: "packages/gate-runner-core",
     files: {
-      "package.json": JSON.stringify({
-        name: "@orqenix/gate-runner-core",
-        version: "0.5.0-phase-5",
-        description: "Shared base for Orqenix charter gate runners",
-        license: "Apache-2.0",
-        type: "module",
-        main: "./dist/index.js",
-        types: "./dist/index.d.ts",
-        exports: { ".": { types: "./dist/index.d.ts", import: "./dist/index.js" } },
-        scripts: { build: "tsc --build", test: "vitest run" },
-        devDependencies: { typescript: "^5.6.0", vitest: "^2.1.0" },
-      }, null, 2),
+      "package.json": JSON.stringify(
+        {
+          name: "@orqenix/gate-runner-core",
+          version: "0.5.0-phase-5",
+          description: "Shared base for Orqenix charter gate runners",
+          license: "Apache-2.0",
+          type: "module",
+          main: "./dist/index.js",
+          types: "./dist/index.d.ts",
+          exports: { ".": { types: "./dist/index.d.ts", import: "./dist/index.js" } },
+          scripts: { build: "tsc --build", test: "vitest run" },
+          devDependencies: { typescript: "^5.6.0", vitest: "^2.1.0" },
+        },
+        null,
+        2,
+      ),
       "src/index.ts": `export interface GateCheck {
   id: string;
   description: string;
@@ -185,4 +207,7 @@ async function main(): Promise<void> {
   consola.success(`\nDone. ${packages.length} packages scaffolded.`);
 }
 
-main().catch((e) => { consola.error(e); process.exit(1); });
+main().catch((e) => {
+  consola.error(e);
+  process.exit(1);
+});

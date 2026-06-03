@@ -1,4 +1,4 @@
-import { blake3Bytes, canonicalJson } from '@orqenix/core';
+import { blake3Bytes, canonicalJson } from "@orqenix/core";
 import {
   type CapabilityToken,
   type EncodedToken,
@@ -9,14 +9,14 @@ import {
   TokenPayloadSchema,
   TOKEN_ID_PATTERN,
   InvalidTokenFormatError,
-} from './contracts.js';
+} from "./contracts.js";
 
-const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+const BASE32_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
 function encodeBase32(bytes: Uint8Array): string {
   let bits = 0;
   let value = 0;
-  let out = '';
+  let out = "";
   for (const b of bytes) {
     value = (value << 8) | b;
     bits += 8;
@@ -30,19 +30,20 @@ function encodeBase32(bytes: Uint8Array): string {
 }
 
 export function base64UrlEncode(bytes: Uint8Array): string {
-  return Buffer.from(bytes).toString('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
+  return Buffer.from(bytes)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 export function base64UrlDecode(s: string): Uint8Array {
   if (!/^[A-Za-z0-9_-]*$/.test(s)) {
-    throw new InvalidTokenFormatError('base64url contains invalid characters');
+    throw new InvalidTokenFormatError("base64url contains invalid characters");
   }
-  const padded = s + '='.repeat((4 - (s.length % 4)) % 4);
-  const std = padded.replace(/-/g, '+').replace(/_/g, '/');
-  return new Uint8Array(Buffer.from(std, 'base64'));
+  const padded = s + "=".repeat((4 - (s.length % 4)) % 4);
+  const std = padded.replace(/-/g, "+").replace(/_/g, "/");
+  return new Uint8Array(Buffer.from(std, "base64"));
 }
 
 function utf8Encode(s: string): Uint8Array {
@@ -50,7 +51,7 @@ function utf8Encode(s: string): Uint8Array {
 }
 
 function utf8Decode(b: Uint8Array): string {
-  return new TextDecoder('utf-8', { fatal: true }).decode(b);
+  return new TextDecoder("utf-8", { fatal: true }).decode(b);
 }
 
 export function canonicalSigningInput(header: TokenHeader, payload: TokenPayload): Uint8Array {
@@ -59,7 +60,7 @@ export function canonicalSigningInput(header: TokenHeader, payload: TokenPayload
   return utf8Encode(`${h}.${p}`);
 }
 
-export function computeJti(payloadWithoutJti: Omit<TokenPayload, 'jti'>): TokenId {
+export function computeJti(payloadWithoutJti: Omit<TokenPayload, "jti">): TokenId {
   const json = canonicalJson(payloadWithoutJti);
   const digest = blake3Bytes(utf8Encode(json));
   const truncated = digest.slice(0, 20);
@@ -83,10 +84,10 @@ export function encodeToken(token: CapabilityToken): EncodedToken {
 }
 
 export function decodeToken(input: string): CapabilityToken {
-  if (typeof input !== 'string') {
-    throw new InvalidTokenFormatError('input must be a string');
+  if (typeof input !== "string") {
+    throw new InvalidTokenFormatError("input must be a string");
   }
-  const parts = input.split('.');
+  const parts = input.split(".");
   if (parts.length !== 3) {
     throw new InvalidTokenFormatError(`expected 3 parts separated by ".", got ${parts.length}`);
   }
@@ -122,7 +123,9 @@ export function decodeToken(input: string): CapabilityToken {
     throw new InvalidTokenFormatError(`signature decode error: ${(e as Error).message}`);
   }
   if (signature.length !== 64) {
-    throw new InvalidTokenFormatError(`Ed25519 signature must be 64 bytes, got ${signature.length}`);
+    throw new InvalidTokenFormatError(
+      `Ed25519 signature must be 64 bytes, got ${signature.length}`,
+    );
   }
 
   return { header: headerResult.data, payload: payloadResult.data, signature };

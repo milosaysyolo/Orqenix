@@ -13,7 +13,7 @@ pnpm add @orqenix/mcp-server
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/mcp-server";
+import {} from /* exports */ "@orqenix/mcp-server";
 ```
 
 ## API

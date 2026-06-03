@@ -29,9 +29,5 @@ export function replaceFenced(source: string, replacement: string): string {
   if (start === -1 || end === -1) {
     return source + "\n" + wrapFenced(replacement) + "\n";
   }
-  return (
-    source.slice(0, start) +
-    wrapFenced(replacement) +
-    source.slice(end + FENCE_END.length)
-  );
+  return source.slice(0, start) + wrapFenced(replacement) + source.slice(end + FENCE_END.length);
 }

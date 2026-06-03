@@ -1,4 +1,4 @@
-import type { OrqenixPlugin } from "@orqenix/core/plugin";
+import type { KnowledgeQuery, OrqenixPlugin, PluginContext } from "@orqenix/core";
 
 export interface PickerConfig {
   enabled: boolean;
@@ -115,7 +115,7 @@ export function createPlugin(userConfig: Partial<PickerConfig> = {}): OrqenixPlu
     priority: 90,
     capabilities: ["selection", "ranking"],
     hooks: {
-      "knowledge.query": async (query, _ctx) => {
+      "knowledge.query": async (query: KnowledgeQuery, _ctx: PluginContext) => {
         const adjustedTopK = Math.min(query.topK ?? config.topN, config.topN);
         return { ...query, topK: adjustedTopK };
       },

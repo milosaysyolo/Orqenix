@@ -2,7 +2,7 @@
 // @bc CS-022 Workspace Schema
 // @gate G31.1
 
-import type { MigrationRecord } from '@orqenix/storage-sqlite';
+import type { MigrationRecord } from "@orqenix/storage-sqlite";
 
 const M001 = `
 CREATE TABLE IF NOT EXISTS workspaces (
@@ -27,5 +27,5 @@ CREATE INDEX IF NOT EXISTS workspace_memberships_scope
 `;
 
 export const WORKSPACE_MIGRATIONS: MigrationRecord[] = [
-  { id: 21, name: 'workspaces_v1', sql: M001, checksum: '' },
+  { id: 21, name: "workspaces_v1", sql: M001, checksum: "" },
 ];

@@ -27,11 +27,7 @@ export interface DetectOutput {
 }
 
 export async function run(input: DetectInput): Promise<DetectOutput> {
-  const { stdout } = await execa("git", [
-    "diff",
-    "--name-only",
-    `${input.sinceRef}...HEAD`,
-  ]);
+  const { stdout } = await execa("git", ["diff", "--name-only", `${input.sinceRef}...HEAD`]);
   const files = stdout.split("\n").filter((f) => f.length > 0);
 
   const byPackage = new Map<string, ChangedPackage>();
@@ -43,9 +39,7 @@ export async function run(input: DetectInput): Promise<DetectOutput> {
 
     if (!byPackage.has(dirName)) {
       try {
-        const pkg = JSON.parse(
-          await readFile(join(pkgPath, "package.json"), "utf-8")
-        );
+        const pkg = JSON.parse(await readFile(join(pkgPath, "package.json"), "utf-8"));
         byPackage.set(dirName, {
           name: pkg.name as string,
           path: pkgPath,

@@ -9,7 +9,7 @@ describe("hybridRank", () => {
         { id: "b", path: "p", title: "t", snippet: "", rank: -1 },
       ],
       [],
-      0.6
+      0.6,
     );
     expect(out[0]?.id).toBe("a");
     expect(out[0]?.source).toBe("fts");
@@ -24,7 +24,7 @@ describe("hybridRank", () => {
     const out = hybridRank(
       [{ id: "x", path: "p", title: "t", snippet: "", rank: -1 }],
       [{ id: "x", distance: 0.05 }],
-      0.5
+      0.5,
     );
     expect(out[0]?.source).toBe("both");
   });
@@ -39,7 +39,7 @@ describe("hybridRank", () => {
         { id: "a", distance: 0.9 },
         { id: "b", distance: 0.1 },
       ],
-      1
+      1,
     );
     expect(out[0]?.id).toBe("b");
   });
@@ -54,7 +54,7 @@ describe("hybridRank", () => {
         { id: "a", distance: 0.9 },
         { id: "b", distance: 0.1 },
       ],
-      0
+      0,
     );
     expect(out[0]?.id).toBe("a");
   });
@@ -67,7 +67,7 @@ describe("gradeAndDiversify", () => {
         { id: "1", path: "a/x", title: "", score: 0.5, source: "fts" },
         { id: "2", path: "b/y", title: "", score: 0.05, source: "fts" },
       ],
-      { minScore: 0.1, diversityPenalty: 0 }
+      { minScore: 0.1, diversityPenalty: 0 },
     );
     expect(out.map((h) => h.id)).toEqual(["1"]);
   });
@@ -78,7 +78,7 @@ describe("gradeAndDiversify", () => {
         { id: "1", path: "a/x.md", title: "", score: 1, source: "fts" },
         { id: "2", path: "a/y.md", title: "", score: 0.9, source: "fts" },
       ],
-      { minScore: 0, diversityPenalty: 0.5 }
+      { minScore: 0, diversityPenalty: 0.5 },
     );
     expect(out[0]?.id).toBe("1");
     expect(out[1]?.score).toBeCloseTo(0.45);

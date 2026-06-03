@@ -27,8 +27,20 @@ const dummyContext: CheckContext = {
 describe("runner", () => {
   it("runs all checks and returns results", async () => {
     const checks = [
-      makeCheck("T01", { id: "T01", severity: "blocking", status: "pass", durationMs: 1, message: "OK" }),
-      makeCheck("T02", { id: "T02", severity: "blocking", status: "pass", durationMs: 1, message: "OK" }),
+      makeCheck("T01", {
+        id: "T01",
+        severity: "blocking",
+        status: "pass",
+        durationMs: 1,
+        message: "OK",
+      }),
+      makeCheck("T02", {
+        id: "T02",
+        severity: "blocking",
+        status: "pass",
+        durationMs: 1,
+        message: "OK",
+      }),
     ];
     const results = await runChecks(checks, dummyContext);
     expect(results).toHaveLength(2);
@@ -59,7 +71,13 @@ describe("runner", () => {
 
   it("runs checks with concurrency batching", async () => {
     const checks = Array.from({ length: 12 }, (_, i) =>
-      makeCheck(`T${i}`, { id: `T${i}`, severity: "blocking", status: "pass", durationMs: 1, message: "OK" })
+      makeCheck(`T${i}`, {
+        id: `T${i}`,
+        severity: "blocking",
+        status: "pass",
+        durationMs: 1,
+        message: "OK",
+      }),
     );
     const results = await runChecks(checks, dummyContext);
     expect(results).toHaveLength(12);
@@ -67,8 +85,20 @@ describe("runner", () => {
 
   it("returns mixed statuses correctly", async () => {
     const checks = [
-      makeCheck("PASS", { id: "PASS", severity: "blocking", status: "pass", durationMs: 1, message: "OK" }),
-      makeCheck("FAIL", { id: "FAIL", severity: "blocking", status: "fail", durationMs: 1, message: "Fail" }),
+      makeCheck("PASS", {
+        id: "PASS",
+        severity: "blocking",
+        status: "pass",
+        durationMs: 1,
+        message: "OK",
+      }),
+      makeCheck("FAIL", {
+        id: "FAIL",
+        severity: "blocking",
+        status: "fail",
+        durationMs: 1,
+        message: "Fail",
+      }),
     ];
     const results = await runChecks(checks, dummyContext);
     expect(results.filter((r) => r.status === "pass")).toHaveLength(1);

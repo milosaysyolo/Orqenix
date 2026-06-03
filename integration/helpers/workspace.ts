@@ -2,7 +2,7 @@ import { mkdtemp, rm, mkdir, writeFile, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { execa, type ExecaReturnValue } from "execa";
+import { execa } from "execa";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -13,7 +13,7 @@ export const ORQENIX_CLI = resolve(ORQENIX_ROOT, "packages", "cli", "dist", "ind
 export interface WorkspaceContext {
   dir: string;
   cleanup: () => Promise<void>;
-  cli(args: string[]): Promise<ExecaReturnValue>;
+  cli(args: string[]): Promise<Awaited<ReturnType<typeof execa>>>;
   writeFile(rel: string, content: string): Promise<void>;
   readFile(rel: string): Promise<string>;
   exists(rel: string): Promise<boolean>;

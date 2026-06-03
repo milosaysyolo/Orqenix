@@ -20,9 +20,7 @@ export class DecisionKB {
     return new DecisionKB({ nodes: new Map() });
   }
 
-  async append(
-    entry: Omit<DecisionEntry, "id" | "timestamp">,
-  ): Promise<string> {
+  async append(entry: Omit<DecisionEntry, "id" | "timestamp">): Promise<string> {
     const now = Date.now();
     const id = deriveId({
       title: entry.title,
@@ -47,11 +45,7 @@ export class DecisionKB {
     return this.toEntry(n);
   }
 
-  async listByType(
-    type: string,
-    _scope: string,
-    _limit?: number,
-  ): Promise<DecisionEntry[]> {
+  async listByType(type: string, _scope: string, _limit?: number): Promise<DecisionEntry[]> {
     const out: DecisionEntry[] = [];
     for (const [, n] of this.graph.nodes) {
       if (n.tags?.includes(type)) out.push(this.toEntry(n));
@@ -59,10 +53,7 @@ export class DecisionKB {
     return out;
   }
 
-  async semanticSearch(
-    queryOrTopK?: string | number,
-    topK?: number,
-  ): Promise<DecisionEntry[]> {
+  async semanticSearch(queryOrTopK?: string | number, topK?: number): Promise<DecisionEntry[]> {
     const k = typeof queryOrTopK === "number" ? queryOrTopK : (topK ?? 10);
     const all = Array.from(this.graph.nodes.values());
     const scored = all.map((n) => this.toEntry(n, 0.5));

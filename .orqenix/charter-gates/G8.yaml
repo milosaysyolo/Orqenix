@@ -4,7 +4,11 @@ title: LLM Adapter Contract
 bsRef: docs/sdd/BS-010-llm-adapter-contract.md
 dependsOn: [G1]
 criteria:
-  - { id: G8.1, description: "ollama adapter unit tests pass",                                    severity: blocking }
-  - { id: G8.2, description: "byok adapter unit tests pass",                                      severity: blocking }
-  - { id: G8.3, description: "all 5 adapter classes implement LlmAdapter shape (complete+isHealthy)", severity: blocking }
+  - { id: G8.1, description: "ollama adapter unit tests pass", severity: blocking }
+  - { id: G8.2, description: "byok adapter unit tests pass", severity: blocking }
+  - {
+      id: G8.3,
+      description: "all 5 adapter classes implement LlmAdapter shape (complete+isHealthy)",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G8-*.json" }

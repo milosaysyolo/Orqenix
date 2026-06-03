@@ -10,11 +10,7 @@ export interface AuditEntry {
   details?: Record<string, unknown>;
 }
 
-export async function appendAudit(
-  path: string,
-  entry: AuditEntry,
-  signingKey: KeyObject,
-) {
+export async function appendAudit(path: string, entry: AuditEntry, signingKey: KeyObject) {
   const body = yamlStringify(entry).trim();
   const sig = sign(null, Buffer.from(body), signingKey).toString("base64");
   await appendFile(path, `---\n${body}\nsignature: ed25519:${sig}\n`);

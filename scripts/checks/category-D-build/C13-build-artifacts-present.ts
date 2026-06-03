@@ -7,7 +7,8 @@ export const C13_BuildArtifactsPresent: Check = {
   category: "build",
   severity: "blocking",
   description: "All publishable packages have dist/ directory",
-  rationale: "Missing dist/ means build hasn't run; publishing would ship an empty or broken package",
+  rationale:
+    "Missing dist/ means build hasn't run; publishing would ship an empty or broken package",
 
   async run(ctx: CheckContext): Promise<CheckResult> {
     const start = Date.now();

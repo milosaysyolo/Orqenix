@@ -3,10 +3,22 @@ import { join } from "node:path";
 import type { Check, CheckContext, CheckResult } from "../types";
 
 const REQUIRED_FIELDS = [
-  "name", "version", "description", "license", "author",
-  "homepage", "repository", "bugs", "keywords",
-  "main", "module", "types", "exports", "files",
-  "publishConfig", "engines",
+  "name",
+  "version",
+  "description",
+  "license",
+  "author",
+  "homepage",
+  "repository",
+  "bugs",
+  "keywords",
+  "main",
+  "module",
+  "types",
+  "exports",
+  "files",
+  "publishConfig",
+  "engines",
 ];
 
 const REQUIRED_PUBLISH_CONFIG_KEYS = ["access", "registry"];
@@ -37,7 +49,11 @@ export const C08_PackageMetadataValid: Check = {
         if (pc) {
           for (const key of REQUIRED_PUBLISH_CONFIG_KEYS) {
             if (pc[key] === undefined) {
-              issues.push({ pkg: pkg.name, field: `publishConfig.${key}`, detail: "Missing in publishConfig" });
+              issues.push({
+                pkg: pkg.name,
+                field: `publishConfig.${key}`,
+                detail: "Missing in publishConfig",
+              });
             }
           }
         }
@@ -46,12 +62,20 @@ export const C08_PackageMetadataValid: Check = {
         if (ex) {
           for (const key of REQUIRED_EXPORTS_KEYS) {
             if (ex[key] === undefined) {
-              issues.push({ pkg: pkg.name, field: `exports.${key}`, detail: "Missing in exports map" });
+              issues.push({
+                pkg: pkg.name,
+                field: `exports.${key}`,
+                detail: "Missing in exports map",
+              });
             }
           }
         }
       } catch (err) {
-        issues.push({ pkg: pkg.name, field: "package.json", detail: `Failed to parse: ${(err as Error).message}` });
+        issues.push({
+          pkg: pkg.name,
+          field: "package.json",
+          detail: `Failed to parse: ${(err as Error).message}`,
+        });
       }
     }
 

@@ -13,7 +13,7 @@ pnpm add @orqenix/skill-kit
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/skill-kit";
+import {} from /* exports */ "@orqenix/skill-kit";
 ```
 
 ## API

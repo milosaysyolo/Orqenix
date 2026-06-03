@@ -3,24 +3,40 @@
 // @gate G14.3, G22.1
 
 import {
-  type CounterSnapshot, type GaugeSnapshot, type HistogramSnapshot,
-  type MetricLabels, type MetricSink, type MetricsSnapshot,
-} from './contracts.js';
+  type CounterSnapshot,
+  type GaugeSnapshot,
+  type HistogramSnapshot,
+  type MetricLabels,
+  type MetricSink,
+  type MetricsSnapshot,
+} from "./contracts.js";
 
 const HIST_MAX = 10_000;
 
 function labelKey(labels: MetricLabels): string {
   const keys = Object.keys(labels).sort();
-  return keys.map((k) => `${k}=${labels[k]}`).join('|');
+  return keys.map((k) => `${k}=${labels[k]}`).join("|");
 }
 
 function metricKey(name: string, labels: MetricLabels): string {
   return `${name}#${labelKey(labels)}`;
 }
 
-interface CounterInternal { value: number; labels: MetricLabels; name: string }
-interface GaugeInternal { value: number; labels: MetricLabels; name: string }
-interface HistogramInternal { samples: number[]; labels: MetricLabels; name: string }
+interface CounterInternal {
+  value: number;
+  labels: MetricLabels;
+  name: string;
+}
+interface GaugeInternal {
+  value: number;
+  labels: MetricLabels;
+  name: string;
+}
+interface HistogramInternal {
+  samples: number[];
+  labels: MetricLabels;
+  name: string;
+}
 
 function percentile(sorted: number[], p: number): number {
   if (sorted.length === 0) return 0;
@@ -39,7 +55,9 @@ export class MetricsRegistry {
   private readonly histograms = new Map<string, HistogramInternal>();
   private sink: MetricSink | null = null;
 
-  setSink(sink: MetricSink | null): void { this.sink = sink; }
+  setSink(sink: MetricSink | null): void {
+    this.sink = sink;
+  }
 
   counter(name: string, labels: MetricLabels = {}): { inc: (v?: number) => void } {
     const key = metricKey(name, labels);
@@ -90,8 +108,10 @@ export class MetricsRegistry {
       const sorted = [...h.samples].sort((a, b) => a - b);
       const sum = sorted.reduce((a, x) => a + x, 0);
       histograms.push({
-        name: h.name, labels: h.labels,
-        count: sorted.length, sum,
+        name: h.name,
+        labels: h.labels,
+        count: sorted.length,
+        sum,
         min: sorted[0] ?? 0,
         max: sorted[sorted.length - 1] ?? 0,
         p50: percentile(sorted, 50),
@@ -113,12 +133,12 @@ export class MetricsRegistry {
 }
 
 export const METRIC_NAMES = {
-  COMPRESS_TOKENS_IN: 'orqenix.compress.tokens_in',
-  COMPRESS_TOKENS_OUT: 'orqenix.compress.tokens_out',
-  COMPRESS_RATIO: 'orqenix.compress.ratio',
-  COMPRESS_DURATION_MS: 'orqenix.compress.duration_ms',
-  COMPRESS_TIER0_PRESERVED: 'orqenix.compress.tier0_preserved',
-  DISTILL_ENTRIES_SCANNED: 'orqenix.distill.entries_scanned',
-  DISTILL_MEMORIES_CREATED: 'orqenix.distill.memories_created',
-  RECALL_DURATION_MS: 'orqenix.recall.duration_ms',
+  COMPRESS_TOKENS_IN: "orqenix.compress.tokens_in",
+  COMPRESS_TOKENS_OUT: "orqenix.compress.tokens_out",
+  COMPRESS_RATIO: "orqenix.compress.ratio",
+  COMPRESS_DURATION_MS: "orqenix.compress.duration_ms",
+  COMPRESS_TIER0_PRESERVED: "orqenix.compress.tier0_preserved",
+  DISTILL_ENTRIES_SCANNED: "orqenix.distill.entries_scanned",
+  DISTILL_MEMORIES_CREATED: "orqenix.distill.memories_created",
+  RECALL_DURATION_MS: "orqenix.recall.duration_ms",
 } as const;

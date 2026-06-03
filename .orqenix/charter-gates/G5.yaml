@@ -4,9 +4,25 @@ title: Memory Distiller Behavior
 bsRef: docs/sdd/BS-007-memory-distiller-oss.md
 dependsOn: [G1, G2, G3, G4, G23]
 criteria:
-  - { id: G5.1, description: "memory-distiller unit tests pass",                                  severity: blocking }
-  - { id: G5.2, description: "extractor handles 50 mixed sentences without crash",                severity: blocking }
-  - { id: G5.3, description: "distillBatch + watermark idempotency on 20 entries",                severity: blocking }
-  - { id: G5.4, description: "content_hash idempotency: 5 identical messages -> 1 memory",        severity: blocking }
-  - { id: G5.5, description: "minConfidence filter rejects low-confidence patterns",              severity: blocking }
+  - { id: G5.1, description: "memory-distiller unit tests pass", severity: blocking }
+  - {
+      id: G5.2,
+      description: "extractor handles 50 mixed sentences without crash",
+      severity: blocking,
+    }
+  - {
+      id: G5.3,
+      description: "distillBatch + watermark idempotency on 20 entries",
+      severity: blocking,
+    }
+  - {
+      id: G5.4,
+      description: "content_hash idempotency: 5 identical messages -> 1 memory",
+      severity: blocking,
+    }
+  - {
+      id: G5.5,
+      description: "minConfidence filter rejects low-confidence patterns",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G5-*.json" }

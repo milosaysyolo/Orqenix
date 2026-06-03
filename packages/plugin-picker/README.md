@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-picker
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-picker";
+import {} from /* exports */ "@orqenix/plugin-picker";
 ```
 
 ## API

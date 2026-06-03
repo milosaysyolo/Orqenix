@@ -22,6 +22,7 @@ audit_log: .orqenix/release-audit.log
 ## Mission
 
 After CI publishes packages to npm, run independent verification:
+
 1. Confirm each package is queryable from npm registry
 2. Verify provenance attestation
 3. Install in fresh tempdir and run smoke test

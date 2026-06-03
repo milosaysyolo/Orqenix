@@ -41,6 +41,7 @@ Step 5: Comment on OSS release issue with Pro release status URL
 ## Output
 
 Comment on OSS release issue:
+
 ```
 Pro release triggered via repository_dispatch.
 Track: https://github.com/milosaysyolo/Orqenix-Pro/actions/runs/<run_id>

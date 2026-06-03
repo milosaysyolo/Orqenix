@@ -3,10 +3,26 @@ import { KnowledgeQueryEngine } from "./index.js";
 
 const stubKB = (kind: string) => ({
   query: async (_q: string, _topK?: number) => [
-    { id: `${kind}-1`, text: `text from ${kind}`, score: 0.9, path: "", heading: "", name: `name-${kind}`,kind: "function" },
+    {
+      id: `${kind}-1`,
+      text: `text from ${kind}`,
+      score: 0.9,
+      path: "",
+      heading: "",
+      name: `name-${kind}`,
+      kind: "function",
+    },
   ],
   semanticSearch: async (_topK?: number) => [
-    { id: `${kind}-1`, title: "title", body: "body", type: "adr", scopeId: "s1", enforcement: "soft" as const, confidence: 0.9 },
+    {
+      id: `${kind}-1`,
+      title: "title",
+      body: "body",
+      type: "adr",
+      scopeId: "s1",
+      enforcement: "soft" as const,
+      confidence: 0.9,
+    },
   ],
 });
 

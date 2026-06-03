@@ -53,10 +53,10 @@ to fix the issue.
 
 ### 3.2 Mechanics
 
-* Constant `GRACE_PERIOD_MS = 7 * 24 * 60 * 60 * 1000`
-* During grace, `verifyLicense` returns `{ valid: true, inGrace: true, graceRemainingMs }`
-* The CLI emits a warning on every invocation during grace
-* After grace, `verifyLicense` returns `{ valid: false, reason: "expired-beyond-grace" }`
+- Constant `GRACE_PERIOD_MS = 7 * 24 * 60 * 60 * 1000`
+- During grace, `verifyLicense` returns `{ valid: true, inGrace: true, graceRemainingMs }`
+- The CLI emits a warning on every invocation during grace
+- After grace, `verifyLicense` returns `{ valid: false, reason: "expired-beyond-grace" }`
 
 ### 3.3 No silent extension
 
@@ -67,8 +67,8 @@ The grace period does not extend on each check. It is anchored to
 
 ### 4.1 Ed25519 keypair
 
-* Private key: generated once, kept on the issuance server, never exported
-* Public key: shipped in the Pro binary as a PEM string
+- Private key: generated once, kept on the issuance server, never exported
+- Public key: shipped in the Pro binary as a PEM string
 
 Ed25519 was chosen for compactness, speed, and standard library support in
 Node.js without external dependencies.
@@ -98,36 +98,36 @@ and for testing.
 A license file is JSON with the payload fields plus a `signature` field
 (base64-encoded). It is suitable for:
 
-* Email delivery to the customer
-* Storage in a secrets manager
-* Mounting as a file in containerized deployments
+- Email delivery to the customer
+- Storage in a secrets manager
+- Mounting as a file in containerized deployments
 
 ## 5. License issuance API
 
 In Phase 4, issuance is manual: a CLI script signs payloads using the
 private key. Phase 5 introduces a hosted issuance API with:
 
-* Audit log of every issuance
-* Revocation list (signed, cached, refreshed)
-* Self-serve renewal for paying customers
+- Audit log of every issuance
+- Revocation list (signed, cached, refreshed)
+- Self-serve renewal for paying customers
 
 ## 6. Anti-tamper
 
-* Public key is embedded in the Pro binary at build time, not loaded from
+- Public key is embedded in the Pro binary at build time, not loaded from
   disk
-* Modifying the binary to bypass verification triggers an integrity check on
+- Modifying the binary to bypass verification triggers an integrity check on
   startup
-* Mismatched signature attempts are logged with full payload for forensics
+- Mismatched signature attempts are logged with full payload for forensics
 
 ## 7. Audit trail
 
 Every license check writes a structured log entry:
 
-* timestamp
-* result (valid, invalid, in-grace)
-* customerId
-* features attempted
-* caller (module path)
+- timestamp
+- result (valid, invalid, in-grace)
+- customerId
+- features attempted
+- caller (module path)
 
 The log is local; it is not phoned home. Enterprise customers can ship the
 log to their SIEM via standard log forwarding.
@@ -184,16 +184,16 @@ renew or downgrade to OSS.
 
 ## 10. Threat model
 
-* Stolen license file: replayable on any machine; future hardware binding in
+- Stolen license file: replayable on any machine; future hardware binding in
   Phase 5
-* Reverse-engineered binary: difficult without source, possible with effort;
+- Reverse-engineered binary: difficult without source, possible with effort;
   acceptable risk for current tier
-* Cracked verification: detected by checksum mismatch on the public key
-* Insider abuse: covered by audit log and revocation list
+- Cracked verification: detected by checksum mismatch on the public key
+- Insider abuse: covered by audit log and revocation list
 
 ## 11. Open questions for Phase 5
 
-* Hardware binding via TPM or platform identity
-* Online license check with offline fallback
-* Per-seat enforcement for team licenses
-* Customer-facing usage dashboard
+- Hardware binding via TPM or platform identity
+- Online license check with offline fallback
+- Per-seat enforcement for team licenses
+- Customer-facing usage dashboard

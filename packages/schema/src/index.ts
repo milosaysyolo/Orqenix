@@ -2,7 +2,7 @@
 // Scaffold for Part-1
 // TODO_Part_1: implement Schema logic
 
-export const PACKAGE_VERSION = '0.5.0-phase-5';
-export const TODO = 'Part_1' as const;
+export const PACKAGE_VERSION = "0.5.0-phase-5";
+export const TODO = "Part_1" as const;
 
-console.info('@orqenix/schema: scaffold loaded, TODO: ' + TODO);
+console.info("@orqenix/schema: scaffold loaded, TODO: " + TODO);

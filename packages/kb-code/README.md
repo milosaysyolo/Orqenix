@@ -13,7 +13,7 @@ pnpm add @orqenix/kb-code
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/kb-code";
+import {} from /* exports */ "@orqenix/kb-code";
 ```
 
 ## API

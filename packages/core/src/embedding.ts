@@ -41,9 +41,7 @@ export async function resolveEmbedder(cfg: {
   }
   const local = await importOptional<LocalFactory>("@orqenix/embedding-local");
   if (!local?.createLocalEmbedder) {
-    throw new Error(
-      "No embedding provider available. Install @orqenix/embedding-local.",
-    );
+    throw new Error("No embedding provider available. Install @orqenix/embedding-local.");
   }
   return local.createLocalEmbedder();
 }

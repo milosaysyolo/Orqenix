@@ -7,7 +7,8 @@ export const C11_OrphanFilesDetected: Check = {
   category: "packages",
   severity: "warning",
   description: "No orphan LICENSE or CHANGELOG files outside actual packages",
-  rationale: "Leftover generated files cause confusion; extra LICENSE files look like license violations",
+  rationale:
+    "Leftover generated files cause confusion; extra LICENSE files look like license violations",
 
   async run(ctx: CheckContext): Promise<CheckResult> {
     const start = Date.now();
@@ -27,7 +28,10 @@ export const C11_OrphanFilesDetected: Check = {
             if (!full.includes("node_modules") && !full.startsWith(".")) {
               await scanDir(full);
             }
-          } else if ((entry.name === "LICENSE" || entry.name === "CHANGELOG.md") && !full.includes("node_modules")) {
+          } else if (
+            (entry.name === "LICENSE" || entry.name === "CHANGELOG.md") &&
+            !full.includes("node_modules")
+          ) {
             const parent = full.substring(0, full.lastIndexOf("/"));
             if (!packagePaths.has(parent)) {
               candidates.push(full);
@@ -43,7 +47,8 @@ export const C11_OrphanFilesDetected: Check = {
 
     for (const f of candidates) {
       const parts = f.split("/");
-      const isInPackagesDir = parts.includes("packages") && parts.indexOf("packages") < parts.length - 1;
+      const isInPackagesDir =
+        parts.includes("packages") && parts.indexOf("packages") < parts.length - 1;
       if (isInPackagesDir) {
         orphans.push(f);
       }

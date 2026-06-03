@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-versioning
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-versioning";
+import {} from /* exports */ "@orqenix/plugin-versioning";
 ```
 
 ## API

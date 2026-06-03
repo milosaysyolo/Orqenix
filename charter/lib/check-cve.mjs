@@ -12,9 +12,7 @@ try {
 }
 
 const advisories = Object.values(json.advisories ?? {});
-const bad = advisories.filter(
-  (a) => a.severity === "high" || a.severity === "critical",
-);
+const bad = advisories.filter((a) => a.severity === "high" || a.severity === "critical");
 
 if (bad.length === 0) {
   console.log("OK: 0 high/critical vulnerabilities");

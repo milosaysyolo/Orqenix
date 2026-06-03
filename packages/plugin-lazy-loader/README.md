@@ -13,7 +13,7 @@ pnpm add @orqenix/plugin-lazy-loader
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/plugin-lazy-loader";
+import {} from /* exports */ "@orqenix/plugin-lazy-loader";
 ```
 
 ## API

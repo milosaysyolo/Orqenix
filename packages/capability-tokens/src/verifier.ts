@@ -4,11 +4,11 @@ import {
   TokenExpiredError,
   TokenNotYetValidError,
   UnknownIssuerError,
-} from './contracts.js';
-import { decodeToken } from './format.js';
-import { verifyTokenSignatureOrThrow } from './signing.js';
-import { requireCapability } from './permissions.js';
-import { RevocationStore } from './revocation.js';
+} from "./contracts.js";
+import { decodeToken } from "./format.js";
+import { verifyTokenSignatureOrThrow } from "./signing.js";
+import { requireCapability } from "./permissions.js";
+import { RevocationStore } from "./revocation.js";
 
 export interface TokenVerifierOptions {
   getIssuerPublicKey: (kid: string) => Promise<Uint8Array | null>;

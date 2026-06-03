@@ -5,20 +5,13 @@ export function createGraph(): DecisionGraph {
   return { nodes: new Map() };
 }
 
-export function deriveId(input: {
-  title: string;
-  rationale: string;
-  decidedAt: number;
-}): string {
+export function deriveId(input: { title: string; rationale: string; decidedAt: number }): string {
   const h = createHash("sha256");
   h.update(`${input.title}\n${input.rationale}\n${input.decidedAt}`);
   return h.digest("hex").slice(0, 16);
 }
 
-export function addDecision(
-  graph: DecisionGraph,
-  node: DecisionNode
-): void {
+export function addDecision(graph: DecisionGraph, node: DecisionNode): void {
   if (graph.nodes.has(node.id)) {
     throw new Error(`Decision ${node.id} already exists`);
   }
@@ -30,10 +23,7 @@ export function addDecision(
   graph.nodes.set(node.id, node);
 }
 
-export function getDecision(
-  graph: DecisionGraph,
-  id: string
-): DecisionNode | undefined {
+export function getDecision(graph: DecisionGraph, id: string): DecisionNode | undefined {
   return graph.nodes.get(id);
 }
 

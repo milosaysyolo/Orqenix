@@ -13,7 +13,7 @@ pnpm add @orqenix/marketplace-client
 ## Usage
 
 ```typescript
-import { /* exports */ } from "@orqenix/marketplace-client";
+import {} from /* exports */ "@orqenix/marketplace-client";
 ```
 
 ## API

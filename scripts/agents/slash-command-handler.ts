@@ -33,7 +33,9 @@ function main(): void {
   const parsed = parseSlashCommand(body);
 
   if (!parsed) {
-    console.error("Invalid slash command format. Use: /orqenix release [major|minor|patch|auto] [reason]");
+    console.error(
+      "Invalid slash command format. Use: /orqenix release [major|minor|patch|auto] [reason]",
+    );
     process.exit(1);
   }
 

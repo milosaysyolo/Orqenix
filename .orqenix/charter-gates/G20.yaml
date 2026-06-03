@@ -4,9 +4,17 @@ title: Incremental Reindex
 bsRef: docs/sdd/BS-021-incremental-reindex.md
 dependsOn: [G1, G2, G19]
 criteria:
-  - { id: G20.1, description: "reindex-incremental unit tests pass",                                severity: blocking }
-  - { id: G20.2, description: "scanFull adds, updates, removes, marks unchanged correctly",         severity: blocking }
-  - { id: G20.3, description: "applyEvents is idempotent on re-apply",                              severity: blocking }
-  - { id: G20.4, description: "ignores .git and node_modules paths",                                severity: blocking }
-  - { id: G20.5, description: "content_hash drives update detection (mtime alone insufficient)",    severity: blocking }
+  - { id: G20.1, description: "reindex-incremental unit tests pass", severity: blocking }
+  - {
+      id: G20.2,
+      description: "scanFull adds, updates, removes, marks unchanged correctly",
+      severity: blocking,
+    }
+  - { id: G20.3, description: "applyEvents is idempotent on re-apply", severity: blocking }
+  - { id: G20.4, description: "ignores .git and node_modules paths", severity: blocking }
+  - {
+      id: G20.5,
+      description: "content_hash drives update detection (mtime alone insufficient)",
+      severity: blocking,
+    }
 artifacts: { reportDir: .orqenix/gate-reports/, reportPattern: "G20-*.json" }

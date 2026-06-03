@@ -22,17 +22,18 @@ pnpm tsx scripts/pre-publish-check.ts --allow-warn
 
 ## Exit Codes
 
-| Code | Meaning |
-|------|---------|
-| 0 | All blocking checks pass (or go-with-warnings) |
-| 1 | One or more blocking checks fail |
-| 2 | Fatal error (check not found, etc.) |
+| Code | Meaning                                        |
+| ---- | ---------------------------------------------- |
+| 0    | All blocking checks pass (or go-with-warnings) |
+| 1    | One or more blocking checks fail               |
+| 2    | Fatal error (check not found, etc.)            |
 
 ## Understanding the Report
 
 The report is saved to `.orqenix/pre-publish-report.json` (or `.orqenix-pro/`).
 
 Key fields:
+
 - `verdict`: "go", "go-with-warnings", or "no-go"
 - `blockingFailures`: count of blocking failures
 - `results[]`: individual check results with recommendations
@@ -66,10 +67,10 @@ fi
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---------|-------------|-----|
+| Symptom   | Likely cause                | Fix                                                  |
+| --------- | --------------------------- | ---------------------------------------------------- |
 | C08 fails | package.json missing fields | Run `pnpm tsx scripts/normalize-packages.ts --apply` |
-| C09 fails | Package not in whitelist | Add to `publishable-whitelist.yaml` |
-| C10 fails | Cross-repo workspace:* dep | Convert to version range |
-| C13 fails | dist/ missing | Run `pnpm build` |
-| C21 fails | No changeset | Run `pnpm changeset` |
+| C09 fails | Package not in whitelist    | Add to `publishable-whitelist.yaml`                  |
+| C10 fails | Cross-repo workspace:\* dep | Convert to version range                             |
+| C13 fails | dist/ missing               | Run `pnpm build`                                     |
+| C21 fails | No changeset                | Run `pnpm changeset`                                 |

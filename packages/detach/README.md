@@ -12,21 +12,30 @@ Detach is irreversible (revoked links cannot return to active; workspaces delete
 
 ## Two kinds
 
-| Kind | What happens |
-|------|--------------|
-| `unlink-remote` | Revokes both directions of links to a single remote scope |
-| `full-detach` | Revokes all active links, deletes owned workspaces, removes `.orqenix/` contents (preserving `identity.key` by default) |
+| Kind            | What happens                                                                                                            |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `unlink-remote` | Revokes both directions of links to a single remote scope                                                               |
+| `full-detach`   | Revokes all active links, deletes owned workspaces, removes `.orqenix/` contents (preserving `identity.key` by default) |
 
 ## Quick start
 
 ```ts
-import { DetachPlanner, DetachExecutor } from '@orqenix/detach';
+import { DetachPlanner, DetachExecutor } from "@orqenix/detach";
 
 const planner = new DetachPlanner({ localScopeId, linkStore, workspaceStore, auditStore });
-const executor = new DetachExecutor({ localScopeId, linkStore, workspaceStore, auditStore, rootDir: process.cwd() });
+const executor = new DetachExecutor({
+  localScopeId,
+  linkStore,
+  workspaceStore,
+  auditStore,
+  rootDir: process.cwd(),
+});
 
 const plan = planner.planUnlink(REMOTE_SCOPE);
-console.log(`This will revoke ${plan.affectedLinks} links. Confirm by passing token:`, plan.confirmationToken);
+console.log(
+  `This will revoke ${plan.affectedLinks} links. Confirm by passing token:`,
+  plan.confirmationToken,
+);
 
 // Later, with user confirmation:
 const report = await executor.execute(plan, plan.confirmationToken);

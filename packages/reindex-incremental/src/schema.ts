@@ -1,4 +1,4 @@
-import type { MigrationRecord } from '@orqenix/storage-sqlite';
+import type { MigrationRecord } from "@orqenix/storage-sqlite";
 
 const M001 = `
 CREATE TABLE IF NOT EXISTS reindex_entries (
@@ -16,5 +16,5 @@ CREATE INDEX IF NOT EXISTS reindex_entries_hash
 `;
 
 export const REINDEX_MIGRATIONS: MigrationRecord[] = [
-  { id: 10, name: 'reindex_v1', sql: M001, checksum: '' },
+  { id: 10, name: "reindex_v1", sql: M001, checksum: "" },
 ];

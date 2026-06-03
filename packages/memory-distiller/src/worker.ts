@@ -1,9 +1,9 @@
-import { EventEmitter } from 'node:events';
-import { CpuThrottle, sleep } from './throttle.js';
-import type { HeuristicDistiller } from './distiller.js';
-import type { DistillationStats } from './contracts.js';
+import { EventEmitter } from "node:events";
+import { CpuThrottle, sleep } from "./throttle.js";
+import type { HeuristicDistiller } from "./distiller.js";
+import type { DistillationStats } from "./contracts.js";
 
-export type WorkerStatus = 'idle' | 'running' | 'stopping' | 'stopped';
+export type WorkerStatus = "idle" | "running" | "stopping" | "stopped";
 
 export interface WorkerOptions {
   distiller: HeuristicDistiller;
@@ -14,7 +14,7 @@ export interface WorkerOptions {
 }
 
 export class DistillerWorker extends EventEmitter {
-  status: WorkerStatus = 'idle';
+  status: WorkerStatus = "idle";
   private readonly distiller: HeuristicDistiller;
   private readonly throttle: CpuThrottle;
   private readonly idleSleepMs: number;
@@ -34,8 +34,8 @@ export class DistillerWorker extends EventEmitter {
   }
 
   async start(): Promise<void> {
-    if (this.status === 'running') return;
-    this.status = 'running';
+    if (this.status === "running") return;
+    this.status = "running";
     this.stopRequested = false;
     this.throttle.reset();
     let consecutiveIdle = 0;
@@ -45,15 +45,15 @@ export class DistillerWorker extends EventEmitter {
       try {
         stats = this.distiller.distillBatch();
       } catch (e) {
-        this.emit('error', e);
-        this.status = 'stopped';
+        this.emit("error", e);
+        this.status = "stopped";
         return;
       }
-      this.emit('batch', stats);
+      this.emit("batch", stats);
 
       if (stats.entriesScanned === 0) {
         consecutiveIdle++;
-        this.emit('idle', { consecutiveIdle });
+        this.emit("idle", { consecutiveIdle });
         if (consecutiveIdle >= this.idleStopRuns) break;
         await sleep(this.idleSleepMs);
         continue;
@@ -63,12 +63,12 @@ export class DistillerWorker extends EventEmitter {
       if (slept > 0) stats.throttleSleepMs = slept;
     }
 
-    this.status = 'stopped';
+    this.status = "stopped";
   }
 
   stop(): void {
-    if (this.status === 'running') {
-      this.status = 'stopping';
+    if (this.status === "running") {
+      this.status = "stopping";
       this.stopRequested = true;
     }
   }

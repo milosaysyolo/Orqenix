@@ -7,7 +7,7 @@ import {
   CAPABILITY_PATTERN,
   InsufficientCapabilityError,
   DelegationDepthExceededError,
-} from './contracts.js';
+} from "./contracts.js";
 
 export interface ParsedCapability {
   readonly action: Action;
@@ -25,7 +25,7 @@ export function parseCapability(s: Capability): ParsedCapability {
 }
 
 function globToRegExp(pattern: string): RegExp {
-  const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+  const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*");
   return new RegExp(`^${escaped}$`);
 }
 
@@ -33,9 +33,9 @@ export function matchesCapability(granted: Capability, required: Capability): bo
   const g = parseCapability(granted);
   const r = parseCapability(required);
   if (g.action !== r.action) return false;
-  if (g.resource !== '*' && g.resource !== r.resource) return false;
+  if (g.resource !== "*" && g.resource !== r.resource) return false;
   if (g.scopePattern === undefined) return true;
-  if (r.scopePattern === undefined) return g.scopePattern === '*';
+  if (r.scopePattern === undefined) return g.scopePattern === "*";
   return globToRegExp(g.scopePattern).test(r.scopePattern);
 }
 
@@ -51,7 +51,7 @@ export function requireCapability(token: CapabilityToken, required: Capability):
 
 export function canDelegate(token: CapabilityToken): boolean {
   if (token.payload.maxDelegationDepth <= 0) return false;
-  return token.payload.caps.some((c) => c.startsWith('delegate:'));
+  return token.payload.caps.some((c) => c.startsWith("delegate:"));
 }
 
 export function nextDelegationDepth(parentDepth: number): number {
@@ -60,4 +60,6 @@ export function nextDelegationDepth(parentDepth: number): number {
   return next;
 }
 
-export function allActions(): readonly Action[] { return ACTIONS; }
+export function allActions(): readonly Action[] {
+  return ACTIONS;
+}
