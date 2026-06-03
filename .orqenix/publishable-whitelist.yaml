@@ -42,14 +42,11 @@ packages:
   - "@orqenix/audit-log"
   - "@orqenix/detach"
   - "@orqenix/migration"
-  - "@orqenix/lifecycle"
-  - "@orqenix/provenance"
-  - "@orqenix/registry"
 
   # Tools
   - "@orqenix/prompt-rewriter"
-  - "@orqenix/sdk"
   - "@orqenix/schema"
-  - "@orqenix/config"
   - "@orqenix/workspace"
   - "@orqenix/scope-link"
+  - "@orqenix/sdk"
+  - "@orqenix/config"

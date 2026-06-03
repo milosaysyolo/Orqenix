@@ -1,0 +1,249 @@
+name: Release OSS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".changeset/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run only (validate but do not publish)"
+        type: boolean
+        default: true
+      skip_charter_gates:
+        description: "Skip charter gates (use only in emergencies)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: release-oss
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+  issues: write
+
+jobs:
+  pre-flight:
+    name: Pre-flight Validation
+    runs-on: ubuntu-latest
+    outputs:
+      verdict: ${{ steps.check.outputs.verdict }}
+      blocking_failures: ${{ steps.check.outputs.blocking_failures }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run pre-publish-check
+        id: check
+        run: |
+          pnpm tsx scripts/pre-publish-check.ts --json-only > .orqenix/pre-publish-report.json
+          VERDICT=$(jq -r '.verdict' .orqenix/pre-publish-report.json)
+          BLOCKING=$(jq -r '.blockingFailures' .orqenix/pre-publish-report.json)
+          echo "verdict=${VERDICT}" >> "$GITHUB_OUTPUT"
+          echo "blocking_failures=${BLOCKING}" >> "$GITHUB_OUTPUT"
+          echo "## Pre-publish Verdict: ${VERDICT}" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${VERDICT}" = "no-go" ]; then
+            echo "::error::Pre-publish check verdict: NO-GO (${BLOCKING} blocking failures)"
+            jq '.results[] | select(.status == "fail") | {id, severity, message}' .orqenix/pre-publish-report.json
+            exit 1
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Upload pre-publish report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-publish-report-oss-${{ github.run_id }}
+          path: .orqenix/pre-publish-report.json
+          retention-days: 30
+
+  build-and-verify:
+    name: Build and Verify
+    needs: pre-flight
+    if: needs.pre-flight.outputs.verdict != 'no-go'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test
+
+      - name: Charter gates
+        if: ${{ !inputs.skip_charter_gates }}
+        run: pnpm verify-phase-5
+
+      - name: Coverage gate
+        run: pnpm vitest run scripts/checks --coverage --coverage.thresholds.lines=70
+
+      - name: Verify tarballs (dry-pack)
+        run: pnpm -r --filter="./packages/*" exec npm pack --dry-run
+
+  publish:
+    name: Publish to npm
+    needs: [pre-flight, build-and-verify]
+    if: ${{ inputs.dry_run != true && needs.pre-flight.outputs.verdict != 'no-go' }}
+    runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+      published_packages: ${{ steps.changesets.outputs.publishedPackages }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - name: Configure git identity
+        run: |
+          git config user.name "orqenix-release-bot"
+          git config user.email "bot@orqenix.dev"
+
+      - name: Create Release PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          publish: pnpm ci:publish
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+
+      - name: Extract released version
+        id: version
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          VERSION=$(node -p "require('./packages/core/package.json').version")
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Tag release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          TAG="v${VERSION}-phase-5"
+          git tag -a "${TAG}" -m "Orqenix OSS Phase 5 release ${VERSION}"
+          git push origin "${TAG}"
+
+  post-publish-smoke:
+    name: Post-Publish Smoke Test
+    needs: publish
+    if: needs.publish.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Wait for npm propagation
+        run: sleep 30
+
+      - name: Install in fresh project
+        run: |
+          mkdir -p /tmp/smoke && cd /tmp/smoke
+          npm init -y >/dev/null
+          npm install @orqenix/cli@${{ needs.publish.outputs.version }} --no-fund --no-audit
+          npm install @orqenix/core@${{ needs.publish.outputs.version }} --no-fund --no-audit
+          node -e "require('@orqenix/core'); console.log('@orqenix/core loaded');"
+          npx orqenix --version
+
+  notify:
+    name: Notify Milo (OSS Done)
+    needs: [publish, post-publish-smoke]
+    if: always() && needs.publish.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create release summary issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const version = '${{ needs.publish.outputs.version }}';
+            const packages = JSON.parse(`${{ needs.publish.outputs.published_packages }}` || '[]');
+            const pkgList = packages.slice(0, 8).map(p => `- https://www.npmjs.com/package/${p.name}/v/${p.version}`).join('\n');
+            const more = packages.length > 8 ? `\n- ... and ${packages.length - 8} more` : '';
+            const body = [
+              `# OSS Release v${version} Published`,
+              ``,
+              `Published **${packages.length}** @orqenix/* packages to npm.`,
+              ``,
+              `## Verify on npm`,
+              pkgList + more,
+              ``,
+              `## Provenance`,
+              `All packages signed with SLSA provenance from workflow run #${context.runId}.`,
+              ``,
+              `## Next: Trigger Pro Release`,
+              `**Pro publish is NOT auto-triggered** (safety mode for first publish).`,
+              ``,
+              `To trigger Pro release manually, run:`,
+              '```',
+              `gh workflow run trigger-pro.yml -f oss_version=${version}`,
+              '```',
+              ``,
+              `Or use Actions UI: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/workflows/trigger-pro.yml`,
+              ``,
+              `## Workflow run`,
+              `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            ].join('\n');
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Release v${version} (OSS) published`,
+              body,
+              labels: ['release', 'auto-generated', 'awaiting-pro-trigger'],
+              assignees: ['milosaysyolo'],
+            });
+            core.setOutput('issue_number', issue.data.number);
