@@ -38,13 +38,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Approve native builds (allowlist only)
-        run: pnpm rebuild better-sqlite3 esbuild @swc/core --config.ignore-scripts=false
+        run: pnpm rebuild better-sqlite3 esbuild @swc/core --pending --config.ignore-scripts=false
 
       - name: Build workspace
         run: pnpm build
 
       - name: Phase 4 stub verification
-        run: tsx scripts/verify-phase-4-stubs.ts
+        run: pnpm tsx scripts/verify-phase-4-stubs.ts
 
       - name: Phase 5 baseline
         run: pnpm vitest run tests/integration/phase5-baseline.test.ts
