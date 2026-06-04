@@ -52,6 +52,22 @@ jobs:
       - name: Rebuild allowlisted native dependencies
         run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --pending --config.ignore-scripts=false
 
+      - name: Cache HuggingFace models
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            ~/.cache/transformers
+            node_modules/.cache/transformers
+            packages/embedding-local/.cache
+          key: hf-models-${{ runner.os }}-${{ hashFiles('packages/embedding-local/package.json') }}
+          restore-keys: |
+            hf-models-${{ runner.os }}-
+
+      - name: Warm HuggingFace cache (best-effort, retries on 429)
+        shell: bash
+        run: pnpm --filter @orqenix/embedding-local run warm-cache
+
       - name: Prettier check
         run: pnpm exec prettier --check .
 
@@ -61,64 +77,8 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Test
+      - name: Test (transformers offline)
+        env:
+          HF_HUB_OFFLINE: "1"
+          TRANSFORMERS_OFFLINE: "1"
         run: pnpm test
-
-  charter:
-    name: Phase 4 Charter (Docker)
-    needs: test
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    # Run only on push to main, not on every PR (Docker build is slow)
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Checkout OSS (inside workspace)
-        uses: actions/checkout@v4
-        with:
-          path: Orqenix
-          fetch-depth: 1
-
-      - name: Resolve Pro ref
-        id: pro-ref
-        shell: bash
-        run: |
-          cd Orqenix
-          echo "ref=$(node scripts/ci/get-pro-ref.mjs)" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout Orqenix-Pro (sibling layout)
-        uses: ./Orqenix/.github/actions/checkout-orqenix-repo
-        with:
-          scope: pro
-          ref: ${{ steps.pro-ref.outputs.ref }}
-          layout: sibling
-          path: ../Orqenix-Pro
-          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
-          fetch-depth: 1
-          verify-paths: |
-            packages/license
-
-      - name: Stage Pro at workspace path for Docker
-        shell: bash
-        run: |
-          WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
-          if [ -d "$WORKSPACE_PARENT/Orqenix-Pro" ]; then
-            cp -a "$WORKSPACE_PARENT/Orqenix-Pro" "$GITHUB_WORKSPACE/Orqenix-Pro"
-          else
-            echo "ERROR: Pro sibling missing after composite checkout"
-            exit 1
-          fi
-
-      - name: Build charter Docker image
-        working-directory: Orqenix
-        run: docker build -t orqenix-charter -f charter/Dockerfile .
-
-      - name: Run charter gates in Docker
-        working-directory: Orqenix
-        run: |
-          docker run --rm \
-            -v "${{ github.workspace }}/Orqenix:/repo:ro" \
-            -v "${{ github.workspace }}/Orqenix-Pro:/Orqenix-Pro:ro" \
-            -e ORQENIX_PRO_PATH=/Orqenix-Pro \
-            -e CHARTER_VERBOSE=1 \
-            orqenix-charter

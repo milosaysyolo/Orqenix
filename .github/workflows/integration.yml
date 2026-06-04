@@ -82,12 +82,32 @@ jobs:
         working-directory: layout/Orqenix
         run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --pending --config.ignore-scripts=false
 
+      - name: Cache HuggingFace models
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            ~/.cache/transformers
+            layout/Orqenix/node_modules/.cache/transformers
+            layout/Orqenix/packages/embedding-local/.cache
+          key: hf-models-${{ runner.os }}-${{ hashFiles('layout/Orqenix/packages/embedding-local/package.json') }}
+          restore-keys: |
+            hf-models-${{ runner.os }}-
+
+      - name: Warm HuggingFace cache (best-effort)
+        shell: bash
+        working-directory: layout/Orqenix
+        run: pnpm --filter @orqenix/embedding-local run warm-cache
+
       - name: Build
         shell: bash
         working-directory: layout/Orqenix
         run: pnpm build
 
-      - name: Test
+      - name: Integration test (transformers offline)
         shell: bash
         working-directory: layout/Orqenix
+        env:
+          HF_HUB_OFFLINE: "1"
+          TRANSFORMERS_OFFLINE: "1"
         run: pnpm test
