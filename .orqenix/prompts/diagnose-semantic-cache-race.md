@@ -16,6 +16,7 @@ retry:1 only as defense-in-depth, not as the fix).
 ## Investigation Steps
 
 1. Reproduce locally by running the test many times:
+
    ```bash
    cd packages/plugin-semantic-cache
    FAILS=0

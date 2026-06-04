@@ -6,6 +6,7 @@ Stabilize the Orqenix CI so the test matrix and integration jobs are
 consistently green, and decouple charter from test flakes.
 
 After this task:
+
 - CI test matrix: 6/6 GREEN consistently (no HuggingFace 429 flakes)
 - Cross-Repo Integration: 6/6 GREEN consistently
 - Charter: runs independently on push + weekly cron (no cascade SKIP)
@@ -15,7 +16,7 @@ After this task:
 1. DO NOT skip or .skip any test.
 2. DO NOT weaken test assertions.
 3. DO NOT remove the composite action github.action_path auto-detect.
-4. DO NOT reintroduce secrets.* into the composite action.
+4. DO NOT reintroduce secrets.\* into the composite action.
 5. DO NOT change the model ID (Xenova/all-MiniLM-L6-v2 is correct).
 6. Charter Dockerfile fix is OUT OF SCOPE (separate session).
 
@@ -85,6 +86,7 @@ git push
 ## Step 6: Monitor
 
 Wait for CI on the push commit. Expect:
+
 - CI test matrix: 6/6 GREEN
 - Cross-Repo Integration: 6/6 GREEN
 - Charter (Phase 4): runs independently; may still RED if Dockerfile is
@@ -94,6 +96,7 @@ Wait for CI on the push commit. Expect:
 ## Step 7: Report
 
 Create .orqenix/reports/test-stabilization-2026-06-04.md with:
+
 - Files changed
 - CI results (run the matrix 2 to 3 times to confirm flakes are gone)
 - Confirmation HuggingFace 429 no longer appears in logs
