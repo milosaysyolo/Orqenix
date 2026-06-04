@@ -21,10 +21,18 @@ jobs:
           path: Orqenix
           fetch-depth: 1
 
+      - name: Resolve Pro ref
+        id: pro-ref
+        shell: bash
+        run: |
+          cd Orqenix
+          echo "ref=$(node scripts/ci/get-pro-ref.mjs)" >> "$GITHUB_OUTPUT"
+
       - name: Checkout Orqenix-Pro (sibling layout)
         uses: ./Orqenix/.github/actions/checkout-orqenix-repo
         with:
           scope: pro
+          ref: ${{ steps.pro-ref.outputs.ref }}
           layout: sibling
           path: ../Orqenix-Pro
           token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}

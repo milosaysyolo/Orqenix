@@ -37,12 +37,20 @@ jobs:
           path: layout/Orqenix
           fetch-depth: 0
 
+      # ---- Resolve Pro ref from OSS cross-repo-refs.json ----
+      - name: Resolve Pro ref
+        id: pro-ref
+        shell: bash
+        run: |
+          cd layout/Orqenix
+          echo "ref=$(node scripts/ci/get-pro-ref.mjs)" >> "$GITHUB_OUTPUT"
+
       # ---- Checkout Pro alongside (inside layout via composite action) ----
       - name: Checkout Orqenix-Pro (inside layout)
         uses: ./layout/Orqenix/.github/actions/checkout-orqenix-repo
         with:
           scope: pro
-          ref: ${{ env.PRO_REF }}
+          ref: ${{ steps.pro-ref.outputs.ref }}
           layout: inside
           path: layout/Orqenix-Pro
           token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}

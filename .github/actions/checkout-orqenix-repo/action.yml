@@ -16,6 +16,15 @@ inputs:
       caller's GITHUB_WORKSPACE).
     required: false
     default: ""
+  refs-file:
+    description: >
+      Path to cross-repo-refs.json relative to the directory where this
+      action runs. If empty, the action auto-detects by searching:
+      (1) the action's own repo root (GITHUB_ACTION_PATH/../../..),
+      (2) $GITHUB_WORKSPACE/.orqenix/cross-repo-refs.json,
+      (3) current working directory. Only used when 'ref' input is empty.
+    required: false
+    default: ""
   layout:
     description: >
       Where to checkout: 'inside' places the repo as a subdirectory
@@ -130,28 +139,68 @@ runs:
       env:
         SCOPE_INPUT: ${{ inputs.scope }}
         REF_INPUT: ${{ inputs.ref }}
+        REFS_FILE_INPUT: ${{ inputs.refs-file }}
+        ACTION_PATH: ${{ github.action_path }}
       run: |
         if [ -n "$REF_INPUT" ]; then
           REF="$REF_INPUT"
           echo "Using explicit ref: $REF"
-        else
-          # Lookup from cross-repo-refs.json
-          if [ ! -f ".orqenix/cross-repo-refs.json" ]; then
-            echo "ERROR: .orqenix/cross-repo-refs.json not found and no ref supplied."
-            exit 1
-          fi
-          KEY="orqenix-$SCOPE_INPUT"
-          REF=$(node -e "
-            const data = require('./.orqenix/cross-repo-refs.json');
-            const entry = data['$KEY'];
-            if (!entry || !entry.ref) {
-              console.error('No ref entry for $KEY');
-              process.exit(1);
-            }
-            process.stdout.write(entry.ref);
-          ")
-          echo "Using pinned ref for $KEY: $REF"
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          exit 0
         fi
+
+        # ref not supplied; locate cross-repo-refs.json
+        REFS_PATH=""
+
+        # Candidate 1: explicit input
+        if [ -n "$REFS_FILE_INPUT" ] && [ -f "$REFS_FILE_INPUT" ]; then
+          REFS_PATH="$REFS_FILE_INPUT"
+        fi
+
+        # Candidate 2: action's own repo root.
+        # github.action_path points to .github/actions/checkout-orqenix-repo
+        # so repo root is 3 levels up.
+        if [ -z "$REFS_PATH" ]; then
+          CANDIDATE="$ACTION_PATH/../../../.orqenix/cross-repo-refs.json"
+          if [ -f "$CANDIDATE" ]; then
+            REFS_PATH="$CANDIDATE"
+          fi
+        fi
+
+        # Candidate 3: workspace root
+        if [ -z "$REFS_PATH" ] && [ -f "$GITHUB_WORKSPACE/.orqenix/cross-repo-refs.json" ]; then
+          REFS_PATH="$GITHUB_WORKSPACE/.orqenix/cross-repo-refs.json"
+        fi
+
+        # Candidate 4: current working directory
+        if [ -z "$REFS_PATH" ] && [ -f ".orqenix/cross-repo-refs.json" ]; then
+          REFS_PATH=".orqenix/cross-repo-refs.json"
+        fi
+
+        if [ -z "$REFS_PATH" ]; then
+          echo "ERROR: no ref supplied and cross-repo-refs.json not found."
+          echo "Searched:"
+          echo "  1. refs-file input: '$REFS_FILE_INPUT'"
+          echo "  2. action repo root: $ACTION_PATH/../../../.orqenix/cross-repo-refs.json"
+          echo "  3. workspace root: $GITHUB_WORKSPACE/.orqenix/cross-repo-refs.json"
+          echo "  4. cwd: $(pwd)/.orqenix/cross-repo-refs.json"
+          echo ""
+          echo "Fix: pass 'ref' input explicitly, or 'refs-file' pointing to the JSON."
+          exit 1
+        fi
+
+        echo "Using refs file: $REFS_PATH"
+        KEY="orqenix-$SCOPE_INPUT"
+        REF=$(node -e "
+          const data = require('$(realpath "$REFS_PATH")');
+          const entry = data['$KEY'];
+          if (!entry || !entry.ref) {
+            console.error('No ref entry for $KEY in $REFS_PATH');
+            process.exit(1);
+          }
+          process.stdout.write(entry.ref);
+        ")
+        echo "Resolved $KEY ref: $REF"
         echo "ref=$REF" >> "$GITHUB_OUTPUT"
 
     - name: Resolve repository name
