@@ -114,8 +114,13 @@ runs:
       run: |
         if [ "$SCOPE_INPUT" != "oss" ] && [ -z "$TOKEN_INPUT" ]; then
           echo "ERROR: scope=$SCOPE_INPUT requires 'token' input."
-          echo "Pass: token: \${{ secrets.ORQENIX_COORDINATOR_PAT }}"
-          echo "Fork PRs do not have access to repo secrets; skip the job for forks."
+          echo "Pass: token: ORQENIX_COORDINATOR_PAT secret from caller workflow"
+          echo "Example caller:"
+          echo "  with:"
+          echo "    scope: pro"
+          echo "    token: \${{ secrets.ORQENIX_COORDINATOR_PAT }}"
+          echo ""
+          echo "Note: fork PRs do not have access to repo secrets; skip the job for forks."
           exit 1
         fi
 

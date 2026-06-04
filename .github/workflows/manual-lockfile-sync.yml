@@ -127,4 +127,6 @@ jobs:
           git add pnpm-lock.yaml
           git commit -m "chore: sync pnpm-lock.yaml (paired with OSS sync)"
           git push origin HEAD:main
+
+          # SANITIZE: reset remote URL to non-tokenized form
           git remote set-url origin "https://github.com/milosaysyolo/Orqenix-Pro.git"
