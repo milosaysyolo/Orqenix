@@ -20,13 +20,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 
-const EXPECTED_ALLOWLIST = [
-  "@mongodb-js/zstd",
-  "@swc/core",
-  "better-sqlite3",
-  "esbuild",
-  "sharp",
-];
+const EXPECTED_ALLOWLIST = ["@mongodb-js/zstd", "@swc/core", "better-sqlite3", "esbuild", "sharp"];
 
 const PKG_PATH = resolve(process.cwd(), "package.json");
 

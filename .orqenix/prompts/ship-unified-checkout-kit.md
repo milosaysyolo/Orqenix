@@ -76,13 +76,13 @@ git push origin main
 
 Wait for the following workflows to complete on the push commit:
 
-| Workflow | Expected | Action if fails |
-|----------|----------|-----------------|
-| Policy Credential Guard | GREEN | If RED, inspect violation, fix, re-push |
-| Lockfile Guard | GREEN | If RED, run lockfile sync via Manual Lockfile Sync workflow |
-| Cross-Repo Integration | GREEN | If RED, check composite action verify-paths step |
-| CI | GREEN | If RED, check sibling layout; Pro clone target must be next to GITHUB_WORKSPACE |
-| Phase 5 Baseline | GREEN | Same as CI |
+| Workflow                | Expected | Action if fails                                                                 |
+| ----------------------- | -------- | ------------------------------------------------------------------------------- |
+| Policy Credential Guard | GREEN    | If RED, inspect violation, fix, re-push                                         |
+| Lockfile Guard          | GREEN    | If RED, run lockfile sync via Manual Lockfile Sync workflow                     |
+| Cross-Repo Integration  | GREEN    | If RED, check composite action verify-paths step                                |
+| CI                      | GREEN    | If RED, check sibling layout; Pro clone target must be next to GITHUB_WORKSPACE |
+| Phase 5 Baseline        | GREEN    | Same as CI                                                                      |
 
 ## Step 6: Report
 
@@ -95,15 +95,19 @@ Commit: <sha>
 Date: <ISO date>
 
 ### Files Shipped
+
 <list with action: created/replaced/patched>
 
 ### CI Results
+
 <table with workflow + result + link>
 
 ### Issues Encountered
+
 <any deviations from spec, polished decisions>
 
 ### Follow-Up
+
 <link to ci-charter and release-oss diagnose prompt>
 ```
 

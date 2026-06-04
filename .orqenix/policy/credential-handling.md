@@ -6,12 +6,12 @@ All GitHub Actions workflows in milosaysyolo/Orqenix (OSS), milosaysyolo/Orqenix
 
 ## Token Classification
 
-| Token | Storage | Scope | Lifetime in workflow |
-|-------|---------|-------|----------------------|
-| GITHUB_TOKEN | Auto-injected | Current repo only | Job duration, auto-rotated |
-| ORQENIX_COORDINATOR_PAT | Repo Secret | Read or write Pro/Cloud | Until manually rotated |
-| NPM_TOKEN | Repo Secret | npm publish OSS scope | Until manually rotated |
-| NPM_TOKEN_PRO | Repo Secret | npm publish Pro scope | Until manually rotated |
+| Token                   | Storage       | Scope                   | Lifetime in workflow       |
+| ----------------------- | ------------- | ----------------------- | -------------------------- |
+| GITHUB_TOKEN            | Auto-injected | Current repo only       | Job duration, auto-rotated |
+| ORQENIX_COORDINATOR_PAT | Repo Secret   | Read or write Pro/Cloud | Until manually rotated     |
+| NPM_TOKEN               | Repo Secret   | npm publish OSS scope   | Until manually rotated     |
+| NPM_TOKEN_PRO           | Repo Secret   | npm publish Pro scope   | Until manually rotated     |
 
 ## Mandatory Handling Rules
 
@@ -57,9 +57,9 @@ After any clone that injected a token into the URL, the next step MUST reset the
 
 This prevents credential leak when:
 
-* The cloned repo is uploaded as a build artifact
-* A subsequent step runs `git remote -v` for debugging
-* A subsequent step fetches additional refs and re-uses the stored URL
+- The cloned repo is uploaded as a build artifact
+- A subsequent step runs `git remote -v` for debugging
+- A subsequent step fetches additional refs and re-uses the stored URL
 
 ### Rule 3: Never use `pull_request_target` for cross-repo workflows
 
@@ -91,11 +91,11 @@ When the bot posts a comment, it MUST NOT include tokens, even truncated. The bo
 
 ### Rule 6: Token rotation cadence
 
-| Token                       | Rotation cadence | Trigger                                  |
-| --------------------------- | ---------------- | ---------------------------------------- |
-| ORQENIX_COORDINATOR_PAT   | Every 90 days    | Calendar reminder                        |
+| Token                    | Rotation cadence | Trigger                                  |
+| ------------------------ | ---------------- | ---------------------------------------- |
+| ORQENIX_COORDINATOR_PAT  | Every 90 days    | Calendar reminder                        |
 | NPM_TOKEN, NPM_TOKEN_PRO | Every 180 days   | Calendar reminder                        |
-| Any token                   | Immediately      | Suspected leak or contributor offboarded |
+| Any token                | Immediately      | Suspected leak or contributor offboarded |
 
 Rotation procedure documented in `.orqenix/runbooks/rotate-tokens.md`.
 
@@ -107,9 +107,9 @@ All cross-repo checkouts (OSS to Pro, Pro to OSS, Cloud to OSS, Cloud to Pro) MU
 
 A CI guard workflow `policy-credential-guard.yml` runs on every PR. It:
 
-* Greps workflow files for `git clone https://x-access-token:` patterns missing the sanitize step
-* Greps for tokens passed as workflow inputs
-* Checks all cross-repo checkouts go through the composite action
+- Greps workflow files for `git clone https://x-access-token:` patterns missing the sanitize step
+- Greps for tokens passed as workflow inputs
+- Checks all cross-repo checkouts go through the composite action
 
 Violations block PR merge.
 

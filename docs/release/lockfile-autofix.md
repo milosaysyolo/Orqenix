@@ -12,10 +12,10 @@ When a PR modifies `package.json`, `pnpm-lock.yaml`, `.npmrc`, or any workspace 
 
 The repo has 2 distinct install modes with different `ignore-scripts` requirements:
 
-| Mode | Where used | `ignore-scripts` | Why |
-|------|-----------|------------------|-----|
-| **`--lockfile-only`** | Lockfile Guard, Lockfile Autofix, Manual Lockfile Sync, sync-lockfile.sh | `true` (default + enforced via env) | Only resolves dependency tree and writes `pnpm-lock.yaml`. Does NOT install native modules or run install scripts. Safe and fast. |
-| **Full install** | CI test matrix, Phase 5 Baseline, Cross-Repo Integration | `false` (explicit via `--config.ignore-scripts=false`) | Needs to build native bindings (better-sqlite3, sharp, zstd, etc.) for tests to load `.node` files. Allowlist enforces which deps may run scripts. |
+| Mode                  | Where used                                                               | `ignore-scripts`                                       | Why                                                                                                                                                |
+| --------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`--lockfile-only`** | Lockfile Guard, Lockfile Autofix, Manual Lockfile Sync, sync-lockfile.sh | `true` (default + enforced via env)                    | Only resolves dependency tree and writes `pnpm-lock.yaml`. Does NOT install native modules or run install scripts. Safe and fast.                  |
+| **Full install**      | CI test matrix, Phase 5 Baseline, Cross-Repo Integration                 | `false` (explicit via `--config.ignore-scripts=false`) | Needs to build native bindings (better-sqlite3, sharp, zstd, etc.) for tests to load `.node` files. Allowlist enforces which deps may run scripts. |
 
 **Do not** change lockfile workflows to `--config.ignore-scripts=false`. They run with `--lockfile-only` which does not install or build anything. Adding the flag would slow down sync without any safety benefit.
 

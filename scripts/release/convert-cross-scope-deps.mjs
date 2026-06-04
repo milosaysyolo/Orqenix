@@ -54,7 +54,11 @@ for (const file of pkgFiles) {
     const deps = pkg[section];
     if (!deps) continue;
     for (const [name, spec] of Object.entries(deps)) {
-      if (name.startsWith("@orqenix-pro/") && typeof spec === "string" && spec.startsWith("file:")) {
+      if (
+        name.startsWith("@orqenix-pro/") &&
+        typeof spec === "string" &&
+        spec.startsWith("file:")
+      ) {
         deps[name] = `^${proVersion}`;
         changed = true;
       }

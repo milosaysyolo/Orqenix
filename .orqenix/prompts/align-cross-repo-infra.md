@@ -51,6 +51,7 @@ node scripts/ci/align-pro-checkout.mjs
 ```
 
 Expected output: JSON report of patched files. At minimum:
+
 - `.github/workflows/ci.yml` patched
 - `.github/workflows/phase5-baseline.yml` patched
 
@@ -62,12 +63,13 @@ git diff .github/workflows/phase5-baseline.yml | head -60
 ```
 
 Each diff should:
+
 - Remove the `git clone --branch v0.5.0-phase-5 ...` step
 - Add 2 steps: `Resolve Pro ref` (uses get-pro-ref.mjs) and `Checkout Orqenix-Pro` (uses actions/checkout@v4)
 
 ### Step 5: Update package.json scripts
 
-Add the 3 ci:* scripts from B6.
+Add the 3 ci:\* scripts from B6.
 
 ### Step 6: Trigger manual test
 

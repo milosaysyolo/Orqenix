@@ -28,13 +28,7 @@
  * Usage: node scripts/ci/align-pro-checkout.mjs
  * Idempotent: skips files already using the composite action.
  */
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-} from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, basename } from "node:path";
 
 const WORKFLOWS_DIR = ".github/workflows";
@@ -81,8 +75,7 @@ const PATTERN_B =
 const PATTERN_C =
   /-\s*name:\s*Checkout Orqenix-Pro\s*\n\s*uses:\s*actions\/checkout@v4\s*\n\s*with:\s*\n\s*repository:\s*milosaysyolo\/Orqenix-Pro[\s\S]*?path:\s*\.\.\/Orqenix-Pro[\s\S]*?(?=\n\s*-\s|\n\s*\w+:|\Z)/g;
 
-const PATTERN_COMPOSITE_ALREADY =
-  /uses:\s*\.\/\.github\/actions\/checkout-orqenix-repo/g;
+const PATTERN_COMPOSITE_ALREADY = /uses:\s*\.\/\.github\/actions\/checkout-orqenix-repo/g;
 
 const results = [];
 
@@ -120,10 +113,7 @@ for (const file of files) {
     continue;
   }
 
-  const backupPath = join(
-    BACKUP_DIR,
-    basename(file) + ".bak." + Date.now() + ".pre-composite",
-  );
+  const backupPath = join(BACKUP_DIR, basename(file) + ".bak." + Date.now() + ".pre-composite");
   writeFileSync(backupPath, original);
   writeFileSync(file, modified);
   results.push({
@@ -144,6 +134,8 @@ const summary = {
 console.log(JSON.stringify(summary, null, 2));
 
 if (summary.patched === 0) {
-  console.error("\nNo files patched. Either all workflows already use the composite action, or the regex patterns need adjustment for your actual workflow content. Inspect manually:");
+  console.error(
+    "\nNo files patched. Either all workflows already use the composite action, or the regex patterns need adjustment for your actual workflow content. Inspect manually:",
+  );
   console.error("  grep -l 'Orqenix-Pro' .github/workflows/*.yml");
 }

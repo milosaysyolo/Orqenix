@@ -3,10 +3,12 @@
 ## Mission
 
 Apply Phase B recovery to milosaysyolo/Orqenix. Phase A (composite action + policy) already shipped. Phase B fixes 2 RED workflows:
+
 1. CI charter (Docker) — caused by broken `$@` shell expansion in git clone
 2. Release OSS — caused by skeleton workflow without real publish logic
 
 After this task, expected status:
+
 - CI charter Docker: GREEN
 - Release OSS: GREEN on dry-run; on tag push, publishes to npm with provenance
 - All other workflows: stay GREEN
@@ -21,9 +23,11 @@ After this task, expected status:
 If missing, STOP and report.
 
 2. Confirm cross-repo-refs.json v1.1.0:
+
    ```bash
    node -p "require('./.orqenix/cross-repo-refs.json').version"
    ```
+
    Should print 1.1.0.
 
 3. Confirm policy guard workflow exists:
@@ -171,7 +175,7 @@ Monitor:
 | CI (charter Docker job)  | GREEN (composite action + cp staging)                                |
 | Phase 5 Baseline         | GREEN (unchanged)                                                    |
 | Policy Credential Guard  | GREEN (no policy violations)                                         |
-| Release OSS              | GREEN as dry-run (no .changeset/*.md files)                         |
+| Release OSS              | GREEN as dry-run (no .changeset/\*.md files)                         |
 | Charter (Phase 4 weekly) | Will run on Monday cron, OR can be triggered manually for smoke test |
 
 ## Step 9: Manual smoke test of Release OSS
@@ -188,18 +192,18 @@ Verify it runs through all 5 jobs (pre-flight, build-and-verify, no publish beca
 
 Create `.orqenix/reports/phase-b-recovery-2026-06-04.md` with:
 
-* Files changed
-* CI results
-* Smoke test result
-* Outstanding items (e.g., first live publish still pending user approval)
+- Files changed
+- CI results
+- Smoke test result
+- Outstanding items (e.g., first live publish still pending user approval)
 
 ## Denied Actions
 
-* Do not run `gh workflow run release.yml -f dry_run=false` without explicit user approval.
-* Do not change provenance signing to optional.
-* Do not modify .changeset/ contents.
-* Do not pin pnpm to a version other than what packageManager field specifies.
-* Do not bypass charter gates (skip_charter_gates=true) without explicit user approval.
+- Do not run `gh workflow run release.yml -f dry_run=false` without explicit user approval.
+- Do not change provenance signing to optional.
+- Do not modify .changeset/ contents.
+- Do not pin pnpm to a version other than what packageManager field specifies.
+- Do not bypass charter gates (skip_charter_gates=true) without explicit user approval.
 
 ## Escalation
 
