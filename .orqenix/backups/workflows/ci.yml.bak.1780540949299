@@ -14,17 +14,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - name: Resolve Pro ref
-        id: pro-ref-1
-        run: echo "ref=$(node scripts/ci/get-pro-ref.mjs)" >> "$GITHUB_OUTPUT"
       - name: Checkout Orqenix-Pro
-        uses: actions/checkout@v4
-        with:
-          repository: milosaysyolo/Orqenix-Pro
-          ref: ${{ steps.pro-ref-1.outputs.ref }}
-          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
-          path: ../Orqenix-Pro
-          fetch-depth: 1
+        shell: bash
+        env:
+          PRO_TOKEN: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+        run: git clone --depth 1 --branch v0.5.0-phase-5 https://x-access-token:${PRO_TOKEN}@github.com/milosaysyolo/Orqenix-Pro.git ../Orqenix-Pro
       - uses: pnpm/action-setup@v3
         with:
           version: 9
