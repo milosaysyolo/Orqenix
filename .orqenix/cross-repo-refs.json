@@ -1,6 +1,14 @@
 {
   "$schema": "./schemas/cross-repo-refs.schema.json",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "orqenix-oss": {
+    "ref": "main",
+    "rationale": "OSS development trunk",
+    "owner": "release-coordinator",
+    "bump-frequency": "continuous (main branch)",
+    "last-bumped": "2026-06-04",
+    "last-bumped-by": "milosaysyolo"
+  },
   "orqenix-pro": {
     "ref": "v0.5.0-phase-5",
     "rationale": "Phase 5 stable tag, pinned for reproducible cross-repo CI",
@@ -10,10 +18,23 @@
     "last-bumped-by": "milosaysyolo",
     "compatible-oss-range": ">=0.5.0-phase-5 <0.6.0"
   },
+  "orqenix-cloud": {
+    "ref": "main",
+    "rationale": "Cloud repo not yet created (Phase 7); placeholder entry for composite action validation",
+    "owner": "release-coordinator",
+    "bump-frequency": "with each Cloud release",
+    "last-bumped": null,
+    "last-bumped-by": null,
+    "compatible-oss-range": ">=0.7.0",
+    "status": "placeholder-not-yet-implemented"
+  },
   "consumers": [
     ".github/workflows/ci.yml",
     ".github/workflows/phase5-baseline.yml",
     ".github/workflows/cross-repo-integration.yml",
-    ".github/workflows/manual-lockfile-sync.yml"
+    ".github/workflows/manual-lockfile-sync.yml",
+    ".github/workflows/lockfile-autofix.yml",
+    ".github/workflows/release.yml",
+    ".github/workflows/charter.yml"
   ]
 }

@@ -1,0 +1,283 @@
+name: "Checkout Orqenix Repo"
+description: >
+  Unified checkout for any Orqenix scope (OSS, Pro, Cloud).
+  Handles same-workspace and sibling-directory layouts.
+  Enforces credential-handling policy (token validation, sibling
+  clone via git, automatic .git/config sanitization, verification).
+author: "orqenix-release-coordinator"
+inputs:
+  scope:
+    description: "Which Orqenix scope to checkout: oss, pro, or cloud"
+    required: true
+  ref:
+    description: >
+      Ref to checkout (branch, tag, or SHA). If empty, the action
+      reads from .orqenix/cross-repo-refs.json (relative to the
+      caller's GITHUB_WORKSPACE).
+    required: false
+    default: ""
+  layout:
+    description: >
+      Where to checkout: 'inside' places the repo as a subdirectory
+      of $GITHUB_WORKSPACE (uses actions/checkout@v4). 'sibling'
+      places the repo as a sibling of $GITHUB_WORKSPACE (uses git
+      clone with sanitization, required for relative-path workspace
+      links like ../Orqenix-Pro).
+    required: true
+  path:
+    description: >
+      Target directory name. For 'inside' layout, relative to
+      $GITHUB_WORKSPACE. For 'sibling' layout, must start with
+      '../' and target a directory next to GITHUB_WORKSPACE.
+    required: true
+  token:
+    description: >
+      PAT with read access to the target scope. Required for Pro
+      and Cloud. For OSS, GITHUB_TOKEN suffices.
+    required: false
+    default: ""
+  fetch-depth:
+    description: "fetch-depth for the checkout. 1 for snapshot, 0 for full history."
+    required: false
+    default: "1"
+  verify-paths:
+    description: >
+      Newline-separated list of paths (relative to the cloned repo
+      root) that MUST exist after checkout. Fails the action if any
+      are missing. Use this to fail fast when a ref does not include
+      required Phase 5 packages like packages/license.
+    required: false
+    default: ""
+
+outputs:
+  ref-used:
+    description: "Resolved ref that was actually checked out"
+    value: ${{ steps.resolve.outputs.ref }}
+  sha:
+    description: "Commit SHA at HEAD after checkout"
+    value: ${{ steps.report.outputs.sha }}
+  dir:
+    description: "Absolute path to the checked-out directory"
+    value: ${{ steps.report.outputs.dir }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Validate scope input
+      shell: bash
+      env:
+        SCOPE_INPUT: ${{ inputs.scope }}
+      run: |
+        case "$SCOPE_INPUT" in
+          oss|pro|cloud) ;;
+          *)
+            echo "ERROR: invalid scope '$SCOPE_INPUT'. Must be oss, pro, or cloud."
+            exit 1
+            ;;
+        esac
+
+    - name: Validate layout input
+      shell: bash
+      env:
+        LAYOUT_INPUT: ${{ inputs.layout }}
+        PATH_INPUT: ${{ inputs.path }}
+      run: |
+        case "$LAYOUT_INPUT" in
+          inside)
+            case "$PATH_INPUT" in
+              ../*|/*)
+                echo "ERROR: 'inside' layout requires path inside workspace, got '$PATH_INPUT'"
+                exit 1
+                ;;
+            esac
+            ;;
+          sibling)
+            case "$PATH_INPUT" in
+              ../*) ;;
+              *)
+                echo "ERROR: 'sibling' layout requires path starting with ../, got '$PATH_INPUT'"
+                exit 1
+                ;;
+            esac
+            ;;
+          *)
+            echo "ERROR: invalid layout '$LAYOUT_INPUT'. Must be inside or sibling."
+            exit 1
+            ;;
+        esac
+
+    - name: Validate token (Pro and Cloud require it)
+      shell: bash
+      env:
+        SCOPE_INPUT: ${{ inputs.scope }}
+        TOKEN_INPUT: ${{ inputs.token }}
+      run: |
+        if [ "$SCOPE_INPUT" != "oss" ] && [ -z "$TOKEN_INPUT" ]; then
+          echo "ERROR: scope=$SCOPE_INPUT requires 'token' input."
+          echo "Pass: token: \${{ secrets.ORQENIX_COORDINATOR_PAT }}"
+          echo "Fork PRs do not have access to repo secrets; skip the job for forks."
+          exit 1
+        fi
+
+    - name: Resolve ref
+      id: resolve
+      shell: bash
+      env:
+        SCOPE_INPUT: ${{ inputs.scope }}
+        REF_INPUT: ${{ inputs.ref }}
+      run: |
+        if [ -n "$REF_INPUT" ]; then
+          REF="$REF_INPUT"
+          echo "Using explicit ref: $REF"
+        else
+          # Lookup from cross-repo-refs.json
+          if [ ! -f ".orqenix/cross-repo-refs.json" ]; then
+            echo "ERROR: .orqenix/cross-repo-refs.json not found and no ref supplied."
+            exit 1
+          fi
+          KEY="orqenix-$SCOPE_INPUT"
+          REF=$(node -e "
+            const data = require('./.orqenix/cross-repo-refs.json');
+            const entry = data['$KEY'];
+            if (!entry || !entry.ref) {
+              console.error('No ref entry for $KEY');
+              process.exit(1);
+            }
+            process.stdout.write(entry.ref);
+          ")
+          echo "Using pinned ref for $KEY: $REF"
+        fi
+        echo "ref=$REF" >> "$GITHUB_OUTPUT"
+
+    - name: Resolve repository name
+      id: repo
+      shell: bash
+      env:
+        SCOPE_INPUT: ${{ inputs.scope }}
+      run: |
+        case "$SCOPE_INPUT" in
+          oss)   echo "name=milosaysyolo/Orqenix" >> "$GITHUB_OUTPUT" ;;
+          pro)   echo "name=milosaysyolo/Orqenix-Pro" >> "$GITHUB_OUTPUT" ;;
+          cloud) echo "name=milosaysyolo/Orqenix-Cloud" >> "$GITHUB_OUTPUT" ;;
+        esac
+
+    - name: Checkout (inside layout via actions/checkout)
+      if: inputs.layout == 'inside'
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ steps.repo.outputs.name }}
+        ref: ${{ steps.resolve.outputs.ref }}
+        token: ${{ inputs.token || github.token }}
+        path: ${{ inputs.path }}
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: Checkout (sibling layout via git clone)
+      if: inputs.layout == 'sibling'
+      shell: bash
+      env:
+        TOKEN: ${{ inputs.token }}
+        REPO: ${{ steps.repo.outputs.name }}
+        REF: ${{ steps.resolve.outputs.ref }}
+        TARGET_PATH: ${{ inputs.path }}
+        FETCH_DEPTH: ${{ inputs.fetch-depth }}
+      run: |
+        # Sibling layout: clone next to $GITHUB_WORKSPACE
+        # Target absolute path is computed from workspace parent
+        WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
+        TARGET_NAME=$(basename "$TARGET_PATH")
+        ABS_TARGET="$WORKSPACE_PARENT/$TARGET_NAME"
+
+        if [ -d "$ABS_TARGET" ]; then
+          echo "Target $ABS_TARGET already exists; removing for clean clone."
+          rm -rf "$ABS_TARGET"
+        fi
+
+        DEPTH_FLAG=""
+        if [ "$FETCH_DEPTH" != "0" ]; then
+          DEPTH_FLAG="--depth $FETCH_DEPTH"
+        fi
+
+        echo "Cloning $REPO @ $REF into $ABS_TARGET"
+        git clone $DEPTH_FLAG --branch "$REF" \
+          "https://x-access-token:${TOKEN}@github.com/${REPO}.git" \
+          "$ABS_TARGET"
+
+    - name: Sanitize sibling clone credentials
+      if: inputs.layout == 'sibling'
+      shell: bash
+      env:
+        REPO: ${{ steps.repo.outputs.name }}
+        TARGET_PATH: ${{ inputs.path }}
+      run: |
+        WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
+        TARGET_NAME=$(basename "$TARGET_PATH")
+        ABS_TARGET="$WORKSPACE_PARENT/$TARGET_NAME"
+
+        cd "$ABS_TARGET"
+        git remote set-url origin "https://github.com/${REPO}.git"
+
+        if grep -q "x-access-token" .git/config 2>/dev/null; then
+          echo "ERROR: token still present in .git/config after sanitize"
+          cat .git/config | sed 's/x-access-token:[^@]*@/x-access-token:REDACTED@/g'
+          exit 1
+        fi
+        echo "Sanitized: $(git remote get-url origin)"
+
+    - name: Verify required paths
+      if: inputs.verify-paths != ''
+      shell: bash
+      env:
+        TARGET_PATH: ${{ inputs.path }}
+        LAYOUT: ${{ inputs.layout }}
+        VERIFY_PATHS: ${{ inputs.verify-paths }}
+        REF: ${{ steps.resolve.outputs.ref }}
+        SCOPE: ${{ inputs.scope }}
+      run: |
+        if [ "$LAYOUT" = "inside" ]; then
+          ABS_TARGET="$GITHUB_WORKSPACE/$TARGET_PATH"
+        else
+          WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
+          TARGET_NAME=$(basename "$TARGET_PATH")
+          ABS_TARGET="$WORKSPACE_PARENT/$TARGET_NAME"
+        fi
+
+        FAILED=0
+        while IFS= read -r p; do
+          [ -z "$p" ] && continue
+          if [ ! -e "$ABS_TARGET/$p" ]; then
+            echo "MISSING: $ABS_TARGET/$p"
+            FAILED=1
+          else
+            echo "OK: $p"
+          fi
+        done <<< "$VERIFY_PATHS"
+
+        if [ $FAILED -eq 1 ]; then
+          echo "ERROR: required paths missing in $SCOPE @ $REF"
+          exit 1
+        fi
+
+    - name: Report checkout result
+      id: report
+      shell: bash
+      env:
+        TARGET_PATH: ${{ inputs.path }}
+        LAYOUT: ${{ inputs.layout }}
+      run: |
+        if [ "$LAYOUT" = "inside" ]; then
+          ABS_TARGET="$GITHUB_WORKSPACE/$TARGET_PATH"
+        else
+          WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
+          TARGET_NAME=$(basename "$TARGET_PATH")
+          ABS_TARGET="$WORKSPACE_PARENT/$TARGET_NAME"
+        fi
+
+        cd "$ABS_TARGET"
+        SHA=$(git rev-parse HEAD)
+        echo "Checked out $ABS_TARGET @ $SHA"
+        echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+        echo "dir=$ABS_TARGET" >> "$GITHUB_OUTPUT"
+
+branding:
+  icon: "git-branch"
+  color: "purple"

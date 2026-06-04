@@ -1,0 +1,33 @@
+feat(ci): unified cross-repo checkout composite action + credential policy
+
+Replaces ad-hoc cross-repo checkout patterns (git clone with hard-coded
+ref, actions/checkout@v4 with invalid sibling path) across all workflows
+with a single composite action that enforces credential handling policy.
+
+P1 alignment goals from prior session:
+- Single source of truth for Pro ref (.orqenix/cross-repo-refs.json)
+- Consistent layout (sibling for cross-repo) across all workflows
+- Unified entry point that future Cloud scope can plug into
+
+New credential handling policy:
+- .orqenix/policy/credential-handling.md (7 mandatory rules)
+- .github/workflows/policy-credential-guard.yml (CI enforcement)
+- Composite action auto-sanitizes .git/config after token-injected clones
+- Composite action validates token presence and verifies required paths
+
+Workflows updated to use composite action:
+- ci.yml
+- phase5-baseline.yml
+- cross-repo-integration.yml
+- manual-lockfile-sync.yml
+- lockfile-autofix.yml
+
+Updates to existing scripts:
+- align-pro-checkout.mjs: emits composite action call (not raw git clone
+  or invalid actions/checkout@v4 path)
+- cross-repo-refs.json: bumped to v1.1.0, added oss and cloud placeholder
+  entries for future use
+
+CI charter (Docker) and Release OSS still RED. Diagnosis prompt added
+at .orqenix/prompts/diagnose-ci-charter-and-release-oss.md for follow-up
+session; not in scope of this commit.

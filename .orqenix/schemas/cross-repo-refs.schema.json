@@ -5,7 +5,17 @@
   "required": ["version", "orqenix-pro", "consumers"],
   "properties": {
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
-    "orqenix-pro": {
+    "orqenix-oss": { "$ref": "#/definitions/scope" },
+    "orqenix-pro": { "$ref": "#/definitions/scope" },
+    "orqenix-cloud": { "$ref": "#/definitions/scope" },
+    "consumers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    }
+  },
+  "definitions": {
+    "scope": {
       "type": "object",
       "required": ["ref", "rationale", "owner"],
       "properties": {
@@ -13,15 +23,11 @@
         "rationale": { "type": "string" },
         "owner": { "type": "string" },
         "bump-frequency": { "type": "string" },
-        "last-bumped": { "type": "string", "format": "date" },
-        "last-bumped-by": { "type": "string" },
-        "compatible-oss-range": { "type": "string" }
+        "last-bumped": { "type": ["string", "null"], "format": "date" },
+        "last-bumped-by": { "type": ["string", "null"] },
+        "compatible-oss-range": { "type": "string" },
+        "status": { "type": "string" }
       }
-    },
-    "consumers": {
-      "type": "array",
-      "items": { "type": "string" },
-      "uniqueItems": true
     }
   }
 }

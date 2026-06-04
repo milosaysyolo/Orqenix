@@ -15,9 +15,6 @@ on:
 permissions:
   contents: read
 
-env:
-  PRO_REF: ${{ inputs.pro_ref || 'v0.5.0-phase-5' }}
-
 jobs:
   integration:
     name: integration (${{ matrix.os }}, ${{ matrix.node }})
@@ -40,29 +37,18 @@ jobs:
           path: layout/Orqenix
           fetch-depth: 0
 
-      # ---- Checkout Pro alongside ----
-      - name: Checkout Orqenix-Pro
-        uses: actions/checkout@v4
+      # ---- Checkout Pro alongside (inside layout via composite action) ----
+      - name: Checkout Orqenix-Pro (inside layout)
+        uses: ./layout/Orqenix/.github/actions/checkout-orqenix-repo
         with:
-          repository: milosaysyolo/Orqenix-Pro
+          scope: pro
           ref: ${{ env.PRO_REF }}
-          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          layout: inside
           path: layout/Orqenix-Pro
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
           fetch-depth: 0
-
-      - name: Verify cross-scope paths
-        shell: bash
-        run: |
-          REQUIRED=(
-            "layout/Orqenix-Pro/packages/license"
-          )
-          for p in "${REQUIRED[@]}"; do
-            if [ ! -d "$p" ]; then
-              echo "ERROR: required Pro path missing: $p (Pro ref: ${{ env.PRO_REF }})"
-              exit 1
-            fi
-            echo "OK: $p"
-          done
+          verify-paths: |
+            packages/license
 
       - name: Setup Node ${{ matrix.node }}
         uses: actions/setup-node@v4

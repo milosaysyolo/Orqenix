@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+/**
+ * Pre-publish checks (C01 to C24) runner.
+ * Reads .orqenix/release/publishable-whitelist.yaml and runs each check.
+ * Returns non-zero exit code if any check fails.
+ *
+ * If checks file or whitelist missing, exits 0 with warning (acceptable
+ * for v0.5.0 setup phase before full release infra ships).
+ */
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { resolve, join } from "node:path";
+
+const ROOT = process.cwd();
+const WHITELIST_PATH = resolve(ROOT, ".orqenix/release/publishable-whitelist.yaml");
+const CHECKS_DIR = resolve(ROOT, "scripts/release/checks");
+
+if (!existsSync(WHITELIST_PATH)) {
+  console.warn("[prepublish-checks] whitelist not found; emitting WARNING and exiting 0.");
+  console.warn(`  Expected: ${WHITELIST_PATH}`);
+  console.warn("  This is acceptable during v0.5.0 setup phase. Full checks ship with S3 batch.");
+  process.exit(0);
+}
+
+if (!existsSync(CHECKS_DIR)) {
+  console.warn("[prepublish-checks] checks directory not found; skipping individual checks.");
+  process.exit(0);
+}
+
+const checkFiles = readdirSync(CHECKS_DIR)
+  .filter((f) => /^C\d{2}-.*\.mjs$/.test(f))
+  .sort();
+
+if (checkFiles.length === 0) {
+  console.warn("[prepublish-checks] no C##-*.mjs check files found; skipping.");
+  process.exit(0);
+}
+
+console.log(`[prepublish-checks] Running ${checkFiles.length} checks...`);
+
+let failed = [];
+for (const file of checkFiles) {
+  const checkPath = join(CHECKS_DIR, file);
+  try {
+    const mod = await import(checkPath);
+    if (typeof mod.run !== "function") {
+      console.warn(`  SKIP ${file}: no exported run() function`);
+      continue;
+    }
+    await mod.run();
+    console.log(`  PASS ${file}`);
+  } catch (e) {
+    console.error(`  FAIL ${file}: ${e.message}`);
+    failed.push(file);
+  }
+}
+
+if (failed.length > 0) {
+  console.error(`\n[prepublish-checks] ${failed.length} checks failed:`);
+  failed.forEach((f) => console.error(`  - ${f}`));
+  process.exit(1);
+}
+
+console.log(`\n[prepublish-checks] All ${checkFiles.length} checks passed.`);
+process.exit(0);

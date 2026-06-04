@@ -1,27 +1,74 @@
 name: Charter (Phase 4)
+
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
   schedule:
     - cron: "0 6 * * 1"
 
+permissions:
+  contents: read
+
 jobs:
   charter:
+    name: Phase 4 Charter Verification
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Orqenix OSS (inside workspace)
+        uses: actions/checkout@v4
         with:
           path: Orqenix
-      - name: Clone Orqenix-Pro
-        env:
-          PRO_TOKEN: ${{ secrets.ORQENIX_PRO_READ_TOKEN }}
+          fetch-depth: 1
+
+      - name: Checkout Orqenix-Pro (sibling layout)
+        uses: ./Orqenix/.github/actions/checkout-orqenix-repo
+        with:
+          scope: pro
+          layout: sibling
+          path: ../Orqenix-Pro
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          fetch-depth: 1
+          verify-paths: |
+            packages/license
+
+      - name: Stage Pro at workspace-relative path for Docker mount
+        shell: bash
         run: |
-          git clone https://x-access-token:${PRO_TOKEN}@github.com/milosaysyolo/Orqenix-Pro.git Orqenix-Pro
-      - name: Run charter
+          # Composite action put Pro at $WORKSPACE_PARENT/Orqenix-Pro (sibling).
+          # Docker mount requires it inside GITHUB_WORKSPACE for safe -v binding.
+          # Copy (not symlink) to avoid Docker resolving symlinks outside workspace.
+          WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
+          if [ -d "$WORKSPACE_PARENT/Orqenix-Pro" ]; then
+            cp -a "$WORKSPACE_PARENT/Orqenix-Pro" "$GITHUB_WORKSPACE/Orqenix-Pro"
+            echo "Pro staged at $GITHUB_WORKSPACE/Orqenix-Pro"
+          else
+            echo "ERROR: Pro sibling missing after composite checkout"
+            exit 1
+          fi
+
+      - name: Verify Docker is available
+        run: docker --version
+
+      - name: Build charter Docker image
+        working-directory: Orqenix
+        run: docker build -t orqenix-charter -f charter/Dockerfile .
+
+      - name: Run Phase 4 charter gates
         working-directory: Orqenix
         run: |
-          docker build -t orqenix-charter -f charter/Dockerfile .
           docker run --rm \
-            -v "${{ github.workspace }}/Orqenix:/repo" \
-            -v "${{ github.workspace }}/Orqenix-Pro:/Orqenix-Pro" \
+            -v "${{ github.workspace }}/Orqenix:/repo:ro" \
+            -v "${{ github.workspace }}/Orqenix-Pro:/Orqenix-Pro:ro" \
             -e ORQENIX_PRO_PATH=/Orqenix-Pro \
+            -e CHARTER_VERBOSE=1 \
             orqenix-charter
+
+      - name: Charter summary
+        if: always()
+        run: |
+          echo "## Charter (Phase 4) Run" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- OSS commit: $(cd Orqenix && git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Pro commit: $(cd Orqenix-Pro && git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Trigger: ${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
