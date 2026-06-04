@@ -49,19 +49,24 @@ jobs:
           verify-paths: |
             packages/license
 
-      - name: Stage Pro at workspace path for Docker
-        shell: bash
+      - name: Resolve Pro absolute path
+        id: pro-path
         run: |
           WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
-          if [ -d "$WORKSPACE_PARENT/Orqenix-Pro" ]; then
-            cp -a "$WORKSPACE_PARENT/Orqenix-Pro" "$GITHUB_WORKSPACE/Orqenix-Pro"
-          else
-            echo "ERROR: Pro sibling missing after composite checkout"
-            exit 1
-          fi
+          echo "abs=$WORKSPACE_PARENT/Orqenix-Pro" >> "$GITHUB_OUTPUT"
 
-      - name: Verify Docker available
-        run: docker --version
+      - name: Cache HuggingFace models for charter
+        uses: actions/cache@v4
+        with:
+          path: charter-hf-cache
+          key: hf-charter-${{ runner.os }}-${{ hashFiles('Orqenix/packages/embedding-local/package.json') }}
+          restore-keys: |
+            hf-charter-${{ runner.os }}-
+
+      - name: Prepare HF cache dir
+        run: |
+          mkdir -p charter-hf-cache
+          chmod -R 777 charter-hf-cache
 
       - name: Build charter Docker image
         working-directory: Orqenix
@@ -70,11 +75,15 @@ jobs:
       - name: Run charter gates in Docker
         working-directory: Orqenix
         run: |
+          # NOTE: mounts are WRITABLE (no :ro) because run.sh does pnpm install
+          # which must write node_modules into /repo and into the Pro repo (G10).
           docker run --rm \
-            -v "${{ github.workspace }}/Orqenix:/repo:ro" \
-            -v "${{ github.workspace }}/Orqenix-Pro:/Orqenix-Pro:ro" \
+            -v "${{ github.workspace }}/Orqenix:/repo" \
+            -v "${{ steps.pro-path.outputs.abs }}:/Orqenix-Pro" \
+            -v "${{ github.workspace }}/charter-hf-cache:/root/.cache/huggingface" \
             -e ORQENIX_PRO_PATH=/Orqenix-Pro \
             -e CHARTER_VERBOSE=1 \
+            -e HF_HOME=/root/.cache/huggingface \
             orqenix-charter
 
       - name: Charter summary

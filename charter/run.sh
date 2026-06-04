@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 # Phase 4 Charter Runner
 # Runs all 20 gates inside a Linux container so Unix tooling (grep, wc, jq) is guaranteed.
+
 set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
+
+# --- Defensive: ensure git trusts mounted repos (belt-and-suspenders with Dockerfile) ---
+git config --global --add safe.directory '*' 2>/dev/null || true
+git config --global --add safe.directory /repo 2>/dev/null || true
+git config --global --add safe.directory "${ORQENIX_PRO_PATH:-../Orqenix-Pro}" 2>/dev/null || true
 
 PASS=0
 FAIL=0
@@ -28,8 +34,26 @@ run_gate() {
   fi
 }
 
-# Install deps once
-pnpm install --frozen-lockfile >/dev/null 2>&1 || pnpm install >/dev/null 2>&1
+# --- Install deps once (writable mount required) ---
+echo "Installing OSS dependencies..."
+if ! pnpm install --frozen-lockfile --config.ignore-scripts=false; then
+  echo "WARNING: frozen install failed, retrying without frozen lockfile"
+  pnpm install --config.ignore-scripts=false
+fi
+
+# Rebuild allowlisted native bindings (better-sqlite3, etc.)
+pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --pending --config.ignore-scripts=false || true
+
+# --- Build packages (G13/G17/G18 need packages/cli/dist) ---
+echo "Building packages..."
+pnpm build || echo "WARNING: build reported errors; dist-dependent gates may fail"
+
+# --- Warm HuggingFace cache so G4 (pnpm test) runs offline without 429 ---
+# Temporarily allow network for warming, then tests run offline (env from Dockerfile).
+echo "Warming HuggingFace model cache..."
+HF_HUB_OFFLINE=0 TRANSFORMERS_OFFLINE=0 \
+  pnpm --filter @orqenix/embedding-local run warm-cache || \
+  echo "WARNING: HF warm failed; G4 may fail if model not cached"
 
 # G1
 run_gate G1 "no @ts-expect-error in src" bash -c '
