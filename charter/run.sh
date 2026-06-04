@@ -5,6 +5,7 @@
 set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export REPO_ROOT
 cd "$REPO_ROOT"
 
 # --- Defensive: ensure git trusts mounted repos (belt-and-suspenders with Dockerfile) ---
@@ -106,13 +107,8 @@ run_gate G11 "7 docs present, each >= 200 lines" bash -c '
   done
 '
 
-# G12: CI matrix 6 jobs
-run_gate G12 "CI matrix 6 jobs" bash -c '
-  grep -E "node-version: \\[.\x2720.\x27.*.\x2722.\x27\\]" .github/workflows/ci.yml >/dev/null &&
-  grep -E "ubuntu-latest" .github/workflows/ci.yml >/dev/null &&
-  grep -E "macos-latest"  .github/workflows/ci.yml >/dev/null &&
-  grep -E "windows-latest" .github/workflows/ci.yml >/dev/null
-'
+# G12: CI matrix 6 jobs (robust YAML parse)
+run_gate G12 "CI matrix 6 jobs" node charter/lib/check-ci-matrix.mjs
 
 # G13: smoke passes locally
 run_gate G13 "smoke passes locally" pnpm smoke
