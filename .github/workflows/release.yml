@@ -273,6 +273,13 @@ jobs:
           git config user.email "release-bot@orqenix.dev"
 
       - name: Version packages
+        env:
+          # Use ORQENIX_COORDINATOR_PAT instead of GITHUB_TOKEN for changesets.
+          # Default GITHUB_TOKEN lacks scopes needed for some changesets ops
+          # (tag push, draft PR). Fine-grained PAT covers what we need;
+          # changelog generation uses the default @changesets/cli/changelog
+          # (no GitHub API fetch, so no read:user scope needed).
+          GITHUB_TOKEN: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
         run: pnpm exec changeset version
 
       - name: Publish to npm
