@@ -13,36 +13,48 @@ for f in \
   log "  OK $f"
 done
 
-log "2: run.sh G17/G18 delegate to gate runners (no stale CLI calls)"
+log "2: run.sh uses ESM loader (node --import tsx/esm), not pnpm exec tsx"
+if grep -qE 'pnpm exec tsx scripts/gates/G1[78]' charter/run.sh; then
+  err "  run.sh still uses 'pnpm exec tsx' for G17/G18 (CJS shim fails on ESM-only deps)"
+  exit 1
+fi
+grep -q 'node --import tsx/esm scripts/gates/G17-detach-roundtrip.ts' charter/run.sh \
+  || { err "  G17 not using node --import tsx/esm"; exit 1; }
+grep -q 'node --import tsx/esm scripts/gates/G18-audit-log-tamper-detection.ts' charter/run.sh \
+  || { err "  G18 not using node --import tsx/esm"; exit 1; }
+log "  OK ESM loader wired"
+
+log "3: No stale CLI calls remain (init/attach/audit append)"
 if grep -qE 'cli/dist/index\.js (init|attach)' charter/run.sh; then
-  err "  run.sh still calls removed CLI commands (init/attach)"
+  err "  run.sh still references removed CLI commands"
   exit 1
 fi
 if grep -q "audit append" charter/run.sh; then
-  err "  run.sh still calls non-existent 'audit append'"
+  err "  run.sh still references non-existent 'audit append'"
   exit 1
 fi
-grep -q "G17-detach-roundtrip.ts" charter/run.sh || { err "  G17 not delegating"; exit 1; }
-grep -q "G18-audit-log-tamper-detection.ts" charter/run.sh || { err "  G18 not delegating"; exit 1; }
-log "  OK delegation wired"
+log "  OK no stale CLI calls"
 
-log "3: Gate runners pass standalone"
-pnpm exec tsx scripts/gates/G17-detach-roundtrip.ts
-pnpm exec tsx scripts/gates/G18-audit-log-tamper-detection.ts
+log "4: G21 smoke creates .orqenix dir"
+grep -q 'mkdirSync(join(tmp, ".orqenix")' charter/lib/check-cli-surface.mjs \
+  || { err "  smoke test missing .orqenix mkdir"; exit 1; }
+log "  OK .orqenix mkdir present"
+
+log "5: Gate runners pass standalone via ESM loader"
+node --import tsx/esm scripts/gates/G17-detach-roundtrip.ts
+node --import tsx/esm scripts/gates/G18-audit-log-tamper-detection.ts
 log "  OK both gate runners green"
 
-if [ -f "charter/lib/check-cli-surface.mjs" ]; then
-  log "4: CLI surface smoke (optional G21)"
-  pnpm --filter @orqenix/cli build >/dev/null 2>&1 || true
-  node charter/lib/check-cli-surface.mjs
-  log "  OK CLI smoke green"
-fi
+log "6: CLI surface smoke passes"
+pnpm --filter @orqenix/cli build >/dev/null 2>&1
+node charter/lib/check-cli-surface.mjs
+log "  OK CLI smoke green"
 
-log "5: Prettier"
-pnpm exec prettier --check charter/lib/check-cli-surface.mjs .orqenix/prompts/fix-charter-g17-g18.md 2>/dev/null || {
+log "7: Prettier"
+pnpm exec prettier --check charter/lib/check-cli-surface.mjs scripts/ci/verify-g17-g18-fix.sh 2>/dev/null || {
   err "Prettier failed. Run: pnpm exec prettier --write charter/lib/check-cli-surface.mjs"
   exit 1
 }
 
 log ""
-log "All G17/G18 fix checks passed. Safe to commit."
+log "All G17/G18/G21 fix checks passed. Safe to commit."

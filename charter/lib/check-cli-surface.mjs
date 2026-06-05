@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 // Integration smoke for the built CLI binary using REAL Phase 5 commands.
 // Complements G17/G18 gate runners (which test library APIs directly).
-// Verifies the CLI binary builds, dispatches known commands, and rejects
-// unknown ones. Exits 0 if all checks pass, 1 otherwise.
+//
+// The CLI (packages/cli/src/bin.ts) resolves its SQLite DB at
+// ORQENIX_DB ?? <cwd>/.orqenix/kb.sqlite. better-sqlite3 creates the .sqlite
+// file but NOT the parent .orqenix/ directory, so we create it before running
+// DB-backed commands (link/audit/detach).
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, existsSync } from "node:fs";
+import { mkdtempSync, mkdirSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -29,6 +32,9 @@ function run(args, cwd) {
 }
 
 const tmp = mkdtempSync(join(tmpdir(), "orqenix-cli-smoke-"));
+// CLI expects <cwd>/.orqenix/kb.sqlite; better-sqlite3 won't create the dir.
+mkdirSync(join(tmp, ".orqenix"), { recursive: true });
+
 let pass = 0;
 let fail = 0;
 

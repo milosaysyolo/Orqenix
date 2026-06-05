@@ -122,24 +122,17 @@ run_gate G15 "bundle size budget" pnpm bundle:check
 # G16: perf budget
 run_gate G16 "perf budget" pnpm bench:phase-4
 
-## G17: detach round-trip — delegate to Phase 5 gate runner.
-## The old gate called `cli init/detach --commit/attach`. The Phase 5 CLI
-## (packages/cli/src/commands.ts) has no `init` (it is `scope init`), no
-## `attach` (detach is one-way), and detach is 2-step `detach plan` +
-## `detach exec --token`. The canonical detach test is the library-level
-## gate runner, which passes 6/6.
+## G17: detach round-trip — delegate to Phase 5 gate runner (ESM loader).
+## storage-sqlite is type:module (ESM-only exports); tsx's default CJS shim
+## cannot require() it -> MODULE_NOT_FOUND. node --import tsx/esm loads tsx in
+## ESM mode (Node 22 in charter image supports --import).
 run_gate G17 "detach round-trip clean" bash -c '
-  pnpm exec tsx scripts/gates/G17-detach-roundtrip.ts
+  node --import tsx/esm scripts/gates/G17-detach-roundtrip.ts
 '
 
-## G18: audit tamper detection — delegate to Phase 5 gate runner.
-## The old gate called `cli audit append` (no such command; audit entries
-## are created as side-effects of detach/link/workspace ops) and sed-patched
-## .orqenix/audit/*.log flat files (audit is now a SQLite hash-chained store,
-## table audit_log, migration id=30). The canonical tamper-detection test is
-## the library-level gate runner, which passes 5/5.
+## G18: audit tamper detection — delegate to Phase 5 gate runner (ESM loader).
 run_gate G18 "audit tamper detection" bash -c '
-  pnpm exec tsx scripts/gates/G18-audit-log-tamper-detection.ts
+  node --import tsx/esm scripts/gates/G18-audit-log-tamper-detection.ts
 '
 
 # G19: license grace period (Pro repo)
@@ -157,7 +150,7 @@ run_gate G20 "keystore correct" bash -c '
 ## G21: CLI surface smoke (real binary, Phase 5 commands)
 ## Complements G17/G18 by exercising the built CLI binary end-to-end.
 run_gate G21 "CLI surface smoke (real binary)" bash -c '
-  pnpm exec tsx scripts/gates/build-cli.ts 2>/dev/null || pnpm --filter @orqenix/cli build >/dev/null 2>&1
+  pnpm --filter @orqenix/cli build >/dev/null 2>&1
   node charter/lib/check-cli-surface.mjs
 '
 
