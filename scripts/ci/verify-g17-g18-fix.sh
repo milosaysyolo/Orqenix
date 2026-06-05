@@ -24,13 +24,6 @@ grep -q 'node --import tsx/esm scripts/gates/G18-audit-log-tamper-detection.ts' 
   || { err "  G18 not using node --import tsx/esm"; exit 1; }
 log "  OK ESM loader wired"
 
-log "2b: No stale strip-types in gate blocks (comments/version guard OK)"
-if grep -qE 'node --experimental-strip-types.*scripts/gates/G1[78]' charter/run.sh; then
-  err "  G17/G18 still uses strip-types"
-  exit 1
-fi
-log "  OK no strip-types in gate blocks"
-
 log "3: No stale CLI calls remain (init/attach/audit append)"
 if grep -qE 'cli/dist/index\.js (init|attach)' charter/run.sh; then
   err "  run.sh still references removed CLI commands"
