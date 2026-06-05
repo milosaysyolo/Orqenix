@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // @gate G22
-import { GateRunner, type GateCheck, type GateReport } from "./_gate-runner.js";
+import { GateRunner, type GateCheck, type GateReport } from "./_gate-runner.ts";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { MetricsRegistry, METRIC_NAMES } from "@orqenix/telemetry";

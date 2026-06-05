@@ -13,6 +13,16 @@ git config --global --add safe.directory '*' 2>/dev/null || true
 git config --global --add safe.directory /repo 2>/dev/null || true
 git config --global --add safe.directory "${ORQENIX_PRO_PATH:-../Orqenix-Pro}" 2>/dev/null || true
 
+# --- Verify Node supports --experimental-strip-types (>= 22.6) ---
+NODE_VER=$(node -p "process.versions.node")
+echo "Node version: ${NODE_VER}"
+NODE_MAJOR=$(echo "$NODE_VER" | cut -d. -f1)
+NODE_MINOR=$(echo "$NODE_VER" | cut -d. -f2)
+if [ "$NODE_MAJOR" -lt 22 ] || { [ "$NODE_MAJOR" -eq 22 ] && [ "$NODE_MINOR" -lt 6 ]; }; then
+  echo "WARNING: Node ${NODE_VER} < 22.6; --experimental-strip-types unavailable."
+  echo "G17/G18 will fail; bump charter/Dockerfile base image to node:22.12-bookworm or newer."
+fi
+
 PASS=0
 FAIL=0
 RED_GATES=()
@@ -122,16 +132,17 @@ run_gate G15 "bundle size budget" pnpm bundle:check
 # G16: perf budget
 run_gate G16 "perf budget" pnpm bench:phase-4
 
-## G17: detach round-trip — bundle gate runner to ESM, run with plain node.
-## Avoids tsx CJS/ESM interop issues (MODULE_NOT_FOUND on ESM-only
-## storage-sqlite, ERR_REQUIRE_CYCLE_MODULE on require cycles).
+## G17: detach round-trip — Node native type stripping (no tsx, no esbuild).
+## All gate runner imports changed from .js to .ts in 6-4.10 so
+## --experimental-strip-types resolves them natively. No transpiler, no
+## CJS/ESM interop, no cross-package module resolution needed.
 run_gate G17 "detach round-trip clean" bash -c '
-  node charter/lib/run-gate-runner.mjs scripts/gates/G17-detach-roundtrip.ts
+  node --experimental-strip-types scripts/gates/G17-detach-roundtrip.ts
 '
 
-## G18: audit tamper detection — same bundle-then-run approach.
+## G18: audit tamper detection — same native type-stripping approach.
 run_gate G18 "audit tamper detection" bash -c '
-  node charter/lib/run-gate-runner.mjs scripts/gates/G18-audit-log-tamper-detection.ts
+  node --experimental-strip-types scripts/gates/G18-audit-log-tamper-detection.ts
 '
 
 # G19: license grace period (Pro repo)

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // @gate G30
-import { GateRunner, type GateCheck, type GateReport } from "./_gate-runner.js";
+import { GateRunner, type GateCheck, type GateReport } from "./_gate-runner.ts";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { mkdtemp, rm, mkdir, writeFile, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";

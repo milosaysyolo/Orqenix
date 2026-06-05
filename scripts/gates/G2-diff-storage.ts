@@ -1,4 +1,4 @@
-import { GateRunner, type GateCheck, type GateReport } from "./_gate-runner.js";
+import { GateRunner, type GateCheck, type GateReport } from "./_gate-runner.ts";
 import { execSync } from "node:child_process";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
