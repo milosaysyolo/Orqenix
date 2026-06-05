@@ -4,11 +4,11 @@
 "@orqenix/storage-sqlite": minor
 "@orqenix/storage-diff": minor
 "@orqenix/capability-tokens": minor
-"@orqenix/chat-kb": minor
+"@orqenix/kb-chat": minor
 "@orqenix/memory-tiers": minor
 "@orqenix/memory-distiller": minor
-"@orqenix/embedding": minor
-"@orqenix/throttle": minor
+"@orqenix/embedding-local": minor
+"@orqenix/embedding-cloud": minor
 "@orqenix/llm-adapter-ollama": minor
 "@orqenix/llm-adapter-byok": minor
 "@orqenix/injection-strategies": minor
