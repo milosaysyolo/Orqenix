@@ -43,7 +43,11 @@ const checks = [
   ["version reports 0.5.0-phase-5", ["version"], (r) => r.ok && /0\.5\.0-phase-5/.test(r.out)],
   ["scope init --name", ["scope", "init", "--name=smoke"], (r) => r.ok],
   ["scope info", ["scope", "info"], (r) => r.ok],
-  ["link create --remote", ["link", "create", "--remote=scope:test"], (r) => r.ok],
+  [
+    "link create --remote",
+    ["link", "create", "--remote=scope:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"],
+    (r) => r.ok,
+  ],
   ["link list", ["link", "list"], (r) => r.ok],
   ["audit verify", ["audit", "verify"], (r) => r.ok],
   ["detach plan --kind full-detach", ["detach", "plan", "--kind=full-detach"], (r) => r.ok],

@@ -122,17 +122,16 @@ run_gate G15 "bundle size budget" pnpm bundle:check
 # G16: perf budget
 run_gate G16 "perf budget" pnpm bench:phase-4
 
-## G17: detach round-trip — delegate to Phase 5 gate runner (ESM loader).
-## storage-sqlite is type:module (ESM-only exports); tsx's default CJS shim
-## cannot require() it -> MODULE_NOT_FOUND. node --import tsx/esm loads tsx in
-## ESM mode (Node 22 in charter image supports --import).
+## G17: detach round-trip — bundle gate runner to ESM, run with plain node.
+## Avoids tsx CJS/ESM interop issues (MODULE_NOT_FOUND on ESM-only
+## storage-sqlite, ERR_REQUIRE_CYCLE_MODULE on require cycles).
 run_gate G17 "detach round-trip clean" bash -c '
-  node --import tsx/esm scripts/gates/G17-detach-roundtrip.ts
+  node charter/lib/run-gate-runner.mjs scripts/gates/G17-detach-roundtrip.ts
 '
 
-## G18: audit tamper detection — delegate to Phase 5 gate runner (ESM loader).
+## G18: audit tamper detection — same bundle-then-run approach.
 run_gate G18 "audit tamper detection" bash -c '
-  node --import tsx/esm scripts/gates/G18-audit-log-tamper-detection.ts
+  node charter/lib/run-gate-runner.mjs scripts/gates/G18-audit-log-tamper-detection.ts
 '
 
 # G19: license grace period (Pro repo)
