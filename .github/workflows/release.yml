@@ -76,6 +76,19 @@ jobs:
           cache: pnpm
           registry-url: "https://registry.npmjs.org"
 
+      - name: Announce run mode
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual dispatch. dry_run=${{ inputs.dry_run }}"
+            if [ "${{ inputs.dry_run }}" = "false" ]; then
+              echo "MODE: LIVE PUBLISH"
+            else
+              echo "MODE: DRY RUN (no publish)"
+            fi
+          else
+            echo "MODE: PUSH event — build/verify only, publish job is guarded OFF"
+          fi
+
       - name: Verify lockfile in sync
         env:
           NPM_CONFIG_IGNORE_SCRIPTS: "true"
@@ -190,13 +203,24 @@ jobs:
   publish:
     name: Publish to npm
     needs: [pre-flight, build-and-verify]
-    if: ${{ inputs.dry_run != true && needs.pre-flight.outputs.verdict != 'no-go' }}
+    # SAFETY: publish only on an explicit manual dispatch with dry_run=false.
+    # On push events the dry_run input is undefined, so
+    # 'inputs.dry_run != true' would evaluate TRUE and could trigger a
+    # live publish without an explicit go. This guard blocks that.
+    if: >
+      github.event_name == 'workflow_dispatch' &&
+      inputs.dry_run == false &&
+      needs.pre-flight.outputs.verdict != 'no-go'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     outputs:
       published: ${{ steps.changesets.outputs.published }}
       published_packages: ${{ steps.changesets.outputs.publishedPackages }}
       version: ${{ steps.version.outputs.version }}
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
