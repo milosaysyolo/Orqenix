@@ -6,6 +6,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = __dirname;
 
 export default defineConfig({
+  optimizeDeps: {
+    include: ["@noble/hashes/blake3", "@noble/hashes"],
+  },
   test: {
     globals: false,
     environment: "node",
@@ -17,6 +20,11 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "html"],
       exclude: ["**/dist/**", "**/test/**", "**/bench/**"],
+    },
+    server: {
+      deps: {
+        inline: [/@noble\/hashes/],
+      },
     },
   },
 });
