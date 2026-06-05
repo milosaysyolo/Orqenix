@@ -221,12 +221,13 @@ jobs:
       contents: write
       id-token: write
       packages: write
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout Orqenix-Pro (sibling)
         uses: ./.github/actions/checkout-orqenix-repo
@@ -280,7 +281,7 @@ jobs:
           commit: "chore(release): version packages"
           title: "chore(release): version packages"
         env:
-          GITHUB_TOKEN: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
