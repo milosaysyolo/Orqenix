@@ -7,7 +7,7 @@ const rootDir = __dirname;
 
 export default defineConfig({
   optimizeDeps: {
-    include: ["@noble/hashes/blake3", "@noble/hashes"],
+    include: ["@noble/hashes/blake3", "@noble/hashes", "jsonc-parser"],
   },
   test: {
     globals: false,
@@ -23,7 +23,7 @@ export default defineConfig({
     },
     server: {
       deps: {
-        inline: [/@noble\/hashes/],
+        inline: [/@noble\/hashes/, /jsonc-parser/],
       },
     },
   },
