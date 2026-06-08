@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/file-watcher",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "Debounced cross-platform file watcher (chokidar) for Orqenix reindex pipeline",
   "license": "Apache-2.0",
   "author": {

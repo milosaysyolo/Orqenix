@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/telemetry",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "In-memory telemetry primitives for Orqenix (counters, histograms, gauges) with sink interface",
   "license": "Apache-2.0",
   "author": {

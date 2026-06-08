@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/migration",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "Phase 4 → Phase 5 migration tooling with rollback (CR v7.1 Ch.18)",
   "license": "Apache-2.0",
   "author": {

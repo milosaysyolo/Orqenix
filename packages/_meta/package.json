@@ -1,7 +1,6 @@
 {
   "name": "@orqenix/_meta",
-  "version": "0.5.0-phase-5",
-  "private": true,
+  "version": "0.5.0",
   "description": "Internal Phase 5 metadata and compatibility helpers (not published)",
   "license": "Apache-2.0",
   "type": "module",
@@ -13,5 +12,8 @@
   },
   "devDependencies": {
     "typescript": "^5.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

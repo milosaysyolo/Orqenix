@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/schema",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "Schema for Orqenix (Part-1)",
   "license": "Apache-2.0",
   "author": {

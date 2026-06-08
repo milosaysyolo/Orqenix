@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/core",
-  "version": "0.2.0-dev",
+  "version": "0.5.0",
   "description": "Orqenix core runtime: scope, config, storage, sync engine",
   "license": "Apache-2.0",
   "author": {

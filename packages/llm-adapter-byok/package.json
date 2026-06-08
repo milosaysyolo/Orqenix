@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/llm-adapter-byok",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "BYOK LLM adapters (OpenAI, Anthropic, Google, DeepSeek) for Orqenix prompt rewriter",
   "license": "Apache-2.0",
   "author": {

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mcp-server",
-  "version": "0.2.0-dev",
+  "version": "0.5.0",
   "description": "Expose Orqenix as an MCP server so editors can consume it",
   "license": "Apache-2.0",
   "author": {

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/plugin-semantic-cache",
-  "version": "0.2.0-dev",
+  "version": "0.5.0",
   "description": "Cache identical LLM calls to avoid redundant cost",
   "license": "Apache-2.0",
   "author": {

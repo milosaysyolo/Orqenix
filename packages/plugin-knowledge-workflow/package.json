@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/plugin-knowledge-workflow",
-  "version": "0.2.0-dev",
+  "version": "0.5.0",
   "description": "Agent-agnostic knowledge workflow: pre-task briefing + post-task reindex",
   "license": "Apache-2.0",
   "author": {

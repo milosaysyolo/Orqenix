@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/plugin-cost-tracker",
-  "version": "0.2.0-dev",
+  "version": "0.5.0",
   "description": "Track token usage and cost per agent, scope, and session",
   "license": "Apache-2.0",
   "author": {

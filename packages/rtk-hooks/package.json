@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/rtk-hooks",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "Read-Through Kernel shell hooks (capture stdout/stderr to ChatKB) extending plugin-compress-input",
   "license": "Apache-2.0",
   "author": {

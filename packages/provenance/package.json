@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/provenance",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "Provenance tagging + verification for cross-scope mesh data (CR v7.1 Ch.13)",
   "license": "Apache-2.0",
   "author": {

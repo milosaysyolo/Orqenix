@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/scope-link",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "Per-scope link manifest for the Orqenix local-first mesh (CR v7.1 Ch.13)",
   "license": "Apache-2.0",
   "author": {

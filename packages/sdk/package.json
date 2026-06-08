@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/sdk",
-  "version": "0.5.0-phase-5",
+  "version": "0.5.0",
   "description": "Sdk for Orqenix (Part-12)",
   "license": "Apache-2.0",
   "author": {

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/opencode-plugin",
-  "version": "0.2.0-dev",
+  "version": "0.5.0",
   "description": "OpenCode plugin that bridges to Orqenix daemon",
   "license": "Apache-2.0",
   "author": {
