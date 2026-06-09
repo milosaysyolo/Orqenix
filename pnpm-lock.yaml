@@ -930,6 +930,9 @@ importers:
         specifier: ^6.20.0
         version: 6.26.0
     devDependencies:
+      '@orqenix/transport-security':
+        specifier: workspace:0.6.0-phase-6
+        version: link:../transport-security
       '@types/node':
         specifier: ^22.7.0
         version: 22.19.19

@@ -111,6 +111,9 @@ jobs:
       - name: Install (frozen lockfile)
         run: pnpm install --frozen-lockfile
 
+      - name: Verify BLAKE3 fixture
+        run: node --experimental-vm-modules scripts/ci/native-matrix/verify-fixture.mjs
+
       - name: Native smoke test
         env:
           HF_HUB_OFFLINE: "1"
