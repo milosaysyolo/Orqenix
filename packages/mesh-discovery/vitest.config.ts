@@ -9,7 +9,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json-summary', 'lcov'],
-      thresholds: { lines: 85, statements: 85, functions: 85, branches: 75 },
+      thresholds: { lines: 85, statements: 85, functions: 85, branches: 80 },
       include: ['src/**/*.ts'],
       exclude: ['src/**/*.d.ts'],
     },
