@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true
+  },
+  "references": [
+    { "path": "../../packages/mesh-transport-core" },
+    { "path": "../../packages/mesh-transport-http" },
+    { "path": "../../packages/mesh-transport-libp2p" },
+    { "path": "../../packages/mesh-discovery" },
+    { "path": "../../packages/transport-security" },
+    { "path": "../../packages/mesh-observability" },
+    { "path": "../../packages/mesh-router" }
+  ],
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules", "test"]
+}

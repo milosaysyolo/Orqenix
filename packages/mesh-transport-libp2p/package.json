@@ -1,0 +1,51 @@
+{
+  "name": "@orqenix/mesh-transport-libp2p",
+  "version": "0.6.0-phase-6",
+  "description": "libp2p MeshTransport foundation for Orqenix Phase 6: HKDF peer ID, Noise + yamux, custom protocol /orqenix/mesh/1.0.0.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --coverage",
+    "gate:G38A": "vitest run test/G38A-gate-wrapper.test.ts --reporter verbose",
+    "gate:G38B": "vitest run test/G38B-gate-wrapper.test.ts --reporter verbose"
+  },
+  "dependencies": {
+    "@orqenix/mesh-transport-core": "workspace:*",
+    "@chainsafe/libp2p-noise": "^16.0.0",
+    "@chainsafe/libp2p-yamux": "^7.0.0",
+    "@libp2p/crypto": "^5.0.0",
+    "@libp2p/interface": "^2.0.0",
+    "@libp2p/memory": "^1.1.0",
+    "@libp2p/peer-id": "^5.0.0",
+    "@libp2p/tcp": "^10.0.0",
+    "@libp2p/websockets": "^9.0.0",
+    "@multiformats/multiaddr": "^12.3.0",
+    "it-length-prefixed": "^9.1.0",
+    "it-pipe": "^3.0.1",
+    "libp2p": "^2.0.0",
+    "msgpackr": "^1.11.0",
+    "uint8arrays": "^5.1.0"
+  },
+  "peerDependencies": {
+    "@libp2p/interface": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@libp2p/interface": {
+      "optional": false
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "publishConfig": { "access": "public", "provenance": true },
+  "engines": { "node": ">=22.0.0" }
+}
