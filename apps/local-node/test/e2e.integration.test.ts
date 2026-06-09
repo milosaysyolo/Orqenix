@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { mkdtemp, writeFile, mkdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { spawn, type ChildProcess } from 'node:child_process';
+import { spawn } from 'cross-spawn';
+import type { ChildProcess } from 'node:child_process';
 import { generateEd25519Keypair, exportEd25519PublicKeyRaw } from '@orqenix/transport-security';
 
 const RUN = process.env.SKIP_E2E === '1' ? it.skip : it;

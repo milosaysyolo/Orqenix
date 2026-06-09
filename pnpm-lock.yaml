@@ -75,12 +75,18 @@ importers:
         specifier: ^2.5.0
         version: 2.9.0
     devDependencies:
+      '@types/cross-spawn':
+        specifier: 6.0.6
+        version: 6.0.6
       '@types/node':
         specifier: ^22.7.0
         version: 22.19.19
       '@vitest/coverage-v8':
         specifier: ^2.1.0
         version: 2.1.9(vitest@2.1.9(@types/node@22.19.19))
+      cross-spawn:
+        specifier: 7.0.6
+        version: 7.0.6
       tsx:
         specifier: ^4.19.0
         version: 4.22.3
@@ -2671,6 +2677,9 @@ packages:
 
   '@types/better-sqlite3@7.6.13':
     resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
+
+  '@types/cross-spawn@6.0.6':
+    resolution: {integrity: sha512-fXRhhUkG4H3TQk5dBhQ7m/JDdSNHKwR2BBia62lhwEIq9xGiQKLxd6LymNhn47SjXhsUEPmxi+PKw2OkW4LLjA==}
 
   '@types/diff@6.0.0':
     resolution: {integrity: sha512-dhVCYGv3ZSbzmQaBSagrv1WJ6rXCdkyTcDyoNu1MD8JohI7pR7k8wdZEm+mvdxRKXyHVwckFzWU1vJc+Z29MlA==}
@@ -5942,6 +5951,10 @@ snapshots:
     optional: true
 
   '@types/better-sqlite3@7.6.13':
+    dependencies:
+      '@types/node': 22.19.19
+
+  '@types/cross-spawn@6.0.6':
     dependencies:
       '@types/node': 22.19.19
 

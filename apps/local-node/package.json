@@ -9,8 +9,19 @@
   "bin": {
     "orqenix-node": "./bin/orqenix-node.mjs"
   },
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
-  "files": ["dist", "bin", "README.md", "LICENSE", "CHANGELOG.md"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "pretest": "tsc -p tsconfig.json",
@@ -20,23 +31,30 @@
     "verify": "tsx ../../scripts/gates/verify-phase-6.ts"
   },
   "dependencies": {
+    "@multiformats/multiaddr": "^12.3.0",
+    "@orqenix/mesh-discovery": "workspace:*",
+    "@orqenix/mesh-observability": "workspace:*",
+    "@orqenix/mesh-router": "workspace:*",
     "@orqenix/mesh-transport-core": "workspace:*",
     "@orqenix/mesh-transport-http": "workspace:*",
     "@orqenix/mesh-transport-libp2p": "workspace:*",
-    "@orqenix/mesh-discovery": "workspace:*",
     "@orqenix/transport-security": "workspace:*",
-    "@orqenix/mesh-observability": "workspace:*",
-    "@orqenix/mesh-router": "workspace:*",
-    "@multiformats/multiaddr": "^12.3.0",
     "yaml": "^2.5.0"
   },
   "devDependencies": {
+    "@types/cross-spawn": "6.0.6",
     "@types/node": "^22.7.0",
     "@vitest/coverage-v8": "^2.1.0",
+    "cross-spawn": "7.0.6",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
   },
-  "publishConfig": { "access": "public", "provenance": true },
-  "engines": { "node": ">=22.0.0" }
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
 }
