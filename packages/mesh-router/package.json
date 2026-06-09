@@ -1,0 +1,29 @@
+{
+  "name": "@orqenix/mesh-router",
+  "version": "0.6.0-phase-6",
+  "description": "Cross-transport mesh router for Orqenix Phase 6: priority-based selection, circuit breaker, sequential failover within deadline, cross-transport dedup, capability-gated inbound dispatch.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" } },
+  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --coverage",
+    "gate:G43": "vitest run test/G43-gate-wrapper.test.ts --reporter verbose"
+  },
+  "dependencies": {
+    "@orqenix/mesh-transport-core": "workspace:*",
+    "@orqenix/mesh-observability": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "publishConfig": { "access": "public", "provenance": true },
+  "engines": { "node": ">=22.0.0" }
+}
