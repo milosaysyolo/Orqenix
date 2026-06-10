@@ -2,6 +2,29 @@
 
 All notable changes to the Orqenix main repo. Format based on Keep a Changelog 1.1.
 
+## [0.6.0-phase-6] — 2026-06-10
+
+### Summary
+
+Phase 6: Real Mesh, Local-First. 7 new OSS packages, ~20,000 LOC, 8 charter gates (G36-G43),
+all PASS. Mesh transport layer with HTTP and libp2p implementations, capability-gated identity,
+mDNS-based discovery, cross-transport routing, and observability hooks.
+
+### npm Packages Published
+
+All 7 OSS @orqenix/* Phase 6 packages are live on npm:
+- @orqenix/mesh-transport-core@0.6.0-phase-6
+- @orqenix/mesh-transport-http@0.6.0-phase-6
+- @orqenix/mesh-transport-libp2p@0.6.0-phase-6
+- @orqenix/mesh-discovery@0.6.0-phase-6
+- @orqenix/transport-security@0.6.0-phase-6
+- @orqenix/mesh-observability@0.6.0-phase-6
+- @orqenix/mesh-router@0.6.0-phase-6
+
+Pro CLI @orqenix-pro/cli@0.6.0-phase-6 also published.
+
+See [GitHub Release](https://github.com/milosaysyolo/Orqenix/releases/tag/v0.6.0-phase-6) for full notes.
+
 ## [0.5.0-phase-5] — 2026-06-03
 
 ### Summary

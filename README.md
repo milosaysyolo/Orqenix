@@ -13,6 +13,8 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@orqenix/core"><img alt="npm" src="https://img.shields.io/npm/v/@orqenix/core?label=%40orqenix%2Fcore&logo=npm" /></a>
+  <a href="https://www.npmjs.com/package/@orqenix/mesh-transport-core"><img alt="npm" src="https://img.shields.io/npm/v/@orqenix/mesh-transport-core?label=mesh&logo=npm" /></a>
+  <a href="https://www.npmjs.com/package/@orqenix-pro/cli"><img alt="Pro CLI" src="https://img.shields.io/npm/v/@orqenix-pro/cli?label=Pro%20CLI&logo=npm&color=orange" /></a>
   <a href="https://github.com/milosaysyolo/Orqenix/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/milosaysyolo/Orqenix/ci.yml?branch=main&logo=github&label=CI" /></a>
   <a href="https://github.com/milosaysyolo/Orqenix/blob/main/LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" /></a>
   <a href="https://github.com/milosaysyolo/Orqenix-Pro/blob/main/LICENSE"><img alt="Pro: BSL-1.1" src="https://img.shields.io/badge/Pro-BSL--1.1-orange.svg" /></a>
