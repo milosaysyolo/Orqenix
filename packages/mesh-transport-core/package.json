@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mesh-transport-core",
-  "version": "0.6.0-phase-6",
+  "version": "0.6.0",
   "description": "Transport-agnostic foundation for the Orqenix mesh: MeshTransport interface, canonical envelope, registry, lifecycle, and loopback reference transport.",
   "type": "module",
   "license": "Apache-2.0",
@@ -38,7 +38,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": false
   },
   "engines": {
     "node": ">=22.0.0"
