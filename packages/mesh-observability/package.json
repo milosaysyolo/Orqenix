@@ -1,45 +1,45 @@
-﻿{
-    "name":  "@orqenix/mesh-observability",
-    "version":  "0.6.0",
-    "description":  "Structured logs, OpenTelemetry-compatible metrics, W3C traceparent propagation, and strict redaction for the Orqenix mesh.",
-    "type":  "module",
-    "license":  "Apache-2.0",
-    "main":  "./dist/index.js",
-    "types":  "./dist/index.d.ts",
-    "exports":  {
-                    ".":  {
-                              "types":  "./dist/index.d.ts",
-                              "import":  "./dist/index.js",
-                              "default":  "./dist/index.js"
-                          }
-                },
-    "files":  [
-                  "dist",
-                  "README.md",
-                  "LICENSE",
-                  "CHANGELOG.md"
-              ],
-    "scripts":  {
-                    "build":  "tsc -p tsconfig.json",
-                    "test":  "vitest run --coverage",
-                    "gate:G42":  "vitest run test/G42-gate-wrapper.test.ts --reporter verbose"
-                },
-    "dependencies":  {
-                         "@orqenix/mesh-transport-core":  "workspace:*",
-                         "blake3-wasm":  "^2.0.0"
-                     },
-    "devDependencies":  {
-                            "@types/node":  "^22.7.0",
-                            "@vitest/coverage-v8":  "^2.1.0",
-                            "tsx":  "^4.19.0",
-                            "typescript":  "^5.6.0",
-                            "vitest":  "^2.1.0"
-                        },
-    "publishConfig":  {
-                          "access":  "public",
-                          "provenance":  false
-                      },
-    "engines":  {
-                    "node":  "\u003e=22.0.0"
-                }
+{
+  "name": "@orqenix/mesh-observability",
+  "version": "0.6.1",
+  "description": "Structured logs, OpenTelemetry-compatible metrics, W3C traceparent propagation, and strict redaction for the Orqenix mesh.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --coverage",
+    "gate:G42": "vitest run test/G42-gate-wrapper.test.ts --reporter verbose"
+  },
+  "dependencies": {
+    "@orqenix/mesh-transport-core": "^0.6.0",
+    "blake3-wasm": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
 }

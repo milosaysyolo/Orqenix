@@ -1,47 +1,47 @@
-﻿{
-    "name":  "@orqenix/mesh-transport-http",
-    "version":  "0.6.0",
-    "description":  "HTTP MeshTransport for Orqenix Phase 6: POST /orqenix/mesh/v1/rpc with msgpack envelopes, dedup cache, bounded retry, and clean teardown.",
-    "type":  "module",
-    "license":  "Apache-2.0",
-    "main":  "./dist/index.js",
-    "types":  "./dist/index.d.ts",
-    "exports":  {
-                    ".":  {
-                              "types":  "./dist/index.d.ts",
-                              "import":  "./dist/index.js",
-                              "default":  "./dist/index.js"
-                          }
-                },
-    "files":  [
-                  "dist",
-                  "README.md",
-                  "LICENSE",
-                  "CHANGELOG.md"
-              ],
-    "scripts":  {
-                    "build":  "tsc -p tsconfig.json",
-                    "test":  "vitest run --coverage",
-                    "gate:G37":  "vitest run test/G37-gate-wrapper.test.ts --reporter verbose"
-                },
-    "dependencies":  {
-                         "@orqenix/mesh-transport-core":  "workspace:*",
-                         "msgpackr":  "^1.11.0",
-                         "undici":  "^6.20.0"
-                     },
-    "devDependencies":  {
-                            "@orqenix/transport-security":  "workspace:0.6.0-phase-6",
-                            "@types/node":  "^22.7.0",
-                            "@vitest/coverage-v8":  "^2.1.0",
-                            "tsx":  "^4.19.0",
-                            "typescript":  "^5.6.0",
-                            "vitest":  "^2.1.0"
-                        },
-    "publishConfig":  {
-                          "access":  "public",
-                          "provenance":  false
-                      },
-    "engines":  {
-                    "node":  "\u003e=22.0.0"
-                }
+{
+  "name": "@orqenix/mesh-transport-http",
+  "version": "0.6.1",
+  "description": "HTTP MeshTransport for Orqenix Phase 6: POST /orqenix/mesh/v1/rpc with msgpack envelopes, dedup cache, bounded retry, and clean teardown.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --coverage",
+    "gate:G37": "vitest run test/G37-gate-wrapper.test.ts --reporter verbose"
+  },
+  "dependencies": {
+    "@orqenix/mesh-transport-core": "^0.6.0",
+    "msgpackr": "^1.11.0",
+    "undici": "^6.20.0"
+  },
+  "devDependencies": {
+    "@orqenix/transport-security": "workspace:0.6.0-phase-6",
+    "@types/node": "^22.7.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
 }
