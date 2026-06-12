@@ -10,13 +10,13 @@
     "last-bumped-by": "milosaysyolo"
   },
   "orqenix-pro": {
-    "ref": "v0.5.0-phase-5",
-    "rationale": "Phase 5 stable tag, pinned for reproducible cross-repo CI",
+    "ref": "phase-8/self-learning-pro",
+    "rationale": "Phase 8 self-learning Pro branch, cross-project federation and advanced detection",
     "owner": "release-coordinator",
     "bump-frequency": "with each Pro release",
-    "last-bumped": "2026-06-03",
+    "last-bumped": "2026-06-12",
     "last-bumped-by": "milosaysyolo",
-    "compatible-oss-range": ">=0.5.0-phase-5 <0.6.0"
+    "compatible-oss-range": ">=0.8.0 <0.9.0"
   },
   "orqenix-cloud": {
     "ref": "main",

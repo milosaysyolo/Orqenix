@@ -1,0 +1,50 @@
+{
+  "name": "@orqenix/marketplace-ui",
+  "version": "0.8.0-alpha.1",
+  "description": "Apache-2.0 shared Marketplace UI components for Workbench + Cloud Control Plane.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "LICENSE", "README.md"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "publishConfig": { "access": "public", "provenance": true },
+  "dependencies": {
+    "@orqenix/ui-primitives": "workspace:*",
+    "@orqenix/marketplace-core": "workspace:*",
+    "lucide-react": "^0.475.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.0 || ^19.0.0",
+    "react-dom": "^18.3.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "packages/marketplace-ui"
+  },
+  "keywords": ["orqenix", "marketplace-ui", "react", "apache-2.0"],
+  "engines": { "node": ">=20.10.0" }
+}
