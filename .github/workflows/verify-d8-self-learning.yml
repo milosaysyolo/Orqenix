@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: Apache-2.0
+# Verify D8.γ self-learning packages
+name: Verify D8.γ Self-Learning
+on:
+  push: { branches: [phase-8/self-learning] }
+  pull_request: { branches: [main, phase-8/*] }
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20.10.0' }
+      - run: corepack enable && pnpm install --frozen-lockfile
+      - run: pnpm --filter @orqenix/self-learning-observer run build
+      - run: pnpm --filter @orqenix/self-learning-observer run test
+      - run: pnpm --filter @orqenix/self-learning-detection run build
+      - run: pnpm --filter @orqenix/self-learning-detection run test
+      - run: pnpm --filter @orqenix/instinct-promoter run build
+      - run: pnpm --filter @orqenix/instinct-promoter run test
+      - run: pnpm --filter @orqenix/skill-genesis run build
+      - run: pnpm --filter @orqenix/skill-genesis run test
+      - run: pnpm --filter @orqenix/verification-loop run build
+      - run: pnpm --filter @orqenix/verification-loop run test

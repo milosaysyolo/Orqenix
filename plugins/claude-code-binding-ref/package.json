@@ -1,0 +1,23 @@
+{
+  "name": "@orqenix/plugin-claude-code-binding-ref",
+  "version": "0.8.0-alpha.1",
+  "description": "Reference agent-binding plugin: template for bridging Orqenix to a platform.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/plugin.js",
+  "files": ["dist", "LICENSE", "README.md"],
+  "scripts": { "build": "tsup src/index.ts --format esm --dts --clean", "test": "vitest run" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "keywords": ["orqenix", "orqenix-plugin", "agent-binding", "claude-code"],
+  "engines": { "node": ">=20.10.0" },
+  "orqenixPlugin": {
+    "manifestVersion": "1.0",
+    "kind": "agent-binding",
+    "compatibility": { "orqenix": ">=0.8.0" },
+    "permissions": ["scope.read"],
+    "external_agent_compat": ["claude-code"],
+    "keywords": ["claude-code"],
+    "sandboxMode": "separate_process",
+    "lifecycle": { "activate": "./scripts/activate.mjs", "deactivate": "./scripts/deactivate.mjs" }
+  }
+}
