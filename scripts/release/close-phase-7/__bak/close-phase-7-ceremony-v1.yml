@@ -1,0 +1,100 @@
+name: Close Phase 7 \u2014 Release Ceremony
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type I-UNDERSTAND-MFA to confirm irreversible publish'
+        type: string
+        required: true
+
+permissions:
+  contents: write       # tag push + GitHub release
+  packages: write       # ghcr image push
+  id-token: write       # cosign keyless + npm provenance
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm gate
+        run: |
+          if [[ "${{ inputs.confirm }}" != "I-UNDERSTAND-MFA" ]]; then
+            echo "::error::Confirmation token required. npm MFA blocks unpublish (Phase 5/6 lesson)."
+            exit 1
+          fi
+
+  ceremony:
+    needs: guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Checkout Orqenix-Pro
+        uses: actions/checkout@v4
+        with:
+          repository: milosaysyolo/Orqenix-Pro
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          path: ../Orqenix-Pro
+          ref: main
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - uses: sigstore/cosign-installer@v3
+
+      - name: Install (ignore-scripts enforced via .npmrc)
+        run: pnpm install --frozen-lockfile
+
+      - name: Block 1 + 2 + security pre-flight
+        run: |
+          node scripts/release/close-phase-7/close-phase-7-master.mjs --from 1 --to 2 --strict
+          node scripts/release/close-phase-7/close-phase-7-master.mjs --block 6 --strict
+
+      - name: Fix Pro deps before publish
+        run: node scripts/post-release/v0.7.0-phase-7/v2/fix-pro-deps.mjs
+
+      - name: Run release ceremony
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
+          GITHUB_CHANGELOG_TOKEN: ${{ secrets.ORQENIX_CHANGELOG_PAT }}
+          ORQENIX_COORDINATOR_PAT: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          NPM_CONFIG_PROVENANCE: 'true'
+          PUBLISH_BATCH_SIZE: '6'
+          PUBLISH_COOLDOWN_SEC: '20'
+        run: bash scripts/release/ceremony.sh
+
+      - name: Verify tags pushed to 3 repos (same wall-clock day, lesson #10)
+        run: |
+          for r in Orqenix Orqenix-Pro Orqenix-Cloud; do
+            git ls-remote --tags "https://github.com/milosaysyolo/$r.git" "v0.7.0-phase-7" \
+              | grep -q "v0.7.0-phase-7" \
+              && echo "TAG $r OK" \
+              || { echo "::error::Tag missing on $r"; exit 1; }
+          done
+
+      - name: Upload closure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: close-phase-7-ceremony-${{ github.run_id }}
+          path: out/close-phase-7/
+          retention-days: 90
+
+  validate:
+    needs: ceremony
+    uses: ./.github/workflows/post-release-validation-v2.yml
+    with:
+      ref: v0.7.0-phase-7
+      strict: true
+    secrets: inherit

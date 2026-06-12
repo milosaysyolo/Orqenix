@@ -1,0 +1,49 @@
+{
+  "name": "@orqenix/migration-phase-7-to-8",
+  "version": "0.8.0-alpha.1",
+  "description": "Apache-2.0 migration tooling: Phase 7 (scope) → Phase 8 (project + branch + session).",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": { "orqenix-migrate": "./dist/cli.mjs" },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "LICENSE", "README.md"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint src tests",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "publishConfig": { "access": "public", "provenance": true },
+  "dependencies": {
+    "@orqenix/memory-engine": "workspace:*",
+    "better-sqlite3": "^11.5.0",
+    "yaml": "^2.6.1",
+    "@noble/hashes": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "20.16.11",
+    "eslint": "^9.15.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "packages/migration-phase-7-to-8"
+  },
+  "keywords": ["orqenix", "migration", "phase-7", "phase-8", "apache-2.0"],
+  "engines": { "node": ">=20.10.0" }
+}

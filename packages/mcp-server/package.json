@@ -1,69 +1,66 @@
 {
   "name": "@orqenix/mcp-server",
-  "version": "0.5.0",
-  "description": "Expose Orqenix as an MCP server so editors can consume it",
+  "version": "0.8.0-alpha.1",
+  "description": "Apache-2.0 Orqenix MCP Server. Exposes memory + skills + mesh as MCP tools/resources/prompts over stdio/HTTP/WebSocket.",
   "license": "Apache-2.0",
-  "author": {
-    "name": "Milo Nguyen",
-    "email": "milo@orqenix.dev",
-    "url": "https://orqenix.dev"
-  },
-  "homepage": "https://orqenix.dev",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/milosaysyolo/Orqenix.git",
-    "directory": "packages\\mcp-server"
-  },
-  "bugs": {
-    "url": "https://github.com/milosaysyolo/Orqenix/issues"
-  },
-  "keywords": [
-    "orqenix",
-    "ai-agents",
-    "orchestration"
-  ],
   "type": "module",
+  "bin": {
+    "orqenix-mcp": "./dist/cli.mjs"
+  },
   "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json"
   },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md"
-  ],
+  "files": ["dist", "LICENSE", "README.md"],
   "sideEffects": false,
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/",
-    "provenance": true
-  },
-  "engines": {
-    "node": ">=20.0.0"
-  },
   "scripts": {
     "build": "tsup",
-    "test": "vitest run",
+    "dev": "tsup --watch",
+    "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
-    "clean": "npx rimraf dist .turbo",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "@orqenix/core": "workspace:*",
-    "jsonc-parser": "^3.3.1"
+    "@orqenix/memory-engine": "workspace:*",
+    "@orqenix/plugin-core": "workspace:*",
+    "@orqenix/skill-runtime": "workspace:*",
+    "@noble/hashes": "^1.5.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/node": "20.16.11",
+    "@vitest/ui": "^2.1.5",
+    "eslint": "^9.15.0",
     "tsup": "^8.3.0",
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "packages/mcp-server"
+  },
+  "homepage": "https://orqenix.dev/docs/mcp-server",
+  "keywords": [
+    "orqenix",
+    "mcp",
+    "model-context-protocol",
+    "ai-agents",
+    "apache-2.0"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
   }
 }

@@ -1,0 +1,156 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * @orqenix/ui-primitives, Design token CSS
+ *
+ * OKLCH-based design tokens. Falls back to HSL in browsers without OKLCH support.
+ * All tokens map to Tailwind theme values via tailwind.config.js.
+ *
+ * Light and dark theme scopes use class-based theming (.light / .dark).
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand colors - Orqenix Emerald (primary) */
+    --orqenix-emerald-50:  oklch(0.96 0.04 154);
+    --orqenix-emerald-100: oklch(0.91 0.08 154);
+    --orqenix-emerald-200: oklch(0.83 0.14 154);
+    --orqenix-emerald-300: oklch(0.74 0.18 154);
+    --orqenix-emerald-400: oklch(0.65 0.20 154);
+    --orqenix-emerald-500: oklch(0.56 0.20 154);
+    --orqenix-emerald-600: oklch(0.48 0.18 154);
+    --orqenix-emerald-700: oklch(0.40 0.16 154);
+    --orqenix-emerald-800: oklch(0.32 0.13 154);
+    --orqenix-emerald-900: oklch(0.24 0.10 154);
+    --orqenix-emerald-950: oklch(0.16 0.06 154);
+
+    /* Brand colors - Orqenix Violet (secondary) */
+    --orqenix-violet-50:  oklch(0.96 0.03 270);
+    --orqenix-violet-100: oklch(0.91 0.06 270);
+    --orqenix-violet-200: oklch(0.83 0.12 270);
+    --orqenix-violet-300: oklch(0.74 0.17 270);
+    --orqenix-violet-400: oklch(0.64 0.21 270);
+    --orqenix-violet-500: oklch(0.55 0.22 270);
+    --orqenix-violet-600: oklch(0.47 0.21 270);
+    --orqenix-violet-700: oklch(0.39 0.18 270);
+    --orqenix-violet-800: oklch(0.31 0.15 270);
+    --orqenix-violet-900: oklch(0.23 0.11 270);
+    --orqenix-violet-950: oklch(0.16 0.07 270);
+
+    /* Brand colors - Orqenix Amber (accent) */
+    --orqenix-amber-50:  oklch(0.97 0.03 80);
+    --orqenix-amber-100: oklch(0.93 0.07 80);
+    --orqenix-amber-200: oklch(0.87 0.14 80);
+    --orqenix-amber-300: oklch(0.81 0.17 80);
+    --orqenix-amber-400: oklch(0.75 0.18 80);
+    --orqenix-amber-500: oklch(0.69 0.18 80);
+    --orqenix-amber-600: oklch(0.59 0.17 80);
+    --orqenix-amber-700: oklch(0.49 0.15 80);
+    --orqenix-amber-800: oklch(0.40 0.13 80);
+    --orqenix-amber-900: oklch(0.31 0.10 80);
+    --orqenix-amber-950: oklch(0.22 0.07 80);
+
+    /* Light theme semantic colors */
+    --background:         oklch(1.00 0 0);
+    --foreground:         oklch(0.15 0.01 270);
+    --card:               oklch(1.00 0 0);
+    --card-foreground:    oklch(0.15 0.01 270);
+    --popover:            oklch(1.00 0 0);
+    --popover-foreground: oklch(0.15 0.01 270);
+    --primary:            oklch(0.20 0.01 270);
+    --primary-foreground: oklch(0.98 0 0);
+    --secondary:          oklch(0.96 0.01 270);
+    --secondary-foreground: oklch(0.20 0.01 270);
+    --muted:              oklch(0.96 0.01 270);
+    --muted-foreground:   oklch(0.55 0.01 270);
+    --accent:             oklch(0.96 0.01 270);
+    --accent-foreground:  oklch(0.20 0.01 270);
+    --destructive:        oklch(0.62 0.24 25);
+    --destructive-foreground: oklch(0.98 0 0);
+    --border:             oklch(0.92 0.01 270);
+    --input:              oklch(0.92 0.01 270);
+    --ring:               oklch(0.20 0.01 270);
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background:         oklch(0.13 0.01 270);
+    --foreground:         oklch(0.98 0 0);
+    --card:               oklch(0.13 0.01 270);
+    --card-foreground:    oklch(0.98 0 0);
+    --popover:            oklch(0.13 0.01 270);
+    --popover-foreground: oklch(0.98 0 0);
+    --primary:            oklch(0.98 0 0);
+    --primary-foreground: oklch(0.20 0.01 270);
+    --secondary:          oklch(0.22 0.01 270);
+    --secondary-foreground: oklch(0.98 0 0);
+    --muted:              oklch(0.22 0.01 270);
+    --muted-foreground:   oklch(0.65 0.01 270);
+    --accent:             oklch(0.22 0.01 270);
+    --accent-foreground:  oklch(0.98 0 0);
+    --destructive:        oklch(0.41 0.21 25);
+    --destructive-foreground: oklch(0.98 0 0);
+    --border:             oklch(0.22 0.01 270);
+    --input:              oklch(0.22 0.01 270);
+    --ring:               oklch(0.85 0.01 270);
+  }
+
+  /* HSL fallback for browsers without OKLCH support */
+  @supports not (color: oklch(0 0 0)) {
+    :root {
+      --background: hsl(0 0% 100%);
+      --foreground: hsl(270 10% 15%);
+      --card: hsl(0 0% 100%);
+      --card-foreground: hsl(270 10% 15%);
+      --popover: hsl(0 0% 100%);
+      --popover-foreground: hsl(270 10% 15%);
+      --primary: hsl(270 10% 20%);
+      --primary-foreground: hsl(0 0% 98%);
+      --secondary: hsl(270 10% 96%);
+      --secondary-foreground: hsl(270 10% 20%);
+      --muted: hsl(270 10% 96%);
+      --muted-foreground: hsl(270 10% 55%);
+      --accent: hsl(270 10% 96%);
+      --accent-foreground: hsl(270 10% 20%);
+      --destructive: hsl(25 90% 62%);
+      --destructive-foreground: hsl(0 0% 98%);
+      --border: hsl(270 10% 92%);
+      --input: hsl(270 10% 92%);
+      --ring: hsl(270 10% 20%);
+    }
+
+    .dark {
+      --background: hsl(270 10% 13%);
+      --foreground: hsl(0 0% 98%);
+      --card: hsl(270 10% 13%);
+      --card-foreground: hsl(0 0% 98%);
+      --popover: hsl(270 10% 13%);
+      --popover-foreground: hsl(0 0% 98%);
+      --primary: hsl(0 0% 98%);
+      --primary-foreground: hsl(270 10% 20%);
+      --secondary: hsl(270 10% 22%);
+      --secondary-foreground: hsl(0 0% 98%);
+      --muted: hsl(270 10% 22%);
+      --muted-foreground: hsl(270 10% 65%);
+      --accent: hsl(270 10% 22%);
+      --accent-foreground: hsl(0 0% 98%);
+      --destructive: hsl(25 90% 41%);
+      --destructive-foreground: hsl(0 0% 98%);
+      --border: hsl(270 10% 22%);
+      --input: hsl(270 10% 22%);
+      --ring: hsl(270 10% 85%);
+    }
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}

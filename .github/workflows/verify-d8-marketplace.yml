@@ -1,0 +1,43 @@
+name: verify-d8-marketplace
+
+on:
+  pull_request:
+    paths:
+      - 'packages/marketplace-core/**'
+      - 'packages/normalization-engine/**'
+      - 'packages/input-adapters/**'
+      - 'packages/output-adapters/**'
+      - 'packages/marketplace-ui/**'
+  push:
+    branches: [main, 'phase-8/**']
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify D8.β (G65 + G66)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9.14.4 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20.10.0', cache: 'pnpm' }
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck marketplace packages
+        run: |
+          pnpm --filter @orqenix/marketplace-core typecheck
+          pnpm --filter @orqenix/normalization-engine typecheck
+          pnpm --filter @orqenix/input-adapters typecheck
+          pnpm --filter @orqenix/output-adapters typecheck
+          pnpm --filter @orqenix/marketplace-ui typecheck
+      - name: Test (includes round-trip fidelity gate)
+        run: |
+          pnpm --filter @orqenix/marketplace-core test
+          pnpm --filter @orqenix/normalization-engine test
+          pnpm --filter @orqenix/input-adapters test
+          pnpm --filter @orqenix/output-adapters test
+      - name: Round-trip fidelity gate (INV-15)
+        run: pnpm --filter @orqenix/output-adapters test -- roundtrip

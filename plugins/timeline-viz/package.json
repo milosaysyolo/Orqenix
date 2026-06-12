@@ -1,0 +1,27 @@
+﻿{
+  "name": "@orqenix/plugin-timeline-viz",
+  "version": "0.8.0-alpha.1",
+  "description": "Reference visualization plugin: memory timeline view for Workbench.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/plugin.js",
+  "files": ["dist", "LICENSE", "README.md"],
+  "scripts": { "build": "tsup src/index.ts --format esm --dts --clean", "test": "vitest run" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "keywords": ["orqenix", "orqenix-plugin", "visualization"],
+  "engines": { "node": ">=20.10.0" },
+  "orqenixPlugin": {
+    "manifestVersion": "1.0",
+    "kind": "visualization",
+    "compatibility": { "orqenix": ">=0.8.0" },
+    "permissions": ["memory.read:chat"],
+    "external_agent_compat": [],
+    "sandboxMode": "wasm",
+    "tool": {
+      "name": "timeline_render",
+      "description": "Renders a timeline visualization of memory entries",
+      "inputSchema": { "type": "object", "properties": { "entries": { "type": "array" } }, "required": ["entries"] },
+      "outputSchema": { "type": "object", "properties": { "svg": { "type": "string" } } }
+    }
+  }
+}

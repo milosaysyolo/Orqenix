@@ -1,0 +1,47 @@
+{
+  "name": "@orqenix/output-adapters",
+  "version": "0.8.0-alpha.1",
+  "description": "Apache-2.0 output adapters for Orqenix normalization. CSF → 8 platform formats with round-trip fidelity.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "LICENSE", "README.md"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint src tests",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "publishConfig": { "access": "public", "provenance": true },
+  "dependencies": {
+    "@orqenix/csf": "workspace:*",
+    "@orqenix/normalization-engine": "workspace:*",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
+    "@orqenix/input-adapters": "workspace:*",
+    "@types/node": "20.16.11",
+    "eslint": "^9.15.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "packages/output-adapters"
+  },
+  "keywords": ["orqenix", "output-adapters", "csf", "round-trip", "apache-2.0"],
+  "engines": { "node": ">=20.10.0" }
+}

@@ -1,5 +1,10 @@
 packages:
   - "packages/*"
+  - "packages/self-learning-observer"
+  - "packages/self-learning-detection"
+  - "packages/instinct-promoter"
+  - "packages/skill-genesis"
+  - "packages/verification-loop"
   - "apps/*"
   - "bench"
   - "integration"
