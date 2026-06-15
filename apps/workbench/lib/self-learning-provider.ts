@@ -24,10 +24,9 @@ export function buildSelfLearning(
   const observer = new Observer({ db, piiFilter: new BasicPiiFilter() });
   const detector = advancedDetector ?? new BasicDetector({ db });
   const skillGenesis = new SkillGenesis({ db });
-  const candidateStore = detector instanceof BasicDetector ? detector.getCandidateStore() : undefined;
   const promoter = new PromoterService({
     db,
-    ...(candidateStore !== undefined ? { candidateStore } : {}),
+    candidateStore: detector instanceof BasicDetector ? detector.getCandidateStore() : undefined,
     observer,
     skillGenesis,
     audit: engine.getAuditWriter() as never,

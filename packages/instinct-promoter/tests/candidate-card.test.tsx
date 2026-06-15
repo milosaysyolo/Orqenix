@@ -40,7 +40,7 @@ describe('CandidateCard', () => {
     render(<CandidateCard candidate={mockCandidate} onReview={() => {}} busy />);
     const buttons = screen.getAllByRole('button');
     for (const btn of buttons) {
-      expect(btn.hasAttribute('disabled')).toBe(true);
+      expect(btn).toBeDisabled();
     }
   });
 });

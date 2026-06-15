@@ -3,7 +3,7 @@
 
 'use client';
 
-import { Cloud, RefreshCw, Globe } from 'lucide-react';
+import { Cloud, Sync, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button, Input, Label, Switch } from '@orqenix/ui-primitives';
 
 export default function SettingsCloudSyncPage() {
@@ -78,7 +78,7 @@ export default function SettingsCloudSyncPage() {
 
           <div className="flex gap-2 pt-2">
             <Button variant="default" className="gap-2">
-              <RefreshCw className="w-4 h-4" />
+              <Sync className="w-4 h-4" />
               Sign in via GitHub OAuth
             </Button>
             <Button variant="outline">Test Connection</Button>
@@ -94,7 +94,7 @@ export default function SettingsCloudSyncPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <RefreshCw className="w-5 h-5" aria-hidden />
+              <Sync className="w-5 h-5" aria-hidden />
               Sync Settings
             </CardTitle>
             <Badge variant="outline" className="text-xs">P7 locked</Badge>

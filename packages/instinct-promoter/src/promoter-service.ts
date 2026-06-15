@@ -49,7 +49,7 @@ export class PromoterService {
   private readonly observer: Observer;
   private readonly skillGenesis: SkillGenesis;
   private readonly audit: PromoterAuditWriter;
-  private readonly detector: IDetector | undefined;
+  private readonly detector?: IDetector;
 
   constructor(options: PromoterServiceOptions) {
     this.db = options.db;
