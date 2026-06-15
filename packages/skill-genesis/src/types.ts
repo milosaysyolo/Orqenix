@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/skill-genesis , Type definitions
 
-import type { ImplementationLanguage } from '@orqenix/csf';
+import type { ImplementationLanguage } from '@orqenix/plugin-core';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
+import type { Database } from 'better-sqlite3';
 
 /** Input to generate a skill from a candidate */
 export interface GenerateFromCandidateInput {
@@ -44,4 +46,19 @@ export interface GeneratedFixture {
   name: string;
   input: Record<string, unknown>;
   expectedOutcome: 'success' | 'error';
+}
+
+export interface SkillGenesisOptions {
+  /** Database instance */
+  db: Database;
+  /** Project identifier */
+  projectId: string;
+  /** Confidence threshold (0-1) for auto-generation */
+  confidenceThreshold?: number;
+}
+
+export interface GeneratedSkill {
+  name: string;
+  csf: CanonicalSkillFormat;
+  observations: string[];
 }

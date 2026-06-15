@@ -80,6 +80,13 @@ export interface CaptureEventInput {
 
 export type ObserverScope = 'project' | 'branch' | 'session';
 
+export const ObserverConfigSchema = z.object({
+  scopeId: z.string(),
+  enabled: z.boolean().default(true),
+  piiFilter: z.enum(['basic', 'strict', 'none']).default('basic'),
+  samplingRate: z.number().min(0).max(1).default(1.0),
+});
+
 export interface ObserverConfig {
   /** Whether observer is enabled (default true, opt-out per ADR-E-010) */
   enabled: boolean;

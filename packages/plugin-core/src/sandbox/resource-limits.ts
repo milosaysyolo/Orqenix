@@ -39,17 +39,18 @@ export function resolveResourceLimits(
   pluginOverrides: SandboxConfig | undefined,
   operatorDefaults: Partial<ResolvedResourceLimits> = {}
 ): ResolvedResourceLimits {
+  const defs = operatorDefaults as ResolvedResourceLimits;
   const base: ResolvedResourceLimits = {
-    cpuLimitPct: operatorDefaults.cpuLimitPct ?? DEFAULT_RESOURCE_LIMITS.cpuLimitPct,
+    cpuLimitPct: defs.cpuLimitPct ?? DEFAULT_RESOURCE_LIMITS.cpuLimitPct,
     memoryLimitMb:
-      operatorDefaults.memoryLimitMb ?? DEFAULT_RESOURCE_LIMITS.memoryLimitMb,
+      defs.memoryLimitMb ?? DEFAULT_RESOURCE_LIMITS.memoryLimitMb,
     wallTimeLimitSec:
-      operatorDefaults.wallTimeLimitSec ?? DEFAULT_RESOURCE_LIMITS.wallTimeLimitSec,
-    fsReadPaths: operatorDefaults.fsReadPaths ?? DEFAULT_RESOURCE_LIMITS.fsReadPaths,
+      defs.wallTimeLimitSec ?? DEFAULT_RESOURCE_LIMITS.wallTimeLimitSec,
+    fsReadPaths: defs.fsReadPaths ?? DEFAULT_RESOURCE_LIMITS.fsReadPaths,
     fsWritePaths:
-      operatorDefaults.fsWritePaths ?? DEFAULT_RESOURCE_LIMITS.fsWritePaths,
+      defs.fsWritePaths ?? DEFAULT_RESOURCE_LIMITS.fsWritePaths,
     networkAllowed:
-      operatorDefaults.networkAllowed ?? DEFAULT_RESOURCE_LIMITS.networkAllowed,
+      defs.networkAllowed ?? DEFAULT_RESOURCE_LIMITS.networkAllowed,
   };
 
   if (!pluginOverrides) {

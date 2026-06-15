@@ -5,26 +5,75 @@
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/plugin.js",
-  "files": ["dist", "LICENSE", "README.md"],
-  "scripts": { "build": "tsup src/index.ts --format esm --dts --clean", "test": "vitest run" },
-  "publishConfig": { "access": "public", "provenance": true },
-  "keywords": ["orqenix", "orqenix-plugin", "subagent"],
-  "engines": { "node": ">=20.10.0" },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "subagent"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "orqenixPlugin": {
     "manifestVersion": "1.0",
     "kind": "subagent",
-    "compatibility": { "orqenix": ">=0.8.0" },
-    "permissions": ["command.execute:limited", "fs.read"],
-    "external_agent_compat": ["claude-code", "opencode"],
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
+    "permissions": [
+      "command.execute:limited",
+      "fs.read"
+    ],
+    "external_agent_compat": [
+      "claude-code",
+      "opencode"
+    ],
     "sandboxMode": "separate_process",
     "tool": {
       "name": "run_tests",
       "description": "Runs the test suite and reports failures (subagent: no persistence)",
-      "inputSchema": { "type": "object", "properties": { "testPath": { "type": "string" } } },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "testPath": {
+            "type": "string"
+          }
+        }
+      },
       "outputSchema": {
         "type": "object",
-        "properties": { "passed": { "type": "number" }, "failed": { "type": "number" }, "failures": { "type": "array" } },
-        "required": ["passed", "failed"]
+        "properties": {
+          "passed": {
+            "type": "number"
+          },
+          "failed": {
+            "type": "number"
+          },
+          "failures": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "passed",
+          "failed"
+        ]
       }
     }
   }

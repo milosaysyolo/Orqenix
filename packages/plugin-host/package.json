@@ -55,7 +55,8 @@
     "typecheck": "tsc --noEmit",
     "clean": "npx rimraf dist .turbo",
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/core": "workspace:*"

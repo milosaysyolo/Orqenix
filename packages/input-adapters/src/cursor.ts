@@ -3,7 +3,7 @@
 
 import { buildCsf } from '@orqenix/normalization-engine';
 import type { InputAdapter, ImportInput, DetectionResult } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 import { ADAPTER_VERSION, readContent } from './shared';
 
 export const cursorInputAdapter: InputAdapter = {

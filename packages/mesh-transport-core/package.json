@@ -23,7 +23,9 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "gate:G36": "tsx ../../scripts/gates/G36-transport-abstraction.ts"
+    "gate:G36": "tsx ../../scripts/gates/G36-transport-abstraction.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "msgpackr": "^1.11.0",

@@ -52,9 +52,9 @@ export class HierarchyQuery {
           results: this.search.search({
             query: input.query,
             ...(input.queryEmbedding ? { queryEmbedding: input.queryEmbedding } : {}),
+            ...(input.sessionId ? { sessionId: input.sessionId } : {}),
             kbs,
             branchId: input.branchId,
-            sessionId: input.sessionId,
             memoryLevel: 'session',
             projectId: input.projectId,
             limit: input.limit,

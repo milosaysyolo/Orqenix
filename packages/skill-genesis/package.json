@@ -15,7 +15,11 @@
     },
     "./package.json": "./package.json"
   },
-  "files": ["dist", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -23,14 +27,17 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
-  "publishConfig": { "access": "public", "provenance": true },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
-    "@orqenix/csf": "workspace:*",
     "@orqenix/normalization-engine": "workspace:*",
     "@orqenix/self-learning-observer": "workspace:*",
     "@orqenix/self-learning-detection": "workspace:*",
     "@noble/hashes": "^1.5.0",
-    "zod": "^3.23.8"
+    "zod": "^3.25.0",
+    "@orqenix/plugin-core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "20.16.11",
@@ -44,6 +51,14 @@
     "url": "https://github.com/milosaysyolo/Orqenix.git",
     "directory": "packages/skill-genesis"
   },
-  "keywords": ["orqenix", "self-learning", "skill-genesis", "code-synthesis", "apache-2.0"],
-  "engines": { "node": ">=20.10.0" }
+  "keywords": [
+    "orqenix",
+    "self-learning",
+    "skill-genesis",
+    "code-synthesis",
+    "apache-2.0"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  }
 }

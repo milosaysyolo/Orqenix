@@ -10,7 +10,7 @@ import {
   type OutputAdapter,
   type ImportInput,
 } from '../src/types';
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 
 function mockInputAdapter(
   kind: string,

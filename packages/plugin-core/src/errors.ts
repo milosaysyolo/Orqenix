@@ -6,7 +6,7 @@ export class PluginError extends Error {
   constructor(
     public readonly code: string,
     message: string,
-    public readonly cause?: unknown
+    public override readonly cause?: unknown
   ) {
     super(message);
     this.name = 'PluginError';
@@ -136,6 +136,14 @@ export class PluginNotRegisteredError extends PluginError {
       `Plugin ${packageName} is not registered.`
     );
     Object.setPrototypeOf(this, PluginNotRegisteredError.prototype);
+  }
+}
+
+/** Plugin invocation denied by permission system */
+export class PluginDeniedError extends PluginError {
+  constructor(packageName: string, permission: string) {
+    super('PLUGIN_DENIED', `Plugin ${packageName} denied: missing permission '${permission}'`);
+    Object.setPrototypeOf(this, PluginDeniedError.prototype);
   }
 }
 

@@ -94,6 +94,7 @@ export type {
 
 export {
   HIERARCHY_MIGRATIONS,
+  ALL_PHASE_8_CORE_MIGRATIONS,
   MigrationRunner,
   BASE_KB_BOOTSTRAP,
   type Migration,

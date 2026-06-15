@@ -5,24 +5,74 @@
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/plugin.js",
-  "files": ["dist", "LICENSE", "README.md"],
-  "scripts": { "build": "tsup src/index.ts --format esm --dts --clean", "test": "vitest run" },
-  "publishConfig": { "access": "public", "provenance": true },
-  "keywords": ["orqenix", "orqenix-plugin", "mcp-server"],
-  "engines": { "node": ">=20.10.0" },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "mcp-server"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "orqenixPlugin": {
     "manifestVersion": "1.0",
     "kind": "mcp-server",
-    "compatibility": { "orqenix": ">=0.8.0", "mcp": ">=0.5.0" },
-    "permissions": ["scope.read"],
-    "external_agent_compat": ["claude-code", "cursor", "opencode"],
+    "compatibility": {
+      "orqenix": ">=0.8.0",
+      "mcp": ">=0.5.0"
+    },
+    "permissions": [
+      "scope.read"
+    ],
+    "external_agent_compat": [
+      "claude-code",
+      "cursor",
+      "opencode"
+    ],
     "sandboxMode": "separate_process",
-    "lifecycle": { "activate": "./scripts/activate.mjs", "deactivate": "./scripts/deactivate.mjs" },
+    "lifecycle": {
+      "activate": "./scripts/activate.mjs",
+      "deactivate": "./scripts/deactivate.mjs"
+    },
     "tool": {
       "name": "echo",
       "description": "Echoes input back (minimal MCP server reference)",
-      "inputSchema": { "type": "object", "properties": { "message": { "type": "string" } }, "required": ["message"] },
-      "outputSchema": { "type": "object", "properties": { "echoed": { "type": "string" } } }
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "echoed": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

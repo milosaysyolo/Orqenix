@@ -7,7 +7,7 @@ import { npmInputAdapter } from './npm';
 import { aiderInputAdapter } from './aider';
 import { opencodeInputAdapter } from './opencode';
 import type { InputAdapter, ImportInput, DetectionResult } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 import { ADAPTER_VERSION } from './shared';
 
 export const localFileInputAdapter: InputAdapter = {

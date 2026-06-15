@@ -4,7 +4,7 @@
 import { parse as parseYaml } from 'yaml';
 import { buildCsf } from '@orqenix/normalization-engine';
 import type { InputAdapter, ImportInput, DetectionResult } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 import { ADAPTER_VERSION, readContent, sanitizeName } from './shared';
 
 export const opencodeInputAdapter: InputAdapter = {

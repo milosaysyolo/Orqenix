@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { ALL_OUTPUT_ADAPTERS, npmOutputAdapter, cursorOutputAdapter, claudeCodeOutputAdapter } from '../src/index';
 import { buildCsf } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 
 function freshCsf(): CanonicalSkillFormat {
   return buildCsf({

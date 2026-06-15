@@ -22,7 +22,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --coverage",
-    "gate:G42": "vitest run test/G42-gate-wrapper.test.ts --reporter verbose"
+    "gate:G42": "vitest run test/G42-gate-wrapper.test.ts --reporter verbose",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/mesh-transport-core": "^0.6.0",

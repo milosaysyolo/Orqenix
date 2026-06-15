@@ -23,10 +23,10 @@ function parseArgs(argv: string[]): CliArgs {
   const args: Partial<CliArgs> = { transport: 'stdio' };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    if (a === '--project') args.project = argv[++i];
+    if (a === '--project') args.project = argv[++i] as string;
     else if (a === '--transport') args.transport = argv[++i] as McpTransport;
     else if (a === '--port') args.port = Number(argv[++i]);
-    else if (a === '--client-id') args.clientId = argv[++i];
+    else if (a === '--client-id') args.clientId = argv[++i] as string;
   }
   if (!args.project) {
     args.project = process.cwd();

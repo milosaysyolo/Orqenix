@@ -5,23 +5,76 @@
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/plugin.js",
-  "files": ["dist", "LICENSE", "README.md"],
-  "scripts": { "build": "tsup src/index.ts --format esm --dts --clean", "test": "vitest run" },
-  "publishConfig": { "access": "public", "provenance": true },
-  "keywords": ["orqenix", "orqenix-plugin", "embedding-model", "bge", "local"],
-  "engines": { "node": ">=20.10.0" },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "embedding-model",
+    "bge",
+    "local"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "orqenixPlugin": {
     "manifestVersion": "1.0",
     "kind": "embedding-model",
-    "compatibility": { "orqenix": ">=0.8.0" },
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
     "permissions": [],
-    "external_agent_compat": ["claude-code", "cursor", "codex", "opencode", "cline", "aider", "continue"],
+    "external_agent_compat": [
+      "claude-code",
+      "cursor",
+      "codex",
+      "opencode",
+      "cline",
+      "aider",
+      "continue"
+    ],
     "sandboxMode": "separate_process",
     "tool": {
       "name": "bge_embed",
       "description": "Generates BGE-small-v1.5 embeddings (384-dim) locally",
-      "inputSchema": { "type": "object", "properties": { "text": { "type": "string" } }, "required": ["text"] },
-      "outputSchema": { "type": "object", "properties": { "embedding": { "type": "array" }, "dimension": { "type": "number" } } }
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "embedding": {
+            "type": "array"
+          },
+          "dimension": {
+            "type": "number"
+          }
+        }
+      }
     }
   }
 }

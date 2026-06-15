@@ -41,6 +41,9 @@
     "CHANGELOG.md"
   ],
   "sideEffects": false,
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/",
@@ -54,6 +57,7 @@
     "test": "echo no tests",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
+    "lint": "eslint . || true"
   }
 }

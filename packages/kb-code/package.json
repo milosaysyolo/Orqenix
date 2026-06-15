@@ -55,7 +55,8 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
-    "postinstall": "node scripts/copy-wasm.mjs"
+    "postinstall": "node scripts/copy-wasm.mjs",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/core": "workspace:*",

@@ -15,7 +15,11 @@
     },
     "./package.json": "./package.json"
   },
-  "files": ["dist", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -23,11 +27,14 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
-  "publishConfig": { "access": "public", "provenance": true },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
-    "@orqenix/csf": "workspace:*",
     "@orqenix/normalization-engine": "workspace:*",
-    "yaml": "^2.6.1"
+    "yaml": "^2.6.1",
+    "@orqenix/plugin-core": "workspace:*"
   },
   "devDependencies": {
     "@orqenix/input-adapters": "workspace:*",
@@ -42,6 +49,14 @@
     "url": "https://github.com/milosaysyolo/Orqenix.git",
     "directory": "packages/output-adapters"
   },
-  "keywords": ["orqenix", "output-adapters", "csf", "round-trip", "apache-2.0"],
-  "engines": { "node": ">=20.10.0" }
+  "keywords": [
+    "orqenix",
+    "output-adapters",
+    "csf",
+    "round-trip",
+    "apache-2.0"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  }
 }

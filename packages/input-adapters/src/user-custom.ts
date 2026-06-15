@@ -4,7 +4,7 @@
 import { z } from 'zod';
 import { buildCsf } from '@orqenix/normalization-engine';
 import type { InputAdapter, ImportInput, DetectionResult } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat, PluginKind } from '@orqenix/csf';
+import type { CanonicalSkillFormat, PluginKind } from '@orqenix/plugin-core';
 import { ADAPTER_VERSION, readContent, sanitizeName } from './shared';
 
 const CustomWrapperSchema = z.object({

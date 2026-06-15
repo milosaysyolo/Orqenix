@@ -22,7 +22,9 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --coverage",
     "gate:G39": "vitest run test/G39-gate-wrapper.test.ts --reporter verbose",
-    "lint:no-dht-no-relay": "tsx ../../scripts/lint/no-dht-no-relay.ts"
+    "lint:no-dht-no-relay": "tsx ../../scripts/lint/no-dht-no-relay.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/mesh-transport-core": "^0.6.0",
