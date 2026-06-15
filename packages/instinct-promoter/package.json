@@ -5,17 +5,17 @@
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
     "./ui": {
       "types": "./dist/ui/index.d.ts",
-      "import": "./dist/ui/index.mjs",
+      "import": "./dist/ui/index.js",
       "require": "./dist/ui/index.cjs"
     },
     "./package.json": "./package.json"

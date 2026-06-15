@@ -280,6 +280,6 @@ export const ALL_MODULE_CONTRACTS: ModuleSettingsContract[] = [
       rationale: 'Workbench port 27420 + UI defaults locked Phase 8',
     },
     hotReloadable: true,
-    hierarchyOverride: 'user',
+    hierarchyOverride: 'project',
   },
 ];

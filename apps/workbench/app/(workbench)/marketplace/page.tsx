@@ -116,7 +116,7 @@ export default function MarketplacePage(): React.ReactElement {
         </TabsList>
 
         <TabsContent value="discover" className="space-y-4 pt-4">
-          <PluginSearch onSearch={(q, f) => void handleSearch(q, f)} loading={loading} />
+          <PluginSearch onSearch={(q: string, f: MarketplaceSearchFilters) => void handleSearch(q, f)} loading={loading} />
           <div className="space-y-3">
             {results.map((p) => (
               <PluginCard key={`${p.source}:${p.name}`} plugin={p} callbacks={callbacks} />
@@ -156,7 +156,7 @@ export default function MarketplacePage(): React.ReactElement {
           open={true}
           {...(exportPlugin ? { pluginName: exportPlugin } : {})}
           onClose={() => { setWizardMode(null); setExportPlugin(undefined); }}
-          onImport={async (input) => {
+          onImport={async (input: Record<string, unknown>) => {
             const res = await fetch('/api/marketplace', {
               method: 'POST',
               headers: { 'content-type': 'application/json' },
@@ -166,7 +166,7 @@ export default function MarketplacePage(): React.ReactElement {
             await loadInstalled();
             return data;
           }}
-          onExport={async (input) => {
+          onExport={async (input: Record<string, unknown>) => {
             const res = await fetch('/api/marketplace', {
               method: 'POST',
               headers: { 'content-type': 'application/json' },
