@@ -54,14 +54,15 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/core": "workspace:*",
     "@noble/ed25519": "^2.1.0",
     "@noble/hashes": "^1.4.0",
     "yaml": "^2.4.5",
-    "zod": "^3.23.8"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "vitest": "^2.1.0",

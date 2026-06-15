@@ -1,0 +1,54 @@
+name: verify-phase-8-full
+
+on:
+  pull_request:
+    branches: [main, 'phase-8/**']
+  push:
+    branches: ['phase-8/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Phase 8 (install + typecheck + test + build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.10.0'
+          cache: 'pnpm'
+
+      - name: Dependency version sanity (golden rule)
+        run: node scripts/verify/check-dep-versions.mjs
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck (all packages)
+        run: pnpm -r run typecheck
+
+      - name: Test (all packages)
+        run: pnpm -r run test
+
+      - name: Build (all packages)
+        run: pnpm -r run build
+
+      - name: Stub-wiring check
+        run: node scripts/verify/check-stub-wiring.mjs
+
+      - name: Upload verify report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-report
+          path: verify-report.json
+          if-no-files-found: ignore

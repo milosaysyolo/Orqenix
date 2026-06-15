@@ -46,6 +46,10 @@ coverage/
 .next/
 .turbo/
 
+# Runtime output / generated artifacts
+out/
+verify-report.json
+
 # Integration test output
 integration-results.json
 

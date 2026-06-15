@@ -1,0 +1,82 @@
+{
+  "name": "@orqenix/plugin-notion-source",
+  "version": "0.8.0-alpha.1",
+  "description": "Reference knowledge-source plugin: connects Notion as an Orqenix knowledge base.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/plugin.js",
+  "types": "./dist/plugin.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "knowledge-source",
+    "notion"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "orqenixPlugin": {
+    "manifestVersion": "1.0",
+    "kind": "knowledge-source",
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
+    "permissions": [
+      "network.fetch",
+      "memory.write:decision"
+    ],
+    "external_agent_compat": [
+      "claude-code",
+      "cursor",
+      "codex",
+      "opencode"
+    ],
+    "settingsSchema": "./schemas/settings.json",
+    "settingsDefaults": {
+      "notion_token_env": "NOTION_TOKEN",
+      "database_id": "NOTION_DATABASE_ID"
+    },
+    "sandboxMode": "separate_process",
+    "tool": {
+      "name": "notion_fetch",
+      "description": "Fetches knowledge entries from a Notion database",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "entries": {
+            "type": "array"
+          }
+        }
+      }
+    }
+  }
+}

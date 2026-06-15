@@ -55,7 +55,8 @@
     "warm-cache": "node scripts/warm-hf-cache.mjs",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/core": "workspace:*",

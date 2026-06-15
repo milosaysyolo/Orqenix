@@ -54,12 +54,13 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/core": "workspace:*",
     "chokidar": "^3.6.0",
-    "zod": "^3.23.8"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "vitest": "^1.6.0",

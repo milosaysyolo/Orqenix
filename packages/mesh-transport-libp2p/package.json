@@ -22,7 +22,9 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --coverage",
     "gate:G38A": "vitest run test/G38A-gate-wrapper.test.ts --reporter verbose",
-    "gate:G38B": "vitest run test/G38B-gate-wrapper.test.ts --reporter verbose"
+    "gate:G38B": "vitest run test/G38B-gate-wrapper.test.ts --reporter verbose",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/mesh-transport-core": "^0.6.0",

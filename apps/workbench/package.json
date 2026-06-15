@@ -1,0 +1,84 @@
+{
+  "name": "@orqenix/workbench",
+  "version": "0.8.0-alpha.1",
+  "description": "Orqenix Workbench , local-first Web UI for project memory, mesh, audit, and marketplace at http://localhost:27420",
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 27420 --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --port 27420 --hostname 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "size:check": "size-limit"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@orqenix/ui-primitives": "workspace:*",
+    "@orqenix/plugin-core": "workspace:*",
+    "@orqenix/memory-engine": "workspace:*",
+    "@orqenix/marketplace-core": "workspace:*",
+    "@orqenix/settings-registry": "workspace:*",
+    "@orqenix/self-learning-observer": "workspace:*",
+    "@orqenix/self-learning-detection": "workspace:*",
+    "@orqenix/instinct-promoter": "workspace:*",
+    "@orqenix/skill-genesis": "workspace:*",
+    "@orqenix/verification-loop": "workspace:*",
+    "@tanstack/react-query": "^5.59.0",
+    "cmdk": "^1.0.0",
+    "lucide-react": "^0.475.0",
+    "zod": "^3.25.0",
+    "@noble/hashes": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.16.11",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@playwright/test": "^1.49.0",
+    "@size-limit/preset-app": "^11.1.6",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/ui": "^2.1.5",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.15.0",
+    "postcss": "^8.4.49",
+    "size-limit": "^11.1.6",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "provenance": false
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "apps/workbench"
+  },
+  "keywords": [
+    "orqenix",
+    "workbench",
+    "ai-coding-agent",
+    "local-first",
+    "memory-fabric",
+    "knowledge-base",
+    "mesh"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "size-limit": [
+    {
+      "name": "Workbench shell + first paint",
+      "path": ".next/static/chunks/main-*.js",
+      "limit": "240 KB",
+      "gzip": true
+    }
+  ],
+  "homepage": "https://orqenix.dev"
+}

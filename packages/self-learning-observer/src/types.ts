@@ -1,0 +1,164 @@
+// SPDX-License-Identifier: Apache-2.0
+// @orqenix/self-learning-observer , Type definitions
+
+import { z } from 'zod';
+
+/** Actor kinds */
+export type ObserverActorKind = 'user' | 'agent' | 'subagent';
+
+/** Action kinds the observer captures */
+export type ObserverActionKind =
+  | 'shell_command'
+  | 'file_edit'
+  | 'file_read'
+  | 'tool_call'
+  | 'chat_message'
+  | 'memory_write'
+  | 'decision_recorded'
+  | 'lesson_recorded'
+  | 'test_run'
+  | 'git_operation'
+  | 'browser_action';
+
+/** Outcome kinds */
+export type ObserverOutcomeKind = 'success' | 'error' | 'pending';
+
+// ─────────────────────────────────────────────────────────────────────────
+// Observation event
+// ─────────────────────────────────────────────────────────────────────────
+
+export const ObservationEventSchema = z.object({
+  /** ULID */
+  id: z.string(),
+  timestamp: z.string().datetime(),
+  /** 3-level hierarchy context */
+  project_id: z.string(),
+  branch_id: z.string().nullable(),
+  session_id: z.string(),
+  parent_session_id: z.string().nullable(),
+  /** Agent platform if known */
+  agent_platform: z.string().nullable(),
+  /** Actor */
+  actor_kind: z.enum(['user', 'agent', 'subagent']),
+  actor_id: z.string(),
+  /** Action */
+  action_kind: z.string(),
+  action_payload: z.record(z.unknown()),
+  /** Outcome */
+  outcome_kind: z.enum(['success', 'error', 'pending']).nullable(),
+  outcome_duration_ms: z.number().int().nullable(),
+  outcome_payload: z.record(z.unknown()).nullable(),
+  /** Privacy */
+  pii_redaction_applied: z.boolean(),
+  redaction_notes: z.string().nullable(),
+});
+
+export type ObservationEvent = z.infer<typeof ObservationEventSchema>;
+
+// ─────────────────────────────────────────────────────────────────────────
+// Capture input (what callers provide before enrichment)
+// ─────────────────────────────────────────────────────────────────────────
+
+export interface CaptureEventInput {
+  projectId: string;
+  branchId?: string | null;
+  sessionId: string;
+  parentSessionId?: string | null;
+  agentPlatform?: string | null;
+  actorKind: ObserverActorKind;
+  actorId: string;
+  actionKind: ObserverActionKind | string;
+  actionPayload: Record<string, unknown>;
+  outcomeKind?: ObserverOutcomeKind | null;
+  outcomeDurationMs?: number | null;
+  outcomePayload?: Record<string, unknown> | null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Observer config (per hierarchy level)
+// ─────────────────────────────────────────────────────────────────────────
+
+export type ObserverScope = 'project' | 'branch' | 'session';
+
+export const ObserverConfigSchema = z.object({
+  scopeId: z.string(),
+  enabled: z.boolean().default(true),
+  piiFilter: z.enum(['basic', 'strict', 'none']).default('basic'),
+  samplingRate: z.number().min(0).max(1).default(1.0),
+});
+
+export interface ObserverConfig {
+  /** Whether observer is enabled (default true, opt-out per ADR-E-010) */
+  enabled: boolean;
+  /** Apply PII filtering (default true) */
+  piiFilterEnabled: boolean;
+  /** Notify on first launch (default true per INV-17) */
+  notifyOnFirstLaunch: boolean;
+  /** Sample rate 0-1 (default 1.0 = capture everything) */
+  sampleRate: number;
+}
+
+export const DEFAULT_OBSERVER_CONFIG: ObserverConfig = {
+  enabled: true,
+  piiFilterEnabled: true,
+  notifyOnFirstLaunch: true,
+  sampleRate: 1.0,
+};
+
+// ─────────────────────────────────────────────────────────────────────────
+// PII filter contract (provided by privacy-core, D7.15)
+// ─────────────────────────────────────────────────────────────────────────
+
+export interface PiiFilter {
+  /** Redact PII from a payload; returns redacted payload + whether anything changed */
+  redact(payload: Record<string, unknown>): {
+    redacted: Record<string, unknown>;
+    applied: boolean;
+    notes?: string;
+  };
+}
+
+/** No-op PII filter for standalone/testing */
+export class NoopPiiFilter implements PiiFilter {
+  redact(payload: Record<string, unknown>): {
+    redacted: Record<string, unknown>;
+    applied: boolean;
+  } {
+    return { redacted: payload, applied: false };
+  }
+}
+
+/**
+ * A basic PII filter that redacts common patterns (emails, tokens, paths with
+ * usernames). Production wires the full @orqenix-cloud/privacy-core filter.
+ */
+export class BasicPiiFilter implements PiiFilter {
+  private readonly patterns: Array<{ re: RegExp; label: string }> = [
+    { re: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, label: 'email' },
+    { re: /\b(?:sk|pk|ghp|gho|xoxb)[-_][A-Za-z0-9]{16,}\b/g, label: 'token' },
+    { re: /\/(?:home|Users)\/[^/\s]+/g, label: 'home-path' },
+  ];
+
+  redact(payload: Record<string, unknown>): {
+    redacted: Record<string, unknown>;
+    applied: boolean;
+    notes?: string;
+  } {
+    let applied = false;
+    const labels = new Set<string>();
+    const json = JSON.stringify(payload);
+    let redactedJson = json;
+    for (const { re, label } of this.patterns) {
+      if (re.test(redactedJson)) {
+        redactedJson = redactedJson.replace(re, `[REDACTED:${label}]`);
+        applied = true;
+        labels.add(label);
+      }
+    }
+    return {
+      redacted: applied ? (JSON.parse(redactedJson) as Record<string, unknown>) : payload,
+      applied,
+      ...(applied ? { notes: `Redacted: ${Array.from(labels).join(', ')}` } : {}),
+    };
+  }
+}

@@ -28,7 +28,9 @@
     "test": "vitest run --coverage",
     "test:no-e2e": "SKIP_E2E=1 vitest run --coverage",
     "start": "node --import tsx src/cli.ts start",
-    "verify": "tsx ../../scripts/gates/verify-phase-6.ts"
+    "verify": "tsx ../../scripts/gates/verify-phase-6.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@multiformats/multiaddr": "^12.3.0",

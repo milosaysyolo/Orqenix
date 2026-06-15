@@ -1,0 +1,118 @@
+{
+  "name": "@orqenix/plugin-git-commit-conventional",
+  "version": "0.8.0-alpha.1",
+  "description": "Reference skill plugin: generates Conventional Commits messages.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/plugin.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . || true"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "skill",
+    "git",
+    "conventional-commits"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "orqenixPlugin": {
+    "manifestVersion": "1.0",
+    "kind": "skill",
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
+    "permissions": [
+      "git.write"
+    ],
+    "external_agent_compat": [
+      "claude-code",
+      "cursor",
+      "codex",
+      "opencode",
+      "cline",
+      "aider",
+      "continue"
+    ],
+    "sandboxMode": "separate_process",
+    "tool": {
+      "name": "git_commit_conventional",
+      "description": "Creates a Git commit following the Conventional Commits spec",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": [
+              "feat",
+              "fix",
+              "docs",
+              "style",
+              "refactor",
+              "test",
+              "chore"
+            ]
+          },
+          "scope": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 72
+          },
+          "body": {
+            "type": "string"
+          },
+          "breakingChange": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "description"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      }
+    },
+    "examples": [
+      {
+        "name": "feature commit",
+        "input": {
+          "type": "feat",
+          "scope": "auth",
+          "description": "add OAuth login"
+        },
+        "expectedOutput": {
+          "message": "feat(auth): add OAuth login"
+        }
+      }
+    ]
+  }
+}

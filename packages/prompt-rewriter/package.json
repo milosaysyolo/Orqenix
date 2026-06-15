@@ -54,7 +54,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
+    "lint": "eslint . || true"
   },
   "dependencies": {
     "@orqenix/core": "workspace:*",
@@ -62,7 +63,7 @@
     "@orqenix/injection-strategies": "workspace:*",
     "@orqenix/llm-adapter-ollama": "workspace:*",
     "@orqenix/storage-sqlite": "workspace:*",
-    "zod": "^3.23.8"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "vitest": "^2.1.0",
