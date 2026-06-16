@@ -1,19 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // Shared vitest config that forces native binding resolution to use the
-// hoisted node_modules path, not pnpm's isolated .pnpm store.
-//
-// Each package imports + extends this:
-//   import { defineConfig, mergeConfig } from 'vitest/config';
-//   import shared from '../../vitest.config.shared';
-//   export default mergeConfig(shared, defineConfig({ /* package-specific */ }));
+// hoisted node_modules path. Updated with env override for child processes.
 
 import { defineConfig } from 'vitest/config';
+import { resolve } from 'node:path';
+
+const workspaceRoot = resolve(import.meta.dirname);
 
 export default defineConfig({
   test: {
-    // Critical: vitest forks/threads must inherit the workspace's hoisted
-    // node_modules so better-sqlite3 binding resolves via the same path that
-    // production runtime uses.
     pool: 'forks',
     poolOptions: {
       forks: {
@@ -21,17 +16,16 @@ export default defineConfig({
         execArgv: [],
       },
     },
-    // Disable optimizeDeps for native deps so vitest doesn't try to bundle them
     server: {
       deps: {
-        external: [/better-sqlite3/, /esbuild/, /@swc\/core/],
+        external: [/better-sqlite3/, /esbuild/, /@swc\/core/, /bindings/],
+        inline: [],
       },
     },
-    // Vitest's default cwd is the package dir; set to workspace root for
-    // consistent require.resolve behavior.
-    root: process.cwd(),
-    // Bail early on persistent infrastructure failures so we don't hit
-    // the 10-min timeout reported in D8.verify-2.
+    env: {
+      NODE_PATH: resolve(workspaceRoot, 'node_modules'),
+    },
+    root: workspaceRoot,
     bail: 3,
     testTimeout: 20000,
     hookTimeout: 20000,

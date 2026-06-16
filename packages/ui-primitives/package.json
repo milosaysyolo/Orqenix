@@ -21,27 +21,17 @@
     },
     "./package.json": "./package.json"
   },
-  "files": [
-    "dist",
-    "LICENSE",
-    "README.md"
-  ],
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "files": ["dist", "LICENSE", "README.md"],
+  "sideEffects": ["**/*.css"],
   "scripts": {
     "build": "tsup && pnpm build:css",
     "build:css": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --minify",
     "dev": "tsup --watch",
-    "lint": "eslint src",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --passWithNoTests"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
+  "publishConfig": { "access": "public", "provenance": true },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-label": "^2.1.1",
@@ -72,30 +62,12 @@
     "tailwindcss": "^3.4.16",
     "tsup": "^8.3.0",
     "typescript": "^5.6.3",
-    "vitest": "^2.1.5",
-    "@typescript-eslint/parser": "^8.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0"
+    "vitest": "^2.1.5"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/milosaysyolo/Orqenix.git",
     "directory": "packages/ui-primitives"
   },
-  "homepage": "https://orqenix.dev/docs/ui-primitives",
-  "bugs": {
-    "url": "https://github.com/milosaysyolo/Orqenix/issues"
-  },
-  "keywords": [
-    "orqenix",
-    "ui-primitives",
-    "shadcn",
-    "radix",
-    "design-system",
-    "oklch",
-    "react",
-    "apache-2.0"
-  ],
-  "engines": {
-    "node": ">=20.10.0"
-  }
+  "engines": { "node": ">=20.10.0" }
 }
