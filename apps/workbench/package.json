@@ -40,7 +40,6 @@
     "@noble/hashes": "^1.5.0"
   },
   "devDependencies": {
-    "@orqenix/eslint-config": "workspace:*",
     "@types/node": "20.16.11",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
