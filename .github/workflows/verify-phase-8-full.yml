@@ -55,7 +55,7 @@ jobs:
 
       # ── Verify lockfile integrity (compensates for no --frozen-lockfile) ──
       - name: Lockfile integrity
-        run: pnpm install --frozen-lockfile --dry-run
+        run: git diff --exit-code pnpm-lock.yaml
 
       # ── Verify native bindings load on this OS ──
       # Note: better-sqlite3 prebuilds may not exist for latest Node ABI on CI.
