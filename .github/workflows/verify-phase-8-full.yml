@@ -66,10 +66,10 @@ jobs:
         run: node scripts/verify/check-native-bindings.mjs --auto-rebuild
 
       # ── Pre-build packages whose typecheck depends on dist/ ──
-      # Use pnpm exec to resolve tsup from workspace root's node_modules/.bin
+      # npx resolves from workspace root's node_modules/.bin across all platforms
       - name: Pre-build core types
         working-directory: packages/core
-        run: pnpm exec tsup
+        run: npx tsup
 
       # ── Typecheck (must be 100%) ──
       - name: Typecheck
