@@ -65,6 +65,11 @@ jobs:
       - name: Build
         run: pnpm -r run build
 
+      # macOS runner may not link .bin after frozen install; rebuild fixes it
+      - name: Rebuild bin links (macOS workaround)
+        if: matrix.os == 'macos-latest'
+        run: pnpm rebuild -r
+
       # ── Typecheck (must be 100%) ──
       # must run after build so project-reference dependencies have .d.ts
       - name: Typecheck
