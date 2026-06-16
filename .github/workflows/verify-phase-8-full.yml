@@ -65,11 +65,16 @@ jobs:
         continue-on-error: true
         run: node scripts/verify/check-native-bindings.mjs --auto-rebuild
 
-      # ── Pre-build packages whose typecheck depends on dist/ ──
-      # npx resolves from workspace root's node_modules/.bin across all platforms
-      - name: Pre-build core types
-        working-directory: packages/core
-        run: npx tsup
+      # ── Add root node_modules/.bin to PATH (hoisted linker on CI creates
+      # .bin entries at root level only, not in workspace sub-packages) ──
+      - name: Add root bin to PATH
+        shell: bash
+        run: echo "${{ github.workspace }}/node_modules/.bin" >> "$GITHUB_PATH"
+
+      # ── Build all packages (generates dist/ for typecheck resolution and
+      # ensures tsc binary is discoverable on all platforms) ──
+      - name: Build
+        run: pnpm -r run build
 
       # ── Typecheck (must be 100%) ──
       - name: Typecheck
