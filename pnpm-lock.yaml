@@ -199,9 +199,6 @@ importers:
 
   integration:
     devDependencies:
-      '@orqenix-pro/license':
-        specifier: file:../../Orqenix-Pro/packages/license
-        version: file:../Orqenix-Pro/packages/license
       '@orqenix/kb-code':
         specifier: workspace:*
         version: link:../packages/kb-code
@@ -3689,10 +3686,6 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
-
-  '@orqenix-pro/license@file:../Orqenix-Pro/packages/license':
-    resolution: {directory: ../Orqenix-Pro/packages/license, type: directory}
-    engines: {node: '>=20.0.0'}
 
   '@orqenix/mesh-observability@0.6.1':
     resolution: {integrity: sha512-4XvDDep6Bz1j0h6b4Txq3g8IPER2oBQmhOas+r2Fe0RbHbibkxafHcrYOEXxjY9YSBOw+0//FH1yzLUu6/gzfA==}
@@ -8589,8 +8582,6 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
-
-  '@orqenix-pro/license@file:../Orqenix-Pro/packages/license': {}
 
   '@orqenix/mesh-observability@0.6.1':
     dependencies:
