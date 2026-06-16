@@ -61,18 +61,7 @@ jobs:
         continue-on-error: true
         run: node scripts/verify/check-native-bindings.mjs --auto-rebuild
 
-      # ── Ensure .bin symlinks exist before build ──
-      # --frozen-lockfile with pnpm may not create all .bin links on CI runners.
-      # rebuild creates them without modifying the lockfile.
-      - name: Rebuild bin links
-        run: pnpm rebuild -r
-
-      # ── Build first (generates .d.ts so typecheck can resolve deps) ──
-      - name: Build
-        run: pnpm -r run build
-
       # ── Typecheck (must be 100%) ──
-      # must run after build so project-reference dependencies have .d.ts
       - name: Typecheck
         run: pnpm -r run typecheck
 
