@@ -49,9 +49,13 @@ jobs:
       - name: Dependency version sanity
         run: node scripts/verify/check-dep-versions.mjs
 
-      # ── Install with allowlist (lets better-sqlite3 run its install script) ──
+      # ── Install ──
       - name: Install
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
+
+      # ── Verify lockfile integrity (compensates for no --frozen-lockfile) ──
+      - name: Lockfile integrity
+        run: pnpm install --frozen-lockfile --dry-run
 
       # ── Verify native bindings load on this OS ──
       # Note: better-sqlite3 prebuilds may not exist for latest Node ABI on CI.
@@ -60,6 +64,10 @@ jobs:
       - name: Verify native bindings
         continue-on-error: true
         run: node scripts/verify/check-native-bindings.mjs --auto-rebuild
+
+      # ── Pre-build packages whose typecheck depends on dist/ ──
+      - name: Pre-build core types
+        run: pnpm --filter @orqenix/core run build
 
       # ── Typecheck (must be 100%) ──
       - name: Typecheck
