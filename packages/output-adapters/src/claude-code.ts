@@ -7,7 +7,7 @@ import type {
   SerializedFormat,
   ExportabilityReport,
 } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 import { ADAPTER_VERSION, getPreservedForKind } from './shared';
 
 interface ClaudeCodePreserved {

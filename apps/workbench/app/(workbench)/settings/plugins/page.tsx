@@ -221,7 +221,7 @@ function RegistryItem({
         <p className="text-xs text-muted-foreground mt-0.5">{url}</p>
         <p className="text-xs text-muted-foreground/70 mt-0.5">{description}</p>
       </div>
-      <Switch defaultChecked={enabled} />
+      <Switch {...(enabled !== undefined ? { defaultChecked: enabled } : {})} />
     </div>
   );
 }

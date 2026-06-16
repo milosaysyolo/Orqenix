@@ -10,6 +10,6 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   target: 'es2022',
-  external: ['@orqenix/csf'],
+  external: ['@orqenix/plugin-core'],
   banner: { js: '// @orqenix/normalization-engine , Apache-2.0 , https://orqenix.dev' },
 });

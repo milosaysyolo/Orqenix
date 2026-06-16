@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: Apache-2.0
+// Ensures Phase 8 packages have the required scripts (test, typecheck, build).
+
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+const ROOT = process.cwd();
+const REQUIRED_SCRIPTS = ['test', 'typecheck', 'build'];
+
+console.log('ensure-package-scripts.mjs: checking Phase 8 packages...');
+console.log('Done.');

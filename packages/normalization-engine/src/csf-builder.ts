@@ -8,7 +8,7 @@ import { blake3 } from '@noble/hashes/blake3';
 import type {
   CanonicalSkillFormat,
   PluginKind,
-} from '@orqenix/csf';
+} from '@orqenix/plugin-core';
 
 export interface CsfBuilderInput {
   name: string;

@@ -2,7 +2,7 @@
 // Input adapter: private-git , parses a plugin from a private Git SSH URL
 
 import type { InputAdapter, ImportInput, DetectionResult } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 import { buildCsf } from '@orqenix/normalization-engine';
 import { ADAPTER_VERSION, sanitizeName } from './shared';
 

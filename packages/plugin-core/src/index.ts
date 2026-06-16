@@ -97,7 +97,7 @@ export {
 export { PluginLoader } from './plugin-loader';
 export { PluginRegistry } from './plugin-registry';
 export { PluginLifecycle } from './lifecycle';
-export { validateManifest } from './manifest-validator';
+export { validateManifest, assertValidManifest } from './manifest-validator';
 export { ConformanceSuite } from './conformance';
 
 // ─────────────────────────────────────────────────────────────────────────

@@ -1,0 +1,87 @@
+name: verify-phase-8-full
+
+on:
+  pull_request:
+    branches: [main, 'phase-8/**']
+  push:
+    branches: ['phase-8/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Phase 8 (${{ matrix.os }} / Node ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: ['20.10.0']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+
+      # ── Ensure native build prerequisites (only needed if prebuilds fail) ──
+      - name: Setup Python (for node-gyp fallback)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build tools (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      # Windows: Visual Studio Build Tools come preinstalled on windows-latest.
+      # macOS: Xcode CLT preinstalled on macos-latest.
+
+      # ── Dep-version sanity (golden rule) ──
+      - name: Dependency version sanity
+        run: node scripts/verify/check-dep-versions.mjs
+
+      # ── Install with allowlist (lets better-sqlite3 run its install script) ──
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # ── Verify native bindings load on this OS ──
+      - name: Verify native bindings
+        run: node scripts/verify/check-native-bindings.mjs --auto-rebuild
+
+      # ── Typecheck (must be 100%) ──
+      - name: Typecheck
+        run: pnpm -r run typecheck
+
+      # ── Test (scoped to Phase 8 by default to avoid legacy noise) ──
+      - name: Test (Phase 8 scope)
+        run: node scripts/verify/test-gate.mjs --phase-8-only --report
+
+      # ── Build (must be 100%) ──
+      - name: Build
+        run: pnpm -r run build
+
+      # ── Stub-wiring (must be 100%) ──
+      - name: Stub-wiring check
+        run: node scripts/verify/check-stub-wiring.mjs
+
+      # ── Artifacts ──
+      - name: Upload verify reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-reports-${{ matrix.os }}
+          path: |
+            verify-report.json
+            test-report.json
+          if-no-files-found: ignore

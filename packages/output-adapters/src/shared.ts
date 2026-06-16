@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/output-adapters , Shared helpers
 
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 import { getOriginalFormat } from '@orqenix/normalization-engine';
 
 export const ADAPTER_VERSION = '0.8.0-alpha.1';

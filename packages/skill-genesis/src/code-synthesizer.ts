@@ -4,7 +4,7 @@
 // Synthesizes executable code stubs in TS/Python/shell from a candidate's
 // action sequence + inferred parameters. Per CR v8.0 Section 9.4.4.
 
-import type { ImplementationLanguage } from '@orqenix/csf';
+import type { ImplementationLanguage } from '@orqenix/plugin-core';
 import type { ObservationEvent } from '@orqenix/self-learning-observer';
 import type { InferredParameter } from './types';
 

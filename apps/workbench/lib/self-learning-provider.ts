@@ -3,7 +3,7 @@
 
 import { Observer, BasicPiiFilter } from '@orqenix/self-learning-observer';
 import { BasicDetector, type IDetector } from '@orqenix/self-learning-detection';
-import { PromoterService } from '@orqenix/instinct-promoter';
+import { PromoterService, type PromoterServiceOptions } from '@orqenix/instinct-promoter';
 import { SkillGenesis } from '@orqenix/skill-genesis';
 import type { MemoryEngine } from '@orqenix/memory-engine';
 
@@ -24,13 +24,16 @@ export function buildSelfLearning(
   const observer = new Observer({ db, piiFilter: new BasicPiiFilter() });
   const detector = advancedDetector ?? new BasicDetector({ db });
   const skillGenesis = new SkillGenesis({ db });
-  const promoter = new PromoterService({
+  const promoterOptions: PromoterServiceOptions = {
     db,
-    candidateStore: detector instanceof BasicDetector ? detector.getCandidateStore() : undefined,
     observer,
     skillGenesis,
     audit: engine.getAuditWriter() as never,
     detector,
-  });
+  };
+  if (detector instanceof BasicDetector) {
+    promoterOptions.candidateStore = detector.getCandidateStore();
+  }
+  const promoter = new PromoterService(promoterOptions);
   return { observer, detector, promoter };
 }

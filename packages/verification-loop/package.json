@@ -25,7 +25,7 @@
   },
   "publishConfig": { "access": "public", "provenance": true },
   "dependencies": {
-    "@orqenix/csf": "workspace:*",
+    "@orqenix/plugin-core": "workspace:*",
     "@orqenix/skill-runtime": "workspace:*",
     "@orqenix/self-learning-observer": "workspace:*",
     "zod": "^3.23.8"

@@ -1,0 +1,22 @@
+{
+  "target": "@orqenix/memory-engine",
+  "timestamp": "2026-06-16T14:52:47.000Z",
+  "platform": { "os": "win32", "arch": "x64", "node": "v24.15.0" },
+  "exitCode": 1,
+  "durationMs": 60590,
+  "failureLines": [
+    "FAIL  packages/storage-sqlite/test/... > ... > ... Could not locate the bindings file",
+    "FAIL  packages/workspace/test/store.test.ts > ... > ... Could not locate the bindings file",
+    "FAIL  tests/integration/phase5-baseline.test.ts > ... > compiles project references"
+  ],
+  "errorBlocks": [
+    "Block: Could not locate the bindings file. Tried:\n → ...pnpm/better-sqlite3@11.10.0/.../build/Release/better_sqlite3.node\n → 13 paths total\n Error originates at new SqliteConnection packages/storage-sqlite/src/connection.ts:24:13"
+  ],
+  "summary": {
+    "testFiles": { "failed": 26, "passed": 130, "total": 156 },
+    "tests": { "failed": 47, "passed": 701, "skipped": 1, "total": 749 },
+    "rootCause": "better-sqlite3 binding resolves to .pnpm store path (pnpm isolated node_modules) instead of hoisted node_modules. Vitest resolves native binding directly from .pnpm store where the .node file was not compiled/installed.",
+    "additionalFailures": "@orqenix/skill-runtime build fails in integration phase5-baseline.test.ts (pre-existing build error)",
+    "notes": "Memory-engine tests themselves may not be SQLite-dependent; failures cascade from workspace vitest config that tests all packages."
+  }
+}

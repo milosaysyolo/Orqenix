@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/normalization-engine , Adapter contract types
 
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Import input

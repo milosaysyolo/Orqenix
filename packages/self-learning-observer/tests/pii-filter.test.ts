@@ -1,30 +1,34 @@
 // SPDX-License-Identifier: Apache-2.0
-// Created by D8.y.1.3 spec - from listing.
-// PII filter tests for self-learning-observer
+// @orqenix/self-learning-observer , PII filter tests
 
 import { describe, it, expect } from 'vitest';
-import { BasicPiiFilter } from '../src/pii-filter';
+import { BasicPiiFilter } from '../src/types';
 
 describe('BasicPiiFilter', () => {
   const filter = new BasicPiiFilter();
 
-  it('redacts email addresses', () => {
-    const result = filter.redact('Contact me at user@example.com for info');
-    expect(result).not.toContain('user@example.com');
-    expect(result).toContain('[EMAIL]');
+  it('redacts email addresses from payload values', () => {
+    const result = filter.redact({ message: 'Contact me at user@example.com' });
+    expect(result.applied).toBe(true);
+    expect(JSON.stringify(result.redacted)).toContain('[REDACTED:email]');
   });
 
-  it('redacts API keys', () => {
-    const result = filter.redact('sk-1234567890abcdef');
-    expect(result).not.toContain('sk-1234567890abcdef');
+  it('redacts API tokens from payload values', () => {
+    const result = filter.redact({ key: 'sk-abcdefghijklmnopqrstuvwxyz123456' });
+    expect(result.applied).toBe(true);
+    expect(JSON.stringify(result.redacted)).toContain('[REDACTED:token]');
   });
 
   it('passes through safe content', () => {
-    const safe = 'git commit -m "fix bug in parser"';
-    expect(filter.redact(safe)).toBe(safe);
+    const payload = { action: 'git commit -m "fix bug"' };
+    const result = filter.redact(payload);
+    expect(result.applied).toBe(false);
+    expect(result.redacted).toEqual(payload);
   });
 
-  it('handles empty string', () => {
-    expect(filter.redact('')).toBe('');
+  it('handles empty payload', () => {
+    const result = filter.redact({});
+    expect(result.applied).toBe(false);
+    expect(result.redacted).toEqual({});
   });
 });

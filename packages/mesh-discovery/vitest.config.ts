@@ -1,17 +1,9 @@
-import { defineConfig } from 'vitest/config';
+// SPDX-License-Identifier: Apache-2.0
+import { defineConfig, mergeConfig } from 'vitest/config';
+import shared from '../../vitest.config.shared';
 
-export default defineConfig({
-  test: {
-    environment: 'node',
-    include: ['test/**/*.test.ts'],
-    exclude: ['test/mdns.integration.test.ts'],
-    testTimeout: 15_000,
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json-summary', 'lcov'],
-      thresholds: { lines: 85, statements: 85, functions: 85, branches: 80 },
-      include: ['src/**/*.ts'],
-      exclude: ['src/**/*.d.ts'],
-    },
-  },
+const localConfig = defineConfig({
+  // Package-specific overrides here (leave empty for default)
 });
+
+export default mergeConfig(shared, localConfig);

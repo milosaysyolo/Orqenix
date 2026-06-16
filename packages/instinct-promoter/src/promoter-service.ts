@@ -57,7 +57,7 @@ export class PromoterService {
     this.observer = options.observer ?? new Observer({ db: this.db });
     this.skillGenesis = options.skillGenesis ?? new SkillGenesis({ db: this.db });
     this.audit = options.audit ?? new NoopPromoterAuditWriter();
-    this.detector = options.detector;
+    if (options.detector) this.detector = options.detector;
   }
 
   /**

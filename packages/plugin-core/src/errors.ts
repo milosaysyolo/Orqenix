@@ -6,7 +6,7 @@ export class PluginError extends Error {
   constructor(
     public readonly code: string,
     message: string,
-    public readonly cause?: unknown
+    public override readonly cause?: unknown
   ) {
     super(message);
     this.name = 'PluginError';
@@ -147,5 +147,16 @@ export class PluginConformanceFailedError extends PluginError {
       `Plugin ${packageName} failed conformance: ${failures.join('; ')}`
     );
     Object.setPrototypeOf(this, PluginConformanceFailedError.prototype);
+  }
+}
+
+/** Plugin denied by sandbox policy */
+export class PluginDeniedError extends PluginError {
+  constructor(packageName: string, reason: string) {
+    super(
+      'PLUGIN_DENIED',
+      `Plugin ${packageName} denied: ${reason}`
+    );
+    Object.setPrototypeOf(this, PluginDeniedError.prototype);
   }
 }

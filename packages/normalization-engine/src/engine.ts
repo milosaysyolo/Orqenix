@@ -4,7 +4,7 @@
 // Orchestrates import (auto-detect adapter → CSF) and export (CSF → target).
 // Per CR v8.0 Chapter 8.
 
-import type { CanonicalSkillFormat } from '@orqenix/csf';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
 import {
   type InputAdapter,
   type OutputAdapter,

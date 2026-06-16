@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/skill-genesis , Type definitions
 
-import type { ImplementationLanguage } from '@orqenix/csf';
+import type { ImplementationLanguage } from '@orqenix/plugin-core';
 
 /** Input to generate a skill from a candidate */
 export interface GenerateFromCandidateInput {

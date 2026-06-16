@@ -54,7 +54,7 @@ export class HierarchyQuery {
             ...(input.queryEmbedding ? { queryEmbedding: input.queryEmbedding } : {}),
             kbs,
             branchId: input.branchId,
-            sessionId: input.sessionId,
+            sessionId: input.sessionId as string,
             memoryLevel: 'session',
             projectId: input.projectId,
             limit: input.limit,

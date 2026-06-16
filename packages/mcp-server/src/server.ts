@@ -86,7 +86,7 @@ export class OrqenixMcpServer {
     }
     const result = this.tokenVerifier.verify(rawToken);
     if (!result.valid) {
-      return { ok: false, reason: result.reason };
+      return { ok: false, ...(result.reason ? { reason: result.reason } : {}) };
     }
     this.authenticatedToken = result.token;
     return { ok: true };

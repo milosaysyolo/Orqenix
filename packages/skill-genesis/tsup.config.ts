@@ -10,7 +10,7 @@ export default defineConfig({
   treeshake: true,
   target: 'es2022',
   external: [
-    '@orqenix/csf',
+    '@orqenix/plugin-core',
     '@orqenix/normalization-engine',
     '@orqenix/self-learning-observer',
     '@orqenix/self-learning-detection',

@@ -9,6 +9,6 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   target: 'es2022',
-  external: ['@orqenix/csf', '@orqenix/skill-runtime', '@orqenix/self-learning-observer'],
+  external: ['@orqenix/plugin-core', '@orqenix/skill-runtime', '@orqenix/self-learning-observer'],
   banner: { js: '// @orqenix/verification-loop , Apache-2.0 , https://orqenix.dev' },
 });

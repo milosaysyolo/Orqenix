@@ -25,7 +25,7 @@
   },
   "publishConfig": { "access": "public", "provenance": true },
   "dependencies": {
-    "@orqenix/csf": "workspace:*",
+    "@orqenix/plugin-core": "workspace:*",
     "@orqenix/normalization-engine": "workspace:*",
     "@orqenix/self-learning-observer": "workspace:*",
     "@orqenix/self-learning-detection": "workspace:*",

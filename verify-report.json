@@ -1,0 +1,32 @@
+{
+  "pipeline": "Phase 8 CORE Verification",
+  "timestamp": "2026-06-15T09:37:25.149Z",
+  "platform": {
+    "node": "v24.15.0",
+    "os": "win32",
+    "arch": "x64"
+  },
+  "summary": {
+    "total": 3,
+    "passed": 2,
+    "failed": 1
+  },
+  "steps": [
+    {
+      "label": "install",
+      "ok": true,
+      "fatal": true
+    },
+    {
+      "label": "native-bindings",
+      "ok": true,
+      "fatal": true
+    },
+    {
+      "label": "typecheck",
+      "ok": false,
+      "fatal": true
+    }
+  ],
+  "verdict": "FAIL"
+}

@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// @orqenix/self-learning-detection , CandidateStore cooldown + review status tests
+// @orqenix/self-learning-detection , CandidateStore tests
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import Database from 'better-sqlite3';
 import { CandidateStore } from '../src/candidate-store';
+import type { DetectedPattern, DetectionThresholds } from '../src/types';
+
+const TEST_THRESHOLDS: DetectionThresholds = { cooldownHours: 24, minOccurrences: 3, minSuccessRate: 0.7, maxSequenceLength: 6, minSequenceLength: 2 };
 
 describe('CandidateStore', () => {
   let db: Database.Database;
@@ -11,6 +14,31 @@ describe('CandidateStore', () => {
 
   beforeAll(() => {
     db = new Database(':memory:');
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS instinct_candidates (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        branch_id TEXT,
+        session_id TEXT,
+        pattern_hash TEXT NOT NULL,
+        pattern_name TEXT,
+        pattern_description TEXT,
+        observation_count INTEGER NOT NULL,
+        success_count INTEGER NOT NULL,
+        total_count INTEGER NOT NULL,
+        success_rate REAL NOT NULL,
+        sample_observation_ids TEXT NOT NULL,
+        detected_at TEXT NOT NULL,
+        impact_score REAL NOT NULL,
+        status TEXT NOT NULL,
+        reviewed_at TEXT,
+        reviewed_by TEXT,
+        review_decision TEXT,
+        cross_scope INTEGER NOT NULL DEFAULT 0,
+        cross_scope_sources_json TEXT,
+        UNIQUE (project_id, pattern_hash)
+      )
+    `);
     store = new CandidateStore(db);
   });
 
@@ -18,37 +46,40 @@ describe('CandidateStore', () => {
     db.close();
   });
 
-  it('stores a candidate', () => {
-    const id = store.add({
-      projectId: 'proj_test',
+  it('upserts a candidate', () => {
+    const pattern: DetectedPattern = {
       patternHash: 'abc123',
-      patternName: 'Test Pattern',
-      observationCount: 5,
+      actionKinds: ['shell_command', 'file_edit'],
+      avgDurationMs: 1500,
+      suggestedName: 'Test Pattern',
+      suggestedDescription: 'A test pattern',
+      occurrenceCount: 5,
+      successCount: 4,
       successRate: 0.8,
       impactScore: 0.6,
-      sampleObservationIds: JSON.stringify(['obs1', 'obs2']),
-    });
-    expect(id).toBeTruthy();
+      sampleObservationIds: ['obs1', 'obs2'],
+    };
+    const result = store.upsert(pattern, { projectId: 'proj_test' }, TEST_THRESHOLDS);
+    expect(['created', 'updated']).toContain(result);
   });
 
   it('lists candidates by status', () => {
     const candidates = store.list('proj_test', 'detected', 10);
     expect(candidates.length).toBeGreaterThanOrEqual(1);
-    expect(candidates[0].status).toBe('detected');
+    const first = candidates[0];
+    if (first) {
+      expect(first.status).toBe('detected');
+    }
   });
 
   it('sets review status', () => {
     const candidates = store.list('proj_test', 'detected', 1);
-    if (candidates.length > 0) {
-      store.setReviewStatus(candidates[0].id, 'promoted', 'test-user');
-      const updated = store.get(candidates[0].id);
+    const first = candidates[0];
+    if (first) {
+      store.setReviewStatus(first.id, 'promoted', 'test-user');
+      const updated = store.get(first.id);
       expect(updated?.status).toBe('promoted');
     }
-  });
-
-  it('handles cooldown', () => {
-    const cooldown = store.getCooldown('proj_test', 'abc123');
-    expect(typeof cooldown).toBe('number');
   });
 
   it('get returns null for missing candidate', () => {

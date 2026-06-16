@@ -40,16 +40,16 @@ export function resolveResourceLimits(
   operatorDefaults: Partial<ResolvedResourceLimits> = {}
 ): ResolvedResourceLimits {
   const base: ResolvedResourceLimits = {
-    cpuLimitPct: operatorDefaults.cpuLimitPct ?? DEFAULT_RESOURCE_LIMITS.cpuLimitPct,
+    cpuLimitPct: (operatorDefaults.cpuLimitPct ?? DEFAULT_RESOURCE_LIMITS.cpuLimitPct) as number,
     memoryLimitMb:
-      operatorDefaults.memoryLimitMb ?? DEFAULT_RESOURCE_LIMITS.memoryLimitMb,
+      (operatorDefaults.memoryLimitMb ?? DEFAULT_RESOURCE_LIMITS.memoryLimitMb) as number,
     wallTimeLimitSec:
-      operatorDefaults.wallTimeLimitSec ?? DEFAULT_RESOURCE_LIMITS.wallTimeLimitSec,
+      (operatorDefaults.wallTimeLimitSec ?? DEFAULT_RESOURCE_LIMITS.wallTimeLimitSec) as number,
     fsReadPaths: operatorDefaults.fsReadPaths ?? DEFAULT_RESOURCE_LIMITS.fsReadPaths,
     fsWritePaths:
       operatorDefaults.fsWritePaths ?? DEFAULT_RESOURCE_LIMITS.fsWritePaths,
     networkAllowed:
-      operatorDefaults.networkAllowed ?? DEFAULT_RESOURCE_LIMITS.networkAllowed,
+      (operatorDefaults.networkAllowed ?? DEFAULT_RESOURCE_LIMITS.networkAllowed) as boolean,
   };
 
   if (!pluginOverrides) {
