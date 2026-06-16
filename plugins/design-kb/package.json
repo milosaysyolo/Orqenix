@@ -1,23 +1,48 @@
-﻿{
+{
   "name": "@orqenix/plugin-design-kb",
   "version": "0.8.0-alpha.1",
   "description": "Reference kb-schema plugin: a custom Design Decisions knowledge base.",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/plugin.js",
-  "files": ["dist", "LICENSE", "README.md"],
-  "scripts": { "build": "tsup src/index.ts --format esm --dts --clean", "test": "vitest run" },
-  "publishConfig": { "access": "public", "provenance": true },
-  "keywords": ["orqenix", "orqenix-plugin", "kb-schema"],
-  "engines": { "node": ">=20.10.0" },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npx tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "kb-schema"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "orqenixPlugin": {
     "manifestVersion": "1.0",
     "kind": "kb-schema",
-    "compatibility": { "orqenix": ">=0.8.0" },
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
     "permissions": [],
     "external_agent_compat": [],
     "sandboxMode": "separate_process",
     "settingsSchema": "./schemas/design-kb.schema.json",
-    "lifecycle": { "install": "./scripts/install.mjs" }
+    "lifecycle": {
+      "install": "./scripts/install.mjs"
+    }
+  },
+  "devDependencies": {
+    "tsup": "catalog:",
+    "vitest": "catalog:",
+    "typescript": "catalog:"
   }
 }

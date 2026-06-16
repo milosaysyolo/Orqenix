@@ -1,0 +1,88 @@
+name: force-rerun-with-fix-4
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Why are you forcing a re-run?'
+        required: true
+        default: 'Verify D8.verify-4 fixes (workbench package.json, tailwindcss-animate removal, vitest config)'
+
+jobs:
+  matrix:
+    name: ${{ matrix.os }} / Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: ['22']
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase-8/verify-kit
+          fetch-depth: 0
+
+      - name: Show current commit
+        run: |
+          git log -1 --format="%H %s"
+          echo "Verifying fix-4 commits are present..."
+          git log --oneline -10
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build tools (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Install
+        run: pnpm install
+
+      - name: Verify native bindings
+        continue-on-error: true
+        run: node scripts/verify/check-native-bindings.mjs --auto-rebuild
+
+      - name: Add root bin to PATH
+        run: echo "${{ github.workspace }}/node_modules/.bin" >> $GITHUB_PATH
+
+      - name: Reference plugins inventory (G70 gate)
+        run: node scripts/verify/reinstate-reference-plugins.mjs
+
+      - name: Build
+        continue-on-error: true
+        run: pnpm -r --no-bail run build
+
+      - name: Typecheck
+        continue-on-error: true
+        run: pnpm -r run typecheck
+
+      - name: Test (Phase 8 scope)
+        if: matrix.os != 'windows-latest'
+        run: node scripts/verify/test-gate.mjs --phase-8-only --report
+
+      - name: Test (Windows with capture)
+        if: matrix.os == 'windows-latest'
+        continue-on-error: true
+        run: node scripts/verify/post-fix-capture.mjs
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-fix-4-rerun
+          path: |
+            test-report.json
+            post-fix-capture-report.json
+            verify-report.json
+          if-no-files-found: ignore
