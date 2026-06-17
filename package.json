@@ -69,7 +69,15 @@
     "verify:phase-8-only": "node scripts/verify/verify-phase-8.mjs --phase-8-only",
     "test:phase-8": "node scripts/verify/test-gate.mjs --phase-8-only",
     "test:all": "node scripts/verify/test-gate.mjs --all",
-    "postinstall": "node scripts/verify/check-native-bindings.mjs --auto-rebuild || true"
+    "postinstall": "node scripts/verify/check-native-bindings.mjs --auto-rebuild || true",
+    "cleanup": "node scripts/cleanup/cleanup.mjs",
+    "cleanup:dry-run": "node scripts/cleanup/cleanup.mjs --dry-run",
+    "cleanup:auto": "node scripts/cleanup/cleanup.mjs --auto-confirm",
+    "cleanup:full": "node scripts/cleanup/cleanup.mjs --auto-confirm --regen-lock",
+    "scan:cruft": "node scripts/cleanup/scan-cruft.mjs",
+    "scan:lockfile": "node scripts/cleanup/lockfile-audit.mjs",
+    "scan:workspace": "node scripts/cleanup/verify-workspace-integrity.mjs",
+    "test:cleanup": "node scripts/cleanup/cleanup.test.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
