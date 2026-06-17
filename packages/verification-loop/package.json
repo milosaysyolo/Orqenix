@@ -15,7 +15,11 @@
     },
     "./package.json": "./package.json"
   },
-  "files": ["dist", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -23,12 +27,15 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
-  "publishConfig": { "access": "public", "provenance": true },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
     "@orqenix/plugin-core": "workspace:*",
     "@orqenix/skill-runtime": "workspace:*",
     "@orqenix/self-learning-observer": "workspace:*",
-    "zod": "^3.23.8"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/node": "20.16.11",
@@ -42,6 +49,13 @@
     "url": "https://github.com/milosaysyolo/Orqenix.git",
     "directory": "packages/verification-loop"
   },
-  "keywords": ["orqenix", "self-learning", "verification", "apache-2.0"],
-  "engines": { "node": ">=20.10.0" }
+  "keywords": [
+    "orqenix",
+    "self-learning",
+    "verification",
+    "apache-2.0"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  }
 }
