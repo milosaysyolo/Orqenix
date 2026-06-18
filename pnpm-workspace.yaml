@@ -1,14 +1,21 @@
 packages:
   - "packages/*"
+  - "packages/self-learning-observer"
+  - "packages/self-learning-detection"
+  - "packages/instinct-promoter"
+  - "packages/skill-genesis"
+  - "packages/verification-loop"
   - "apps/*"
   - "plugins/*"
   - "bench"
   - "integration"
   - "scripts"
+  - "plugins/*"
 
 catalog:
   typescript: ^5.6.0
   vitest: ^2.1.0
+  tsup: ^8.3.0
   "@types/node": ^20.14.0
   prettier: ^3.3.0
   blake3: ^4.0.0

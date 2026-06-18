@@ -1,15 +1,9 @@
-import { defineConfig } from "vitest/config";
+// SPDX-License-Identifier: Apache-2.0
+import { defineConfig, mergeConfig } from 'vitest/config';
+import shared from '../../vitest.config.shared';
 
-export default defineConfig({
-  test: {
-    include: ["test/**/*.test.ts", "src/__tests__/**/*.test.ts"],
-    globals: false,
-    environment: "node",
-    testTimeout: 15000,
-    server: {
-      deps: {
-        external: [/web-tree-sitter/],
-      },
-    },
-  },
+const localConfig = defineConfig({
+  // Package-specific overrides here (leave empty for default)
 });
+
+export default mergeConfig(shared, localConfig);

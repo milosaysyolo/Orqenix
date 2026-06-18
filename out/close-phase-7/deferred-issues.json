@@ -1,0 +1,20 @@
+﻿{
+    "created":  [
+                    "Native gRPC protobuf full proto-loader integration",
+                    "Detach recovery code signed by scope key",
+                    "CLI link command Cloudflare Workers compatibility",
+                    "YAML parser support for comments/manual edits",
+                    "Multi-scope per scope folder support",
+                    "BYOK ephemeral credential typed as scoped-token"
+                ],
+    "urls":  [
+                 "https://github.com/milosaysyolo/Orqenix/issues/13",
+                 "https://github.com/milosaysyolo/Orqenix/issues/14",
+                 "https://github.com/milosaysyolo/Orqenix/issues/15",
+                 "https://github.com/milosaysyolo/Orqenix/issues/16",
+                 "https://github.com/milosaysyolo/Orqenix/issues/17",
+                 "https://github.com/milosaysyolo/Orqenix/issues/18"
+             ],
+    "release":  "0.7.0",
+    "milestone":  "v0.7.1"
+}

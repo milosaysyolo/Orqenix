@@ -6,5 +6,5 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": false
   },
-  "include": ["helpers/**/*", "tests/**/*"]
+  "include": ["helpers/**/*", "tests/**/*", "types/**/*"]
 }

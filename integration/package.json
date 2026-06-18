@@ -9,7 +9,6 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@orqenix-pro/license": "file:../../Orqenix-Pro/packages/license",
     "@orqenix/kb-code": "workspace:*",
     "@orqenix/kb-decisions": "workspace:*",
     "@orqenix/kb-docs": "workspace:*",

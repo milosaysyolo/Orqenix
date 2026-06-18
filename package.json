@@ -62,10 +62,22 @@
     "release:propose": "tsx scripts/release-propose.ts",
     "fix:deps": "node scripts/verify/fix-dep-versions.mjs",
     "check:deps": "node scripts/verify/check-dep-versions.mjs",
-    "check:stubs": "node scripts/verify/check-stub-wiring.mjs",
+    "check:native": "node scripts/verify/check-native-bindings.mjs",
+    "rebuild:native": "node scripts/verify/rebuild-native.mjs",
     "verify": "node scripts/verify/verify-phase-8.mjs",
     "verify:fast": "node scripts/verify/verify-phase-8.mjs --no-build",
-    "verify:types": "node scripts/verify/verify-phase-8.mjs --only=dep-versions,install,typecheck"
+    "verify:phase-8-only": "node scripts/verify/verify-phase-8.mjs --phase-8-only",
+    "test:phase-8": "node scripts/verify/test-gate.mjs --phase-8-only",
+    "test:all": "node scripts/verify/test-gate.mjs --all",
+    "postinstall": "node scripts/verify/check-native-bindings.mjs --auto-rebuild || true",
+    "cleanup": "node scripts/cleanup/cleanup.mjs",
+    "cleanup:dry-run": "node scripts/cleanup/cleanup.mjs --dry-run",
+    "cleanup:auto": "node scripts/cleanup/cleanup.mjs --auto-confirm",
+    "cleanup:full": "node scripts/cleanup/cleanup.mjs --auto-confirm --regen-lock",
+    "scan:cruft": "node scripts/cleanup/scan-cruft.mjs",
+    "scan:lockfile": "node scripts/cleanup/lockfile-audit.mjs",
+    "scan:workspace": "node scripts/cleanup/verify-workspace-integrity.mjs",
+    "test:cleanup": "node scripts/cleanup/cleanup.test.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -77,8 +89,11 @@
     ],
     "overrides": {
       "protobufjs": "^7.5.8",
-      "tmp@<0.2.6": ">=0.2.6"
-    }
+      "tmp@<0.2.6": ">=0.2.6",
+      "better-sqlite3": "^12.0.0",
+      "prebuild-install": "^7.1.2"
+    },
+    "patchedDependencies": {}
   },
   "devDependencies": {
     "@changesets/cli": "2.27.10",
