@@ -2578,6 +2578,9 @@ importers:
 
   packages/verification-loop:
     dependencies:
+      '@orqenix/memory-engine':
+        specifier: workspace:*
+        version: link:../memory-engine
       '@orqenix/plugin-core':
         specifier: workspace:*
         version: link:../plugin-core

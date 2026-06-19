@@ -1,0 +1,80 @@
+{
+  "timestamp": "2026-06-19T03:11:45.950Z",
+  "results": [
+    {
+      "label": "Merge conflict scan",
+      "ok": true,
+      "fatal": true
+    },
+    {
+      "label": "Install",
+      "ok": true,
+      "fatal": true
+    },
+    {
+      "label": "Rebuild native modules",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Build (all packages)",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Migration ordering",
+      "ok": true,
+      "fatal": true
+    },
+    {
+      "label": "Phase 1-2 (Memory Core)",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Phase 3 (Storage)",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Phase 4 (Search)",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Phase 5 (Capability)",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Phase 6 (Federation)",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Phase 7 (Audit Chain)",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Phase 8 (Full Stack)",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Cross-phase seams",
+      "ok": true,
+      "fatal": false
+    },
+    {
+      "label": "Settings bootstrap flat keys",
+      "ok": true,
+      "fatal": false
+    }
+  ],
+  "summary": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0
+  }
+}

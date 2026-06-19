@@ -1,3 +1,10 @@
-// This file was listed as File 97 in the spec but no code block was provided.
-// Placeholder for tsup configuration - the build command in package.json
-// uses inline tsup CLI flags, so this file may be empty/minimal.
+// SPDX-License-Identifier: Apache-2.0
+import { defineConfig } from 'tsup';
+export default defineConfig({
+  entry: { index: 'src/index.ts' },
+  format: ['esm', 'cjs'],
+  dts: true,
+  splitting: false,
+  clean: true,
+  target: 'es2022',
+});

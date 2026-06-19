@@ -5,17 +5,21 @@
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json"
   },
-  "files": ["dist", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
@@ -23,7 +27,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
-  "publishConfig": { "access": "public", "provenance": true },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "dependencies": {
     "@orqenix/ui-primitives": "workspace:*",
     "@orqenix/marketplace-core": "workspace:*",
@@ -45,6 +52,13 @@
     "url": "https://github.com/milosaysyolo/Orqenix.git",
     "directory": "packages/marketplace-ui"
   },
-  "keywords": ["orqenix", "marketplace-ui", "react", "apache-2.0"],
-  "engines": { "node": ">=20.10.0" }
+  "keywords": [
+    "orqenix",
+    "marketplace-ui",
+    "react",
+    "apache-2.0"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  }
 }

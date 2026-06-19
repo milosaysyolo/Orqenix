@@ -132,11 +132,22 @@ export class SettingsResolver {
 
 /**
  * Gets a value from an object by dotted path (e.g., "hierarchy.level_boost.session").
+ *
+ * IMPORTANT (Bug 4, merge-verify): settings-bootstrap.ts declares defaults with
+ * FLAT dotted keys: { 'hierarchy.level_boost.session': 1.5 }. Some callers use
+ * NESTED objects: { hierarchy: { level_boost: { session: 1.5 } } }. This function
+ * supports BOTH — it checks the flat key first, then falls back to nested traversal.
  */
 export function getByPath(
   obj: Record<string, unknown>,
   path: string
 ): unknown {
+  // 1. Flat key match first (settings-bootstrap convention)
+  if (Object.prototype.hasOwnProperty.call(obj, path)) {
+    return obj[path];
+  }
+
+  // 2. Nested traversal fallback
   const parts = path.split('.');
   let cur: unknown = obj;
   for (const part of parts) {

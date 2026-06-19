@@ -1,1 +1,77 @@
-{  "name": "@orqenix/memory-engine",  "version": "0.8.0-alpha.1",  "description": "Apache-2.0 memory engine for Orqenix. 3-level hierarchy, branch deep-copy, subagent harness, parallel query, BLAKE3 audit chain.",  "license": "Apache-2.0",  "type": "module",  "main": "./dist/index.cjs",  "module": "./dist/index.mjs",  "types": "./dist/index.d.ts",  "exports": {    ".": {      "types": "./dist/index.d.ts",      "import": "./dist/index.mjs",      "require": "./dist/index.cjs"    },    "./migrations": {      "types": "./dist/migrations/index.d.ts",      "import": "./dist/migrations/index.mjs",      "require": "./dist/migrations/index.cjs"    },    "./package.json": "./package.json"  },  "files": [    "dist",    "LICENSE",    "README.md"  ],  "sideEffects": false,  "scripts": {    "build": "tsup",    "dev": "tsup --watch",    "lint": "eslint src tests",    "typecheck": "tsc --noEmit",    "test": "vitest run",    "test:watch": "vitest"  },  "publishConfig": {    "access": "public",    "provenance": true  },  "dependencies": {    "@noble/hashes": "^1.5.0",    "better-sqlite3": "^11.5.0",    "zod": "^3.25.0"  },  "optionalDependencies": {    "sqlite-vec": "^0.1.6"  },  "devDependencies": {    "@types/better-sqlite3": "^7.6.11",    "@types/node": "20.16.11",    "@vitest/ui": "^2.1.5",    "eslint": "^9.15.0",    "tsup": "^8.3.0",    "typescript": "^5.6.3",    "vitest": "^2.1.5",    "@typescript-eslint/parser": "^8.0.0",    "@typescript-eslint/eslint-plugin": "^8.0.0"  },  "repository": {    "type": "git",    "url": "https://github.com/milosaysyolo/Orqenix.git",    "directory": "packages/memory-engine"  },  "homepage": "https://orqenix.dev/docs/memory-engine",  "keywords": [    "orqenix",    "memory",    "hierarchy",    "knowledge-base",    "sqlite",    "apache-2.0"  ],  "engines": {    "node": ">=20.10.0"  }}
+{
+  "name": "@orqenix/memory-engine",
+  "version": "0.8.0-alpha.1",
+  "description": "Apache-2.0 memory engine for Orqenix. 3-level hierarchy, branch deep-copy, subagent harness, parallel query, BLAKE3 audit chain.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./migrations": {
+      "types": "./dist/migrations/index.d.ts",
+      "import": "./dist/migrations/index.js",
+      "require": "./dist/migrations/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src tests",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "@noble/hashes": "^1.5.0",
+    "better-sqlite3": "^11.5.0",
+    "zod": "^3.25.0"
+  },
+  "optionalDependencies": {
+    "sqlite-vec": "^0.1.6"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "20.16.11",
+    "@vitest/ui": "^2.1.5",
+    "eslint": "^9.15.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milosaysyolo/Orqenix.git",
+    "directory": "packages/memory-engine"
+  },
+  "homepage": "https://orqenix.dev/docs/memory-engine",
+  "keywords": [
+    "orqenix",
+    "memory",
+    "hierarchy",
+    "knowledge-base",
+    "sqlite",
+    "apache-2.0"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  }
+}
