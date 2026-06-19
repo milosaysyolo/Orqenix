@@ -309,6 +309,55 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
+  packages/bench:
+    dependencies:
+      '@noble/hashes':
+        specifier: ^1.5.0
+        version: 1.8.0
+      '@orqenix/input-adapters':
+        specifier: workspace:*
+        version: link:../input-adapters
+      '@orqenix/local-memory-federation':
+        specifier: workspace:*
+        version: link:../local-memory-federation
+      '@orqenix/memory-engine':
+        specifier: workspace:*
+        version: link:../memory-engine
+      '@orqenix/normalization-engine':
+        specifier: workspace:*
+        version: link:../normalization-engine
+      '@orqenix/output-adapters':
+        specifier: workspace:*
+        version: link:../output-adapters
+      '@orqenix/plugin-core':
+        specifier: workspace:*
+        version: link:../plugin-core
+      '@orqenix/self-learning-detection':
+        specifier: workspace:*
+        version: link:../self-learning-detection
+      '@orqenix/self-learning-observer':
+        specifier: workspace:*
+        version: link:../self-learning-observer
+      '@orqenix/settings-registry':
+        specifier: workspace:*
+        version: link:../settings-registry
+    devDependencies:
+      '@types/node':
+        specifier: 20.16.11
+        version: 20.16.11
+      better-sqlite3:
+        specifier: ^12.0.0
+        version: 12.10.1
+      tsup:
+        specifier: ^8.3.0
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
+      tsx:
+        specifier: ^4.19.2
+        version: 4.22.3
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
   packages/binding-aider:
     dependencies:
       '@orqenix/binding-core':
