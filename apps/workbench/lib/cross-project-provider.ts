@@ -16,7 +16,7 @@ export interface CrossProjectCapability {
  */
 export async function probeCrossProjectFederation(): Promise<CrossProjectCapability> {
   try {
-    await import('@orqenix-pro/cross-project-federation');
+    await import(/* webpackIgnore: true */ '@orqenix-pro/cross-project-federation');
     return { available: true };
   } catch {
     return {

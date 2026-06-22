@@ -38,6 +38,22 @@
     --orqenix-emerald: 154 75% 39%;
     --orqenix-violet: 250 84% 60%;
     --orqenix-amber: 38 92% 50%;
+
+    /* Warm editorial tokens (W2A Dashboard) */
+    --paper: #f6f4ee;
+    --ink: #23241f;
+    --card: #ffffff;
+    --line: #e6e3da;
+    --line2: #d4d0c5;
+    --dim: #8b8778;
+    --faint: #b8b4a8;
+    --rust: #b85c41;
+    --olive: #7d8a5a;
+    --teal: #5c8a8a;
+    --plum: #8a6a9e;
+    --amber: #c9913a;
+    --slate: #7a8288;
+    --card-rgb: 255 255 255;
   }
 
   .dark {
@@ -68,6 +84,22 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+
+    /* Warm editorial tokens (W2A Dashboard) — dark lifted hues */
+    --paper: #1e1d1a;
+    --ink: #e8e5dd;
+    --card: #2a2925;
+    --line: #3a3934;
+    --line2: #4a4944;
+    --dim: #8b8778;
+    --faint: #5a5852;
+    --rust: #d47a5e;
+    --olive: #8fa06a;
+    --teal: #6a9e9e;
+    --plum: #9e7ab0;
+    --amber: #d4a34a;
+    --slate: #8a9298;
+    --card-rgb: 42 41 37;
   }
 
   * {

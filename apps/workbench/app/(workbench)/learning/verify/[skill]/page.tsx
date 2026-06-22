@@ -3,7 +3,8 @@
 'use client';
 import * as React from 'react';
 import { VerificationStatusBadge } from '../../../../../components/verification-status-badge';
-export default function VerifySkillPage({ params }: { params: { skill: string } }) {
+export default async function VerifySkillPage(props: { params: Promise<{ skill: string }> }) {
+  const params = await props.params;
   return (
     <div className="container mx-auto px-6 py-8 max-w-4xl">
       <h1 className="text-2xl font-bold mb-4">Verification: {params.skill}</h1>

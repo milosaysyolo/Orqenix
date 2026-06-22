@@ -79,7 +79,10 @@
     "scan:cruft": "node scripts/cleanup/scan-cruft.mjs",
     "scan:lockfile": "node scripts/cleanup/lockfile-audit.mjs",
     "scan:workspace": "node scripts/cleanup/verify-workspace-integrity.mjs",
-    "test:cleanup": "node scripts/cleanup/cleanup.test.mjs"
+    "test:cleanup": "node scripts/cleanup/cleanup.test.mjs",
+    "wb:verify": "node scripts/verify/verify-workbench.mjs",
+    "wb:preflight": "node scripts/verify/wb-preflight.mjs",
+    "wb:dev": "pnpm --filter @orqenix/workbench dev"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

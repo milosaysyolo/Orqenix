@@ -1,42 +1,29 @@
-// SPDX-License-Identifier: Apache-2.0
-// Workbench , Observer config API (opt-out toggle per scope)
-
 import { NextResponse } from 'next/server';
+import { getRuntime } from '@/lib/runtime';
 
-export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
-/** GET ?scope=project&id=... , read observer config */
 export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const scope = url.searchParams.get('scope') ?? 'project';
-  const id = url.searchParams.get('id') ?? '';
-  // D8.γ: const observer = new Observer({ db }); return observer.getConfig(scope, id);
-  return NextResponse.json(
-    {
-      scope,
-      id,
-      config: { enabled: true, piiFilterEnabled: true, notifyOnFirstLaunch: true, sampleRate: 1.0 },
-      note: 'Observer config wires at runtime',
-    },
-    { status: 200 }
-  );
+  try {
+    const rt = await getRuntime();
+    const url = new URL(req.url);
+    const scope = (url.searchParams.get('scope') ?? 'project') as 'project' | 'branch' | 'session';
+    const id = url.searchParams.get('id') ?? rt.projectId;
+    const config = rt.observer.getConfig(scope, id === 'current' ? rt.projectId : id);
+    return NextResponse.json({ config }, { status: 200, headers: { 'Cache-Control': 'no-store' } });
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+  }
 }
 
-/** POST , toggle observer enabled for a scope */
 export async function POST(req: Request) {
-  let body: { scope?: string; id?: string; enabled?: boolean };
   try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    const body = (await req.json()) as { scope: 'project' | 'branch' | 'session'; id: string; enabled: boolean };
+    const rt = await getRuntime();
+    rt.observer.setConfig(body.scope, body.id === 'current' ? rt.projectId : body.id, { enabled: body.enabled });
+    return NextResponse.json({ ok: true, enabled: body.enabled });
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
-  if (!body.scope || body.id === undefined || body.enabled === undefined) {
-    return NextResponse.json({ error: 'Requires scope + id + enabled' }, { status: 400 });
-  }
-  // D8.γ: observer.setConfig(scope, id, { enabled }); audit observer.config_changed
-  return NextResponse.json(
-    { ok: true, scope: body.scope, id: body.id, enabled: body.enabled },
-    { status: 200 }
-  );
 }

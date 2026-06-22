@@ -131,6 +131,9 @@ importers:
       '@orqenix/marketplace-ui':
         specifier: workspace:*
         version: link:../../packages/marketplace-ui
+      '@orqenix/mcp-server':
+        specifier: workspace:*
+        version: link:../../packages/mcp-server
       '@orqenix/memory-engine':
         specifier: workspace:*
         version: link:../../packages/memory-engine
@@ -225,31 +228,6 @@ importers:
       vitest:
         specifier: ^2.1.5
         version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
-
-  bench:
-    dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../packages/core
-      '@orqenix/embedding-local':
-        specifier: workspace:*
-        version: link:../packages/embedding-local
-      '@orqenix/kb-docs':
-        specifier: workspace:*
-        version: link:../packages/kb-docs
-      '@orqenix/kb-query':
-        specifier: workspace:*
-        version: link:../packages/kb-query
-      execa:
-        specifier: ^8.0.1
-        version: 8.0.1
-    devDependencies:
-      tinybench:
-        specifier: ^2.6.0
-        version: 2.9.0
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   integration:
     devDependencies:

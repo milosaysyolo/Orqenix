@@ -1,181 +1,155 @@
 // SPDX-License-Identifier: Apache-2.0
-// Workbench Marketplace page , full CRUD (replaces D8.α.1 scaffold)
+// W3.A , Marketplace page — Obsidian browse + detail + install flow
 
 'use client';
 
 import * as React from 'react';
-import { Plus, Upload, Download } from 'lucide-react';
-import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from '@orqenix/ui-primitives';
-import {
-  PluginCard,
-  PluginSearch,
-  PluginInstaller,
-  ImportExportWizard,
-  type PluginCardData,
-  type MarketplaceSearchFilters,
-} from '@orqenix/marketplace-ui';
+import Link from 'next/link';
+import { SectionTitle, Card, Badge, Button } from '@/components/ui';
+import { api } from '@/lib/api';
 
-export default function MarketplacePage(): React.ReactElement {
-  const [results, setResults] = React.useState<PluginCardData[]>([]);
-  const [installed, setInstalled] = React.useState<PluginCardData[]>([]);
+const KINDS = [
+  'knowledge-source', 'embedding-model', 'reranker', 'compression-strategy',
+  'memory-injection-strategy', 'prompt-rewriter', 'visualization', 'code-analyzer',
+  'kb-schema', 'mcp-server', 'agent', 'subagent', 'skill', 'agent-binding',
+];
+
+interface Plugin {
+  name: string; version: string; description: string; kind: string; license: string;
+  external_agent_compat: string[]; verified: boolean; publisher: string; source: string; installed?: boolean;
+}
+
+export default function MarketplacePage() {
+  const [tab, setTab] = React.useState<'discover' | 'installed'>('discover');
+  const [query, setQuery] = React.useState('');
+  const [kind, setKind] = React.useState<string | null>(null);
+  const [results, setResults] = React.useState<Plugin[]>([]);
+  const [installed, setInstalled] = React.useState<Plugin[]>([]);
+  const [selected, setSelected] = React.useState<Plugin | null>(null);
   const [loading, setLoading] = React.useState(false);
-  const [installerPlugin, setInstallerPlugin] = React.useState<PluginCardData | null>(null);
-  const [wizardMode, setWizardMode] = React.useState<'import' | 'export' | null>(null);
-  const [exportPlugin, setExportPlugin] = React.useState<string | undefined>(undefined);
 
-  React.useEffect(() => {
-    void loadInstalled();
+  const loadInstalled = React.useCallback(async () => {
+    const res = await api.get<{ plugins: Plugin[] }>('/api/marketplace?action=installed');
+    if (res.ok) setInstalled(res.data!.plugins);
   }, []);
+  React.useEffect(() => { void loadInstalled(); }, [loadInstalled]);
 
-  async function loadInstalled(): Promise<void> {
-    const res = await fetch('/api/marketplace?action=installed');
-    if (res.ok) {
-      const data = (await res.json()) as { plugins: PluginCardData[] };
-      setInstalled(data.plugins);
-    }
-  }
-
-  async function handleSearch(query: string, filters: MarketplaceSearchFilters): Promise<void> {
+  async function search() {
     setLoading(true);
-    try {
-      const res = await fetch('/api/marketplace', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ action: 'search', query, filters }),
-      });
-      if (res.ok) {
-        const data = (await res.json()) as { plugins: PluginCardData[] };
-        setResults(data.plugins);
-      }
-    } finally {
-      setLoading(false);
-    }
+    const res = await api.post<{ plugins: Plugin[] }>('/api/marketplace', {
+      action: 'search', query, filters: kind ? { kind: [kind] } : undefined,
+    });
+    setLoading(false);
+    if (res.ok) setResults(res.data!.plugins);
   }
 
-  async function handleInstall(name: string): Promise<void> {
-    await fetch('/api/marketplace', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ action: 'install', name }),
-    });
+  async function install(p: Plugin) {
+    await api.post('/api/marketplace', { action: 'install', name: p.name, version: p.version, kind: p.kind });
+    await loadInstalled();
+    setTab('installed');
+  }
+  async function uninstall(name: string) {
+    await api.post('/api/marketplace', { action: 'uninstall', name });
     await loadInstalled();
   }
 
-  const callbacks = {
-    onInstall: async (name: string) => {
-      const plugin = results.find((p) => p.name === name);
-      if (plugin) setInstallerPlugin(plugin);
-    },
-    onUninstall: async (name: string) => {
-      await fetch('/api/marketplace', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ action: 'uninstall', name }),
-      });
-      await loadInstalled();
-    },
-    onExport: (name: string) => {
-      setExportPlugin(name);
-      setWizardMode('export');
-    },
-    onConfigure: (name: string) => { window.location.href = `/settings/plugins#${name}`; },
-    onFork: async (name: string) => {
-      const newName = prompt(`Fork ${name} as:`, `@local/${name.split('/').pop()}-fork`);
-      if (newName) {
-        await fetch('/api/marketplace', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ action: 'fork', sourceName: name, newName }),
-        });
-        await loadInstalled();
-      }
-    },
-  };
+  const list = tab === 'discover' ? results : installed;
 
   return (
-    <div className="container mx-auto px-6 py-8 max-w-5xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Marketplace</h1>
-          <p className="text-muted-foreground">Discover, install, create, and manage plugins.</p>
-        </div>
+    <div className="mx-auto max-w-[1500px] px-6 py-6">
+      <div className="flex items-center justify-between">
+        <SectionTitle sub="Discover plugins, skills, and MCP servers">Marketplace</SectionTitle>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2" onClick={() => setWizardMode('import')}>
-            <Upload className="w-4 h-4" /> Import
-          </Button>
-          <Button variant="default" className="gap-2" onClick={() => { window.location.href = '/marketplace/new'; }}>
-            <Plus className="w-4 h-4" /> New Plugin
-          </Button>
+          <Link href="/marketplace/import"><Button variant="outline" size="sm">Import</Button></Link>
+          <Link href="/marketplace/new"><Button variant="primary" size="sm">+ New Plugin</Button></Link>
         </div>
       </div>
 
-      <Tabs defaultValue="discover">
-        <TabsList>
-          <TabsTrigger value="discover">Discover</TabsTrigger>
-          <TabsTrigger value="installed">Installed ({installed.length})</TabsTrigger>
-        </TabsList>
+      <div className="mt-3 flex gap-2">
+        {(['discover', 'installed'] as const).map((t) => (
+          <button key={t} onClick={() => setTab(t)}
+            className={'rounded-[9px] px-3 py-1.5 font-mono text-[12px] font-semibold capitalize ' +
+              (tab === t ? 'bg-[var(--card)] border border-[var(--line2)] text-[var(--ink)]' : 'text-[var(--dim)]')}>
+            {t}{t === 'installed' ? ` (${installed.length})` : ''}
+          </button>
+        ))}
+      </div>
 
-        <TabsContent value="discover" className="space-y-4 pt-4">
-          <PluginSearch onSearch={(q, f) => void handleSearch(q, f)} loading={loading} />
-          <div className="space-y-3">
-            {results.map((p) => (
-              <PluginCard key={`${p.source}:${p.name}`} plugin={p} callbacks={callbacks} />
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="installed" className="space-y-3 pt-4">
-          {installed.map((p) => (
-            <PluginCard key={p.name} plugin={{ ...p, installed: true }} callbacks={callbacks} />
+      <div className="mt-4 grid grid-cols-[190px_1fr_330px] gap-4">
+        <Card className="p-3">
+          <div className="mb-2 font-mono text-[10px] font-extrabold uppercase tracking-wide text-[var(--faint)]">Categories</div>
+          <button onClick={() => setKind(null)} className={'block w-full rounded px-2 py-1 text-left font-mono text-[11px] ' + (kind === null ? 'text-[var(--rust)] font-bold' : 'text-[var(--dim)]')}>All</button>
+          {KINDS.map((k) => (
+            <button key={k} onClick={() => setKind(k)} className={'block w-full rounded px-2 py-1 text-left font-mono text-[11px] ' + (kind === k ? 'text-[var(--rust)] font-bold' : 'text-[var(--dim)] hover:text-[var(--ink)]')}>{k}</button>
           ))}
-        </TabsContent>
-      </Tabs>
+        </Card>
 
-      <PluginInstaller
-        open={installerPlugin !== null}
-        plugin={
-          installerPlugin
-            ? {
-                name: installerPlugin.name,
-                version: installerPlugin.version,
-                kind: installerPlugin.kind,
-                license: installerPlugin.license,
-                permissions: [],
-                verified: installerPlugin.verified,
-                sandboxMode: 'separate_process',
-              }
-            : null
-        }
-        onClose={() => setInstallerPlugin(null)}
-        onConfirm={handleInstall}
-      />
+        <div>
+          {tab === 'discover' && (
+            <div className="mb-3 flex gap-2">
+              <input value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && search()}
+                placeholder="search plugins, skills, MCP servers..."
+                className="flex-1 rounded-[9px] border border-[var(--line)] bg-[var(--card)] px-3 py-2 font-mono text-[12px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" />
+              <Button variant="primary" size="md" onClick={search} disabled={loading}>{loading ? 'searching...' : 'Search'}</Button>
+            </div>
+          )}
+          <div className="grid grid-cols-2 gap-3">
+            {list.length === 0 ? (
+              <div className="col-span-2 py-12 text-center font-mono text-[11px] text-[var(--faint)]">
+                {tab === 'discover' ? 'Search to discover plugins.' : 'No plugins installed yet.'}
+              </div>
+            ) : (
+              list.map((p) => (
+                <Card key={`${p.source ?? 'local'}:${p.name}`} className="cursor-pointer p-4 transition-colors hover:border-[var(--rust)]" >
+                  <button onClick={() => setSelected(p)} className="w-full text-left">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[12px] font-bold text-[var(--ink)]">{p.name}</span>
+                      <Badge tone="neutral">v{p.version}</Badge>
+                      {p.verified ? <Badge tone="olive">verified</Badge> : <Badge tone="amber">unverified</Badge>}
+                    </div>
+                    <p className="mt-1 line-clamp-2 text-[12px] text-[var(--dim)]">{p.description}</p>
+                    <div className="mt-2 flex items-center gap-2 font-mono text-[10px] text-[var(--faint)]">
+                      <Badge tone="plum">{p.kind}</Badge>
+                      <span>{p.publisher} · {p.license}</span>
+                    </div>
+                  </button>
+                  <div className="mt-3 flex justify-end">
+                    {tab === 'installed' || installed.some((i) => i.name === p.name) ? (
+                      <Button variant="danger" size="sm" onClick={() => uninstall(p.name)}>Uninstall</Button>
+                    ) : (
+                      <Button variant="primary" size="sm" onClick={() => install(p)}>Install</Button>
+                    )}
+                  </div>
+                </Card>
+              ))
+            )}
+          </div>
+        </div>
 
-      {wizardMode && (
-        <ImportExportWizard
-          mode={wizardMode}
-          open={true}
-          {...(exportPlugin ? { pluginName: exportPlugin } : {})}
-          onClose={() => { setWizardMode(null); setExportPlugin(undefined); }}
-          onImport={async (input) => {
-            const res = await fetch('/api/marketplace', {
-              method: 'POST',
-              headers: { 'content-type': 'application/json' },
-              body: JSON.stringify({ action: 'import', ...input }),
-            });
-            const data = (await res.json()) as { ok: boolean; warnings: string[] };
-            await loadInstalled();
-            return data;
-          }}
-          onExport={async (input) => {
-            const res = await fetch('/api/marketplace', {
-              method: 'POST',
-              headers: { 'content-type': 'application/json' },
-              body: JSON.stringify({ action: 'export', pluginName: exportPlugin, ...input }),
-            });
-            return (await res.json()) as { ok: boolean; lossyFields: string[] };
-          }}
-        />
-      )}
+        <Card className="h-fit p-4">
+          {!selected ? (
+            <div className="py-10 text-center font-mono text-[11px] text-[var(--faint)]">Select a plugin to inspect.</div>
+          ) : (
+            <div className="space-y-3">
+              <div className="font-mono text-[13px] font-bold text-[var(--ink)]">{selected.name}</div>
+              <div className="font-mono text-[10px] text-[var(--dim)]">v{selected.version} · {selected.publisher}</div>
+              <p className="text-[12px] text-[var(--dim)]">{selected.description}</p>
+              <div>
+                <div className="mb-1 font-mono text-[10px] font-bold uppercase text-[var(--faint)]">Compatible with</div>
+                <div className="flex flex-wrap gap-1">
+                  {selected.external_agent_compat.map((c) => <Badge key={c} tone="teal">{c}</Badge>)}
+                </div>
+              </div>
+              <div className="flex gap-2 pt-1">
+                {installed.some((i) => i.name === selected.name)
+                  ? <Button variant="danger" size="sm" onClick={() => uninstall(selected.name)}>Uninstall</Button>
+                  : <Button variant="primary" size="sm" onClick={() => install(selected)}>Install</Button>}
+                <Link href={`/marketplace/${encodeURIComponent(selected.name)}`}><Button variant="outline" size="sm">Details</Button></Link>
+              </div>
+            </div>
+          )}
+        </Card>
+      </div>
     </div>
   );
 }

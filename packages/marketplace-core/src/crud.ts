@@ -35,6 +35,7 @@ export interface MarketplaceAuditWriter {
     ts: string;
     actor: { user: string };
     payload: Record<string, unknown>;
+    project_id: string;
   }): Promise<void>;
 }
 
@@ -52,7 +53,8 @@ export class MarketplaceCrud {
   constructor(
     private readonly store: LocalPluginStore,
     private readonly audit: MarketplaceAuditWriter,
-    private readonly actor: string = 'user'
+    private readonly actor: string = 'user',
+    private readonly projectId: string = ''
   ) {
     this.conformance = new ConformanceSuite();
   }
@@ -195,7 +197,7 @@ export class MarketplaceCrud {
         external_agent_compat: input.external_agent_compat,
         license: 'Apache-2.0',
         keywords: [],
-        compatibility: { orqenix: '>=0.8.0' },
+        compatibility: { orqenix: '^0.8.0' },
         settingsHotReloadable: false,
         settingsHierarchyOverride: 'project',
         sandboxMode: 'separate_process',
@@ -267,6 +269,7 @@ export class MarketplaceCrud {
       ts: new Date().toISOString(),
       actor: { user: this.actor },
       payload,
+      project_id: this.projectId,
     });
   }
 }

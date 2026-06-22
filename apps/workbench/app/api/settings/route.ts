@@ -1,147 +1,65 @@
-// SPDX-License-Identifier: Apache-2.0
-// Settings API , resolve + update + export
-//
-// Bridges Workbench Settings UI to @orqenix/settings-registry.
-// D8.α.6 wires the SQLite-backed persistence; D8.α.5 provides the API shape.
-
 import { NextResponse } from 'next/server';
+import { getRuntime } from '@/lib/runtime';
+import { ALL_MODULE_CONTRACTS } from '@/lib/settings-bootstrap';
 
-export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
-/**
- * GET /api/settings
- *   ?action=resolve&moduleId=...&path=...&projectId=...   → resolve a setting
- *   ?action=list                                          → list all contracts
- *   ?action=export&level=all&format=yaml                  → export settings
- */
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const action = url.searchParams.get('action') ?? 'list';
+function ensureOverrideTable(db: import('better-sqlite3').Database) {
+  db.exec(`CREATE TABLE IF NOT EXISTS config_overrides (
+    module_id TEXT NOT NULL, key TEXT NOT NULL, scope TEXT NOT NULL DEFAULT 'project',
+    value_json TEXT NOT NULL, updated_at TEXT NOT NULL,
+    PRIMARY KEY (module_id, key, scope)
+  ) STRICT;`);
+}
 
+export async function GET() {
   try {
-    // D8.α.6 wires the shared registry singleton backed by SQLite:
-    //   const registry = getSettingsRegistry();
-    //   await bootstrapSettings(registry);  (or modules self-register)
+    const rt = await getRuntime();
+    const db = rt.engine.getStore().db;
+    ensureOverrideTable(db);
+    const overrides = db.prepare('SELECT module_id, key, value_json FROM config_overrides').all() as Array<{ module_id: string; key: string; value_json: string }>;
+    const overrideMap = new Map(overrides.map((o) => [`${o.module_id}::${o.key}`, JSON.parse(o.value_json)]));
 
-    switch (action) {
-      case 'list': {
-        // D8.α.5 stub: returns the static contract catalog shape
-        return NextResponse.json(
-          {
-            contracts: [],
-            note: 'Settings registry singleton wires in D8.α.6 (SQLite-backed persistence)',
-          },
-          { status: 200, headers: { 'Cache-Control': 'no-store' } }
-        );
-      }
+    const groups = ALL_MODULE_CONTRACTS.map((c) => ({
+      moduleId: c.moduleId,
+      phase: c.provenance.phase,
+      crVersion: c.provenance.crVersion,
+      hotReloadable: c.hotReloadable,
+      hierarchyOverride: c.hierarchyOverride,
+      settings: Object.entries(c.defaults).map(([key, def]) => {
+        const ovKey = `${c.moduleId}::${key}`;
+        const overridden = overrideMap.has(ovKey);
+        return { key, default: def, value: overridden ? overrideMap.get(ovKey) : def, overridden };
+      }),
+    }));
 
-      case 'resolve': {
-        const moduleId = url.searchParams.get('moduleId');
-        const path = url.searchParams.get('path');
-        if (!moduleId || !path) {
-          return NextResponse.json(
-            { error: 'resolve requires moduleId and path params' },
-            { status: 400 }
-          );
-        }
-        // D8.α.6: const resolved = await registry.resolve(moduleId, path, ctx);
-        return NextResponse.json(
-          {
-            moduleId,
-            path,
-            note: 'Resolution wires in D8.α.6',
-          },
-          { status: 200 }
-        );
-      }
-
-      case 'export': {
-        const level = url.searchParams.get('level') ?? 'all';
-        const format = url.searchParams.get('format') ?? 'yaml';
-        // D8.α.6: const data = await exportSettings(registry, { level, format });
-        return NextResponse.json(
-          {
-            level,
-            format,
-            note: 'Export wires in D8.α.6',
-          },
-          { status: 200 }
-        );
-      }
-
-      default:
-        return NextResponse.json(
-          { error: `Unknown action '${action}'` },
-          { status: 400 }
-        );
-    }
+    return NextResponse.json({ groups }, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   } catch (err) {
-    return NextResponse.json(
-      { error: (err as Error).message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }
 
-/**
- * POST /api/settings
- *   Body: { action: 'update' | 'revert' | 'import', ... }
- */
 export async function POST(req: Request) {
-  let body: {
-    action?: string;
-    moduleId?: string;
-    path?: string;
-    value?: unknown;
-    level?: string;
-    hierarchyId?: string;
-    serialized?: string;
-    mode?: 'merge' | 'replace';
-  };
   try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
-  }
+    const body = (await req.json()) as { action: 'update' | 'reset'; moduleId: string; key: string; value?: unknown };
+    const rt = await getRuntime();
+    const db = rt.engine.getStore().db;
+    ensureOverrideTable(db);
+    const now = new Date().toISOString();
 
-  const { action } = body;
-  if (!action) {
-    return NextResponse.json(
-      { error: 'Missing required field: action' },
-      { status: 400 }
-    );
-  }
-
-  const validActions = ['update', 'revert', 'import'];
-  if (!validActions.includes(action)) {
-    return NextResponse.json(
-      { error: `Invalid action '${action}'. Must be one of: ${validActions.join(', ')}` },
-      { status: 400 }
-    );
-  }
-
-  try {
-    // D8.α.6 wires the actual registry operations:
-    //
-    //   case 'update': await registry.update(body.moduleId, body.path, body.value,
-    //                    { level: body.level, hierarchyId: body.hierarchyId });
-    //   case 'revert': await registry.revert(body.moduleId, body.path,
-    //                    { level: body.level, hierarchyId: body.hierarchyId });
-    //   case 'import': await importSettings(registry, body.serialized, { mode: body.mode });
-
-    return NextResponse.json(
-      {
-        ok: true,
-        action,
-        note: 'Settings mutation wires in D8.α.6 (SQLite persistence + hot-reload)',
-      },
-      { status: 200 }
-    );
+    if (body.action === 'update') {
+      db.prepare(`INSERT INTO config_overrides (module_id, key, scope, value_json, updated_at) VALUES (?, ?, 'project', ?, ?)
+                  ON CONFLICT(module_id, key, scope) DO UPDATE SET value_json=excluded.value_json, updated_at=excluded.updated_at`)
+        .run(body.moduleId, body.key, JSON.stringify(body.value), now);
+      return NextResponse.json({ ok: true });
+    }
+    if (body.action === 'reset') {
+      db.prepare('DELETE FROM config_overrides WHERE module_id=? AND key=?').run(body.moduleId, body.key);
+      return NextResponse.json({ ok: true });
+    }
+    return NextResponse.json({ error: 'unknown action' }, { status: 400 });
   } catch (err) {
-    return NextResponse.json(
-      { error: (err as Error).message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }

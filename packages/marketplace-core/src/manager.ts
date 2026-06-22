@@ -29,6 +29,7 @@ export interface MarketplaceManagerOptions {
   lifecycle: PluginLifecycle;
   resolverRegistry?: RegistryResolverRegistry;
   actor?: string;
+  projectId?: string;
 }
 
 /**
@@ -42,6 +43,7 @@ export class MarketplaceManager {
   private readonly store: LocalPluginStore;
   private readonly audit: MarketplaceAuditWriter;
   private readonly actor: string;
+  private readonly projectId: string;
 
   constructor(options: MarketplaceManagerOptions) {
     this.store = options.store;
@@ -50,7 +52,8 @@ export class MarketplaceManager {
     this.lifecycle = options.lifecycle;
     this.resolvers = options.resolverRegistry ?? new RegistryResolverRegistry();
     this.actor = options.actor ?? 'user';
-    this.crud = new MarketplaceCrud(options.store, options.audit, this.actor);
+    this.projectId = options.projectId ?? '';
+    this.crud = new MarketplaceCrud(options.store, options.audit, this.actor, options.projectId ?? '');
   }
 
   // ─── CRUD ────────────────────────────────────────────────────────────
@@ -113,6 +116,7 @@ export class MarketplaceManager {
           adapterKind: result.adapter.kind,
           csfHash: result.csf.provenance.contentHash,
         },
+        project_id: this.projectId,
       });
 
       return {
@@ -128,6 +132,7 @@ export class MarketplaceManager {
         ts: new Date().toISOString(),
         actor: { user: this.actor },
         payload: { error: (err as Error).message },
+        project_id: this.projectId,
       });
       return { ok: false, warnings: [(err as Error).message] };
     }
@@ -153,6 +158,7 @@ export class MarketplaceManager {
           targetKind: input.targetKind,
           lossyFields: result.report.lossyFields,
         },
+        project_id: this.projectId,
       });
       return {
         ok: false,
@@ -169,6 +175,7 @@ export class MarketplaceManager {
         targetKind: input.targetKind,
         lossy: result.report.lossyFields.length > 0,
       },
+      project_id: this.projectId,
     });
 
     return {

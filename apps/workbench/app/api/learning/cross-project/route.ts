@@ -3,34 +3,39 @@
 
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+async function tryImportPro() {
   try {
-    await import('@orqenix-pro/cross-project-federation');
+    await import(/* webpackIgnore: true */ '@orqenix-pro/cross-project-federation');
+    return true;
+  } catch { return false; }
+}
+
+export async function GET() {
+  const available = await tryImportPro();
+    if (available) {
     return NextResponse.json({ available: true, candidates: [] });
-  } catch {
-    return NextResponse.json(
-      {
-        available: false,
-        error: 'Cross-project federation is an Orqenix Pro feature.',
-        code: 'PRO_FEATURE_UNAVAILABLE',
-      },
-      { status: 501 }
-    );
   }
+  return NextResponse.json(
+    {
+      available: false,
+      error: 'Cross-project federation is an Orqenix Pro feature.',
+      code: 'PRO_FEATURE_UNAVAILABLE',
+    },
+    { status: 501 }
+  );
 }
 
 export async function POST() {
-  try {
-    await import('@orqenix-pro/cross-project-federation');
+  const available = await tryImportPro();
+    if (available) {
     return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json(
-      {
-        available: false,
-        error: 'Cross-project federation is an Orqenix Pro feature.',
-        code: 'PRO_FEATURE_UNAVAILABLE',
-      },
-      { status: 501 }
-    );
   }
+  return NextResponse.json(
+    {
+      available: false,
+      error: 'Cross-project federation is an Orqenix Pro feature.',
+      code: 'PRO_FEATURE_UNAVAILABLE',
+    },
+    { status: 501 }
+  );
 }
