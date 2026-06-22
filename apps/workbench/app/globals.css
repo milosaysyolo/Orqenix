@@ -1,168 +1,71 @@
-/* SPDX-License-Identifier: Apache-2.0 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+:root {
+  --paper: #f6f4ee;
+  --paper2: #efece3;
+  --card: #fcfbf6;
+  --ink: #23241f;
+  --dim: #52534a;
+  --faint: #8a8b80;
+  --line: rgba(35, 36, 31, 0.12);
+  --line2: rgba(35, 36, 31, 0.22);
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+  --rust: #b65a3c;
+  --amber: #b8902f;
+  --teal: #2e857d;
+  --plum: #73579c;
+  --olive: #5f8038;
+  --slate: #4a6b88;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+  --radius-sm: 6px; --radius-md: 9px; --radius-lg: 13px; --radius-xl: 18px;
 
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-
-    --radius: 0.5rem;
-
-    --orqenix-emerald: 154 75% 39%;
-    --orqenix-violet: 250 84% 60%;
-    --orqenix-amber: 38 92% 50%;
-
-    /* Warm editorial tokens (W2A Dashboard) */
-    --paper: #f6f4ee;
-    --ink: #23241f;
-    --card: #ffffff;
-    --line: #e6e3da;
-    --line2: #d4d0c5;
-    --dim: #8b8778;
-    --faint: #b8b4a8;
-    --rust: #b85c41;
-    --olive: #7d8a5a;
-    --teal: #5c8a8a;
-    --plum: #8a6a9e;
-    --amber: #c9913a;
-    --slate: #7a8288;
-    --card-rgb: 255 255 255;
-  }
-
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-
-    /* Warm editorial tokens (W2A Dashboard) — dark lifted hues */
-    --paper: #1e1d1a;
-    --ink: #e8e5dd;
-    --card: #2a2925;
-    --line: #3a3934;
-    --line2: #4a4944;
-    --dim: #8b8778;
-    --faint: #5a5852;
-    --rust: #d47a5e;
-    --olive: #8fa06a;
-    --teal: #6a9e9e;
-    --plum: #9e7ab0;
-    --amber: #d4a34a;
-    --slate: #8a9298;
-    --card-rgb: 42 41 37;
-  }
-
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground antialiased;
-    font-feature-settings: 'rlig' 1, 'calt' 1;
-  }
-
-  /* Focus visibility for keyboard navigation */
-  *:focus-visible {
-    @apply outline-2 outline-offset-2 outline-ring;
-  }
-
-  /* Selection styling */
-  ::selection {
-    background-color: hsl(var(--orqenix-emerald) / 0.2);
-  }
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Georgia, "Times New Roman", serif;
 }
 
-@layer components {
-  /* Skip link for screen readers (a11y) */
-  .skip-link {
-    @apply absolute -top-10 left-2 z-50 rounded-md bg-primary px-4 py-2 text-primary-foreground transition-all focus:top-2;
-  }
-
-  /* Workbench shell styling */
-  .workbench-shell {
-    @apply flex h-screen flex-col bg-background;
-  }
-
-  .workbench-content {
-    @apply flex-1 overflow-hidden;
-  }
-
-  /* Top nav active tab indicator */
-  .nav-tab-active {
-    @apply text-foreground after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary;
-  }
-
-  /* Loading skeleton */
-  .skeleton {
-    @apply animate-pulse rounded-md bg-muted;
-  }
-
-  /* Code block */
-  pre {
-    @apply rounded-lg bg-muted p-4 font-mono text-sm overflow-x-auto;
-  }
+.dark {
+  --paper: #1a1916;
+  --paper2: #211f1b;
+  --card: #232019;
+  --ink: #ece8df;
+  --dim: #a8a499;
+  --faint: #6f6c63;
+  --line: rgba(236, 232, 223, 0.12);
+  --line2: rgba(236, 232, 223, 0.22);
+  --rust: #d27151;
+  --amber: #d4ab4a;
+  --teal: #45a59a;
+  --plum: #9b7fc4;
+  --olive: #82a155;
+  --slate: #6e91b4;
 }
 
-@layer utilities {
-  /* Reduced motion respect */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
+html { font-family: var(--sans); scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    linear-gradient(rgba(35,36,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35,36,31,.022) 1px, transparent 1px),
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(182,90,60,.045), transparent 60%);
+  background-size: 46px 46px, 46px 46px, 100% 100%;
+}
+.dark body {
+  background-image:
+    linear-gradient(rgba(236,232,223,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236,232,223,.025) 1px, transparent 1px),
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(210,113,81,.06), transparent 60%);
+  background-size: 46px 46px, 46px 46px, 100% 100%;
+}
+
+.font-serif { font-family: var(--serif); }
+.font-mono { font-family: var(--mono); }
+.grad-text {
+  background: linear-gradient(110deg, var(--rust), var(--plum));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
