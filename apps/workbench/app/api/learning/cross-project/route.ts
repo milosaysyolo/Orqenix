@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    await import("@orqenix-pro/cross-project-federation");
+    await import(/* webpackIgnore: true */ "@orqenix-pro/cross-project-federation");
     return NextResponse.json({ available: true, candidates: [] });
   } catch {
     return NextResponse.json(
@@ -21,7 +21,7 @@ export async function GET() {
 
 export async function POST() {
   try {
-    await import("@orqenix-pro/cross-project-federation");
+    await import(/* webpackIgnore: true */ "@orqenix-pro/cross-project-federation");
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json(
