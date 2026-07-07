@@ -1,8 +1,8 @@
-import type { Database } from 'better-sqlite3';
+import type { Database } from "better-sqlite3";
 
 export const id = 200;
 export const phase = 6;
-export const description = 'create mesh_transports table';
+export const description = "create mesh_transports table";
 
 export function up(db: Database): void {
   db.exec(`

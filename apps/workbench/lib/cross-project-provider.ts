@@ -16,12 +16,13 @@ export interface CrossProjectCapability {
  */
 export async function probeCrossProjectFederation(): Promise<CrossProjectCapability> {
   try {
-    await import('@orqenix-pro/cross-project-federation');
+    await import("@orqenix-pro/cross-project-federation");
     return { available: true };
   } catch {
     return {
       available: false,
-      reason: 'Cross-project federation is an Orqenix Pro feature. Install @orqenix-pro/cross-project-federation.',
+      reason:
+        "Cross-project federation is an Orqenix Pro feature. Install @orqenix-pro/cross-project-federation.",
     };
   }
 }

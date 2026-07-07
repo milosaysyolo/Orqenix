@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Mesh tab , view mesh links and capabilities (LAN + Cloud peers)
 
-'use client';
+"use client";
 
-import { Network, Link2, Shield, Globe } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge } from '@orqenix/ui-primitives';
+import { Network, Link2, Shield, Globe } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, Badge } from "@orqenix/ui-primitives";
 
 export default function MeshPage() {
   return (
@@ -57,7 +57,9 @@ export default function MeshPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">—</div>
-            <Badge variant="secondary" className="mt-1">Cloud sync optional</Badge>
+            <Badge variant="secondary" className="mt-1">
+              Cloud sync optional
+            </Badge>
           </CardContent>
         </Card>
       </div>
@@ -74,8 +76,8 @@ export default function MeshPage() {
             <Network className="w-12 h-12 text-muted-foreground mx-auto mb-3" aria-hidden />
             <h3 className="font-semibold mb-2">Mesh topology graph</h3>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              The force-directed graph + hierarchical + memory flow layouts ship in D8.α.6.
-              Built on the canvas engine from D7.5 (Cloud Web Control Plane).
+              The force-directed graph + hierarchical + memory flow layouts ship in D8.α.6. Built on
+              the canvas engine from D7.5 (Cloud Web Control Plane).
             </p>
             <p className="text-xs text-muted-foreground mt-4">
               Charter gate: G58 (Memory Hierarchy , link state engine)

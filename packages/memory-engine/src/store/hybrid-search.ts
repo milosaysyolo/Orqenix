@@ -5,14 +5,8 @@
 // + recency 0.1). Replaces the D8.α.3 ProjectIndex.query() stub with real
 // search against SQLite memory.db.
 
-import type { Database } from 'better-sqlite3';
-import type {
-  KbKind,
-  MemoryEntry,
-  SearchResult,
-  Tier,
-  ProtectionFlags,
-} from './types';
+import type { Database } from "better-sqlite3";
+import type { KbKind, MemoryEntry, SearchResult, Tier, ProtectionFlags } from "./types";
 
 export interface HybridSearchWeights {
   vector: number;
@@ -29,10 +23,10 @@ export const DEFAULT_WEIGHTS: HybridSearchWeights = {
 };
 
 const KB_TABLE: Record<KbKind, string> = {
-  chat: 'chat_entries',
-  code: 'code_entries',
-  decision: 'decision_entries',
-  lesson: 'lesson_entries',
+  chat: "chat_entries",
+  code: "code_entries",
+  decision: "decision_entries",
+  lesson: "lesson_entries",
 };
 
 const TIER_BOOST: Record<Tier, number> = {
@@ -49,7 +43,7 @@ export interface HybridSearchInput {
   /** Scope filter: branch_id + optional session_id */
   branchId: string;
   sessionId?: string;
-  memoryLevel: 'session' | 'branch' | 'project';
+  memoryLevel: "session" | "branch" | "project";
   projectId: string;
   limit: number;
 }
@@ -67,7 +61,7 @@ export interface HybridSearchInput {
 export class HybridSearch {
   constructor(
     private readonly db: Database,
-    private readonly weights: HybridSearchWeights = DEFAULT_WEIGHTS
+    private readonly weights: HybridSearchWeights = DEFAULT_WEIGHTS,
   ) {}
 
   search(input: HybridSearchInput): SearchResult[] {
@@ -93,29 +87,26 @@ export class HybridSearch {
     return results.sort((a, b) => b.rawScore - a.rawScore).slice(0, input.limit);
   }
 
-  private queryTable(
-    table: string,
-    input: HybridSearchInput
-  ): Record<string, unknown>[] {
+  private queryTable(table: string, input: HybridSearchInput): Record<string, unknown>[] {
     // Scope filter: entries at this level for this branch (+ session if session-level)
-    const conditions: string[] = ['project_id = @projectId', 'memory_level = @level'];
+    const conditions: string[] = ["project_id = @projectId", "memory_level = @level"];
     const params: Record<string, unknown> = {
       projectId: input.projectId,
       level: input.memoryLevel,
     };
 
-    if (input.memoryLevel === 'session') {
-      conditions.push('session_id = @sessionId');
-      params.sessionId = input.sessionId ?? '';
-    } else if (input.memoryLevel === 'branch') {
-      conditions.push('branch_id = @branchId');
+    if (input.memoryLevel === "session") {
+      conditions.push("session_id = @sessionId");
+      params.sessionId = input.sessionId ?? "";
+    } else if (input.memoryLevel === "branch") {
+      conditions.push("branch_id = @branchId");
       params.branchId = input.branchId;
     }
     // project level: no branch/session filter
 
     const sql = `
       SELECT * FROM ${table}
-      WHERE ${conditions.join(' AND ')}
+      WHERE ${conditions.join(" AND ")}
       LIMIT 500
     `;
     return this.db.prepare(sql).all(params) as Record<string, unknown>[];
@@ -127,11 +118,11 @@ export class HybridSearch {
       embedding = new Float32Array(
         row.embedding.buffer,
         row.embedding.byteOffset,
-        row.embedding.byteLength / 4
+        row.embedding.byteLength / 4,
       );
     }
     let protectionFlags: ProtectionFlags | null = null;
-    if (typeof row.protection_flags === 'string' && row.protection_flags.length > 0) {
+    if (typeof row.protection_flags === "string" && row.protection_flags.length > 0) {
       try {
         protectionFlags = JSON.parse(row.protection_flags) as ProtectionFlags;
       } catch {
@@ -146,9 +137,9 @@ export class HybridSearch {
       content: (row.content as string | null) ?? null,
       embedding,
       project_id: row.project_id as string,
-      branch_id: (row.branch_id as string) ?? '',
+      branch_id: (row.branch_id as string) ?? "",
       session_id: (row.session_id as string | null) ?? null,
-      memory_level: (row.memory_level as MemoryEntry['memory_level']) ?? 'project',
+      memory_level: (row.memory_level as MemoryEntry["memory_level"]) ?? "project",
       protection_flags: protectionFlags,
       cloned_from_branch_id: (row.cloned_from_branch_id as string | null) ?? null,
       promoted_from_session_id: (row.promoted_from_session_id as string | null) ?? null,
@@ -158,11 +149,8 @@ export class HybridSearch {
     };
   }
 
-  private scoreEntry(
-    entry: MemoryEntry,
-    input: HybridSearchInput
-  ): SearchResult['scores'] {
-    const content = (entry.content ?? '').toLowerCase();
+  private scoreEntry(entry: MemoryEntry, input: HybridSearchInput): SearchResult["scores"] {
+    const content = (entry.content ?? "").toLowerCase();
     const queryLower = input.query.toLowerCase();
     const queryTerms = queryLower.split(/\s+/).filter(Boolean);
 

@@ -11,23 +11,23 @@
 // Engine (top-level orchestrator)
 // ─────────────────────────────────────────────────────────────────────────
 
-export { FederationEngine } from './federation-engine';
+export { FederationEngine } from "./federation-engine";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Discovery + Index
 // ─────────────────────────────────────────────────────────────────────────
 
-export { ProjectDiscovery } from './project-discovery';
-export { ProjectIndex } from './project-index';
+export { ProjectDiscovery } from "./project-discovery";
+export { ProjectIndex } from "./project-index";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Aggregator + Permission + Cache + Audit
 // ─────────────────────────────────────────────────────────────────────────
 
-export { QueryAggregator } from './query-aggregator';
-export { PermissionChecker } from './permission-checker';
-export { CacheLayer } from './cache-layer';
-export { AuditLogger } from './audit-logger';
+export { QueryAggregator } from "./query-aggregator";
+export { PermissionChecker } from "./permission-checker";
+export { CacheLayer } from "./cache-layer";
+export { AuditLogger } from "./audit-logger";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Types (re-export from types.ts)
@@ -45,7 +45,7 @@ export type {
   ApproveCandidateRequest,
   FederationAuditKind,
   FederationAuditEvent,
-} from './types';
+} from "./types";
 
 export {
   KbKindSchema,
@@ -56,7 +56,7 @@ export {
   FederationApprovalsYamlSchema,
   CrossProjectQuerySchema,
   ApproveCandidateRequestSchema,
-} from './types';
+} from "./types";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Errors (re-export from errors.ts)
@@ -71,4 +71,4 @@ export {
   RegistryError,
   CandidateNotFoundError,
   PermissionError,
-} from './errors';
+} from "./errors";

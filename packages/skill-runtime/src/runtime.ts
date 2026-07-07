@@ -5,13 +5,13 @@
 // against its declared inputSchema, runs it in the plugin sandbox, validates
 // output against outputSchema. Per CR v8.0 Chapter 9.
 
-import type { MemoryEngine } from '@orqenix/memory-engine';
+import type { MemoryEngine } from "@orqenix/memory-engine";
 import {
   SandboxManager,
   PluginRegistry,
   type CanonicalSkillFormat,
   type RegisteredPlugin,
-} from '@orqenix/plugin-core';
+} from "@orqenix/plugin-core";
 
 export interface SkillRuntimeOptions {
   engine: MemoryEngine;
@@ -39,15 +39,15 @@ export interface SkillInvocationResult {
 export class SkillNotFoundError extends Error {
   constructor(skillName: string) {
     super(`Skill '${skillName}' is not installed or not active`);
-    this.name = 'SkillNotFoundError';
+    this.name = "SkillNotFoundError";
     Object.setPrototypeOf(this, SkillNotFoundError.prototype);
   }
 }
 
 export class SkillInputInvalidError extends Error {
   constructor(skillName: string, issues: string[]) {
-    super(`Skill '${skillName}' input invalid: ${issues.join('; ')}`);
-    this.name = 'SkillInputInvalidError';
+    super(`Skill '${skillName}' input invalid: ${issues.join("; ")}`);
+    this.name = "SkillInputInvalidError";
     Object.setPrototypeOf(this, SkillInputInvalidError.prototype);
   }
 }
@@ -79,13 +79,13 @@ export class SkillRuntime {
   async invoke(
     skillName: string,
     input: unknown,
-    ctx: SkillInvocationContext
+    ctx: SkillInvocationContext,
   ): Promise<SkillInvocationResult> {
     const startMs = Date.now();
 
     // 1. Resolve skill
     const plugin = this.registry.find(skillName);
-    if (!plugin || plugin.csf.kind !== 'skill') {
+    if (!plugin || plugin.csf.kind !== "skill") {
       throw new SkillNotFoundError(skillName);
     }
 
@@ -97,10 +97,7 @@ export class SkillRuntime {
 
     // 3. Activate sandbox if needed
     if (!this.sandbox.isActive(skillName)) {
-      await this.sandbox.activate(
-        plugin,
-        this.resolveEntryPath(plugin)
-      );
+      await this.sandbox.activate(plugin, this.resolveEntryPath(plugin));
     }
 
     // 4. Invoke via sandbox
@@ -126,13 +123,13 @@ export class SkillRuntime {
 
   /** Lists installed skills */
   listSkills(): RegisteredPlugin[] {
-    return this.registry.listByKind('skill');
+    return this.registry.listByKind("skill");
   }
 
   // ─── Private ────────────────────────────────────────────────────────
 
   private resolveEntryPath(plugin: RegisteredPlugin): string {
-    const { join, isAbsolute } = require('node:path') as typeof import('node:path');
+    const { join, isAbsolute } = require("node:path") as typeof import("node:path");
     const entry = plugin.csf.implementation.entry;
     return isAbsolute(entry) ? entry : join(plugin.packagePath, entry);
   }
@@ -157,9 +154,7 @@ export class SkillRuntime {
   }
 
   private validateOutput(csf: CanonicalSkillFormat, output: unknown): boolean {
-    const schema = csf.manifest.tool?.outputSchema as
-      | { required?: string[] }
-      | undefined;
+    const schema = csf.manifest.tool?.outputSchema as { required?: string[] } | undefined;
     if (!schema) return true; // no output schema declared
     if (schema.required && Array.isArray(schema.required)) {
       const obj = (output ?? {}) as Record<string, unknown>;

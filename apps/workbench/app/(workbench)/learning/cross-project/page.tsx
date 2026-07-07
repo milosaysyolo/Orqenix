@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: Apache-2.0
 // Workbench , Cross-project learning page (Pro feature)
 
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { CrossProjectCandidateCard } from '../../../../components/cross-project-candidate-card';
-import { probeCrossProjectFederation } from '../../../../lib/cross-project-provider';
-import type { CrossProjectCapability } from '../../../../lib/cross-project-provider';
+import { useEffect, useState } from "react";
+import { CrossProjectCandidateCard } from "../../../../components/cross-project-candidate-card";
+import { probeCrossProjectFederation } from "../../../../lib/cross-project-provider";
+import type { CrossProjectCapability } from "../../../../lib/cross-project-provider";
 
 export default function CrossProjectPage() {
   const [capability, setCapability] = useState<CrossProjectCapability>({
     available: false,
-    reason: 'Probing...',
+    reason: "Probing...",
   });
 
   useEffect(() => {

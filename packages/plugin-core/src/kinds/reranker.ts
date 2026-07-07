@@ -3,13 +3,13 @@
 //
 // Rerank search result candidates by relevance (Cohere, Voyage, local BGE-reranker).
 
-import type { CanonicalSkillFormat } from '../csf-schema';
-import type { PluginKindHandler, ValidationResult } from '../types';
+import type { CanonicalSkillFormat } from "../csf-schema";
+import type { PluginKindHandler, ValidationResult } from "../types";
 
-export const rerankerHandler: PluginKindHandler<'reranker'> = {
-  kind: 'reranker',
+export const rerankerHandler: PluginKindHandler<"reranker"> = {
+  kind: "reranker",
   description:
-    'Reranks search result candidates by relevance (Cohere, Voyage, local BGE-reranker).',
+    "Reranks search result candidates by relevance (Cohere, Voyage, local BGE-reranker).",
 
   validateManifest(csf: CanonicalSkillFormat): ValidationResult {
     const errors: string[] = [];
@@ -17,17 +17,15 @@ export const rerankerHandler: PluginKindHandler<'reranker'> = {
 
     if (!csf.manifest.tool) {
       errors.push(
-        'reranker plugins MUST declare manifest.tool with rerank(query, candidates) input schema'
+        "reranker plugins MUST declare manifest.tool with rerank(query, candidates) input schema",
       );
     } else {
       const inputSchema = csf.manifest.tool.inputSchema as {
         properties?: Record<string, unknown>;
       };
       const props = inputSchema.properties ?? {};
-      if (!('query' in props) || !('candidates' in props)) {
-        warnings.push(
-          "reranker inputSchema should include 'query' and 'candidates' properties"
-        );
+      if (!("query" in props) || !("candidates" in props)) {
+        warnings.push("reranker inputSchema should include 'query' and 'candidates' properties");
       }
     }
 

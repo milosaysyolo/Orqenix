@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/self-learning-detection , Type definitions
 
-import { z } from 'zod';
-import type { ObservationEvent } from '@orqenix/self-learning-observer';
+import { z } from "zod";
+import type { ObservationEvent } from "@orqenix/self-learning-observer";
 
 /** Detection thresholds (configurable per CR v8.0 Section 9.6) */
 export interface DetectionThresholds {
@@ -78,7 +78,7 @@ export const InstinctCandidateSchema = z.object({
   sample_observation_ids: z.string(), // JSON array
   detected_at: z.string().datetime(),
   impact_score: z.number(),
-  status: z.enum(['detected', 'reviewed', 'promoted', 'rejected', 'deferred']),
+  status: z.enum(["detected", "reviewed", "promoted", "rejected", "deferred"]),
   reviewed_at: z.string().datetime().nullable(),
   reviewed_by: z.string().nullable(),
   review_decision: z.string().nullable(),

@@ -37,7 +37,8 @@ Every event carries project_id + branch_id + session_id + parent_session_id
 ## Storage
 
 `observation_events` table (Migration 530), indexed by tenant + scope + session
-+ timestamp + actor.
+
+- timestamp + actor.
 
 ## License
 

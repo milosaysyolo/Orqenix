@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // Top navigation bar , 8 top-level tabs + project/branch selector + command palette trigger
 
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useTheme } from 'next-themes';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 import {
   Brain,
   Network,
@@ -19,18 +19,18 @@ import {
   Moon,
   Command,
   HelpCircle,
-} from 'lucide-react';
-import { Button, Badge } from '@orqenix/ui-primitives';
+} from "lucide-react";
+import { Button, Badge } from "@orqenix/ui-primitives";
 
 const TOP_TABS = [
-  { href: '/memory', label: 'Memory', icon: Brain, badge: null },
-  { href: '/mesh', label: 'Mesh', icon: Network, badge: null },
-  { href: '/audit', label: 'Audit', icon: ShieldCheck, badge: null },
-  { href: '/marketplace', label: 'Marketplace', icon: Package, badge: null },
-  { href: '/learning', label: 'Self-Learning', icon: Sparkles, badge: 'active' as const },
-  { href: '/sessions', label: 'Sessions', icon: MessageSquare, badge: null },
-  { href: '/branches', label: 'Branches', icon: GitBranch, badge: null },
-  { href: '/settings', label: 'Settings', icon: Settings, badge: null },
+  { href: "/memory", label: "Memory", icon: Brain, badge: null },
+  { href: "/mesh", label: "Mesh", icon: Network, badge: null },
+  { href: "/audit", label: "Audit", icon: ShieldCheck, badge: null },
+  { href: "/marketplace", label: "Marketplace", icon: Package, badge: null },
+  { href: "/learning", label: "Self-Learning", icon: Sparkles, badge: "active" as const },
+  { href: "/sessions", label: "Sessions", icon: MessageSquare, badge: null },
+  { href: "/branches", label: "Branches", icon: GitBranch, badge: null },
+  { href: "/settings", label: "Settings", icon: Settings, badge: null },
 ] as const;
 
 interface TopNavProps {
@@ -76,7 +76,10 @@ export function TopNav({ onOpenCommandPalette }: TopNavProps) {
         </div>
 
         {/* Tab navigation */}
-        <nav className="flex-1 flex items-center gap-1 overflow-x-auto" aria-label="Main navigation">
+        <nav
+          className="flex-1 flex items-center gap-1 overflow-x-auto"
+          aria-label="Main navigation"
+        >
           {TOP_TABS.map((tab) => {
             const isActive = pathname.startsWith(tab.href);
             return (
@@ -85,13 +88,13 @@ export function TopNav({ onOpenCommandPalette }: TopNavProps) {
                 href={tab.href}
                 className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap relative transition-colors ${
                   isActive
-                    ? 'text-foreground bg-secondary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                    ? "text-foreground bg-secondary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                 }`}
               >
                 <tab.icon className="w-4 h-4" aria-hidden />
                 <span className="hidden md:inline">{tab.label}</span>
-                {tab.badge === 'active' && (
+                {tab.badge === "active" && (
                   <span
                     className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-orqenix-emerald"
                     aria-label="active"
@@ -118,10 +121,10 @@ export function TopNav({ onOpenCommandPalette }: TopNavProps) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
-            {theme === 'dark' ? (
+            {theme === "dark" ? (
               <Sun className="w-4 h-4" aria-hidden />
             ) : (
               <Moon className="w-4 h-4" aria-hidden />

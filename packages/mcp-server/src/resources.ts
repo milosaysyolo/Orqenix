@@ -4,7 +4,7 @@
 // 9 MCP resources exposing Orqenix state per CR v8.0 Section 9.2.2.
 // Resources are read-only; modifications go through tools.
 
-import type { MemoryEngine } from '@orqenix/memory-engine';
+import type { MemoryEngine } from "@orqenix/memory-engine";
 
 export interface ResourceContext {
   engine: MemoryEngine;
@@ -34,15 +34,15 @@ function prefix(pattern: string): (uri: string) => boolean {
 // ─────────────────────────────────────────────────────────────────────────
 
 const scopeIdentityResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://identity/scope',
-  description: 'Scope identity (Ed25519 public key, project_id). Never exposes private key.',
-  matches: exact('orqenix://identity/scope'),
+  uriPattern: "orqenix://identity/scope",
+  description: "Scope identity (Ed25519 public key, project_id). Never exposes private key.",
+  matches: exact("orqenix://identity/scope"),
   async read(_uri, ctx) {
     return {
       project_id: ctx.engine.projectId,
       // Public key + algorithm only; private key never exposed
-      algorithm: 'Ed25519',
-      note: 'Public identity only; private key remains in .orqenix/identity/scope.pem',
+      algorithm: "Ed25519",
+      note: "Public identity only; private key remains in .orqenix/identity/scope.pem",
     };
   },
 };
@@ -52,16 +52,16 @@ const scopeIdentityResource: McpResourceDefinition = {
 // ─────────────────────────────────────────────────────────────────────────
 
 const memoryMatrixResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://memory/matrix',
-  description: 'Memory × Knowledge Matrix snapshot (cell counts per tier × KB).',
-  matches: exact('orqenix://memory/matrix'),
+  uriPattern: "orqenix://memory/matrix",
+  description: "Memory × Knowledge Matrix snapshot (cell counts per tier × KB).",
+  matches: exact("orqenix://memory/matrix"),
   async read(_uri, ctx) {
     // Aggregate cell counts via a lightweight query per KB
-    const kbs: Array<'chat' | 'code' | 'decision' | 'lesson'> = [
-      'chat',
-      'code',
-      'decision',
-      'lesson',
+    const kbs: Array<"chat" | "code" | "decision" | "lesson"> = [
+      "chat",
+      "code",
+      "decision",
+      "lesson",
     ];
     const snapshot: Record<string, Record<string, number>> = {
       T1: {},
@@ -72,15 +72,15 @@ const memoryMatrixResource: McpResourceDefinition = {
     // Use engine store accessor for raw counts
     const store = ctx.engine.getStore();
     const KB_TABLE: Record<string, string> = {
-      chat: 'chat_entries',
-      code: 'code_entries',
-      decision: 'decision_entries',
-      lesson: 'lesson_entries',
+      chat: "chat_entries",
+      code: "code_entries",
+      decision: "decision_entries",
+      lesson: "lesson_entries",
     };
     for (const kb of kbs) {
       const rows = store.db
         .prepare(
-          `SELECT tier, COUNT(*) AS c FROM ${KB_TABLE[kb]} WHERE project_id = ? GROUP BY tier`
+          `SELECT tier, COUNT(*) AS c FROM ${KB_TABLE[kb]} WHERE project_id = ? GROUP BY tier`,
         )
         .all(ctx.engine.projectId) as Array<{ tier: string; c: number }>;
       for (const r of rows) {
@@ -97,13 +97,13 @@ const memoryMatrixResource: McpResourceDefinition = {
 // ─────────────────────────────────────────────────────────────────────────
 
 const meshPeersResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://mesh/peers',
-  description: 'Linked peers (LAN + Cloud). Returns scope IDs + link states.',
-  matches: exact('orqenix://mesh/peers'),
+  uriPattern: "orqenix://mesh/peers",
+  description: "Linked peers (LAN + Cloud). Returns scope IDs + link states.",
+  matches: exact("orqenix://mesh/peers"),
   async read(_uri, _ctx) {
     // Link state managed by @orqenix/link-state; MCP surface defined here.
     // For D8.α.7, return empty peers list (link state composed at engine level).
-    return { peers: [], note: 'Mesh link state composed via @orqenix/link-state' };
+    return { peers: [], note: "Mesh link state composed via @orqenix/link-state" };
   },
 };
 
@@ -112,14 +112,14 @@ const meshPeersResource: McpResourceDefinition = {
 // ─────────────────────────────────────────────────────────────────────────
 
 const auditLogResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://audit/log',
-  description: 'Audit log entries (paginated, most recent 100).',
-  matches: prefix('orqenix://audit/log'),
+  uriPattern: "orqenix://audit/log",
+  description: "Audit log entries (paginated, most recent 100).",
+  matches: prefix("orqenix://audit/log"),
   async read(uri, ctx) {
     // Optional ?sinceSeq=N&limit=M
-    const url = new URL(uri.replace('orqenix://', 'https://orqenix.local/'));
-    const sinceSeq = Number(url.searchParams.get('sinceSeq') ?? '0');
-    const limit = Math.min(Number(url.searchParams.get('limit') ?? '100'), 100);
+    const url = new URL(uri.replace("orqenix://", "https://orqenix.local/"));
+    const sinceSeq = Number(url.searchParams.get("sinceSeq") ?? "0");
+    const limit = Math.min(Number(url.searchParams.get("limit") ?? "100"), 100);
     const entries = ctx.engine.listAudit(sinceSeq, limit);
     return {
       entries: entries.map((e) => ({
@@ -140,31 +140,31 @@ const auditLogResource: McpResourceDefinition = {
 // ─────────────────────────────────────────────────────────────────────────
 
 const projectConfigResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://config/project',
-  description: 'Project-level configuration.',
-  matches: exact('orqenix://config/project'),
+  uriPattern: "orqenix://config/project",
+  description: "Project-level configuration.",
+  matches: exact("orqenix://config/project"),
   async read(_uri, ctx) {
-    return { project_id: ctx.engine.projectId, level: 'project' };
+    return { project_id: ctx.engine.projectId, level: "project" };
   },
 };
 
 const branchConfigResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://config/branch/<id>',
-  description: 'Branch-level configuration.',
-  matches: prefix('orqenix://config/branch/'),
+  uriPattern: "orqenix://config/branch/<id>",
+  description: "Branch-level configuration.",
+  matches: prefix("orqenix://config/branch/"),
   async read(uri, _ctx) {
-    const branchId = uri.replace('orqenix://config/branch/', '');
-    return { branch_id: branchId, level: 'branch' };
+    const branchId = uri.replace("orqenix://config/branch/", "");
+    return { branch_id: branchId, level: "branch" };
   },
 };
 
 const sessionConfigResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://config/session/<id>',
-  description: 'Session-level configuration.',
-  matches: prefix('orqenix://config/session/'),
+  uriPattern: "orqenix://config/session/<id>",
+  description: "Session-level configuration.",
+  matches: prefix("orqenix://config/session/"),
   async read(uri, _ctx) {
-    const sessionId = uri.replace('orqenix://config/session/', '');
-    return { session_id: sessionId, level: 'session' };
+    const sessionId = uri.replace("orqenix://config/session/", "");
+    return { session_id: sessionId, level: "session" };
   },
 };
 
@@ -173,15 +173,15 @@ const sessionConfigResource: McpResourceDefinition = {
 // ─────────────────────────────────────────────────────────────────────────
 
 const skillsResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://skills/registered',
-  description: 'All installed Orqenix skills.',
-  matches: exact('orqenix://skills/registered'),
+  uriPattern: "orqenix://skills/registered",
+  description: "All installed Orqenix skills.",
+  matches: exact("orqenix://skills/registered"),
   async read(_uri, ctx) {
     // Skills are installed_plugins of kind 'skill'
     const store = ctx.engine.getStore();
     const rows = store.db
       .prepare(
-        "SELECT package_name, version FROM installed_plugins WHERE kind = 'skill' AND state IN ('active','installed','configured')"
+        "SELECT package_name, version FROM installed_plugins WHERE kind = 'skill' AND state IN ('active','installed','configured')",
       )
       .all() as Array<{ package_name: string; version: string }>;
     return { skills: rows };
@@ -193,15 +193,13 @@ const skillsResource: McpResourceDefinition = {
 // ─────────────────────────────────────────────────────────────────────────
 
 const pluginsResource: McpResourceDefinition = {
-  uriPattern: 'orqenix://plugins/active',
-  description: 'All active plugins.',
-  matches: exact('orqenix://plugins/active'),
+  uriPattern: "orqenix://plugins/active",
+  description: "All active plugins.",
+  matches: exact("orqenix://plugins/active"),
   async read(_uri, ctx) {
     const store = ctx.engine.getStore();
     const rows = store.db
-      .prepare(
-        "SELECT package_name, version, kind FROM installed_plugins WHERE state = 'active'"
-      )
+      .prepare("SELECT package_name, version, kind FROM installed_plugins WHERE state = 'active'")
       .all() as Array<{ package_name: string; version: string; kind: string }>;
     return { plugins: rows };
   },

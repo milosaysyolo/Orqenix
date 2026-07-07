@@ -2,7 +2,10 @@ import { RelayServer } from "../../../../Orqenix-Cloud/packages/relay-core/src/s
 import { WebSocket } from "ws";
 import * as ed25519 from "@noble/ed25519";
 import {
-  encodeFrame, decodeFrame, signChallenge, FrameKind,
+  encodeFrame,
+  decodeFrame,
+  signChallenge,
+  FrameKind,
 } from "../../../../Orqenix-Cloud/packages/relay-protocol/src/index.js";
 
 const PORT = 17422;
@@ -14,7 +17,16 @@ const BURST_SIZE = 500;
 export async function benchRelayThroughput(iterations: number): Promise<number[]> {
   const sk = ed25519.utils.randomPrivateKey();
   const pk = await ed25519.getPublicKeyAsync(sk);
-  const server = new RelayServer({ port: PORT, cloudPrivateKey: sk, region: "bench", directory: { async lookup(scopeId: string) { return { pubkey: pk, tenantId: TENANT }; } } });
+  const server = new RelayServer({
+    port: PORT,
+    cloudPrivateKey: sk,
+    region: "bench",
+    directory: {
+      async lookup(scopeId: string) {
+        return { pubkey: pk, tenantId: TENANT };
+      },
+    },
+  });
   await server.start();
 
   const samples: number[] = [];
@@ -23,13 +35,20 @@ export async function benchRelayThroughput(iterations: number): Promise<number[]
   try {
     const ws = await connect(PORT, SCOPE, sk);
     let received = 0;
-    ws.on("message", () => { received++; });
+    ws.on("message", () => {
+      received++;
+    });
 
     const start = performance.now();
     let sent = 0;
     while (performance.now() - start < DURATION_MS) {
       for (let i = 0; i < BURST_SIZE; i++) {
-        ws.send(encodeFrame({ kind: FrameKind.Envelope, payload: { from: SCOPE, to: SCOPE, data: `throughput-${sent}`, ttl: 5000 } }));
+        ws.send(
+          encodeFrame({
+            kind: FrameKind.Envelope,
+            payload: { from: SCOPE, to: SCOPE, data: `throughput-${sent}`, ttl: 5000 },
+          }),
+        );
         sent++;
       }
       // Wait briefly for drain
@@ -58,7 +77,12 @@ async function connect(serverPort: number, scopeId: string, sk: Uint8Array): Pro
   });
   const nonce = Buffer.from(CHALLENGE).toString("base64");
   const sig = await signChallenge(sk, CHALLENGE);
-  ws.send(encodeFrame({ kind: FrameKind.Auth, payload: { scopeId, nonce, sig: Buffer.from(sig).toString("base64"), tenantId: TENANT } }));
+  ws.send(
+    encodeFrame({
+      kind: FrameKind.Auth,
+      payload: { scopeId, nonce, sig: Buffer.from(sig).toString("base64"), tenantId: TENANT },
+    }),
+  );
   await new Promise<void>((resolve) => setTimeout(resolve, 50));
   return ws;
 }

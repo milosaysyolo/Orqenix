@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Workbench , Self-Learning candidates API (list + review)
 
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 /** GET /api/learning/candidates , list candidates for review */
 export async function GET() {
@@ -13,8 +13,8 @@ export async function GET() {
   //   const service = new PromoterService({ db: engine.getStore().db, audit: engine.getAuditWriter() });
   //   const candidates = await service.listForReview(projectId);
   return NextResponse.json(
-    { candidates: [], note: 'PromoterService wires at runtime via memory-engine db' },
-    { status: 200, headers: { 'Cache-Control': 'no-store' } }
+    { candidates: [], note: "PromoterService wires at runtime via memory-engine db" },
+    { status: 200, headers: { "Cache-Control": "no-store" } },
   );
 }
 
@@ -24,18 +24,18 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const valid = ['promote', 'promote_customize', 'reject', 'defer'];
+  const valid = ["promote", "promote_customize", "reject", "defer"];
   if (!body.action || !valid.includes(body.action)) {
     return NextResponse.json(
-      { error: `Invalid action. Must be: ${valid.join(', ')}` },
-      { status: 400 }
+      { error: `Invalid action. Must be: ${valid.join(", ")}` },
+      { status: 400 },
     );
   }
   if (!body.candidateId) {
-    return NextResponse.json({ error: 'Missing candidateId' }, { status: 400 });
+    return NextResponse.json({ error: "Missing candidateId" }, { status: 400 });
   }
 
   // D8.γ runtime:
@@ -45,9 +45,9 @@ export async function POST(req: Request) {
       ok: true,
       candidateId: body.candidateId,
       action: body.action,
-      openBuilder: body.action === 'promote_customize',
-      note: 'PromoterService.review wires at runtime',
+      openBuilder: body.action === "promote_customize",
+      note: "PromoterService.review wires at runtime",
     },
-    { status: 200 }
+    { status: 200 },
   );
 }

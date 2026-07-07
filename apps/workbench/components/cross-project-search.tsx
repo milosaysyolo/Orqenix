@@ -4,10 +4,10 @@
 // Surfaces cross-project candidates with explicit approval workflow per
 // CR v8.0 ADR-E-011 + INV-18.
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Search, ShieldAlert, CheckCircle2, X } from 'lucide-react';
+import * as React from "react";
+import { Search, ShieldAlert, CheckCircle2, X } from "lucide-react";
 import {
   Button,
   Input,
@@ -18,13 +18,13 @@ import {
   Badge,
   Label,
   Switch,
-} from '@orqenix/ui-primitives';
+} from "@orqenix/ui-primitives";
 
 interface CandidatePreview {
   id: string;
   source_project_id: string;
   source_project_name: string;
-  kind: 'chat' | 'code' | 'decision' | 'lesson';
+  kind: "chat" | "code" | "decision" | "lesson";
   preview: string;
   relevance: number;
   created_at: string;
@@ -45,10 +45,7 @@ export interface CrossProjectSearchProps {
   initialQuery?: string;
 }
 
-export function CrossProjectSearch({
-  onApprove,
-  initialQuery = '',
-}: CrossProjectSearchProps) {
+export function CrossProjectSearch({ onApprove, initialQuery = "" }: CrossProjectSearchProps) {
   const [query, setQuery] = React.useState(initialQuery);
   const [filterDecision, setFilterDecision] = React.useState(true);
   const [filterLesson, setFilterLesson] = React.useState(true);
@@ -64,14 +61,14 @@ export function CrossProjectSearch({
     setLoading(true);
     try {
       const kinds: string[] = [];
-      if (filterDecision) kinds.push('decision');
-      if (filterLesson) kinds.push('lesson');
-      if (filterCode) kinds.push('code');
-      if (filterChat) kinds.push('chat');
+      if (filterDecision) kinds.push("decision");
+      if (filterLesson) kinds.push("lesson");
+      if (filterCode) kinds.push("code");
+      if (filterChat) kinds.push("chat");
 
-      const response = await fetch('/api/cross-project/query', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+      const response = await fetch("/api/cross-project/query", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ query, kinds, limit: 20 }),
       });
 
@@ -82,7 +79,7 @@ export function CrossProjectSearch({
       const data = (await response.json()) as FederationResult;
       setResult(data);
     } catch (err) {
-      console.error('cross-project query failed:', err);
+      console.error("cross-project query failed:", err);
       setResult(null);
     } finally {
       setLoading(false);
@@ -95,7 +92,7 @@ export function CrossProjectSearch({
       await onApprove?.(candidate.id);
       setApprovedIds(new Set([...approvedIds, candidate.id]));
     } catch (err) {
-      console.error('approval failed:', err);
+      console.error("approval failed:", err);
     }
   }
 
@@ -105,19 +102,15 @@ export function CrossProjectSearch({
       <Card className="border-orqenix-amber/30 bg-orqenix-amber/5">
         <CardContent className="py-4">
           <div className="flex items-start gap-3">
-            <ShieldAlert
-              className="w-5 h-5 text-orqenix-amber mt-0.5 shrink-0"
-              aria-hidden
-            />
+            <ShieldAlert className="w-5 h-5 text-orqenix-amber mt-0.5 shrink-0" aria-hidden />
             <div className="flex-1">
               <p className="text-sm font-medium text-foreground">
                 Cross-project candidates require explicit approval
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                Candidates surface as previews only. Data does not cross
-                project boundaries until you click "Approve & Share" per
-                candidate. All cross-project queries are recorded in the audit
-                chain.
+                Candidates surface as previews only. Data does not cross project boundaries until
+                you click "Approve & Share" per candidate. All cross-project queries are recorded in
+                the audit chain.
               </p>
             </div>
           </div>
@@ -141,7 +134,7 @@ export function CrossProjectSearch({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     void executeSearch();
                   }
                 }}
@@ -152,7 +145,7 @@ export function CrossProjectSearch({
               onClick={() => void executeSearch()}
               disabled={loading || query.trim().length === 0}
             >
-              {loading ? 'Searching...' : 'Search'}
+              {loading ? "Searching..." : "Search"}
             </Button>
           </div>
 
@@ -216,8 +209,7 @@ export function CrossProjectSearch({
           <CardContent>
             {result.candidates.length === 0 ? (
               <div className="text-center py-8 text-sm text-muted-foreground">
-                No candidates found across {result.projects_queried.length}{' '}
-                projects.
+                No candidates found across {result.projects_queried.length} projects.
               </div>
             ) : (
               <div className="space-y-3">
@@ -263,9 +255,7 @@ function CandidateCard({
               relevance {(candidate.relevance * 100).toFixed(0)}%
             </span>
           </div>
-          <div className="text-sm text-foreground line-clamp-3">
-            {candidate.preview}
-          </div>
+          <div className="text-sm text-foreground line-clamp-3">{candidate.preview}</div>
         </div>
       </div>
       <div className="flex items-center justify-between">

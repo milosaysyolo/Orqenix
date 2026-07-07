@@ -1,10 +1,19 @@
 // SPDX-License-Identifier: Apache-2.0
 // Settings → Self-Learning , observer, detection thresholds, promotion settings
 
-'use client';
+"use client";
 
-import { Sparkles, AlertTriangle, Brain, ShieldAlert } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Label, Switch, Slider } from '@orqenix/ui-primitives';
+import { Sparkles, AlertTriangle, Brain, ShieldAlert } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Label,
+  Switch,
+  Slider,
+} from "@orqenix/ui-primitives";
 
 export default function SettingsSelfLearningPage() {
   return (
@@ -27,9 +36,9 @@ export default function SettingsSelfLearningPage() {
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 Orqenix observes your workflow (tool calls, file edits, outcomes) to detect
-                recurring patterns and suggest them as reusable skills. PII is filtered.
-                You can disable observation at session, branch, or project level at any time.
-                Cross-project sharing requires explicit approval per ADR-E-011.
+                recurring patterns and suggest them as reusable skills. PII is filtered. You can
+                disable observation at session, branch, or project level at any time. Cross-project
+                sharing requires explicit approval per ADR-E-011.
               </p>
               <p className="text-xs text-orqenix-amber font-medium mt-2">
                 Per CR v8.0 INV-17: Observer is enabled by default with this prominent banner.
@@ -46,7 +55,9 @@ export default function SettingsSelfLearningPage() {
               <Sparkles className="w-5 h-5" aria-hidden />
               Observer
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -83,7 +94,9 @@ export default function SettingsSelfLearningPage() {
               <Brain className="w-5 h-5" aria-hidden />
               Detection Thresholds
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -123,7 +136,9 @@ export default function SettingsSelfLearningPage() {
               <AlertTriangle className="w-5 h-5" aria-hidden />
               Cross-Scope Sharing
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -178,9 +193,7 @@ function SettingRow({
             </Badge>
           )}
         </div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div className="flex items-center shrink-0">{children}</div>
     </div>

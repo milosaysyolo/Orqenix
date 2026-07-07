@@ -3,19 +3,14 @@
 //
 // Phase 8 (D8.β) , Charter gates G65 + G66
 
-export { MarketplaceManager } from './manager';
-export type { MarketplaceManagerOptions } from './manager';
+export { MarketplaceManager } from "./manager";
+export type { MarketplaceManagerOptions } from "./manager";
 
-export {
-  MarketplaceCrud,
-  CrudOperationError,
-} from './crud';
-export type { LocalPluginStore, MarketplaceAuditWriter } from './crud';
+export { MarketplaceCrud, CrudOperationError } from "./crud";
+export type { LocalPluginStore, MarketplaceAuditWriter } from "./crud";
 
-export {
-  RegistryResolverRegistry,
-} from './registry-resolver';
-export type { RegistryResolver } from './registry-resolver';
+export { RegistryResolverRegistry } from "./registry-resolver";
+export type { RegistryResolver } from "./registry-resolver";
 
 export type {
   RegistrySource,
@@ -31,7 +26,7 @@ export type {
   ImportResult,
   ExportResult,
   MarketplaceAuditKind,
-} from './types';
+} from "./types";
 
 export {
   RegistrySourceSchema,
@@ -41,4 +36,4 @@ export {
   DeletePluginInputSchema,
   ImportInputSchema,
   ExportInputSchema,
-} from './types';
+} from "./types";

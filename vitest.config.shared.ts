@@ -2,14 +2,14 @@
 // Shared vitest config that forces native binding resolution to use the
 // hoisted node_modules path. Updated with env override for child processes.
 
-import { defineConfig } from 'vitest/config';
-import { resolve } from 'node:path';
+import { defineConfig } from "vitest/config";
+import { resolve } from "node:path";
 
 const workspaceRoot = resolve(import.meta.dirname);
 
 export default defineConfig({
   test: {
-    pool: 'forks',
+    pool: "forks",
     poolOptions: {
       forks: {
         singleFork: false,
@@ -23,7 +23,7 @@ export default defineConfig({
       },
     },
     env: {
-      NODE_PATH: resolve(workspaceRoot, 'node_modules'),
+      NODE_PATH: resolve(workspaceRoot, "node_modules"),
     },
     root: workspaceRoot,
     bail: 3,

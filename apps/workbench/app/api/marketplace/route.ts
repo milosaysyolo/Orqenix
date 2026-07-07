@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: Apache-2.0
 // Workbench , Marketplace API (search/install/uninstall/create/update/delete/fork/import/export)
 
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const action = url.searchParams.get('action') ?? 'installed';
+  const action = url.searchParams.get("action") ?? "installed";
 
-  if (action === 'installed') {
+  if (action === "installed") {
     // D8.β wires MarketplaceManager + SqliteLocalPluginStore here.
     // Returns local installed plugins from local_plugins table (Migration 550).
     return NextResponse.json(
-      { plugins: [], note: 'Marketplace manager wires at runtime via SqliteLocalPluginStore' },
-      { status: 200, headers: { 'Cache-Control': 'no-store' } }
+      { plugins: [], note: "Marketplace manager wires at runtime via SqliteLocalPluginStore" },
+      { status: 200, headers: { "Cache-Control": "no-store" } },
     );
   }
 
@@ -27,15 +27,25 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const action = body.action as string | undefined;
-  const valid = ['search', 'install', 'uninstall', 'create', 'update', 'delete', 'fork', 'import', 'export'];
+  const valid = [
+    "search",
+    "install",
+    "uninstall",
+    "create",
+    "update",
+    "delete",
+    "fork",
+    "import",
+    "export",
+  ];
   if (!action || !valid.includes(action)) {
     return NextResponse.json(
-      { error: `Invalid action. Must be one of: ${valid.join(', ')}` },
-      { status: 400 }
+      { error: `Invalid action. Must be one of: ${valid.join(", ")}` },
+      { status: 400 },
     );
   }
 
@@ -55,12 +65,12 @@ export async function POST(req: Request) {
       {
         ok: true,
         action,
-        note: 'Marketplace operation wires MarketplaceManager (D8.β) at runtime',
+        note: "Marketplace operation wires MarketplaceManager (D8.β) at runtime",
         plugins: [],
         warnings: [],
         lossyFields: [],
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return NextResponse.json({ error: (err as Error).message }, { status: 500 });

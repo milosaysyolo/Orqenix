@@ -1,10 +1,19 @@
 // SPDX-License-Identifier: Apache-2.0
 // Settings → Search , hybrid search weights, noise reduction, prompt rewriter
 
-'use client';
+"use client";
 
-import { Search, Filter, Zap } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Label, Switch, Slider } from '@orqenix/ui-primitives';
+import { Search, Filter, Zap } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Label,
+  Switch,
+  Slider,
+} from "@orqenix/ui-primitives";
 
 export default function SettingsSearchPage() {
   return (
@@ -23,7 +32,9 @@ export default function SettingsSearchPage() {
               <Search className="w-5 h-5" aria-hidden />
               Hybrid Search Weights
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P4 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P4 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -56,7 +67,9 @@ export default function SettingsSearchPage() {
               <Filter className="w-5 h-5" aria-hidden />
               Noise Reduction (RTK)
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P4 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P4 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -85,7 +98,9 @@ export default function SettingsSearchPage() {
               <Zap className="w-5 h-5" aria-hidden />
               Prompt Rewriter
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P4 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P4 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -141,9 +156,7 @@ function SettingRow({
             </Badge>
           )}
         </div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div className="flex items-center shrink-0">{children}</div>
     </div>

@@ -4,7 +4,7 @@
  * Agent note: this class is the seam for a future Pro-only Rust accelerator
  * (rust-libp2p via NAPI-RS) at Phase 7+. Do not embed transport-specific logic here.
  */
-import type { MeshTransport, ScopeId, TransportRegistry } from './types.js';
+import type { MeshTransport, ScopeId, TransportRegistry } from "./types.js";
 
 interface Entry {
   transport: MeshTransport;
@@ -31,9 +31,7 @@ export class DefaultTransportRegistry implements TransportRegistry {
   }
 
   all(): MeshTransport[] {
-    return [...this.entries.values()]
-      .sort((a, b) => a.order - b.order)
-      .map((e) => e.transport);
+    return [...this.entries.values()].sort((a, b) => a.order - b.order).map((e) => e.transport);
   }
 
   /**

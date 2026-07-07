@@ -5,16 +5,16 @@
  */
 
 /** Branded scope identifier (BLAKE3 of scope Ed25519 public key, base32). */
-export type ScopeId = string & { readonly __brand: 'ScopeId' };
+export type ScopeId = string & { readonly __brand: "ScopeId" };
 
 /** Branded opaque capability token; structural fields live in the security package. */
-export type CapabilityToken = string & { readonly __brand: 'CapabilityToken' };
+export type CapabilityToken = string & { readonly __brand: "CapabilityToken" };
 
 /** Address used by a concrete transport to reach a peer. Opaque to the router. */
 export type MeshAddress =
-  | { kind: 'http'; baseUrl: string }
-  | { kind: 'libp2p'; multiaddr: string }
-  | { kind: 'loopback'; scopeId: ScopeId };
+  | { kind: "http"; baseUrl: string }
+  | { kind: "libp2p"; multiaddr: string }
+  | { kind: "loopback"; scopeId: ScopeId };
 
 /** Cooperative cancellation and per-attempt soft timeout. */
 export interface SendOpts {
@@ -33,7 +33,7 @@ export interface TransportCtx {
 export interface PeerInfo {
   scopeId: ScopeId;
   peerId?: string;
-  transport: 'http' | 'libp2p' | 'loopback' | string;
+  transport: "http" | "libp2p" | "loopback" | string;
   connectedAt: number;
   rttMs?: number;
 }
@@ -45,7 +45,7 @@ export interface TraceContext {
 }
 
 /** Final, exhaustive status enum for a MeshResponse. */
-export type MeshStatus = 'ok' | 'denied' | 'error' | 'timeout';
+export type MeshStatus = "ok" | "denied" | "error" | "timeout";
 
 /** Canonical wire-level request shape, serialized as msgpack. */
 export interface MeshRequest {
@@ -70,7 +70,7 @@ export interface MeshResponse {
 
 /** The interface every concrete transport implements. */
 export interface MeshTransport {
-  readonly kind: 'http' | 'libp2p' | 'loopback' | string;
+  readonly kind: "http" | "libp2p" | "loopback" | string;
   readonly localScopeId: ScopeId;
 
   start(): Promise<void>;

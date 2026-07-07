@@ -2,17 +2,17 @@
 // @orqenix/memory-engine , Storage layer types
 
 /** The 4 Knowledge Base kinds (CR v8.0 Section 4.2) */
-export type KbKind = 'chat' | 'code' | 'decision' | 'lesson';
+export type KbKind = "chat" | "code" | "decision" | "lesson";
 
 /** Memory tiers (CR v8.0 Section 4.2) */
-export type Tier = 'T1' | 'T2' | 'T3' | 'T4';
+export type Tier = "T1" | "T2" | "T3" | "T4";
 
 /** Hierarchy memory level */
-export type MemoryLevel = 'session' | 'branch' | 'project';
+export type MemoryLevel = "session" | "branch" | "project";
 
 /** Protection flags for subagent returns + pinned entries (INV-13) */
 export interface ProtectionFlags {
-  kind: 'subagent_return' | 'pinned';
+  kind: "subagent_return" | "pinned";
   immutable: boolean;
   never_compress: boolean;
   never_move_tier: boolean;

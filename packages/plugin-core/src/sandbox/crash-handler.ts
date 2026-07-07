@@ -4,8 +4,8 @@
 // Detects + handles plugin sandbox crashes WITHOUT affecting Workbench or
 // other plugins. Per CR v8.0 INV-14.
 
-import type { PluginAuditWriter } from '../audit-kinds';
-import { NoopPluginAuditWriter } from '../audit-kinds';
+import type { PluginAuditWriter } from "../audit-kinds";
+import { NoopPluginAuditWriter } from "../audit-kinds";
 
 export interface CrashEvent {
   pluginName: string;
@@ -37,9 +37,7 @@ export class CrashHandler {
   private readonly audit: PluginAuditWriter;
   private readonly maxCrashes: number;
   private readonly windowMs: number;
-  private readonly onAutoDisable:
-    | ((pluginName: string, crashCount: number) => void)
-    | undefined;
+  private readonly onAutoDisable: ((pluginName: string, crashCount: number) => void) | undefined;
 
   /** Map of pluginName → array of crash timestamps within the window */
   private crashTimes: Map<string, number[]> = new Map();
@@ -71,9 +69,9 @@ export class CrashHandler {
     // Audit the crash (never throws per INV-14)
     try {
       await this.audit.append({
-        kind: 'plugin.crashed',
+        kind: "plugin.crashed",
         ts: event.timestamp,
-        actor: { system: 'crash-handler' },
+        actor: { system: "crash-handler" },
         payload: {
           pluginName: event.pluginName,
           pluginVersion: event.pluginVersion,

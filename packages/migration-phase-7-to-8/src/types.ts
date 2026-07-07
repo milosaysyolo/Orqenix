@@ -5,7 +5,7 @@ export interface MigrationCheckResult {
   /** Whether the project is in a valid Phase 7 state */
   ready: boolean;
   /** Detected phase (7 if scope.yaml present; 8 if already migrated) */
-  detectedPhase: 7 | 8 | 'unknown';
+  detectedPhase: 7 | 8 | "unknown";
   /** Issues blocking migration */
   blockers: string[];
   /** Non-blocking warnings */
@@ -41,9 +41,12 @@ export interface MigrationRollbackResult {
 }
 
 export class MigrationError extends Error {
-  constructor(public readonly code: string, message: string) {
+  constructor(
+    public readonly code: string,
+    message: string,
+  ) {
     super(message);
-    this.name = 'MigrationError';
+    this.name = "MigrationError";
     Object.setPrototypeOf(this, MigrationError.prototype);
   }
 }

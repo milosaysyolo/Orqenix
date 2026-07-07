@@ -17,8 +17,8 @@ pnpm add @orqenix/ui-primitives
 ## Usage
 
 ```tsx
-import { Button, Card, CardContent, Badge } from '@orqenix/ui-primitives';
-import '@orqenix/ui-primitives/styles.css';
+import { Button, Card, CardContent, Badge } from "@orqenix/ui-primitives";
+import "@orqenix/ui-primitives/styles.css";
 
 export function MyComponent() {
   return (
@@ -38,20 +38,20 @@ export function MyComponent() {
 
 ### 12 primitives
 
-| Component | Variants | Radix-based |
-|---|---|---|
-| `Button` | default, secondary, outline, ghost, destructive, link | No |
-| `Card` (+ CardHeader, CardTitle, CardContent) | - | No |
-| `Badge` | default, secondary, outline, destructive | No |
-| `Input` | (text, email, url, password, etc.) | No |
-| `Label` | - | Yes |
-| `Switch` | - | Yes |
-| `Slider` | - | Yes |
-| `Dialog` (+ DialogContent, DialogHeader, DialogTitle) | - | Yes |
-| `Tabs` (+ TabsList, TabsTrigger, TabsContent) | - | Yes |
-| `Toast` (+ Toaster) | default, destructive | Yes |
-| `Select` (+ SelectTrigger, SelectContent, SelectItem) | - | Yes |
-| `Separator` | horizontal, vertical | Yes |
+| Component                                             | Variants                                              | Radix-based |
+| ----------------------------------------------------- | ----------------------------------------------------- | ----------- |
+| `Button`                                              | default, secondary, outline, ghost, destructive, link | No          |
+| `Card` (+ CardHeader, CardTitle, CardContent)         | -                                                     | No          |
+| `Badge`                                               | default, secondary, outline, destructive              | No          |
+| `Input`                                               | (text, email, url, password, etc.)                    | No          |
+| `Label`                                               | -                                                     | Yes         |
+| `Switch`                                              | -                                                     | Yes         |
+| `Slider`                                              | -                                                     | Yes         |
+| `Dialog` (+ DialogContent, DialogHeader, DialogTitle) | -                                                     | Yes         |
+| `Tabs` (+ TabsList, TabsTrigger, TabsContent)         | -                                                     | Yes         |
+| `Toast` (+ Toaster)                                   | default, destructive                                  | Yes         |
+| `Select` (+ SelectTrigger, SelectContent, SelectItem) | -                                                     | Yes         |
+| `Separator`                                           | horizontal, vertical                                  | Yes         |
 
 ### Design tokens
 
@@ -59,9 +59,9 @@ OKLCH-based color palette with semantic naming. Light and dark themes built-in.
 Tokens exposed as CSS custom properties and TypeScript exports:
 
 ```ts
-import { tokens } from '@orqenix/ui-primitives/tokens';
+import { tokens } from "@orqenix/ui-primitives/tokens";
 
-console.log(tokens.colors.orqenix.emerald);  // OKLCH color
+console.log(tokens.colors.orqenix.emerald); // OKLCH color
 ```
 
 ### Utility helpers

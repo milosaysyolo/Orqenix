@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
 // Input adapter: github , clones/fetches a GitHub repo's package.json
 
-import { npmInputAdapter } from './npm';
-import { buildCsf } from '@orqenix/normalization-engine';
-import type { InputAdapter, ImportInput, DetectionResult } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
-import { ADAPTER_VERSION } from './shared';
+import { npmInputAdapter } from "./npm";
+import { buildCsf } from "@orqenix/normalization-engine";
+import type { InputAdapter, ImportInput, DetectionResult } from "@orqenix/normalization-engine";
+import type { CanonicalSkillFormat } from "@orqenix/plugin-core";
+import { ADAPTER_VERSION } from "./shared";
 
 export const githubInputAdapter: InputAdapter = {
-  kind: 'github',
+  kind: "github",
   version: ADAPTER_VERSION,
-  name: 'GitHub Repository',
+  name: "GitHub Repository",
 
   async detect(input: ImportInput): Promise<DetectionResult> {
     if (input.url && /^https:\/\/github\.com\/[^/]+\/[^/]+/.test(input.url)) {
@@ -21,10 +21,10 @@ export const githubInputAdapter: InputAdapter = {
 
   async parse(input: ImportInput): Promise<CanonicalSkillFormat> {
     if (!input.url) {
-      throw new Error('github adapter requires a url');
+      throw new Error("github adapter requires a url");
     }
     const m = /github\.com\/([^/]+)\/([^/]+)/.exec(input.url);
-    if (!m) throw new Error('Invalid GitHub URL');
+    if (!m) throw new Error("Invalid GitHub URL");
     const [, owner, repo] = m;
     const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/HEAD/package.json`;
 
@@ -48,7 +48,7 @@ export const githubInputAdapter: InputAdapter = {
       language: csf.implementation.language as never,
       entry: csf.implementation.entry,
       importedFromUrl: input.url,
-      importedFromKind: 'github',
+      importedFromKind: "github",
       normalizerVersion: ADAPTER_VERSION,
       originalFormatPreserved: csf.provenance.original_format_preserved,
     });

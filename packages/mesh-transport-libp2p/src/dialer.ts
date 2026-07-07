@@ -1,5 +1,5 @@
-import { multiaddr } from '@multiformats/multiaddr';
-import type { Connection, Libp2p, PeerId } from '@libp2p/interface';
+import { multiaddr } from "@multiformats/multiaddr";
+import type { Connection, Libp2p, PeerId } from "@libp2p/interface";
 
 export interface DialBackoff {
   maxAttempts?: number;
@@ -61,8 +61,8 @@ export class Dialer {
   ): Promise<Connection> {
     let lastErr: unknown;
     for (let attempt = 0; attempt < this.backoff.maxAttempts; attempt++) {
-      if (opts.signal?.aborted) throw new Error('dial aborted');
-      if (Date.now() >= opts.deadlineMs) throw new Error('dial deadline exceeded');
+      if (opts.signal?.aborted) throw new Error("dial aborted");
+      if (Date.now() >= opts.deadlineMs) throw new Error("dial deadline exceeded");
 
       try {
         const remaining = Math.max(0, opts.deadlineMs - Date.now());
@@ -70,7 +70,7 @@ export class Dialer {
         const t = setTimeout(() => ac.abort(), remaining);
         if (opts.signal) {
           if (opts.signal.aborted) ac.abort();
-          else opts.signal.addEventListener('abort', () => ac.abort(), { once: true });
+          else opts.signal.addEventListener("abort", () => ac.abort(), { once: true });
         }
         try {
           return await node.dial(multiaddr(target), { signal: ac.signal });
@@ -90,7 +90,7 @@ export class Dialer {
       if (remaining <= 0) break;
       await this.backoff.sleep(Math.min(delay, Math.max(0, remaining)));
     }
-    throw lastErr ?? new Error('dial failed');
+    throw lastErr ?? new Error("dial failed");
   }
 
   pendingCount(): number {

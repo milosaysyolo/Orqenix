@@ -2,10 +2,10 @@
 // Command palette , Cmd+K navigation across all tabs + actions
 // Uses cmdk library
 
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { Command } from 'cmdk';
+import { useRouter } from "next/navigation";
+import { Command } from "cmdk";
 import {
   Brain,
   Network,
@@ -22,8 +22,8 @@ import {
   Sun,
   Moon,
   Zap,
-} from 'lucide-react';
-import { useTheme } from 'next-themes';
+} from "lucide-react";
+import { useTheme } from "next-themes";
 
 interface CommandPaletteProps {
   open: boolean;
@@ -56,7 +56,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           className="pointer-events-auto w-full max-w-2xl rounded-lg border border-border bg-background shadow-xl overflow-hidden"
           loop
           onKeyDown={(e: React.KeyboardEvent) => {
-            if (e.key === 'Escape') {
+            if (e.key === "Escape") {
               e.preventDefault();
               onClose();
             }
@@ -84,7 +84,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             {/* Top-level tabs */}
             <Command.Group heading="Navigate" className="text-xs text-muted-foreground px-2 py-1.5">
               <Command.Item
-                onSelect={() => navigateAndClose('/memory')}
+                onSelect={() => navigateAndClose("/memory")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Brain className="w-4 h-4" aria-hidden />
@@ -92,7 +92,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                 <span className="ml-auto text-xs text-muted-foreground">Tab</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/mesh')}
+                onSelect={() => navigateAndClose("/mesh")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Network className="w-4 h-4" aria-hidden />
@@ -100,7 +100,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                 <span className="ml-auto text-xs text-muted-foreground">Tab</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/audit')}
+                onSelect={() => navigateAndClose("/audit")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <ShieldCheck className="w-4 h-4" aria-hidden />
@@ -108,7 +108,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                 <span className="ml-auto text-xs text-muted-foreground">Tab</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/marketplace')}
+                onSelect={() => navigateAndClose("/marketplace")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Package className="w-4 h-4" aria-hidden />
@@ -116,7 +116,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                 <span className="ml-auto text-xs text-muted-foreground">Tab</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/learning')}
+                onSelect={() => navigateAndClose("/learning")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Sparkles className="w-4 h-4" aria-hidden />
@@ -124,7 +124,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                 <span className="ml-auto text-xs text-muted-foreground">Tab</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/sessions')}
+                onSelect={() => navigateAndClose("/sessions")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <MessageSquare className="w-4 h-4" aria-hidden />
@@ -132,7 +132,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                 <span className="ml-auto text-xs text-muted-foreground">Tab</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/branches')}
+                onSelect={() => navigateAndClose("/branches")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <GitBranch className="w-4 h-4" aria-hidden />
@@ -140,7 +140,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                 <span className="ml-auto text-xs text-muted-foreground">Tab</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/settings')}
+                onSelect={() => navigateAndClose("/settings")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Settings className="w-4 h-4" aria-hidden />
@@ -150,51 +150,54 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             </Command.Group>
 
             {/* Settings sub-tabs */}
-            <Command.Group heading="Settings" className="text-xs text-muted-foreground px-2 py-1.5 mt-2">
+            <Command.Group
+              heading="Settings"
+              className="text-xs text-muted-foreground px-2 py-1.5 mt-2"
+            >
               <Command.Item
-                onSelect={() => navigateAndClose('/settings/memory')}
+                onSelect={() => navigateAndClose("/settings/memory")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Settings className="w-4 h-4" aria-hidden />
                 <span>Settings → Memory</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/settings/storage')}
+                onSelect={() => navigateAndClose("/settings/storage")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Settings className="w-4 h-4" aria-hidden />
                 <span>Settings → Storage</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/settings/search')}
+                onSelect={() => navigateAndClose("/settings/search")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Settings className="w-4 h-4" aria-hidden />
                 <span>Settings → Search</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/settings/mesh')}
+                onSelect={() => navigateAndClose("/settings/mesh")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Settings className="w-4 h-4" aria-hidden />
                 <span>Settings → Mesh</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/settings/cloud-sync')}
+                onSelect={() => navigateAndClose("/settings/cloud-sync")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Settings className="w-4 h-4" aria-hidden />
                 <span>Settings → Cloud Sync</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/settings/self-learning')}
+                onSelect={() => navigateAndClose("/settings/self-learning")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Settings className="w-4 h-4" aria-hidden />
                 <span>Settings → Self-Learning</span>
               </Command.Item>
               <Command.Item
-                onSelect={() => navigateAndClose('/settings/plugins')}
+                onSelect={() => navigateAndClose("/settings/plugins")}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
                 <Settings className="w-4 h-4" aria-hidden />
@@ -203,10 +206,13 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             </Command.Group>
 
             {/* Quick actions */}
-            <Command.Group heading="Actions" className="text-xs text-muted-foreground px-2 py-1.5 mt-2">
+            <Command.Group
+              heading="Actions"
+              className="text-xs text-muted-foreground px-2 py-1.5 mt-2"
+            >
               <Command.Item
                 onSelect={() => {
-                  navigateAndClose('/marketplace');
+                  navigateAndClose("/marketplace");
                 }}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
@@ -215,7 +221,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
               </Command.Item>
               <Command.Item
                 onSelect={() => {
-                  navigateAndClose('/marketplace');
+                  navigateAndClose("/marketplace");
                 }}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
@@ -224,7 +230,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
               </Command.Item>
               <Command.Item
                 onSelect={() => {
-                  navigateAndClose('/marketplace');
+                  navigateAndClose("/marketplace");
                 }}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
@@ -233,25 +239,32 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
               </Command.Item>
               <Command.Item
                 onSelect={() => {
-                  setTheme(theme === 'dark' ? 'light' : 'dark');
+                  setTheme(theme === "dark" ? "light" : "dark");
                   onClose();
                 }}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"
               >
-                {theme === 'dark' ? (
+                {theme === "dark" ? (
                   <Sun className="w-4 h-4" aria-hidden />
                 ) : (
                   <Moon className="w-4 h-4" aria-hidden />
                 )}
-                <span>Switch to {theme === 'dark' ? 'light' : 'dark'} mode</span>
+                <span>Switch to {theme === "dark" ? "light" : "dark"} mode</span>
               </Command.Item>
             </Command.Group>
 
             {/* Help */}
-            <Command.Group heading="Help" className="text-xs text-muted-foreground px-2 py-1.5 mt-2">
+            <Command.Group
+              heading="Help"
+              className="text-xs text-muted-foreground px-2 py-1.5 mt-2"
+            >
               <Command.Item
                 onSelect={() => {
-                  window.open('https://orqenix.dev/docs/workbench', '_blank', 'noopener,noreferrer');
+                  window.open(
+                    "https://orqenix.dev/docs/workbench",
+                    "_blank",
+                    "noopener,noreferrer",
+                  );
                   onClose();
                 }}
                 className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent cursor-pointer aria-selected:bg-accent"

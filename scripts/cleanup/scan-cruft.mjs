@@ -18,15 +18,15 @@
 //      node scripts/cleanup/scan-cruft.mjs --json
 //      node scripts/cleanup/scan-cruft.mjs --severity=high
 
-import { readFile, stat, readdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
-import { join, relative } from 'node:path';
-import { execSync } from 'node:child_process';
+import { readFile, stat, readdir } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { join, relative } from "node:path";
+import { execSync } from "node:child_process";
 
 const ROOT = process.cwd();
 const args = process.argv.slice(2);
-const jsonMode = args.includes('--json');
-const severityFilter = args.find((a) => a.startsWith('--severity='))?.split('=')[1];
+const jsonMode = args.includes("--json");
+const severityFilter = args.find((a) => a.startsWith("--severity="))?.split("=")[1];
 
 const findings = []; // { category, severity, file, detail }
 function add(category, severity, file, detail) {
@@ -49,46 +49,70 @@ const ROOT_DEBUG_PATTERNS = [
 const rootFiles = await readdir(ROOT);
 for (const f of rootFiles) {
   if (ROOT_DEBUG_PATTERNS.some((p) => p.test(f))) {
-    add('debug-artifact', 'medium', f, 'Verify cycle output left at root');
+    add("debug-artifact", "medium", f, "Verify cycle output left at root");
   }
 }
 
 // ── 2. Tracked dist/ directories (should be in .gitignore) ───────────
 try {
-  const trackedDist = execSync('git ls-files "**/dist/**"', { cwd: ROOT, encoding: 'utf-8' });
-  const distFiles = trackedDist.split('\n').filter(Boolean);
+  const trackedDist = execSync('git ls-files "**/dist/**"', { cwd: ROOT, encoding: "utf-8" });
+  const distFiles = trackedDist.split("\n").filter(Boolean);
   if (distFiles.length > 0) {
-    add('tracked-dist', 'high', `${distFiles.length} files`, `dist/ contents tracked in git. Sample: ${distFiles[0]}`);
+    add(
+      "tracked-dist",
+      "high",
+      `${distFiles.length} files`,
+      `dist/ contents tracked in git. Sample: ${distFiles[0]}`,
+    );
   }
-} catch { /* git not available or no matches */ }
+} catch {
+  /* git not available or no matches */
+}
 
 // ── 3. Tracked node_modules ──────────────────────────────────────────
 try {
-  const trackedNm = execSync('git ls-files "**/node_modules/**"', { cwd: ROOT, encoding: 'utf-8' });
+  const trackedNm = execSync('git ls-files "**/node_modules/**"', { cwd: ROOT, encoding: "utf-8" });
   if (trackedNm.trim().length > 0) {
-    add('tracked-node-modules', 'critical', 'node_modules', 'node_modules tracked in git, must remove');
+    add(
+      "tracked-node-modules",
+      "critical",
+      "node_modules",
+      "node_modules tracked in git, must remove",
+    );
   }
-} catch { /* */ }
+} catch {
+  /* */
+}
 
 // ── 4. Legacy ESLint configs (should be flat config) ─────────────────
 try {
-  const legacy = execSync('git ls-files "**/.eslintrc.cjs" "**/.eslintrc.js" "**/.eslintrc.json" "**/.eslintrc"', { cwd: ROOT, encoding: 'utf-8' });
-  legacy.split('\n').filter(Boolean).forEach((f) => {
-    add('legacy-eslint', 'medium', f, 'ESLint 9 requires flat config (eslint.config.js)');
-  });
-} catch { /* */ }
+  const legacy = execSync(
+    'git ls-files "**/.eslintrc.cjs" "**/.eslintrc.js" "**/.eslintrc.json" "**/.eslintrc"',
+    { cwd: ROOT, encoding: "utf-8" },
+  );
+  legacy
+    .split("\n")
+    .filter(Boolean)
+    .forEach((f) => {
+      add("legacy-eslint", "medium", f, "ESLint 9 requires flat config (eslint.config.js)");
+    });
+} catch {
+  /* */
+}
 
 // ── 5. Duplicate versions of the same dep across workspace ───────────
 try {
-  const pkgList = execSync('git ls-files "**/package.json"', { cwd: ROOT, encoding: 'utf-8' })
-    .split('\n').filter((p) => p && !p.includes('node_modules'));
+  const pkgList = execSync('git ls-files "**/package.json"', { cwd: ROOT, encoding: "utf-8" })
+    .split("\n")
+    .filter((p) => p && !p.includes("node_modules"));
   const depVersions = new Map(); // name → Map(version → [files])
   for (const rel of pkgList) {
-    const pkg = JSON.parse(await readFile(join(ROOT, rel), 'utf-8'));
-    for (const block of ['dependencies', 'devDependencies', 'peerDependencies']) {
+    const pkg = JSON.parse(await readFile(join(ROOT, rel), "utf-8"));
+    for (const block of ["dependencies", "devDependencies", "peerDependencies"]) {
       const deps = pkg[block] ?? {};
       for (const [name, ver] of Object.entries(deps)) {
-        if (typeof ver !== 'string' || ver.startsWith('workspace:') || ver.startsWith('file:')) continue;
+        if (typeof ver !== "string" || ver.startsWith("workspace:") || ver.startsWith("file:"))
+          continue;
         const versions = depVersions.get(name) ?? new Map();
         const files = versions.get(ver) ?? [];
         files.push(rel);
@@ -99,58 +123,79 @@ try {
   }
   for (const [name, versions] of depVersions) {
     if (versions.size > 1) {
-      const versionList = Array.from(versions.keys()).join(', ');
-      add('duplicate-dep-versions', 'high', name, `Different versions: ${versionList}`);
+      const versionList = Array.from(versions.keys()).join(", ");
+      add("duplicate-dep-versions", "high", name, `Different versions: ${versionList}`);
     }
   }
 } catch (err) {
-  add('scan-error', 'low', 'depVersions', err.message);
+  add("scan-error", "low", "depVersions", err.message);
 }
 
 // ── 6. BOM in source files ───────────────────────────────────────────
 try {
-  const sources = execSync('git ls-files "**/*.ts" "**/*.tsx" "**/*.mjs" "**/*.json"', { cwd: ROOT, encoding: 'utf-8' })
-    .split('\n').filter((p) => p && !p.includes('node_modules') && !p.includes('dist/'));
+  const sources = execSync('git ls-files "**/*.ts" "**/*.tsx" "**/*.mjs" "**/*.json"', {
+    cwd: ROOT,
+    encoding: "utf-8",
+  })
+    .split("\n")
+    .filter((p) => p && !p.includes("node_modules") && !p.includes("dist/"));
   for (const rel of sources.slice(0, 5000)) {
     try {
       const buf = await readFile(join(ROOT, rel));
-      if (buf[0] === 0xEF && buf[1] === 0xBB && buf[2] === 0xBF) {
-        add('bom', 'medium', rel, 'File starts with UTF-8 BOM (will break some parsers)');
+      if (buf[0] === 0xef && buf[1] === 0xbb && buf[2] === 0xbf) {
+        add("bom", "medium", rel, "File starts with UTF-8 BOM (will break some parsers)");
       }
-    } catch { /* */ }
+    } catch {
+      /* */
+    }
   }
-} catch { /* */ }
+} catch {
+  /* */
+}
 
 // ── 7. CRLF line endings in TypeScript files ─────────────────────────
 try {
-  const sources = execSync('git ls-files "**/*.ts" "**/*.tsx"', { cwd: ROOT, encoding: 'utf-8' })
-    .split('\n').filter((p) => p && !p.includes('dist/'));
+  const sources = execSync('git ls-files "**/*.ts" "**/*.tsx"', { cwd: ROOT, encoding: "utf-8" })
+    .split("\n")
+    .filter((p) => p && !p.includes("dist/"));
   for (const rel of sources.slice(0, 3000)) {
     try {
-      const content = await readFile(join(ROOT, rel), 'utf-8');
-      if (content.includes('\r\n')) {
-        add('crlf', 'low', rel, 'CRLF line endings (should be LF)');
+      const content = await readFile(join(ROOT, rel), "utf-8");
+      if (content.includes("\r\n")) {
+        add("crlf", "low", rel, "CRLF line endings (should be LF)");
       }
-    } catch { /* */ }
+    } catch {
+      /* */
+    }
   }
-} catch { /* */ }
+} catch {
+  /* */
+}
 
 // ── 8. PHASE 8 TODO/FIXME markers (must resolve before tag) ─────────
 try {
-  const sources = execSync('git ls-files "packages/**/*.ts" "apps/**/*.ts" "plugins/**/*.ts"', { cwd: ROOT, encoding: 'utf-8' })
-    .split('\n').filter(Boolean);
+  const sources = execSync('git ls-files "packages/**/*.ts" "apps/**/*.ts" "plugins/**/*.ts"', {
+    cwd: ROOT,
+    encoding: "utf-8",
+  })
+    .split("\n")
+    .filter(Boolean);
   for (const rel of sources) {
     try {
-      const content = await readFile(join(ROOT, rel), 'utf-8');
-      const lines = content.split('\n');
+      const content = await readFile(join(ROOT, rel), "utf-8");
+      const lines = content.split("\n");
       for (let i = 0; i < lines.length; i++) {
         if (/PHASE 8 TODO|D8\.\w\.\d wires/.test(lines[i])) {
-          add('phase-8-todo', 'high', `${rel}:${i + 1}`, lines[i].trim().slice(0, 100));
+          add("phase-8-todo", "high", `${rel}:${i + 1}`, lines[i].trim().slice(0, 100));
         }
       }
-    } catch { /* */ }
+    } catch {
+      /* */
+    }
   }
-} catch { /* */ }
+} catch {
+  /* */
+}
 
 // ── 9. Empty directories ─────────────────────────────────────────────
 async function findEmptyDirs(dir, results = []) {
@@ -161,20 +206,23 @@ async function findEmptyDirs(dir, results = []) {
       return results;
     }
     for (const e of entries) {
-      if (e.isDirectory() && !['node_modules', '.git', 'dist'].includes(e.name)) {
+      if (e.isDirectory() && !["node_modules", ".git", "dist"].includes(e.name)) {
         await findEmptyDirs(join(dir, e.name), results);
       }
     }
-  } catch { /* */ }
+  } catch {
+    /* */
+  }
   return results;
 }
-const empty = await findEmptyDirs(join(ROOT, 'packages'));
-empty.concat(await findEmptyDirs(join(ROOT, 'apps')))
-     .concat(await findEmptyDirs(join(ROOT, 'plugins')))
-     .forEach((d) => add('empty-dir', 'low', relative(ROOT, d), 'Empty directory'));
+const empty = await findEmptyDirs(join(ROOT, "packages"));
+empty
+  .concat(await findEmptyDirs(join(ROOT, "apps")))
+  .concat(await findEmptyDirs(join(ROOT, "plugins")))
+  .forEach((d) => add("empty-dir", "low", relative(ROOT, d), "Empty directory"));
 
 // ── 10. Orphan scripts/files (created during verify but unused) ─────
-const SCAN_DIRS_FOR_ORPHANS = ['scripts/verify', '.orqenix/prompts'];
+const SCAN_DIRS_FOR_ORPHANS = ["scripts/verify", ".orqenix/prompts"];
 for (const dir of SCAN_DIRS_FOR_ORPHANS) {
   const abs = join(ROOT, dir);
   if (!existsSync(abs)) continue;
@@ -184,18 +232,28 @@ for (const dir of SCAN_DIRS_FOR_ORPHANS) {
       const fullPath = join(abs, f);
       const isReferenced = (() => {
         try {
-          const name = f.replace(/\.[^.]+$/, '');
-          const search = execSync(`git grep -l "${name}" -- "package.json" "**/package.json" ".github/" "*.md"`, { cwd: ROOT, encoding: 'utf-8' });
+          const name = f.replace(/\.[^.]+$/, "");
+          const search = execSync(
+            `git grep -l "${name}" -- "package.json" "**/package.json" ".github/" "*.md"`,
+            { cwd: ROOT, encoding: "utf-8" },
+          );
           return search.trim().length > 0;
         } catch {
           return false;
         }
       })();
       if (!isReferenced) {
-        add('orphan-script', 'low', relative(ROOT, fullPath), 'Not referenced in package.json or workflows');
+        add(
+          "orphan-script",
+          "low",
+          relative(ROOT, fullPath),
+          "Not referenced in package.json or workflows",
+        );
       }
     }
-  } catch { /* */ }
+  } catch {
+    /* */
+  }
 }
 
 // ── Output ───────────────────────────────────────────────────────────
@@ -208,24 +266,30 @@ if (severityFilter) {
   } else {
     filtered.forEach(printFinding);
   }
-  process.exit(filtered.some((f) => ['critical', 'high'].includes(f.severity)) ? 1 : 0);
+  process.exit(filtered.some((f) => ["critical", "high"].includes(f.severity)) ? 1 : 0);
 }
 
 if (jsonMode) {
-  console.log(JSON.stringify({
-    summary: {
-      total: findings.length,
-      critical: findings.filter((f) => f.severity === 'critical').length,
-      high: findings.filter((f) => f.severity === 'high').length,
-      medium: findings.filter((f) => f.severity === 'medium').length,
-      low: findings.filter((f) => f.severity === 'low').length,
-    },
-    findings,
-  }, null, 2));
+  console.log(
+    JSON.stringify(
+      {
+        summary: {
+          total: findings.length,
+          critical: findings.filter((f) => f.severity === "critical").length,
+          high: findings.filter((f) => f.severity === "high").length,
+          medium: findings.filter((f) => f.severity === "medium").length,
+          low: findings.filter((f) => f.severity === "low").length,
+        },
+        findings,
+      },
+      null,
+      2,
+    ),
+  );
 } else {
-  console.log('═══════════════════════════════════════════════════════════════════');
-  console.log('  Pre-tag Cleanup Scan');
-  console.log('═══════════════════════════════════════════════════════════════════\n');
+  console.log("═══════════════════════════════════════════════════════════════════");
+  console.log("  Pre-tag Cleanup Scan");
+  console.log("═══════════════════════════════════════════════════════════════════\n");
   const byCategory = new Map();
   for (const f of findings) {
     const list = byCategory.get(f.category) ?? [];
@@ -234,19 +298,25 @@ if (jsonMode) {
   }
   for (const [cat, list] of byCategory) {
     const sev = list[0].severity;
-    const icon = { critical: '🚨', high: '❗', medium: '⚠', low: 'ℹ', info: '·' }[sev];
+    const icon = { critical: "🚨", high: "❗", medium: "⚠", low: "ℹ", info: "·" }[sev];
     console.log(`${icon}  [${sev}] ${cat} — ${list.length} finding(s)`);
-    list.slice(0, 5).forEach((f) => console.log(`     ${f.file}${f.detail ? ' — ' + f.detail : ''}`));
+    list
+      .slice(0, 5)
+      .forEach((f) => console.log(`     ${f.file}${f.detail ? " — " + f.detail : ""}`));
     if (list.length > 5) console.log(`     ... and ${list.length - 5} more`);
     console.log();
   }
-  console.log(`Total: ${findings.length} findings (${findings.filter(f => ['critical', 'high'].includes(f.severity)).length} blocking)`);
+  console.log(
+    `Total: ${findings.length} findings (${findings.filter((f) => ["critical", "high"].includes(f.severity)).length} blocking)`,
+  );
 }
 
 function printFinding(f) {
-  const icon = { critical: '🚨', high: '❗', medium: '⚠', low: 'ℹ' }[f.severity];
-  console.log(`${icon} [${f.severity}] ${f.category}: ${f.file}${f.detail ? ' — ' + f.detail : ''}`);
+  const icon = { critical: "🚨", high: "❗", medium: "⚠", low: "ℹ" }[f.severity];
+  console.log(
+    `${icon} [${f.severity}] ${f.category}: ${f.file}${f.detail ? " — " + f.detail : ""}`,
+  );
 }
 
 // Exit non-zero if any critical/high
-process.exit(findings.some((f) => ['critical', 'high'].includes(f.severity)) ? 1 : 0);
+process.exit(findings.some((f) => ["critical", "high"].includes(f.severity)) ? 1 : 0);

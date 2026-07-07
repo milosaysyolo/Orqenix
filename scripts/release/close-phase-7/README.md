@@ -21,16 +21,16 @@ gh workflow run close-phase-7-ceremony.yml --ref main -f confirm=I-UNDERSTAND-MF
 
 ALL blocks GREEN:
 
-| Block | Name | Gate |
-|-------|------|------|
-| 0 | Revert bad -phase-7 | .bak restored, no -phase-7 ranges anywhere |
-| 1 | Fix code drift | bench files real, D7.4 clean |
-| 2 | Fix Pro deps | Pro deps -> ^0.7.0, build/test OK (after publish) |
-| 6sec | Security | 5 security tests + no DHT/P2P (Cloud repo CI) |
-| 3 | Release ceremony | published 0.7.0 + signed + tagged v0.7.0 (3 repos same day) |
-| 4 | v2 validation | verdict GO on Linux |
-| 5 | Defer limitations | deferred issues filed (milestone v0.7.1) |
-| 7 | Docs + announce | docs measured + memory checkpoint |
+| Block | Name                | Gate                                                        |
+| ----- | ------------------- | ----------------------------------------------------------- |
+| 0     | Revert bad -phase-7 | .bak restored, no -phase-7 ranges anywhere                  |
+| 1     | Fix code drift      | bench files real, D7.4 clean                                |
+| 2     | Fix Pro deps        | Pro deps -> ^0.7.0, build/test OK (after publish)           |
+| 6sec  | Security            | 5 security tests + no DHT/P2P (Cloud repo CI)               |
+| 3     | Release ceremony    | published 0.7.0 + signed + tagged v0.7.0 (3 repos same day) |
+| 4     | v2 validation       | verdict GO on Linux                                         |
+| 5     | Defer limitations   | deferred issues filed (milestone v0.7.1)                    |
+| 7     | Docs + announce     | docs measured + memory checkpoint                           |
 
 ## Safety
 

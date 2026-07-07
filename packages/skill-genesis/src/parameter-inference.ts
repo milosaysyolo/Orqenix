@@ -4,8 +4,8 @@
 // Analyzes observation samples to extract parameters: which fields varied
 // (→ inputs) vs constant (→ baked into code). Per CR v8.0 Section 9.4.4.
 
-import type { ObservationEvent } from '@orqenix/self-learning-observer';
-import type { InferredParameter } from './types';
+import type { ObservationEvent } from "@orqenix/self-learning-observer";
+import type { InferredParameter } from "./types";
 
 export class ParameterInference {
   /**
@@ -63,7 +63,7 @@ export class ParameterInference {
       if (p.required) required.push(p.name);
     }
     return {
-      type: 'object',
+      type: "object",
       properties,
       ...(required.length > 0 ? { required } : {}),
     };
@@ -71,11 +71,11 @@ export class ParameterInference {
 
   // ─── Private ──────────────────────────────────────────────────────────
 
-  private flatten(obj: Record<string, unknown>, prefix = ''): Record<string, unknown> {
+  private flatten(obj: Record<string, unknown>, prefix = ""): Record<string, unknown> {
     const out: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(obj)) {
       const path = prefix ? `${prefix}.${key}` : key;
-      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      if (value !== null && typeof value === "object" && !Array.isArray(value)) {
         Object.assign(out, this.flatten(value as Record<string, unknown>, path));
       } else {
         out[path] = value;
@@ -84,22 +84,22 @@ export class ParameterInference {
     return out;
   }
 
-  private inferType(samples: unknown[]): InferredParameter['type'] {
-    if (samples.length === 0) return 'string';
+  private inferType(samples: unknown[]): InferredParameter["type"] {
+    if (samples.length === 0) return "string";
     const first = samples[0];
-    if (typeof first === 'number') return 'number';
-    if (typeof first === 'boolean') return 'boolean';
-    if (Array.isArray(first)) return 'array';
-    if (first !== null && typeof first === 'object') return 'object';
-    return 'string';
+    if (typeof first === "number") return "number";
+    if (typeof first === "boolean") return "boolean";
+    if (Array.isArray(first)) return "array";
+    if (first !== null && typeof first === "object") return "object";
+    return "string";
   }
 
   private toParamName(fieldPath: string): string {
     // dot.path → camelCase-ish param name
     return fieldPath
-      .split('.')
+      .split(".")
       .pop()!
-      .replace(/[^a-zA-Z0-9]/g, '_')
-      .replace(/^_+|_+$/g, '');
+      .replace(/[^a-zA-Z0-9]/g, "_")
+      .replace(/^_+|_+$/g, "");
   }
 }

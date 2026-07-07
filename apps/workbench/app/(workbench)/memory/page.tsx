@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Memory tab , browse hierarchical memory matrices (project → branch → session)
 
-'use client';
+"use client";
 
-import { Brain, Database, Layers, Search } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@orqenix/ui-primitives';
+import { Brain, Database, Layers, Search } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@orqenix/ui-primitives";
 
 export default function MemoryPage() {
   return (
@@ -74,8 +74,8 @@ export default function MemoryPage() {
             <Brain className="w-12 h-12 text-muted-foreground mx-auto mb-3" aria-hidden />
             <h3 className="font-semibold mb-2">Memory matrix scaffold</h3>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              The hierarchical memory matrix viewer ships in D8.α.6. This placeholder confirms
-              the Memory tab is wired and routable.
+              The hierarchical memory matrix viewer ships in D8.α.6. This placeholder confirms the
+              Memory tab is wired and routable.
             </p>
             <p className="text-xs text-muted-foreground mt-4">
               Charter gate: G58 (Memory Hierarchy) , 18 sub-criteria

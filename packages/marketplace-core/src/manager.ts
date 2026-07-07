@@ -4,10 +4,10 @@
 // Coordinates CRUD + registry resolution + import/export + install/uninstall.
 // Per CR v8.0 Chapter 6.
 
-import { NormalizationEngine } from '@orqenix/normalization-engine';
-import { PluginLifecycle } from '@orqenix/plugin-core';
-import { MarketplaceCrud, type LocalPluginStore, type MarketplaceAuditWriter } from './crud';
-import { RegistryResolverRegistry } from './registry-resolver';
+import { NormalizationEngine } from "@orqenix/normalization-engine";
+import { PluginLifecycle } from "@orqenix/plugin-core";
+import { MarketplaceCrud, type LocalPluginStore, type MarketplaceAuditWriter } from "./crud";
+import { RegistryResolverRegistry } from "./registry-resolver";
 import {
   type PluginListing,
   type SearchFilters,
@@ -20,7 +20,7 @@ import {
   type ForkPluginInput,
   type DeletePluginInput,
   type CrudResult,
-} from './types';
+} from "./types";
 
 export interface MarketplaceManagerOptions {
   store: LocalPluginStore;
@@ -49,7 +49,7 @@ export class MarketplaceManager {
     this.normalization = options.normalizationEngine;
     this.lifecycle = options.lifecycle;
     this.resolvers = options.resolverRegistry ?? new RegistryResolverRegistry();
-    this.actor = options.actor ?? 'user';
+    this.actor = options.actor ?? "user";
     this.crud = new MarketplaceCrud(options.store, options.audit, this.actor);
   }
 
@@ -74,13 +74,11 @@ export class MarketplaceManager {
   async search(query: string, filters?: SearchFilters): Promise<PluginListing[]> {
     const enabledSources = filters?.source ?? this.resolvers.listEnabled();
     const perSource = await Promise.allSettled(
-      enabledSources.map((src) =>
-        this.resolvers.getResolver(src).search(query, filters)
-      )
+      enabledSources.map((src) => this.resolvers.getResolver(src).search(query, filters)),
     );
     const merged: PluginListing[] = [];
     for (const res of perSource) {
-      if (res.status === 'fulfilled') {
+      if (res.status === "fulfilled") {
         merged.push(...res.value);
       }
     }
@@ -105,7 +103,7 @@ export class MarketplaceManager {
 
       await this.store.set(result.csf);
       await this.audit.append({
-        kind: 'marketplace.import_succeeded',
+        kind: "marketplace.import_succeeded",
         ts: new Date().toISOString(),
         actor: { user: this.actor },
         payload: {
@@ -124,7 +122,7 @@ export class MarketplaceManager {
       };
     } catch (err) {
       await this.audit.append({
-        kind: 'marketplace.import_failed',
+        kind: "marketplace.import_failed",
         ts: new Date().toISOString(),
         actor: { user: this.actor },
         payload: { error: (err as Error).message },
@@ -145,7 +143,7 @@ export class MarketplaceManager {
     // Lossy guard per CR v8.0 Section 8.6
     if (result.report.lossyFields.length > 0 && !input.acceptLossy) {
       await this.audit.append({
-        kind: 'marketplace.export_lossy_rejected',
+        kind: "marketplace.export_lossy_rejected",
         ts: new Date().toISOString(),
         actor: { user: this.actor },
         payload: {
@@ -161,7 +159,7 @@ export class MarketplaceManager {
     }
 
     await this.audit.append({
-      kind: 'marketplace.export_succeeded',
+      kind: "marketplace.export_succeeded",
       ts: new Date().toISOString(),
       actor: { user: this.actor },
       payload: {

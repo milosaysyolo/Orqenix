@@ -6,22 +6,22 @@
 // subagent, and hands the return to the absorber. Single-level depth per
 // Anti-pattern 36.
 
-import { ulid } from '../store/ulid';
+import { ulid } from "../store/ulid";
 import {
   type SubagentHarness as Harness,
   type SubagentReturn,
   type InvokeSubagentInput,
   type SubagentConstraints,
   DEFAULT_SUBAGENT_CONSTRAINTS,
-} from './types';
+} from "./types";
 
 export class SubagentHarnessError extends Error {
   constructor(
     public readonly code: string,
-    message: string
+    message: string,
   ) {
     super(message);
-    this.name = 'SubagentHarnessError';
+    this.name = "SubagentHarnessError";
     Object.setPrototypeOf(this, SubagentHarnessError.prototype);
   }
 }
@@ -62,14 +62,14 @@ export class SubagentHarnessManager {
     const ret = await this.runWithTimeout(
       input.harness,
       input.runner,
-      constraints.maxWallTimeSec * 1000
+      constraints.maxWallTimeSec * 1000,
     );
 
     // Validate steps taken against maxSteps
     if (ret.stepsTaken > constraints.maxSteps) {
       throw new SubagentHarnessError(
-        'SUBAGENT_MAX_STEPS_EXCEEDED',
-        `Subagent took ${ret.stepsTaken} steps, exceeding maxSteps=${constraints.maxSteps}`
+        "SUBAGENT_MAX_STEPS_EXCEEDED",
+        `Subagent took ${ret.stepsTaken} steps, exceeding maxSteps=${constraints.maxSteps}`,
       );
     }
 
@@ -85,40 +85,40 @@ export class SubagentHarnessManager {
   private validateHarness(harness: Harness): void {
     if (!harness.systemPrompt || harness.systemPrompt.trim().length === 0) {
       throw new SubagentHarnessError(
-        'SUBAGENT_HARNESS_INVALID',
-        'Harness must include a non-empty systemPrompt'
+        "SUBAGENT_HARNESS_INVALID",
+        "Harness must include a non-empty systemPrompt",
       );
     }
     if (!harness.goal || harness.goal.trim().length === 0) {
       throw new SubagentHarnessError(
-        'SUBAGENT_HARNESS_INVALID',
-        'Harness must include a goal statement'
+        "SUBAGENT_HARNESS_INVALID",
+        "Harness must include a goal statement",
       );
     }
     if (!harness.returnSchema) {
       throw new SubagentHarnessError(
-        'SUBAGENT_HARNESS_INVALID',
-        'Harness must declare a returnSchema (parent absorbs the return)'
+        "SUBAGENT_HARNESS_INVALID",
+        "Harness must declare a returnSchema (parent absorbs the return)",
       );
     }
     // Anti-pattern 36: subagent cannot spawn sub-subagents.
     // The forbiddenTools must include any subagent-spawn tool.
     const constraints = harness.constraints ?? DEFAULT_SUBAGENT_CONSTRAINTS;
-    const allowsSubagentSpawn = constraints.allowedTools.some((t) =>
-      t.includes('invoke_subagent') || t.includes('spawn_subagent')
+    const allowsSubagentSpawn = constraints.allowedTools.some(
+      (t) => t.includes("invoke_subagent") || t.includes("spawn_subagent"),
     );
     if (allowsSubagentSpawn) {
       throw new SubagentHarnessError(
-        'SUBAGENT_DEPTH_EXCEEDED',
-        'Subagents cannot spawn sub-subagents (single-level depth per Anti-pattern 36)'
+        "SUBAGENT_DEPTH_EXCEEDED",
+        "Subagents cannot spawn sub-subagents (single-level depth per Anti-pattern 36)",
       );
     }
   }
 
   private async runWithTimeout(
     harness: Harness,
-    runner: InvokeSubagentInput['runner'],
-    timeoutMs: number
+    runner: InvokeSubagentInput["runner"],
+    timeoutMs: number,
   ): Promise<SubagentReturn> {
     return Promise.race([
       runner(harness),
@@ -127,12 +127,12 @@ export class SubagentHarnessManager {
           () =>
             reject(
               new SubagentHarnessError(
-                'SUBAGENT_TIMEOUT',
-                `Subagent exceeded wall-time limit of ${timeoutMs}ms`
-              )
+                "SUBAGENT_TIMEOUT",
+                `Subagent exceeded wall-time limit of ${timeoutMs}ms`,
+              ),
             ),
-          timeoutMs
-        )
+          timeoutMs,
+        ),
       ),
     ]);
   }

@@ -5,7 +5,7 @@
 // works across all 7 agent platforms (external_agent_compat).
 
 interface CommitInput {
-  type: 'feat' | 'fix' | 'docs' | 'style' | 'refactor' | 'test' | 'chore';
+  type: "feat" | "fix" | "docs" | "style" | "refactor" | "test" | "chore";
   scope?: string;
   description: string;
   body?: string;
@@ -21,8 +21,8 @@ interface CommitOutput {
  * no side effects in the reference (production would invoke `git commit`).
  */
 export async function invoke(input: CommitInput): Promise<CommitOutput> {
-  const scope = input.scope ? `(${input.scope})` : '';
-  const breaking = input.breakingChange ? '!' : '';
+  const scope = input.scope ? `(${input.scope})` : "";
+  const breaking = input.breakingChange ? "!" : "";
   let message = `${input.type}${scope}${breaking}: ${input.description}`;
 
   if (input.body) {

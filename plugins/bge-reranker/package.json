@@ -1,1 +1,77 @@
-{  "name": "@orqenix/plugin-bge-reranker",  "version": "0.8.0-alpha.1",  "description": "Reference reranker plugin: BGE reranker for search result reranking.",  "license": "Apache-2.0",  "type": "module",  "main": "./dist/plugin.js",  "files": [    "dist",    "LICENSE",    "README.md"  ],  "scripts": {    "build": "npx tsup src/index.ts --format esm --dts --clean",    "test": "vitest run"  },  "publishConfig": {    "access": "public",    "provenance": true  },  "keywords": [    "orqenix",    "orqenix-plugin",    "reranker",    "bge"  ],  "engines": {    "node": ">=20.10.0"  },  "orqenixPlugin": {    "manifestVersion": "1.0",    "kind": "reranker",    "compatibility": {      "orqenix": ">=0.8.0"    },    "permissions": [],    "external_agent_compat": [      "claude-code",      "cursor",      "codex",      "opencode"    ],    "sandboxMode": "separate_process",    "tool": {      "name": "bge_rerank",      "description": "Reranks candidates by relevance to a query",      "inputSchema": {        "type": "object",        "properties": {          "query": {            "type": "string"          },          "candidates": {            "type": "array"          }        },        "required": [          "query",          "candidates"        ]      },      "outputSchema": {        "type": "object",        "properties": {          "ranked": {            "type": "array"          }        }      }    }  },  "devDependencies": {    "tsup": "catalog:",    "vitest": "catalog:",    "typescript": "catalog:"  }}
+{
+  "name": "@orqenix/plugin-bge-reranker",
+  "version": "0.8.0-alpha.1",
+  "description": "Reference reranker plugin: BGE reranker for search result reranking.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/plugin.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npx tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "reranker",
+    "bge"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "orqenixPlugin": {
+    "manifestVersion": "1.0",
+    "kind": "reranker",
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
+    "permissions": [],
+    "external_agent_compat": [
+      "claude-code",
+      "cursor",
+      "codex",
+      "opencode"
+    ],
+    "sandboxMode": "separate_process",
+    "tool": {
+      "name": "bge_rerank",
+      "description": "Reranks candidates by relevance to a query",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "candidates": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "query",
+          "candidates"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ranked": {
+            "type": "array"
+          }
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "tsup": "catalog:",
+    "vitest": "catalog:",
+    "typescript": "catalog:"
+  }
+}

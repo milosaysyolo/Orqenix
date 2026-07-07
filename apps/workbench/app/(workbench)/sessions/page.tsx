@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Sessions tab , browse and manage agent sessions
 
-'use client';
+"use client";
 
-import { Activity, Pause, Trash2, MessageSquare } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge } from '@orqenix/ui-primitives';
+import { Activity, Pause, Trash2, MessageSquare } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, Badge } from "@orqenix/ui-primitives";
 
 export default function SessionsPage() {
   return (

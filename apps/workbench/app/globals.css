@@ -19,7 +19,10 @@
   --olive: #5f8038;
   --slate: #4a6b88;
 
-  --radius-sm: 6px; --radius-md: 9px; --radius-lg: 13px; --radius-xl: 18px;
+  --radius-sm: 6px;
+  --radius-md: 9px;
+  --radius-lg: 13px;
+  --radius-xl: 18px;
 
   --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
@@ -43,29 +46,44 @@
   --slate: #6e91b4;
 }
 
-html { font-family: var(--sans); scroll-behavior: smooth; }
+html {
+  font-family: var(--sans);
+  scroll-behavior: smooth;
+}
 
 body {
   background: var(--paper);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   background-image:
-    linear-gradient(rgba(35,36,31,.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(35,36,31,.022) 1px, transparent 1px),
-    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(182,90,60,.045), transparent 60%);
-  background-size: 46px 46px, 46px 46px, 100% 100%;
+    linear-gradient(rgba(35, 36, 31, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 36, 31, 0.022) 1px, transparent 1px),
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(182, 90, 60, 0.045), transparent 60%);
+  background-size:
+    46px 46px,
+    46px 46px,
+    100% 100%;
 }
 .dark body {
   background-image:
-    linear-gradient(rgba(236,232,223,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(236,232,223,.025) 1px, transparent 1px),
-    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(210,113,81,.06), transparent 60%);
-  background-size: 46px 46px, 46px 46px, 100% 100%;
+    linear-gradient(rgba(236, 232, 223, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236, 232, 223, 0.025) 1px, transparent 1px),
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(210, 113, 81, 0.06), transparent 60%);
+  background-size:
+    46px 46px,
+    46px 46px,
+    100% 100%;
 }
 
-.font-serif { font-family: var(--serif); }
-.font-mono { font-family: var(--mono); }
+.font-serif {
+  font-family: var(--serif);
+}
+.font-mono {
+  font-family: var(--mono);
+}
 .grad-text {
   background: linear-gradient(110deg, var(--rust), var(--plum));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

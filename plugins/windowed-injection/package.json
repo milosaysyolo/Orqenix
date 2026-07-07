@@ -1,1 +1,82 @@
-{  "name": "@orqenix/plugin-windowed-injection",  "version": "0.8.0-alpha.1",  "description": "Reference memory-injection-strategy plugin: token-budget windowed injection.",  "license": "Apache-2.0",  "type": "module",  "main": "./dist/plugin.js",  "files": [    "dist",    "LICENSE",    "README.md"  ],  "scripts": {    "build": "npx tsup src/index.ts --format esm --dts --clean",    "test": "vitest run"  },  "publishConfig": {    "access": "public",    "provenance": true  },  "keywords": [    "orqenix",    "orqenix-plugin",    "memory-injection-strategy"  ],  "engines": {    "node": ">=20.10.0"  },  "orqenixPlugin": {    "manifestVersion": "1.0",    "kind": "memory-injection-strategy",    "compatibility": {      "orqenix": ">=0.8.0"    },    "permissions": [      "memory.read:chat",      "memory.read:decision",      "memory.read:lesson"    ],    "external_agent_compat": [      "claude-code",      "cursor",      "codex"    ],    "sandboxMode": "separate_process",    "tool": {      "name": "windowed_inject",      "description": "Selects ranked memory entries within a token budget (hierarchy-aware)",      "inputSchema": {        "type": "object",        "properties": {          "ranked": {            "type": "array"          },          "tokenBudget": {            "type": "number"          }        },        "required": [          "ranked",          "tokenBudget"        ]      },      "outputSchema": {        "type": "object",        "properties": {          "selected": {            "type": "array"          },          "tokensUsed": {            "type": "number"          }        }      }    }  },  "devDependencies": {    "tsup": "catalog:",    "vitest": "catalog:",    "typescript": "catalog:"  }}
+{
+  "name": "@orqenix/plugin-windowed-injection",
+  "version": "0.8.0-alpha.1",
+  "description": "Reference memory-injection-strategy plugin: token-budget windowed injection.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/plugin.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npx tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "memory-injection-strategy"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "orqenixPlugin": {
+    "manifestVersion": "1.0",
+    "kind": "memory-injection-strategy",
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
+    "permissions": [
+      "memory.read:chat",
+      "memory.read:decision",
+      "memory.read:lesson"
+    ],
+    "external_agent_compat": [
+      "claude-code",
+      "cursor",
+      "codex"
+    ],
+    "sandboxMode": "separate_process",
+    "tool": {
+      "name": "windowed_inject",
+      "description": "Selects ranked memory entries within a token budget (hierarchy-aware)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "ranked": {
+            "type": "array"
+          },
+          "tokenBudget": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "ranked",
+          "tokenBudget"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "selected": {
+            "type": "array"
+          },
+          "tokensUsed": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "tsup": "catalog:",
+    "vitest": "catalog:",
+    "typescript": "catalog:"
+  }
+}

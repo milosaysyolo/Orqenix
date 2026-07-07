@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/instinct-promoter/ui , CandidateCard component
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Sparkles, CheckCheck, X, Pause, Pencil, Clock, GitMerge } from 'lucide-react';
-import { Card, CardContent, Badge, Button } from '@orqenix/ui-primitives';
-import type { PromoterCandidate, ReviewAction } from '../types';
+import * as React from "react";
+import { Sparkles, CheckCheck, X, Pause, Pencil, Clock, GitMerge } from "lucide-react";
+import { Card, CardContent, Badge, Button } from "@orqenix/ui-primitives";
+import type { PromoterCandidate, ReviewAction } from "../types";
 
 export interface CandidateCardProps {
   candidate: PromoterCandidate;
@@ -14,7 +14,11 @@ export interface CandidateCardProps {
   busy?: boolean;
 }
 
-export function CandidateCard({ candidate, onReview, busy }: CandidateCardProps): React.ReactElement {
+export function CandidateCard({
+  candidate,
+  onReview,
+  busy,
+}: CandidateCardProps): React.ReactElement {
   const [expanded, setExpanded] = React.useState(false);
 
   return (
@@ -46,7 +50,8 @@ export function CandidateCard({ candidate, onReview, busy }: CandidateCardProps)
           <span>{(candidate.successRate * 100).toFixed(0)}% success</span>
           <span>·</span>
           <span className="flex items-center gap-1">
-            <Clock className="w-3 h-3" aria-hidden /> ~{candidate.estTimeSavedPerWeekMin} min/week saved
+            <Clock className="w-3 h-3" aria-hidden /> ~{candidate.estTimeSavedPerWeekMin} min/week
+            saved
           </span>
           {candidate.crossScope && candidate.crossScopeSources.length > 0 && (
             <>
@@ -62,7 +67,7 @@ export function CandidateCard({ candidate, onReview, busy }: CandidateCardProps)
             className="text-xs text-muted-foreground hover:text-foreground"
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? 'Hide' : 'Show'} {candidate.samples.length} sample observations (redacted)
+            {expanded ? "Hide" : "Show"} {candidate.samples.length} sample observations (redacted)
           </button>
           {expanded && (
             <div className="mt-2 space-y-1.5 rounded-md border border-border bg-muted/30 p-3">
@@ -70,11 +75,13 @@ export function CandidateCard({ candidate, onReview, busy }: CandidateCardProps)
                 <div key={s.id} className="text-xs">
                   <span className="text-muted-foreground">
                     [{new Date(s.timestamp).toLocaleTimeString()}]
-                  </span>{' '}
-                  <Badge variant="outline" className="text-xs">{s.actionKind}</Badge>
+                  </span>{" "}
+                  <Badge variant="outline" className="text-xs">
+                    {s.actionKind}
+                  </Badge>
                   {s.outcomeKind && (
                     <Badge
-                      variant={s.outcomeKind === 'success' ? 'default' : 'destructive'}
+                      variant={s.outcomeKind === "success" ? "default" : "destructive"}
                       className="text-xs ml-1"
                     >
                       {s.outcomeKind}
@@ -89,16 +96,34 @@ export function CandidateCard({ candidate, onReview, busy }: CandidateCardProps)
 
         {/* Actions */}
         <div className="flex items-center gap-2 pt-1">
-          <Button size="sm" onClick={() => onReview('promote')} disabled={busy} className="gap-1">
+          <Button size="sm" onClick={() => onReview("promote")} disabled={busy} className="gap-1">
             <CheckCheck className="w-3.5 h-3.5" aria-hidden /> Promote
           </Button>
-          <Button size="sm" variant="outline" onClick={() => onReview('promote_customize')} disabled={busy} className="gap-1">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onReview("promote_customize")}
+            disabled={busy}
+            className="gap-1"
+          >
             <Pencil className="w-3.5 h-3.5" aria-hidden /> Customize First
           </Button>
-          <Button size="sm" variant="ghost" onClick={() => onReview('defer')} disabled={busy} className="gap-1">
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onReview("defer")}
+            disabled={busy}
+            className="gap-1"
+          >
             <Pause className="w-3.5 h-3.5" aria-hidden /> Defer
           </Button>
-          <Button size="sm" variant="ghost" onClick={() => onReview('reject')} disabled={busy} className="gap-1">
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onReview("reject")}
+            disabled={busy}
+            className="gap-1"
+          >
             <X className="w-3.5 h-3.5" aria-hidden /> Reject
           </Button>
         </div>

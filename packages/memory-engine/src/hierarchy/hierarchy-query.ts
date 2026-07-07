@@ -5,33 +5,141 @@
 // NO short-circuit. Merges with weighted level boost + protection boost +
 // dedup + cluster. Per CR v8.0 Section 4.4 + INV-12
 
-import { HybridSearch } from '../store/hybrid-search';
-import type { MemoryEntry, KbKind } from '../store/types';
-import {  type HierarchyQueryInput,  type HierarchyQueryResult,  type RankedResult,  type LevelBoosts,  DEFAULT_LEVEL_BOOSTS,} from './types';
-const ALL_KBS: KbKind[] = ['chat', 'code', 'decision', 'lesson'];
+import { HybridSearch } from "../store/hybrid-search";
+import type { MemoryEntry, KbKind } from "../store/types";
+import {
+  type HierarchyQueryInput,
+  type HierarchyQueryResult,
+  type RankedResult,
+  type LevelBoosts,
+  DEFAULT_LEVEL_BOOSTS,
+} from "./types";
+const ALL_KBS: KbKind[] = ["chat", "code", "decision", "lesson"];
 const DEFAULT_MIN_RELEVANCE = 0.65;
 const DEFAULT_CLUSTER_COSINE = 0.92;
-export class HierarchyQuery {  constructor(private readonly search: HybridSearch) {}
-/**   * Resolves a query across the 3 hierarchy levels in parallel.   *   * Per INV-12: ALL levels query simultaneously; NO short-circuit when one   * level returns hits. Performance bounded by slowest level, not sum.   */
-async query(input: HierarchyQueryInput): Promise<HierarchyQueryResult> {    const startMs = Date.now();
-const boosts: LevelBoosts = {      ...DEFAULT_LEVEL_BOOSTS,      ...input.levelBoosts,    };
-const kbs = input.kbs ?? ALL_KBS;
-const minRelevance = input.minRelevanceScore ?? DEFAULT_MIN_RELEVANCE;
-const clusterThreshold =      input.clusterCosineThreshold ?? DEFAULT_CLUSTER_COSINE;    // G��G�� Determine which levels to query (based on active links) G��G��G��G��G��G��G��G��G��G��G��
-const levelsToQuery: Array<'session' | 'branch' | 'project'> = [];
-const queryPromises: Array<Promise<{ level: 'session' | 'branch' | 'project'; results: ReturnType<HybridSearch['search']> }>> = [];    // Always query session (current context) if sessionId present
-if (input.sessionId) {      levelsToQuery.push('session');      queryPromises.push(        Promise.resolve().then(() => ({          level: 'session' as const,          results: this.search.search({            query: input.query,            ...(input.queryEmbedding ? { queryEmbedding: input.queryEmbedding } : {}),            kbs,            branchId: input.branchId,            sessionId: input.sessionId as string,            memoryLevel: 'session',            projectId: input.projectId,            limit: input.limit,          }),        }))      );    }    // Query branch if cross-session sharing is active (default true)
-if (input.crossSessionActive !== false) {      levelsToQuery.push('branch');      queryPromises.push(        Promise.resolve().then(() => ({          level: 'branch' as const,          results: this.search.search({            query: input.query,            ...(input.queryEmbedding ? { queryEmbedding: input.queryEmbedding } : {}),            kbs,            branchId: input.branchId,            memoryLevel: 'branch',            projectId: input.projectId,            limit: input.limit,          }),        }))      );    }    // Query project if cross-branch sharing is active (default true)
-if (input.crossBranchActive !== false) {      levelsToQuery.push('project');      queryPromises.push(        Promise.resolve().then(() => ({          level: 'project' as const,          results: this.search.search({            query: input.query,            ...(input.queryEmbedding ? { queryEmbedding: input.queryEmbedding } : {}),            kbs,            branchId: input.branchId,            memoryLevel: 'project',            projectId: input.projectId,            limit: input.limit,          }),        }))      );    }    // G��G�� INV-12: parallel execution, NO short-circuit G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��
-const perLevel = await Promise.all(queryPromises);    // G��G�� Merge with weighted level boost + protection boost G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��
-const merged: RankedResult[] = [];    for (const { level, results } of perLevel) {      const levelBoost =        level === 'session'          ? boosts.session          : level === 'branch'            ? boosts.branch            : boosts.project;      for (const result of results) {        let finalScore = result.rawScore * levelBoost;        // Protection boost for subagent returns (always surface)
-if (result.entry.protection_flags?.kind === 'subagent_return') {          finalScore *= boosts.subagentReturn;        }        merged.push({          ...result,          finalScore,          sourceLevel: level,        });      }    }    // G��G�� Dedup by content hash (entries promoted across levels) G��G��G��G��G��G��G��G��G��G��G��
-const byHash = new Map<string, RankedResult>();    for (const r of merged) {      const existing = byHash.get(r.entry.hash);      if (!existing || r.finalScore > existing.finalScore) {        byHash.set(r.entry.hash, r);      }    }    // G��G�� Cluster near-duplicates by embedding similarity G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��
-const sorted = Array.from(byHash.values()).sort(      (a, b) => b.finalScore - a.finalScore    );
-const clusters: RankedResult[] = [];    for (const candidate of sorted) {      let isDuplicate = false;      if (candidate.entry.embedding) {        for (const rep of clusters) {          if (!rep.entry.embedding) continue;
-const sim = this.cosine(rep.entry.embedding, candidate.entry.embedding);          if (sim > clusterThreshold) {            isDuplicate = true;            break;          }        }      }      if (!isDuplicate) {        clusters.push(candidate);      }    }    // G��G�� Anti-noise threshold (protection entries bypass threshold) G��G��G��G��G��G��G��
-const filtered = clusters.filter(      (r) =>        r.finalScore >= minRelevance ||        r.entry.protection_flags?.kind === 'subagent_return'    );    // Final ranked list, apply limit
-const final = filtered      .sort((a, b) => b.finalScore - a.finalScore)      .slice(0, input.limit);    return {      results: final,      levelsQueried: levelsToQuery,      durationMs: Date.now() - startMs,    };  }  private cosine(a: Float32Array, b: Float32Array): number {    if (a.length !== b.length) return 0;
-let dot = 0;
-let normA = 0;
-let normB = 0;    for (let i = 0; i < a.length; i++) {      dot += (a[i] as number) * (b[i] as number);      normA += (a[i] as number) ** 2;      normB += (b[i] as number) ** 2;    }    if (normA === 0 || normB === 0) return 0;    return dot / (Math.sqrt(normA) * Math.sqrt(normB));  }}
+export class HierarchyQuery {
+  constructor(private readonly search: HybridSearch) {}
+  /**   * Resolves a query across the 3 hierarchy levels in parallel.   *   * Per INV-12: ALL levels query simultaneously; NO short-circuit when one   * level returns hits. Performance bounded by slowest level, not sum.   */
+  async query(input: HierarchyQueryInput): Promise<HierarchyQueryResult> {
+    const startMs = Date.now();
+    const boosts: LevelBoosts = { ...DEFAULT_LEVEL_BOOSTS, ...input.levelBoosts };
+    const kbs = input.kbs ?? ALL_KBS;
+    const minRelevance = input.minRelevanceScore ?? DEFAULT_MIN_RELEVANCE;
+    const clusterThreshold = input.clusterCosineThreshold ?? DEFAULT_CLUSTER_COSINE; // G��G�� Determine which levels to query (based on active links) G��G��G��G��G��G��G��G��G��G��G��
+    const levelsToQuery: Array<"session" | "branch" | "project"> = [];
+    const queryPromises: Array<
+      Promise<{
+        level: "session" | "branch" | "project";
+        results: ReturnType<HybridSearch["search"]>;
+      }>
+    > = []; // Always query session (current context) if sessionId present
+    if (input.sessionId) {
+      levelsToQuery.push("session");
+      queryPromises.push(
+        Promise.resolve().then(() => ({
+          level: "session" as const,
+          results: this.search.search({
+            query: input.query,
+            ...(input.queryEmbedding ? { queryEmbedding: input.queryEmbedding } : {}),
+            kbs,
+            branchId: input.branchId,
+            sessionId: input.sessionId as string,
+            memoryLevel: "session",
+            projectId: input.projectId,
+            limit: input.limit,
+          }),
+        })),
+      );
+    } // Query branch if cross-session sharing is active (default true)
+    if (input.crossSessionActive !== false) {
+      levelsToQuery.push("branch");
+      queryPromises.push(
+        Promise.resolve().then(() => ({
+          level: "branch" as const,
+          results: this.search.search({
+            query: input.query,
+            ...(input.queryEmbedding ? { queryEmbedding: input.queryEmbedding } : {}),
+            kbs,
+            branchId: input.branchId,
+            memoryLevel: "branch",
+            projectId: input.projectId,
+            limit: input.limit,
+          }),
+        })),
+      );
+    } // Query project if cross-branch sharing is active (default true)
+    if (input.crossBranchActive !== false) {
+      levelsToQuery.push("project");
+      queryPromises.push(
+        Promise.resolve().then(() => ({
+          level: "project" as const,
+          results: this.search.search({
+            query: input.query,
+            ...(input.queryEmbedding ? { queryEmbedding: input.queryEmbedding } : {}),
+            kbs,
+            branchId: input.branchId,
+            memoryLevel: "project",
+            projectId: input.projectId,
+            limit: input.limit,
+          }),
+        })),
+      );
+    } // G��G�� INV-12: parallel execution, NO short-circuit G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��
+    const perLevel = await Promise.all(queryPromises); // G��G�� Merge with weighted level boost + protection boost G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��
+    const merged: RankedResult[] = [];
+    for (const { level, results } of perLevel) {
+      const levelBoost =
+        level === "session" ? boosts.session : level === "branch" ? boosts.branch : boosts.project;
+      for (const result of results) {
+        let finalScore = result.rawScore * levelBoost; // Protection boost for subagent returns (always surface)
+        if (result.entry.protection_flags?.kind === "subagent_return") {
+          finalScore *= boosts.subagentReturn;
+        }
+        merged.push({ ...result, finalScore, sourceLevel: level });
+      }
+    } // G��G�� Dedup by content hash (entries promoted across levels) G��G��G��G��G��G��G��G��G��G��G��
+    const byHash = new Map<string, RankedResult>();
+    for (const r of merged) {
+      const existing = byHash.get(r.entry.hash);
+      if (!existing || r.finalScore > existing.finalScore) {
+        byHash.set(r.entry.hash, r);
+      }
+    } // G��G�� Cluster near-duplicates by embedding similarity G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��G��
+    const sorted = Array.from(byHash.values()).sort((a, b) => b.finalScore - a.finalScore);
+    const clusters: RankedResult[] = [];
+    for (const candidate of sorted) {
+      let isDuplicate = false;
+      if (candidate.entry.embedding) {
+        for (const rep of clusters) {
+          if (!rep.entry.embedding) continue;
+          const sim = this.cosine(rep.entry.embedding, candidate.entry.embedding);
+          if (sim > clusterThreshold) {
+            isDuplicate = true;
+            break;
+          }
+        }
+      }
+      if (!isDuplicate) {
+        clusters.push(candidate);
+      }
+    } // G��G�� Anti-noise threshold (protection entries bypass threshold) G��G��G��G��G��G��G��
+    const filtered = clusters.filter(
+      (r) => r.finalScore >= minRelevance || r.entry.protection_flags?.kind === "subagent_return",
+    ); // Final ranked list, apply limit
+    const final = filtered.sort((a, b) => b.finalScore - a.finalScore).slice(0, input.limit);
+    return { results: final, levelsQueried: levelsToQuery, durationMs: Date.now() - startMs };
+  }
+  private cosine(a: Float32Array, b: Float32Array): number {
+    if (a.length !== b.length) return 0;
+    let dot = 0;
+    let normA = 0;
+    let normB = 0;
+    for (let i = 0; i < a.length; i++) {
+      dot += (a[i] as number) * (b[i] as number);
+      normA += (a[i] as number) ** 2;
+      normB += (b[i] as number) ** 2;
+    }
+    if (normA === 0 || normB === 0) return 0;
+    return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+  }
+}

@@ -8,11 +8,11 @@ import {
   CanonicalSkillFormatSchema,
   type CanonicalSkillFormat,
   type PluginKind,
-} from './csf-schema';
-import { PluginKindRegistry } from './kinds/registry';
-import { validatePermissions } from './permissions';
-import type { ValidationResult } from './types';
-import { ManifestInvalidError } from './errors';
+} from "./csf-schema";
+import { PluginKindRegistry } from "./kinds/registry";
+import { validatePermissions } from "./permissions";
+import type { ValidationResult } from "./types";
+import { ManifestInvalidError } from "./errors";
 
 export interface ManifestValidationOutcome extends ValidationResult {
   /** Parsed CSF when valid */
@@ -27,23 +27,23 @@ export interface ManifestValidationOutcome extends ValidationResult {
  */
 export function validateManifest(
   packageJson: unknown,
-  kindRegistry?: PluginKindRegistry
+  kindRegistry?: PluginKindRegistry,
 ): ManifestValidationOutcome {
   const errors: string[] = [];
   const warnings: string[] = [];
 
   // 1. package.json must be an object
-  if (typeof packageJson !== 'object' || packageJson === null) {
-    return { valid: false, errors: ['package.json is not an object'] };
+  if (typeof packageJson !== "object" || packageJson === null) {
+    return { valid: false, errors: ["package.json is not an object"] };
   }
 
   const pkg = packageJson as Record<string, unknown>;
 
   // 2. Must have orqenixPlugin field
-  if (!('orqenixPlugin' in pkg) || typeof pkg.orqenixPlugin !== 'object') {
+  if (!("orqenixPlugin" in pkg) || typeof pkg.orqenixPlugin !== "object") {
     return {
       valid: false,
-      errors: ['package.json missing orqenixPlugin field (not an Orqenix plugin)'],
+      errors: ["package.json missing orqenixPlugin field (not an Orqenix plugin)"],
     };
   }
 
@@ -62,33 +62,30 @@ export function validateManifest(
       license: pkg.license ?? op.license,
       homepage: pkg.homepage ?? op.homepage,
       repository:
-        typeof pkg.repository === 'object'
+        typeof pkg.repository === "object"
           ? (pkg.repository as { url?: string }).url
           : pkg.repository,
-      bugs:
-        typeof pkg.bugs === 'object'
-          ? (pkg.bugs as { url?: string }).url
-          : pkg.bugs,
+      bugs: typeof pkg.bugs === "object" ? (pkg.bugs as { url?: string }).url : pkg.bugs,
       keywords: pkg.keywords ?? op.keywords ?? [],
       compatibility: op.compatibility,
       settingsSchema: op.settingsSchema,
       settingsDefaults: op.settingsDefaults,
       settingsHotReloadable: op.settingsHotReloadable ?? false,
-      settingsHierarchyOverride: op.settingsHierarchyOverride ?? 'project',
+      settingsHierarchyOverride: op.settingsHierarchyOverride ?? "project",
       lifecycle: op.lifecycle,
-      sandboxMode: op.sandboxMode ?? 'separate_process',
+      sandboxMode: op.sandboxMode ?? "separate_process",
       sandboxOverrides: op.sandboxOverrides,
     },
     implementation: {
       language: op.implementationLanguage ?? inferLanguage(pkg),
-      entry: op.entry ?? pkg.main ?? './dist/plugin.js',
+      entry: op.entry ?? pkg.main ?? "./dist/plugin.js",
       source: op.source,
       dependencies: op.dependencies,
       examples: op.examples,
     },
     provenance: op.provenance ?? {
-      verification_status: 'unverified',
-      contentHash: '0'.repeat(32), // placeholder; computed by loader
+      verification_status: "unverified",
+      contentHash: "0".repeat(32), // placeholder; computed by loader
     },
   };
 
@@ -96,7 +93,7 @@ export function validateManifest(
   const schemaResult = CanonicalSkillFormatSchema.safeParse(csfCandidate);
   if (!schemaResult.success) {
     for (const issue of schemaResult.error.issues) {
-      errors.push(`${issue.path.join('.')}: ${issue.message}`);
+      errors.push(`${issue.path.join(".")}: ${issue.message}`);
     }
     return { valid: false, errors };
   }
@@ -113,7 +110,7 @@ export function validateManifest(
   const registry = kindRegistry ?? new PluginKindRegistry();
   if (!registry.isSupported(csf.kind)) {
     errors.push(
-      `Unsupported plugin kind '${csf.kind}'. Must be one of 14 locked kinds (ADR-E-006).`
+      `Unsupported plugin kind '${csf.kind}'. Must be one of 14 locked kinds (ADR-E-006).`,
     );
     return { valid: false, errors };
   }
@@ -137,13 +134,13 @@ export function validateManifest(
  */
 export function assertValidManifest(
   packageJson: unknown,
-  kindRegistry?: PluginKindRegistry
+  kindRegistry?: PluginKindRegistry,
 ): CanonicalSkillFormat {
   const result = validateManifest(packageJson, kindRegistry);
   if (!result.valid || !result.csf) {
     throw new ManifestInvalidError(
-      `Plugin manifest validation failed: ${result.errors.join('; ')}`,
-      result.errors
+      `Plugin manifest validation failed: ${result.errors.join("; ")}`,
+      result.errors,
     );
   }
   return result.csf;
@@ -151,11 +148,11 @@ export function assertValidManifest(
 
 /** Infer implementation language from package.json hints */
 function inferLanguage(pkg: Record<string, unknown>): string {
-  const main = (pkg.main as string) ?? '';
-  if (main.endsWith('.wasm')) return 'wasm';
-  if (main.endsWith('.py')) return 'python';
-  if (main.endsWith('.sh')) return 'shell';
+  const main = (pkg.main as string) ?? "";
+  if (main.endsWith(".wasm")) return "wasm";
+  if (main.endsWith(".py")) return "python";
+  if (main.endsWith(".sh")) return "shell";
   // Default to typescript (most plugins ship compiled JS but author TS)
-  if ('types' in pkg || 'typings' in pkg) return 'typescript';
-  return 'javascript';
+  if ("types" in pkg || "typings" in pkg) return "typescript";
+  return "javascript";
 }

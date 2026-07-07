@@ -2,35 +2,27 @@
 // First-launch wizard , Welcome + Observer banner + Done
 // Per CR v8.0 G61-16: first-launch wizard introduces Workbench + asks about observer
 
-'use client';
+"use client";
 
-import { useState } from 'react';
-import {
-  Brain,
-  Sparkles,
-  ShieldAlert,
-  ChevronRight,
-  Check,
-  Network,
-  Package,
-} from 'lucide-react';
-import { Button, Card, CardContent, Badge } from '@orqenix/ui-primitives';
+import { useState } from "react";
+import { Brain, Sparkles, ShieldAlert, ChevronRight, Check, Network, Package } from "lucide-react";
+import { Button, Card, CardContent, Badge } from "@orqenix/ui-primitives";
 
-type Step = 'welcome' | 'observer' | 'done';
+type Step = "welcome" | "observer" | "done";
 
 interface FirstLaunchWizardProps {
   onComplete: () => void;
 }
 
 export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
-  const [step, setStep] = useState<Step>('welcome');
+  const [step, setStep] = useState<Step>("welcome");
   const [observerEnabled, setObserverEnabled] = useState(true); // opt-out default
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-xl">
         {/* Welcome step */}
-        {step === 'welcome' && (
+        {step === "welcome" && (
           <CardContent className="p-8">
             <div className="flex justify-center mb-6">
               <div
@@ -41,9 +33,7 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
               </div>
             </div>
 
-            <h1 className="text-2xl font-bold text-center mb-2">
-              Welcome to Orqenix Workbench
-            </h1>
+            <h1 className="text-2xl font-bold text-center mb-2">Welcome to Orqenix Workbench</h1>
             <p className="text-center text-muted-foreground mb-6">
               Your local-first knowledge fabric for AI coding agents
             </p>
@@ -73,7 +63,7 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
 
             <div className="flex flex-col gap-2 pt-4 border-t border-border">
               <Button
-                onClick={() => setStep('observer')}
+                onClick={() => setStep("observer")}
                 className="w-full justify-center gap-2"
                 size="lg"
               >
@@ -88,7 +78,7 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
         )}
 
         {/* Observer step (prominent banner per INV-17) */}
-        {step === 'observer' && (
+        {step === "observer" && (
           <CardContent className="p-8">
             <div className="flex items-start gap-4 mb-6">
               <div
@@ -106,12 +96,12 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
             </div>
 
             <div className="bg-orqenix-amber/5 border border-orqenix-amber/30 rounded-lg p-4 mb-6">
-              <p className="text-sm font-medium mb-2">
-                What the observer does
-              </p>
+              <p className="text-sm font-medium mb-2">What the observer does</p>
               <ul className="text-xs text-muted-foreground space-y-1.5">
                 <li>• Captures workflow patterns: tool calls, file edits, outcomes</li>
-                <li>• Detects recurring sequences ({'>'} 5 occurrences, {'>'} 80% success)</li>
+                <li>
+                  • Detects recurring sequences ({">"} 5 occurrences, {">"} 80% success)
+                </li>
                 <li>• Suggests skills you can promote to your skill library</li>
                 <li>• PII is filtered before storage (Phase 7 privacy filters)</li>
                 <li>• Cross-project sharing requires explicit approval (ADR-E-011)</li>
@@ -156,7 +146,8 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    No workflow patterns captured. Can re-enable anytime in Settings → Self-Learning.
+                    No workflow patterns captured. Can re-enable anytime in Settings →
+                    Self-Learning.
                   </p>
                 </div>
               </label>
@@ -167,7 +158,7 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
             </p>
 
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setStep('welcome')} className="flex-1">
+              <Button variant="outline" onClick={() => setStep("welcome")} className="flex-1">
                 Back
               </Button>
               <Button
@@ -175,14 +166,14 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
                   // Persist observer setting to localStorage for now
                   // D8.α.5 Settings Registry will wire this to the real settings layer
                   localStorage.setItem(
-                    'orqenix-workbench:observer-enabled',
-                    observerEnabled ? 'true' : 'false'
+                    "orqenix-workbench:observer-enabled",
+                    observerEnabled ? "true" : "false",
                   );
-                  setStep('done');
+                  setStep("done");
                 }}
                 className="flex-1 justify-center gap-2"
               >
-                {observerEnabled ? 'Enable observer' : 'Disable observer'}
+                {observerEnabled ? "Enable observer" : "Disable observer"}
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
@@ -190,7 +181,7 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
         )}
 
         {/* Done step */}
-        {step === 'done' && (
+        {step === "done" && (
           <CardContent className="p-8 text-center">
             <div className="flex justify-center mb-6">
               <div
@@ -203,54 +194,45 @@ export function FirstLaunchWizard({ onComplete }: FirstLaunchWizardProps) {
 
             <h2 className="text-2xl font-bold mb-3">You're all set</h2>
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              Workbench is running at <code className="bg-muted px-1.5 py-0.5 rounded font-mono text-sm">http://localhost:27420</code>
+              Workbench is running at{" "}
+              <code className="bg-muted px-1.5 py-0.5 rounded font-mono text-sm">
+                http://localhost:27420
+              </code>
             </p>
 
             <div className="grid grid-cols-2 gap-3 mb-8 text-left">
               <Card className="p-3">
                 <Brain className="w-5 h-5 text-orqenix-emerald mb-2" aria-hidden />
                 <p className="text-sm font-medium">Memory</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Browse hierarchical memory
-                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">Browse hierarchical memory</p>
               </Card>
               <Card className="p-3">
                 <Sparkles className="w-5 h-5 text-orqenix-amber mb-2" aria-hidden />
                 <p className="text-sm font-medium">Self-Learning</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Observer is{' '}
-                  <strong>
-                    {observerEnabled ? 'enabled' : 'disabled'}
-                  </strong>
+                  Observer is <strong>{observerEnabled ? "enabled" : "disabled"}</strong>
                 </p>
               </Card>
               <Card className="p-3">
                 <Package className="w-5 h-5 text-orqenix-violet mb-2" aria-hidden />
                 <p className="text-sm font-medium">Marketplace</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Discover and install plugins
-                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">Discover and install plugins</p>
               </Card>
               <Card className="p-3">
                 <Network className="w-5 h-5 text-orqenix-emerald mb-2" aria-hidden />
                 <p className="text-sm font-medium">Mesh</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  View links and capabilities
-                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">View links and capabilities</p>
               </Card>
             </div>
 
-            <Button
-              onClick={onComplete}
-              className="w-full justify-center gap-2"
-              size="lg"
-            >
+            <Button onClick={onComplete} className="w-full justify-center gap-2" size="lg">
               Open Workbench
               <ChevronRight className="w-4 h-4" />
             </Button>
 
             <p className="text-xs text-muted-foreground mt-4">
-              Press <kbd className="bg-muted px-1.5 py-0.5 rounded font-mono">⌘K</kbd> any time to open the command palette
+              Press <kbd className="bg-muted px-1.5 py-0.5 rounded font-mono">⌘K</kbd> any time to
+              open the command palette
             </p>
           </CardContent>
         )}
@@ -264,7 +246,7 @@ function FeatureRow({
   title,
   description,
 }: {
-  icon: React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
+  icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
   title: string;
   description: string;
 }) {

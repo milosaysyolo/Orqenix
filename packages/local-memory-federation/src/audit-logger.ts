@@ -4,11 +4,7 @@
 // Records all cross-project federation events in the relevant project's
 // audit chain. Per CR v8.0 Section 4.9 + Anti-pattern 34.
 
-import type {
-  FederationAuditKind,
-  FederationAuditEvent,
-  ProjectId,
-} from './types';
+import type { FederationAuditKind, FederationAuditEvent, ProjectId } from "./types";
 
 /**
  * Interface for the underlying audit chain implementation.
@@ -49,7 +45,7 @@ export class InMemoryAuditChainWriter implements AuditChainWriter {
 export class AuditLogger {
   constructor(
     private readonly writer: AuditChainWriter,
-    private readonly userId: string
+    private readonly userId: string,
   ) {}
 
   /** Logs a cross-project query attempt */
@@ -60,7 +56,7 @@ export class AuditLogger {
     candidatesReturned: number;
     durationMs: number;
   }): Promise<void> {
-    return this.write('memory.cross_project_query', input.projectId, {
+    return this.write("memory.cross_project_query", input.projectId, {
       source_project_ids: input.sourceProjectIds,
       query_hash: input.queryHash,
       candidates_returned: input.candidatesReturned,
@@ -75,9 +71,9 @@ export class AuditLogger {
     targetProjectId: ProjectId;
     scope: Record<string, boolean>;
     expiresAt: string;
-    action: 'granted' | 'revoked';
+    action: "granted" | "revoked";
   }): Promise<void> {
-    return this.write('memory.cross_project_approval', input.projectId, {
+    return this.write("memory.cross_project_approval", input.projectId, {
       source_project_id: input.sourceProjectId,
       target_project_id: input.targetProjectId,
       scope: input.scope,
@@ -94,7 +90,7 @@ export class AuditLogger {
     candidateKind: string;
     contentHash: string;
   }): Promise<void> {
-    return this.write('memory.cross_project_share', input.projectId, {
+    return this.write("memory.cross_project_share", input.projectId, {
       source_project_id: input.sourceProjectId,
       candidate_id: input.candidateId,
       candidate_kind: input.candidateKind,
@@ -105,7 +101,7 @@ export class AuditLogger {
   private async write(
     kind: FederationAuditKind,
     projectId: ProjectId,
-    payload: Record<string, unknown>
+    payload: Record<string, unknown>,
   ): Promise<void> {
     const event: FederationAuditEvent = {
       kind,

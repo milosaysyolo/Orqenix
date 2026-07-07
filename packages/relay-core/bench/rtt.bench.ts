@@ -2,7 +2,10 @@ import { RelayServer } from "../../../../Orqenix-Cloud/packages/relay-core/src/s
 import { WebSocket } from "ws";
 import * as ed25519 from "@noble/ed25519";
 import {
-  encodeFrame, decodeFrame, signChallenge, FrameKind,
+  encodeFrame,
+  decodeFrame,
+  signChallenge,
+  FrameKind,
 } from "../../../../Orqenix-Cloud/packages/relay-protocol/src/index.js";
 
 const PORT = 17421;
@@ -19,7 +22,12 @@ async function connect(serverPort: number, scopeId: string, sk: Uint8Array): Pro
   });
   const nonce = Buffer.from(CHALLENGE).toString("base64");
   const sig = await signChallenge(sk, CHALLENGE);
-  ws.send(encodeFrame({ kind: FrameKind.Auth, payload: { scopeId, nonce, sig: Buffer.from(sig).toString("base64"), tenantId: TENANT } }));
+  ws.send(
+    encodeFrame({
+      kind: FrameKind.Auth,
+      payload: { scopeId, nonce, sig: Buffer.from(sig).toString("base64"), tenantId: TENANT },
+    }),
+  );
   await new Promise<void>((resolve) => setTimeout(resolve, 50));
   return ws;
 }
@@ -27,7 +35,16 @@ async function connect(serverPort: number, scopeId: string, sk: Uint8Array): Pro
 export async function benchRelayRtt(iterations: number): Promise<number[]> {
   const sk = ed25519.utils.randomPrivateKey();
   const pk = await ed25519.getPublicKeyAsync(sk);
-  const server = new RelayServer({ port: PORT, cloudPrivateKey: sk, region: "bench", directory: { async lookup(scopeId: string) { return { pubkey: pk, tenantId: TENANT }; } } });
+  const server = new RelayServer({
+    port: PORT,
+    cloudPrivateKey: sk,
+    region: "bench",
+    directory: {
+      async lookup(scopeId: string) {
+        return { pubkey: pk, tenantId: TENANT };
+      },
+    },
+  });
   await server.start();
 
   const samples: number[] = [];
@@ -37,12 +54,18 @@ export async function benchRelayRtt(iterations: number): Promise<number[]> {
 
     for (let i = 0; i < iterations; i++) {
       const t0 = performance.now();
-      wsA.send(encodeFrame({ kind: FrameKind.Envelope, payload: { from: SCOPE_A, to: SCOPE_B, data: `ping-${i}`, ttl: 5000 } }));
+      wsA.send(
+        encodeFrame({
+          kind: FrameKind.Envelope,
+          payload: { from: SCOPE_A, to: SCOPE_B, data: `ping-${i}`, ttl: 5000 },
+        }),
+      );
       await new Promise<void>((resolve) => wsB.once("message", () => resolve()));
       const t1 = performance.now();
       samples.push(t1 - t0);
     }
-    wsA.close(); wsB.close();
+    wsA.close();
+    wsB.close();
   } finally {
     await server.stop();
   }

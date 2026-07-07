@@ -32,15 +32,15 @@ export async function invoke(input: NotionFetchInput): Promise<NotionFetchOutput
   }
 
   const resp = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
-    method: 'POST',
+    method: "POST",
     headers: {
       authorization: `Bearer ${token}`,
-      'notion-version': '2022-06-28',
-      'content-type': 'application/json',
+      "notion-version": "2022-06-28",
+      "content-type": "application/json",
     },
     body: JSON.stringify({
       filter: {
-        property: 'title',
+        property: "title",
         rich_text: { contains: input.query },
       },
     }),
@@ -65,7 +65,7 @@ export async function invoke(input: NotionFetchInput): Promise<NotionFetchOutput
 
 function extractTitle(props: Record<string, unknown>): string {
   const titleProp = props.title as { title?: Array<{ plain_text?: string }> } | undefined;
-  return titleProp?.title?.[0]?.plain_text ?? 'Untitled';
+  return titleProp?.title?.[0]?.plain_text ?? "Untitled";
 }
 
 function extractContent(props: Record<string, unknown>): string {

@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { mkdtemp, writeFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { loadTransportsConfig } from '../src/config.js';
+import { describe, it, expect } from "vitest";
+import { mkdtemp, writeFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { loadTransportsConfig } from "../src/config.js";
 
 const GOOD = `
 transports:
@@ -26,15 +26,15 @@ circuit_breaker:
 deadline_default_ms: 5000
 `;
 
-describe('transports.yaml', () => {
-  it('parses the canonical example', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'orqenix-cfg-'));
+describe("transports.yaml", () => {
+  it("parses the canonical example", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "orqenix-cfg-"));
     try {
-      const p = join(dir, 'transports.yaml');
+      const p = join(dir, "transports.yaml");
       await writeFile(p, GOOD);
       const cfg = await loadTransportsConfig(p);
       expect(cfg.transports.length).toBe(2);
-      expect(cfg.priority).toEqual(['libp2p', 'http']);
+      expect(cfg.priority).toEqual(["libp2p", "http"]);
       expect(cfg.circuitBreaker.failureThreshold).toBe(3);
       expect(cfg.deadlineDefaultMs).toBe(5000);
     } finally {
@@ -42,16 +42,16 @@ describe('transports.yaml', () => {
     }
   });
 
-  it('rejects unknown transport kind', async () => {
+  it("rejects unknown transport kind", async () => {
     const bad = `
 transports:
   - kind: unknown
     enabled: true
     listen: ["/ip4/0.0.0.0/tcp/4101"]
 `;
-    const dir = await mkdtemp(join(tmpdir(), 'orqenix-cfg-'));
+    const dir = await mkdtemp(join(tmpdir(), "orqenix-cfg-"));
     try {
-      const p = join(dir, 'transports.yaml');
+      const p = join(dir, "transports.yaml");
       await writeFile(p, bad);
       await expect(loadTransportsConfig(p)).rejects.toThrow();
     } finally {
@@ -59,15 +59,15 @@ transports:
     }
   });
 
-  it('rejects invalid circuit_breaker values', async () => {
+  it("rejects invalid circuit_breaker values", async () => {
     const bad = `
 transports: []
 circuit_breaker:
   failure_threshold: -1
 `;
-    const dir = await mkdtemp(join(tmpdir(), 'orqenix-cfg-'));
+    const dir = await mkdtemp(join(tmpdir(), "orqenix-cfg-"));
     try {
-      const p = join(dir, 'transports.yaml');
+      const p = join(dir, "transports.yaml");
       await writeFile(p, bad);
       await expect(loadTransportsConfig(p)).rejects.toThrow();
     } finally {

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // Workbench , Self-Learning provider , wires observer + detector + promoter
 
-import { Observer, BasicPiiFilter } from '@orqenix/self-learning-observer';
-import { BasicDetector, type IDetector } from '@orqenix/self-learning-detection';
-import { PromoterService, type PromoterServiceOptions } from '@orqenix/instinct-promoter';
-import { SkillGenesis } from '@orqenix/skill-genesis';
-import type { MemoryEngine } from '@orqenix/memory-engine';
+import { Observer, BasicPiiFilter } from "@orqenix/self-learning-observer";
+import { BasicDetector, type IDetector } from "@orqenix/self-learning-detection";
+import { PromoterService, type PromoterServiceOptions } from "@orqenix/instinct-promoter";
+import { SkillGenesis } from "@orqenix/skill-genesis";
+import type { MemoryEngine } from "@orqenix/memory-engine";
 
 /**
  * Constructs the self-learning stack bound to the memory-engine SQLite db.
@@ -14,7 +14,7 @@ import type { MemoryEngine } from '@orqenix/memory-engine';
  */
 export function buildSelfLearning(
   engine: MemoryEngine,
-  advancedDetector?: IDetector
+  advancedDetector?: IDetector,
 ): {
   observer: Observer;
   detector: IDetector;

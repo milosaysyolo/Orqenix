@@ -3,8 +3,8 @@
 //
 // Generates test fixtures from observation samples. Per CR v8.0 Section 9.4.4.
 
-import type { ObservationEvent } from '@orqenix/self-learning-observer';
-import type { InferredParameter, GeneratedFixture } from './types';
+import type { ObservationEvent } from "@orqenix/self-learning-observer";
+import type { InferredParameter, GeneratedFixture } from "./types";
 
 export class FixtureGenerator {
   /**
@@ -33,7 +33,10 @@ export class FixtureGenerator {
       const firstPayload = sorted[0]?.action_payload ?? {};
       const input: Record<string, unknown> = {};
       for (const [key, value] of Object.entries(this.flatten(firstPayload))) {
-        const paramName = key.split('.').pop()!.replace(/[^a-zA-Z0-9]/g, '_');
+        const paramName = key
+          .split(".")
+          .pop()!
+          .replace(/[^a-zA-Z0-9]/g, "_");
         if (paramNames.has(paramName)) {
           input[paramName] = value;
         }
@@ -42,7 +45,7 @@ export class FixtureGenerator {
       fixtures.push({
         name: `fixture-${++idx}`,
         input,
-        expectedOutcome: terminal.outcome_kind === 'success' ? 'success' : 'error',
+        expectedOutcome: terminal.outcome_kind === "success" ? "success" : "error",
       });
 
       if (fixtures.length >= 10) break; // cap at 10 fixtures
@@ -51,11 +54,11 @@ export class FixtureGenerator {
     return fixtures;
   }
 
-  private flatten(obj: Record<string, unknown>, prefix = ''): Record<string, unknown> {
+  private flatten(obj: Record<string, unknown>, prefix = ""): Record<string, unknown> {
     const out: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(obj)) {
       const path = prefix ? `${prefix}.${key}` : key;
-      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      if (value !== null && typeof value === "object" && !Array.isArray(value)) {
         Object.assign(out, this.flatten(value as Record<string, unknown>, path));
       } else {
         out[path] = value;

@@ -1,10 +1,10 @@
-import { webcrypto } from 'node:crypto';
-import type { TraceContext } from '@orqenix/mesh-transport-core';
+import { webcrypto } from "node:crypto";
+import type { TraceContext } from "@orqenix/mesh-transport-core";
 
 const TRACEPARENT_RE = /^00-([0-9a-f]{32})-([0-9a-f]{16})-([0-9a-f]{2})$/;
 
 export interface ParsedTraceparent {
-  version: '00';
+  version: "00";
   traceId: string;
   spanId: string;
   flags: string;
@@ -13,7 +13,7 @@ export interface ParsedTraceparent {
 export function parseTraceparent(tp: string): ParsedTraceparent | null {
   const m = TRACEPARENT_RE.exec(tp);
   if (!m) return null;
-  return { version: '00', traceId: m[1], spanId: m[2], flags: m[3] };
+  return { version: "00", traceId: m[1], spanId: m[2], flags: m[3] };
 }
 
 export function validateTraceparent(tp: string): boolean {
@@ -27,11 +27,16 @@ export function formatTraceparent(p: ParsedTraceparent): string {
 function randHex(bytes: number): string {
   const buf = new Uint8Array(bytes);
   webcrypto.getRandomValues(buf);
-  return Buffer.from(buf).toString('hex');
+  return Buffer.from(buf).toString("hex");
 }
 
 export function newTraceparent(): string {
-  return formatTraceparent({ version: '00', traceId: randHex(16), spanId: randHex(8), flags: '01' });
+  return formatTraceparent({
+    version: "00",
+    traceId: randHex(16),
+    spanId: randHex(8),
+    flags: "01",
+  });
 }
 
 export function deriveChildSpan(parent: string): string {

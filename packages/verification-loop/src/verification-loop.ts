@@ -4,9 +4,9 @@
 // Runs replay + cross-validation to progress a skill's verification status.
 // Per CR v8.0 Section 9.4.5 + Anti-38.
 
-import type { Database } from 'better-sqlite3';
-import { ulid } from '@orqenix/memory-engine';
-import { Observer } from '@orqenix/self-learning-observer';
+import type { Database } from "better-sqlite3";
+import { ulid } from "@orqenix/memory-engine";
+import { Observer } from "@orqenix/self-learning-observer";
 import {
   type VerifyInput,
   type VerifyResult,
@@ -15,7 +15,7 @@ import {
   type VerificationThresholds,
   type SkillExecutor,
   DEFAULT_VERIFICATION_THRESHOLDS,
-} from './types';
+} from "./types";
 
 export interface VerificationLoopOptions {
   db: Database;
@@ -52,7 +52,7 @@ export class VerificationLoop {
     // Need minimum samples to verify
     if (input.derivedFromObservations.length < thresholds.replayTestSamplesMin) {
       return {
-        newStatus: 'unverified',
+        newStatus: "unverified",
         passed: false,
         runs: [],
         canDefaultEnable: false,
@@ -62,7 +62,9 @@ export class VerificationLoop {
     // Split observations: holdout for cross-validation
     const holdoutCount = Math.max(
       1,
-      Math.floor((input.derivedFromObservations.length * thresholds.crossValidationHoldoutPct) / 100)
+      Math.floor(
+        (input.derivedFromObservations.length * thresholds.crossValidationHoldoutPct) / 100,
+      ),
     );
     const holdout = input.derivedFromObservations.slice(0, holdoutCount);
     const trainingSamples = input.derivedFromObservations.slice(holdoutCount);
@@ -71,7 +73,7 @@ export class VerificationLoop {
     const replayRun = await this.runVerification({
       skillName: input.skillName,
       skillVersion: input.skillVersion,
-      kind: 'replay',
+      kind: "replay",
       observationIds: trainingSamples,
       projectId: input.projectId,
     });
@@ -80,7 +82,7 @@ export class VerificationLoop {
     const replayPassed = replayRun.success_rate * 100 >= thresholds.successThresholdPct;
     if (!replayPassed) {
       this.persistRun(replayRun);
-      return { newStatus: 'unverified', passed: false, runs, canDefaultEnable: false };
+      return { newStatus: "unverified", passed: false, runs, canDefaultEnable: false };
     }
     this.persistRun(replayRun);
 
@@ -88,7 +90,7 @@ export class VerificationLoop {
     const crossValRun = await this.runVerification({
       skillName: input.skillName,
       skillVersion: input.skillVersion,
-      kind: 'cross_validation',
+      kind: "cross_validation",
       observationIds: holdout,
       projectId: input.projectId,
     });
@@ -97,22 +99,20 @@ export class VerificationLoop {
 
     const crossValPassed = crossValRun.success_rate * 100 >= thresholds.successThresholdPct;
 
-    const newStatus: VerificationStatus = crossValPassed
-      ? 'verified'
-      : 'replay_tested';
+    const newStatus: VerificationStatus = crossValPassed ? "verified" : "replay_tested";
 
     return {
       newStatus,
       passed: crossValPassed,
       runs,
-      canDefaultEnable: newStatus === 'verified', // Anti-38
+      canDefaultEnable: newStatus === "verified", // Anti-38
     };
   }
 
   /** Returns verification run history for a skill */
   getHistory(skillName: string): VerificationRun[] {
     const rows = this.db
-      .prepare('SELECT * FROM skill_verification_runs WHERE skill_id = ? ORDER BY run_at DESC')
+      .prepare("SELECT * FROM skill_verification_runs WHERE skill_id = ? ORDER BY run_at DESC")
       .all(skillName) as Array<Record<string, unknown>>;
     return rows.map((r) => this.rowToRun(r));
   }
@@ -122,7 +122,7 @@ export class VerificationLoop {
   private async runVerification(input: {
     skillName: string;
     skillVersion: string;
-    kind: VerificationRun['verification_kind'];
+    kind: VerificationRun["verification_kind"];
     observationIds: string[];
     projectId: string;
   }): Promise<VerificationRun> {
@@ -137,14 +137,14 @@ export class VerificationLoop {
     for (const obsId of input.observationIds) {
       const event = byId.get(obsId);
       if (!event) continue;
-      const expectedOutcome = event.outcome_kind === 'success' ? 'success' : 'error';
+      const expectedOutcome = event.outcome_kind === "success" ? "success" : "error";
       const result = await this.executor.replay({
         skillName: input.skillName,
         input: event.action_payload,
         expectedOutcome,
       });
       if (result.matched) success += 1;
-      else if (result.actualOutcome === 'partial') partial += 1;
+      else if (result.actualOutcome === "partial") partial += 1;
       else failure += 1;
     }
 
@@ -174,12 +174,21 @@ export class VerificationLoop {
           id, skill_id, skill_version, verification_kind, run_at,
           observations_used, success_count, failure_count, partial_count,
           success_rate, notes, result_payload_json
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .run(
-        run.id, run.skill_id, run.skill_version, run.verification_kind, run.run_at,
-        run.observations_used, run.success_count, run.failure_count, run.partial_count,
-        run.success_rate, run.notes, run.result_payload_json
+        run.id,
+        run.skill_id,
+        run.skill_version,
+        run.verification_kind,
+        run.run_at,
+        run.observations_used,
+        run.success_count,
+        run.failure_count,
+        run.partial_count,
+        run.success_rate,
+        run.notes,
+        run.result_payload_json,
       );
   }
 
@@ -188,7 +197,7 @@ export class VerificationLoop {
       id: row.id as string,
       skill_id: row.skill_id as string,
       skill_version: row.skill_version as string,
-      verification_kind: row.verification_kind as VerificationRun['verification_kind'],
+      verification_kind: row.verification_kind as VerificationRun["verification_kind"],
       run_at: row.run_at as string,
       observations_used: row.observations_used as number,
       success_count: row.success_count as number,

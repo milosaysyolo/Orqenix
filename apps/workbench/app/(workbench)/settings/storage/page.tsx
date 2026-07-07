@@ -1,10 +1,19 @@
 // SPDX-License-Identifier: Apache-2.0
 // Settings → Storage , configure KB backends, compression levels, and embedding models
 
-'use client';
+"use client";
 
-import { Database, Archive, HardDrive } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Label, Switch, Slider } from '@orqenix/ui-primitives';
+import { Database, Archive, HardDrive } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Label,
+  Switch,
+  Slider,
+} from "@orqenix/ui-primitives";
 
 export default function SettingsStoragePage() {
   return (
@@ -23,7 +32,9 @@ export default function SettingsStoragePage() {
               <Database className="w-5 h-5" aria-hidden />
               Knowledge Base Backend
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P6 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P6 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -77,7 +88,9 @@ export default function SettingsStoragePage() {
               <Archive className="w-5 h-5" aria-hidden />
               Compression
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P3 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P3 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -89,11 +102,7 @@ export default function SettingsStoragePage() {
             <Switch defaultChecked />
           </SettingRow>
 
-          <SettingRow
-            label="Snapshot every N deltas"
-            description="Default 20"
-            phaseLock="P3"
-          >
+          <SettingRow label="Snapshot every N deltas" description="Default 20" phaseLock="P3">
             <Slider defaultValue={[20]} min={10} max={50} step={1} className="w-48" />
             <span className="text-sm text-muted-foreground ml-3">20</span>
           </SettingRow>
@@ -107,11 +116,7 @@ export default function SettingsStoragePage() {
             <span className="text-sm text-muted-foreground ml-3">3</span>
           </SettingRow>
 
-          <SettingRow
-            label="zstd level T4 (archive)"
-            description="Default 19 (max)"
-            phaseLock="P3"
-          >
+          <SettingRow label="zstd level T4 (archive)" description="Default 19 (max)" phaseLock="P3">
             <Slider defaultValue={[19]} min={9} max={22} step={1} className="w-48" />
             <span className="text-sm text-muted-foreground ml-3">19</span>
           </SettingRow>
@@ -125,7 +130,9 @@ export default function SettingsStoragePage() {
               <HardDrive className="w-5 h-5" aria-hidden />
               Embedding Model
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 / P4</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 / P4
+            </Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -180,9 +187,7 @@ function SettingRow({
             </Badge>
           )}
         </div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div className="flex items-center shrink-0">{children}</div>
     </div>

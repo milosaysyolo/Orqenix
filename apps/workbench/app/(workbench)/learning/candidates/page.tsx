@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // Workbench , Self-Learning Candidates page (Promoter UI)
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Sparkles, ShieldAlert } from 'lucide-react';
-import { Card, CardContent } from '@orqenix/ui-primitives';
-import { CandidateList } from '@orqenix/instinct-promoter/ui';
-import type { PromoterCandidate, ReviewAction } from '@orqenix/instinct-promoter';
+import * as React from "react";
+import { Sparkles, ShieldAlert } from "lucide-react";
+import { Card, CardContent } from "@orqenix/ui-primitives";
+import { CandidateList } from "@orqenix/instinct-promoter/ui";
+import type { PromoterCandidate, ReviewAction } from "@orqenix/instinct-promoter";
 
 export default function CandidatesPage(): React.ReactElement {
   const [candidates, setCandidates] = React.useState<PromoterCandidate[]>([]);
@@ -20,7 +20,7 @@ export default function CandidatesPage(): React.ReactElement {
   async function load(): Promise<void> {
     setLoading(true);
     try {
-      const res = await fetch('/api/learning/candidates');
+      const res = await fetch("/api/learning/candidates");
       if (res.ok) {
         const data = (await res.json()) as { candidates: PromoterCandidate[] };
         setCandidates(data.candidates);
@@ -31,10 +31,10 @@ export default function CandidatesPage(): React.ReactElement {
   }
 
   async function handleReview(candidateId: string, action: ReviewAction): Promise<void> {
-    const res = await fetch('/api/learning/candidates', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ candidateId, action, reviewedBy: 'local-user' }),
+    const res = await fetch("/api/learning/candidates", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ candidateId, action, reviewedBy: "local-user" }),
     });
     if (res.ok) {
       const data = (await res.json()) as { openBuilder?: boolean; generatedSkillName?: string };
@@ -54,8 +54,8 @@ export default function CandidatesPage(): React.ReactElement {
           Candidate Patterns
         </h1>
         <p className="text-muted-foreground">
-          Recurring workflows detected by the observer, ranked by impact. Promote useful
-          ones to skills.
+          Recurring workflows detected by the observer, ranked by impact. Promote useful ones to
+          skills.
         </p>
       </div>
 
@@ -66,8 +66,8 @@ export default function CandidatesPage(): React.ReactElement {
             <div className="flex-1">
               <p className="text-sm font-medium">Promoted skills require verification</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Per Anti-pattern 38, a promoted skill is created as <strong>unverified</strong>.
-                It must pass the verification loop (replay + cross-validation) before becoming
+                Per Anti-pattern 38, a promoted skill is created as <strong>unverified</strong>. It
+                must pass the verification loop (replay + cross-validation) before becoming
                 default-enabled. Observation samples are PII-redacted.
               </p>
             </div>

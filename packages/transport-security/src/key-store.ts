@@ -1,4 +1,4 @@
-import type { ScopeId } from '@orqenix/mesh-transport-core';
+import type { ScopeId } from "@orqenix/mesh-transport-core";
 
 export interface KeyResolver {
   resolve(scopeId: ScopeId): Promise<Uint8Array | undefined>;
@@ -28,7 +28,7 @@ export class LRUKeyStore {
   }
 
   put(scopeId: ScopeId, publicKey: Uint8Array): void {
-    if (publicKey.length !== 32) throw new Error('LRUKeyStore: public key must be 32 bytes');
+    if (publicKey.length !== 32) throw new Error("LRUKeyStore: public key must be 32 bytes");
     if (this.map.has(scopeId)) this.map.delete(scopeId);
     this.map.set(scopeId, publicKey);
     while (this.map.size > this.maxEntries) {

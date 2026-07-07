@@ -1,17 +1,24 @@
 // SPDX-License-Identifier: Apache-2.0
 // Plugin list , shows installed plugins with state + actions
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Package, Power, Settings as SettingsIcon, Trash2, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import { Card, CardContent, Badge, Button } from '@orqenix/ui-primitives';
+import * as React from "react";
+import {
+  Package,
+  Power,
+  Settings as SettingsIcon,
+  Trash2,
+  AlertTriangle,
+  CheckCircle2,
+} from "lucide-react";
+import { Card, CardContent, Badge, Button } from "@orqenix/ui-primitives";
 
 interface PluginListItem {
   name: string;
   version: string;
   kind: string;
-  state: 'installed' | 'configured' | 'active' | 'inactive' | 'crashed';
+  state: "installed" | "configured" | "active" | "inactive" | "crashed";
   isVerified: boolean;
   crashCount: number;
   totalInvocations: number;
@@ -26,20 +33,20 @@ export interface PluginListProps {
 }
 
 const KIND_GROUPS: Record<string, string> = {
-  'knowledge-source': 'Knowledge',
-  'embedding-model': 'Knowledge',
-  reranker: 'Knowledge',
-  'compression-strategy': 'Knowledge',
-  'memory-injection-strategy': 'Knowledge',
-  'prompt-rewriter': 'Knowledge',
-  visualization: 'Knowledge',
-  'code-analyzer': 'Knowledge',
-  'kb-schema': 'Knowledge',
-  'mcp-server': 'Agent',
-  agent: 'Agent',
-  subagent: 'Agent',
-  skill: 'Agent',
-  'agent-binding': 'Agent',
+  "knowledge-source": "Knowledge",
+  "embedding-model": "Knowledge",
+  reranker: "Knowledge",
+  "compression-strategy": "Knowledge",
+  "memory-injection-strategy": "Knowledge",
+  "prompt-rewriter": "Knowledge",
+  visualization: "Knowledge",
+  "code-analyzer": "Knowledge",
+  "kb-schema": "Knowledge",
+  "mcp-server": "Agent",
+  agent: "Agent",
+  subagent: "Agent",
+  skill: "Agent",
+  "agent-binding": "Agent",
 };
 
 export function PluginList({
@@ -71,7 +78,7 @@ export function PluginList({
                     v{plugin.version}
                   </Badge>
                   <Badge variant="outline" className="text-xs">
-                    {KIND_GROUPS[plugin.kind] ?? '?'} · {plugin.kind}
+                    {KIND_GROUPS[plugin.kind] ?? "?"} · {plugin.kind}
                   </Badge>
                   <PluginStateBadge state={plugin.state} />
                   {plugin.isVerified ? (
@@ -88,13 +95,13 @@ export function PluginList({
                   {plugin.totalInvocations} invocations
                   {plugin.crashCount > 0 && (
                     <span className="text-status-warning ml-2">
-                      · {plugin.crashCount} crash{plugin.crashCount > 1 ? 'es' : ''}
+                      · {plugin.crashCount} crash{plugin.crashCount > 1 ? "es" : ""}
                     </span>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                {plugin.state === 'active' ? (
+                {plugin.state === "active" ? (
                   <Button
                     variant="outline"
                     size="sm"
@@ -109,7 +116,7 @@ export function PluginList({
                     size="sm"
                     onClick={() => void onActivate?.(plugin.name)}
                     className="gap-1"
-                    disabled={plugin.state === 'crashed' && plugin.crashCount >= 3}
+                    disabled={plugin.state === "crashed" && plugin.crashCount >= 3}
                   >
                     <Power className="w-3.5 h-3.5" aria-hidden /> Activate
                   </Button>
@@ -139,13 +146,9 @@ export function PluginList({
   );
 }
 
-function PluginStateBadge({ state }: { state: PluginListItem['state'] }) {
+function PluginStateBadge({ state }: { state: PluginListItem["state"] }) {
   const variant =
-    state === 'active'
-      ? 'default'
-      : state === 'crashed'
-        ? 'destructive'
-        : 'secondary';
+    state === "active" ? "default" : state === "crashed" ? "destructive" : "secondary";
   return (
     <Badge variant={variant} className="text-xs">
       {state}

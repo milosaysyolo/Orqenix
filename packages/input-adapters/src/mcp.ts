@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: Apache-2.0
 // Input adapter: mcp , parses an MCP server manifest (package.json + mcpServer)
 
-import { buildCsf } from '@orqenix/normalization-engine';
-import type { InputAdapter, ImportInput, DetectionResult } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
-import { ADAPTER_VERSION, readContent, sanitizeName } from './shared';
+import { buildCsf } from "@orqenix/normalization-engine";
+import type { InputAdapter, ImportInput, DetectionResult } from "@orqenix/normalization-engine";
+import type { CanonicalSkillFormat } from "@orqenix/plugin-core";
+import { ADAPTER_VERSION, readContent, sanitizeName } from "./shared";
 
 export const mcpInputAdapter: InputAdapter = {
-  kind: 'mcp',
+  kind: "mcp",
   version: ADAPTER_VERSION,
-  name: 'MCP Server Manifest',
+  name: "MCP Server Manifest",
 
   async detect(input: ImportInput): Promise<DetectionResult> {
     const content = await readContent(input);
@@ -24,28 +24,28 @@ export const mcpInputAdapter: InputAdapter = {
   },
 
   async parse(input: ImportInput): Promise<CanonicalSkillFormat> {
-    const content = (await readContent(input)) ?? '{}';
+    const content = (await readContent(input)) ?? "{}";
     const pkg = JSON.parse(content) as {
       name?: string;
       version?: string;
       description?: string;
       mcpServer?: { name?: string; transport?: string; tools?: string[] };
     };
-    const name = pkg.name ?? pkg.mcpServer?.name ?? 'mcp-server';
+    const name = pkg.name ?? pkg.mcpServer?.name ?? "mcp-server";
     return buildCsf({
-      name: name.startsWith('@') ? name : `@local/${sanitizeName(name)}`,
-      version: pkg.version ?? '0.1.0',
-      kind: 'mcp-server',
+      name: name.startsWith("@") ? name : `@local/${sanitizeName(name)}`,
+      version: pkg.version ?? "0.1.0",
+      kind: "mcp-server",
       tool: {
-        name: sanitizeName(name).replace(/-/g, '_'),
-        description: pkg.description ?? 'Imported MCP server',
-        inputSchema: { type: 'object' },
+        name: sanitizeName(name).replace(/-/g, "_"),
+        description: pkg.description ?? "Imported MCP server",
+        inputSchema: { type: "object" },
       },
       permissions: [],
-      external_agent_compat: ['claude-code', 'cursor', 'opencode'],
-      language: 'typescript',
-      entry: './dist/server.js',
-      importedFromKind: 'mcp',
+      external_agent_compat: ["claude-code", "cursor", "opencode"],
+      language: "typescript",
+      entry: "./dist/server.js",
+      importedFromKind: "mcp",
       normalizerVersion: ADAPTER_VERSION,
       originalFormatPreserved: pkg,
     });

@@ -43,14 +43,14 @@ Config directory defaults to `.orqenix` relative to CWD.
 
 ## Architecture
 
-| Layer | Package | Role |
-|-------|---------|------|
-| Transport | `@orqenix/mesh-transport-http` | HTTP mesh transport (msgpack wire) |
-| Transport | `@orqenix/mesh-transport-libp2p` | libp2p mesh transport (Noise + yamux) |
-| Discovery | `@orqenix/mesh-discovery` | mDNS + bootstrap peer discovery |
-| Security | `@orqenix/transport-security` | Ed25519 identity, capability verification |
-| Observability | `@orqenix/mesh-observability` | Structured logging + metrics |
-| Routing | `@orqenix/mesh-router` | Priority-aware, circuit-broken transport selection |
+| Layer         | Package                          | Role                                               |
+| ------------- | -------------------------------- | -------------------------------------------------- |
+| Transport     | `@orqenix/mesh-transport-http`   | HTTP mesh transport (msgpack wire)                 |
+| Transport     | `@orqenix/mesh-transport-libp2p` | libp2p mesh transport (Noise + yamux)              |
+| Discovery     | `@orqenix/mesh-discovery`        | mDNS + bootstrap peer discovery                    |
+| Security      | `@orqenix/transport-security`    | Ed25519 identity, capability verification          |
+| Observability | `@orqenix/mesh-observability`    | Structured logging + metrics                       |
+| Routing       | `@orqenix/mesh-router`           | Priority-aware, circuit-broken transport selection |
 
 ## Cross-repo setup (Orqenix-Pro)
 

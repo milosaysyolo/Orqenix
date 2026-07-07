@@ -1,7 +1,7 @@
-import { Packr, Unpackr } from 'msgpackr';
-import type { ScopeId, CapabilityToken } from '@orqenix/mesh-transport-core';
-import { canonicalize } from '@orqenix/mesh-transport-core';
-import { b64urlDecode, b64urlEncode } from './ed25519.js';
+import { Packr, Unpackr } from "msgpackr";
+import type { ScopeId, CapabilityToken } from "@orqenix/mesh-transport-core";
+import { canonicalize } from "@orqenix/mesh-transport-core";
+import { b64urlDecode, b64urlEncode } from "./ed25519.js";
 
 const packr = new Packr({ useRecords: false });
 const unpackr = new Unpackr({ useRecords: false });
@@ -16,7 +16,7 @@ export interface CapabilityTokenFields {
   sig: string;
 }
 
-export function canonicalSigningBytes(token: Omit<CapabilityTokenFields, 'sig'>): Uint8Array {
+export function canonicalSigningBytes(token: Omit<CapabilityTokenFields, "sig">): Uint8Array {
   const stripped = {
     iss: token.iss,
     sub: token.sub,
@@ -34,22 +34,22 @@ export function encodeCapabilityToken(token: CapabilityTokenFields): CapabilityT
 
 export function decodeCapabilityToken(s: string): CapabilityTokenFields {
   const raw = unpackr.unpack(b64urlDecode(s)) as unknown;
-  if (!raw || typeof raw !== 'object') throw new Error('cap-token: not an object');
+  if (!raw || typeof raw !== "object") throw new Error("cap-token: not an object");
   const o = raw as Record<string, unknown>;
 
-  for (const k of ['iss', 'sub', 'jti', 'sig'] as const) {
-    if (typeof o[k] !== 'string' || (o[k] as string).length === 0) {
+  for (const k of ["iss", "sub", "jti", "sig"] as const) {
+    if (typeof o[k] !== "string" || (o[k] as string).length === 0) {
       throw new Error(`cap-token: field ${k} missing or empty`);
     }
   }
-  if (!Array.isArray(o.caps) || o.caps.some((c) => typeof c !== 'string')) {
-    throw new Error('cap-token: caps must be string[]');
+  if (!Array.isArray(o.caps) || o.caps.some((c) => typeof c !== "string")) {
+    throw new Error("cap-token: caps must be string[]");
   }
   if (!Number.isInteger(o.exp) || (o.exp as number) <= 0) {
-    throw new Error('cap-token: exp must be a positive integer');
+    throw new Error("cap-token: exp must be a positive integer");
   }
   if (o.nbf !== undefined && (!Number.isInteger(o.nbf) || (o.nbf as number) <= 0)) {
-    throw new Error('cap-token: nbf must be a positive integer when present');
+    throw new Error("cap-token: nbf must be a positive integer when present");
   }
   return {
     iss: o.iss as ScopeId,

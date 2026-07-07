@@ -4,10 +4,10 @@
 // Bridges Workbench Settings UI to @orqenix/settings-registry.
 // D8.α.6 wires the SQLite-backed persistence; D8.α.5 provides the API shape.
 
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 /**
  * GET /api/settings
@@ -17,7 +17,7 @@ export const runtime = 'nodejs';
  */
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const action = url.searchParams.get('action') ?? 'list';
+  const action = url.searchParams.get("action") ?? "list";
 
   try {
     // D8.α.6 wires the shared registry singleton backed by SQLite:
@@ -25,24 +25,24 @@ export async function GET(req: Request) {
     //   await bootstrapSettings(registry);  (or modules self-register)
 
     switch (action) {
-      case 'list': {
+      case "list": {
         // D8.α.5 stub: returns the static contract catalog shape
         return NextResponse.json(
           {
             contracts: [],
-            note: 'Settings registry singleton wires in D8.α.6 (SQLite-backed persistence)',
+            note: "Settings registry singleton wires in D8.α.6 (SQLite-backed persistence)",
           },
-          { status: 200, headers: { 'Cache-Control': 'no-store' } }
+          { status: 200, headers: { "Cache-Control": "no-store" } },
         );
       }
 
-      case 'resolve': {
-        const moduleId = url.searchParams.get('moduleId');
-        const path = url.searchParams.get('path');
+      case "resolve": {
+        const moduleId = url.searchParams.get("moduleId");
+        const path = url.searchParams.get("path");
         if (!moduleId || !path) {
           return NextResponse.json(
-            { error: 'resolve requires moduleId and path params' },
-            { status: 400 }
+            { error: "resolve requires moduleId and path params" },
+            { status: 400 },
           );
         }
         // D8.α.6: const resolved = await registry.resolve(moduleId, path, ctx);
@@ -50,37 +50,31 @@ export async function GET(req: Request) {
           {
             moduleId,
             path,
-            note: 'Resolution wires in D8.α.6',
+            note: "Resolution wires in D8.α.6",
           },
-          { status: 200 }
+          { status: 200 },
         );
       }
 
-      case 'export': {
-        const level = url.searchParams.get('level') ?? 'all';
-        const format = url.searchParams.get('format') ?? 'yaml';
+      case "export": {
+        const level = url.searchParams.get("level") ?? "all";
+        const format = url.searchParams.get("format") ?? "yaml";
         // D8.α.6: const data = await exportSettings(registry, { level, format });
         return NextResponse.json(
           {
             level,
             format,
-            note: 'Export wires in D8.α.6',
+            note: "Export wires in D8.α.6",
           },
-          { status: 200 }
+          { status: 200 },
         );
       }
 
       default:
-        return NextResponse.json(
-          { error: `Unknown action '${action}'` },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: `Unknown action '${action}'` }, { status: 400 });
     }
   } catch (err) {
-    return NextResponse.json(
-      { error: (err as Error).message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }
 
@@ -97,27 +91,24 @@ export async function POST(req: Request) {
     level?: string;
     hierarchyId?: string;
     serialized?: string;
-    mode?: 'merge' | 'replace';
+    mode?: "merge" | "replace";
   };
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
   const { action } = body;
   if (!action) {
-    return NextResponse.json(
-      { error: 'Missing required field: action' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Missing required field: action" }, { status: 400 });
   }
 
-  const validActions = ['update', 'revert', 'import'];
+  const validActions = ["update", "revert", "import"];
   if (!validActions.includes(action)) {
     return NextResponse.json(
-      { error: `Invalid action '${action}'. Must be one of: ${validActions.join(', ')}` },
-      { status: 400 }
+      { error: `Invalid action '${action}'. Must be one of: ${validActions.join(", ")}` },
+      { status: 400 },
     );
   }
 
@@ -134,14 +125,11 @@ export async function POST(req: Request) {
       {
         ok: true,
         action,
-        note: 'Settings mutation wires in D8.α.6 (SQLite persistence + hot-reload)',
+        note: "Settings mutation wires in D8.α.6 (SQLite persistence + hot-reload)",
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
-    return NextResponse.json(
-      { error: (err as Error).message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }

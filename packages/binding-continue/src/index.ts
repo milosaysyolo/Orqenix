@@ -1,2 +1,2 @@
 // SPDX-License-Identifier: Apache-2.0
-export { ContinueBinding } from './binding';
+export { ContinueBinding } from "./binding";

@@ -8,13 +8,13 @@
 
 D8.α.6 implements the actual memory engine that prior deliveries stubbed:
 
-| Stub | Now wired |
-|---|---|
-| `ProjectIndex.query()` (D8.α.3) | Real hybrid search vs SQLite memory.db |
-| `ProjectIndex.fetchFullContent()` (D8.α.3) | Real blob fetch |
-| Audit chain writer (D8.α.3/α.4) | Real BLAKE3 chain (extends Phase 7 D7.13) |
-| `RegistryPersistence` (D8.α.4) | SQLite `installed_plugins` (Migration 540) |
-| `SettingsPersistence` (D8.α.5) | SQLite `config_overrides` (Migration 560) |
+| Stub                                       | Now wired                                  |
+| ------------------------------------------ | ------------------------------------------ |
+| `ProjectIndex.query()` (D8.α.3)            | Real hybrid search vs SQLite memory.db     |
+| `ProjectIndex.fetchFullContent()` (D8.α.3) | Real blob fetch                            |
+| Audit chain writer (D8.α.3/α.4)            | Real BLAKE3 chain (extends Phase 7 D7.13)  |
+| `RegistryPersistence` (D8.α.4)             | SQLite `installed_plugins` (Migration 540) |
+| `SettingsPersistence` (D8.α.5)             | SQLite `config_overrides` (Migration 560)  |
 
 ## Architecture (CR v8.0 Chapters 4 + 5)
 
@@ -56,40 +56,42 @@ Project (project_id = blake3 of Ed25519)
 ## Usage
 
 ```ts
-import { MemoryEngine } from '@orqenix/memory-engine';
+import { MemoryEngine } from "@orqenix/memory-engine";
 
-const engine = await MemoryEngine.open('./.orqenix/memory.db', {
-  projectId: 'blake3:7f2ac8d1...',
+const engine = await MemoryEngine.open("./.orqenix/memory.db", {
+  projectId: "blake3:7f2ac8d1...",
 });
 
 // Write to a session
 await engine.write({
-  kb: 'decision',
-  content: 'Use Stripe for billing',
-  branchId: 'blake3:main...',
-  sessionId: '01J3X8H9...',
-  memoryLevel: 'session',
+  kb: "decision",
+  content: "Use Stripe for billing",
+  branchId: "blake3:main...",
+  sessionId: "01J3X8H9...",
+  memoryLevel: "session",
 });
 
 // Parallel 3-step query (session → branch → project)
 const results = await engine.query({
-  query: 'billing approach',
-  sessionId: '01J3X8H9...',
-  branchId: 'blake3:main...',
-  projectId: 'blake3:7f2ac8d1...',
+  query: "billing approach",
+  sessionId: "01J3X8H9...",
+  branchId: "blake3:main...",
+  projectId: "blake3:7f2ac8d1...",
   limit: 20,
 });
 
 // Branch deep-copy
 await engine.createBranch({
-  parentBranchId: 'blake3:main...',
-  newBranchName: 'feature/stripe',
+  parentBranchId: "blake3:main...",
+  newBranchName: "feature/stripe",
 });
 
 // Subagent (no matrix; parent absorbs return)
 const ret = await engine.invokeSubagent({
-  parentSessionId: '01J3X8H9...',
-  harness: { /* ... */ },
+  parentSessionId: "01J3X8H9...",
+  harness: {
+    /* ... */
+  },
 });
 ```
 

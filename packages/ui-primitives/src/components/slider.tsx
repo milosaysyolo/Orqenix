@@ -7,11 +7,11 @@
 // Heavily used in Workbench Settings UI for numeric configuration
 // (boost weights, thresholds, sample rates, etc.).
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import * as SliderPrimitive from '@radix-ui/react-slider';
-import { cn } from '../lib/cn';
+import * as React from "react";
+import * as SliderPrimitive from "@radix-ui/react-slider";
+import { cn } from "../lib/cn";
 
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
@@ -20,9 +20,9 @@ const Slider = React.forwardRef<
   <SliderPrimitive.Root
     ref={ref}
     className={cn(
-      'relative flex w-full touch-none select-none items-center',
-      'data-cursor-not-allowed data-opacity-50',
-      className
+      "relative flex w-full touch-none select-none items-center",
+      "data-cursor-not-allowed data-opacity-50",
+      className,
     )}
     {...props}
   >
@@ -31,9 +31,9 @@ const Slider = React.forwardRef<
     </SliderPrimitive.Track>
     <SliderPrimitive.Thumb
       className={cn(
-        'block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors',
-        'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
-        'disabled:pointer-events-none disabled:opacity-50'
+        "block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors",
+        "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+        "disabled:pointer-events-none disabled:opacity-50",
       )}
     />
   </SliderPrimitive.Root>

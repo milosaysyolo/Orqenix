@@ -1,10 +1,18 @@
 // SPDX-License-Identifier: Apache-2.0
 // Settings → Mesh , transport preferences, capabilities, sharing toggles
 
-'use client';
+"use client";
 
-import { Network, Link2, Share2 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Label, Switch } from '@orqenix/ui-primitives';
+import { Network, Link2, Share2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Label,
+  Switch,
+} from "@orqenix/ui-primitives";
 
 export default function SettingsMeshPage() {
   return (
@@ -23,7 +31,9 @@ export default function SettingsMeshPage() {
               <Share2 className="w-5 h-5" aria-hidden />
               Sharing Toggles
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -60,7 +70,9 @@ export default function SettingsMeshPage() {
               <Network className="w-5 h-5" aria-hidden />
               Mesh Transport
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P6 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P6 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -85,7 +97,9 @@ export default function SettingsMeshPage() {
               <Link2 className="w-5 h-5" aria-hidden />
               Capability Tokens
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P6 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P6 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -110,7 +124,9 @@ export default function SettingsMeshPage() {
             phaseLock="P6"
           >
             <Switch disabled />
-            <Badge variant="secondary" className="text-xs ml-2">Pro</Badge>
+            <Badge variant="secondary" className="text-xs ml-2">
+              Pro
+            </Badge>
           </SettingRow>
 
           <SettingRow
@@ -119,7 +135,9 @@ export default function SettingsMeshPage() {
             phaseLock="P6"
           >
             <Switch disabled />
-            <Badge variant="secondary" className="text-xs ml-2">Pro</Badge>
+            <Badge variant="secondary" className="text-xs ml-2">
+              Pro
+            </Badge>
           </SettingRow>
         </CardContent>
       </Card>
@@ -160,9 +178,7 @@ function SettingRow({
             </Badge>
           )}
         </div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div className="flex items-center shrink-0">{children}</div>
     </div>

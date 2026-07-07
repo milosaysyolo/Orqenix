@@ -1,5 +1,5 @@
-import { hash as blake3Hash } from 'blake3-wasm';
-import type { MeshRequest } from '@orqenix/mesh-transport-core';
+import { hash as blake3Hash } from "blake3-wasm";
+import type { MeshRequest } from "@orqenix/mesh-transport-core";
 
 export interface PayloadSummary {
   payloadSize: number;
@@ -11,9 +11,18 @@ export interface CapabilitySummary {
 }
 
 const FORBIDDEN_FIELD_NAMES = new Set([
-  'capability', 'cap', 'token', 'signature', 'sig', 'secret',
-  'privateKey', 'private_key', 'seed', 'scopeSeed',
-  'payload', 'payloadBytes',
+  "capability",
+  "cap",
+  "token",
+  "signature",
+  "sig",
+  "secret",
+  "privateKey",
+  "private_key",
+  "seed",
+  "scopeSeed",
+  "payload",
+  "payloadBytes",
 ]);
 
 export function summarizePayload(bytes: Uint8Array | undefined): PayloadSummary | undefined {
@@ -21,7 +30,7 @@ export function summarizePayload(bytes: Uint8Array | undefined): PayloadSummary 
   const digest = blake3Hash(bytes);
   return {
     payloadSize: bytes.length,
-    payloadHash: Buffer.from(digest).toString('hex'),
+    payloadHash: Buffer.from(digest).toString("hex"),
   };
 }
 
@@ -29,7 +38,7 @@ export function summarizeCapability(_token: unknown): CapabilitySummary | undefi
   return { jti: undefined };
 }
 
-export function summarizeRequest(req: Pick<MeshRequest, 'id' | 'method' | 'payload'>): {
+export function summarizeRequest(req: Pick<MeshRequest, "id" | "method" | "payload">): {
   requestId: string;
   method: string;
   payload?: PayloadSummary;
@@ -42,15 +51,15 @@ export function summarizeRequest(req: Pick<MeshRequest, 'id' | 'method' | 'paylo
 }
 
 export function redact(input: unknown, depth = 0): unknown {
-  if (depth > 4) return '[depth-limited]';
+  if (depth > 4) return "[depth-limited]";
   if (input == null) return input;
   if (input instanceof Uint8Array) return summarizePayload(input);
   if (Array.isArray(input)) return input.map((v) => redact(v, depth + 1));
-  if (typeof input === 'object') {
+  if (typeof input === "object") {
     const out: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(input as Record<string, unknown>)) {
       if (FORBIDDEN_FIELD_NAMES.has(k)) {
-        out[k] = '[redacted]';
+        out[k] = "[redacted]";
         continue;
       }
       out[k] = redact(v, depth + 1);
@@ -61,7 +70,11 @@ export function redact(input: unknown, depth = 0): unknown {
 }
 
 export function containsLeak(serialized: string): boolean {
-  if (/"(capability|token|sig|signature|secret|privateKey|seed)"\s*:\s*"(?!\[redacted\])/.test(serialized)) {
+  if (
+    /"(capability|token|sig|signature|secret|privateKey|seed)"\s*:\s*"(?!\[redacted\])/.test(
+      serialized,
+    )
+  ) {
     return true;
   }
   if (/"[A-Za-z0-9_-]{120,}"/.test(serialized)) {

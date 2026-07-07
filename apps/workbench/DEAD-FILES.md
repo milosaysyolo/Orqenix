@@ -11,10 +11,12 @@ apps/workbench/components/theme-provider.tsx       # old provider  → replaced 
 ```
 
 After deleting, grep to confirm nothing imports them:
+
 ```
 git grep -n "workbench-shell\|theme-provider" -- apps/workbench   # must return nothing
 ```
 
 If anything still imports them, switch the import to:
+
 - `components/app-shell` (AppShell)
 - `components/theme` (ThemeProvider, ThemeToggle)

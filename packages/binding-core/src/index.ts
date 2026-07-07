@@ -8,4 +8,4 @@ export {
   type ExportResult,
   buildMcpCommand,
   resolveMcpBinPath,
-} from './binding-contract'
+} from "./binding-contract";

@@ -4,19 +4,21 @@
 // Coordinates candidate review: lists ranked candidates, enriches with redacted
 // samples, executes review decisions. On Promote, delegates to skill-genesis
 
-import type { Database } from 'better-sqlite3';
-import { CandidateStore, type IDetector } from '@orqenix/self-learning-detection';
-import { Observer } from '@orqenix/self-learning-observer';
-import { SkillGenesis } from '@orqenix/skill-genesis';
-import {  type PromoterCandidate,  type ObservationSample,  type ReviewDecision,  type ReviewResult,} from './types';
+import type { Database } from "better-sqlite3";
+import { CandidateStore, type IDetector } from "@orqenix/self-learning-detection";
+import { Observer } from "@orqenix/self-learning-observer";
+import { SkillGenesis } from "@orqenix/skill-genesis";
+import {
+  type PromoterCandidate,
+  type ObservationSample,
+  type ReviewDecision,
+  type ReviewResult,
+} from "./types";
 
 /** Audit writer for promoter events */
 export interface PromoterAuditWriter {
   append(event: {
-    kind:
-      | 'candidate.reviewed'
-      | 'candidate.promoted_to_skill'
-      | 'observer.candidate_detected';
+    kind: "candidate.reviewed" | "candidate.promoted_to_skill" | "observer.candidate_detected";
     ts: string;
     actor: { user: string };
     payload: Record<string, unknown>;
@@ -59,18 +61,15 @@ export class PromoterService {
    * redacted observation samples.
    */
   async listForReview(projectId: string, limit = 50): Promise<PromoterCandidate[]> {
-    const candidates = this.candidateStore.list(projectId, 'detected', limit);
+    const candidates = this.candidateStore.list(projectId, "detected", limit);
     return candidates.map((c) => {
       const sampleIds = JSON.parse(c.sample_observation_ids) as string[];
       const samples = this.fetchSamples(projectId, sampleIds);
-      const estTimeSavedPerWeekMin = this.estimateWeeklySavings(
-        c.observation_count,
-        samples
-      );
+      const estTimeSavedPerWeekMin = this.estimateWeeklySavings(c.observation_count, samples);
       return {
         id: c.id,
-        patternName: c.pattern_name ?? '(unnamed)',
-        patternDescription: c.pattern_description ?? '',
+        patternName: c.pattern_name ?? "(unnamed)",
+        patternDescription: c.pattern_description ?? "",
         occurrenceCount: c.observation_count,
         successRate: c.success_rate,
         impactScore: c.impact_score,
@@ -95,7 +94,7 @@ export class PromoterService {
     }
     // Audit the review
     await this.audit.append({
-      kind: 'candidate.reviewed',
+      kind: "candidate.reviewed",
       ts: new Date().toISOString(),
       actor: { user: decision.reviewedBy },
       payload: {
@@ -105,60 +104,52 @@ export class PromoterService {
       },
     });
     switch (decision.action) {
-      case 'reject':
+      case "reject":
         this.candidateStore.setReviewStatus(
           decision.candidateId,
-          'rejected',
+          "rejected",
           decision.reviewedBy,
-          decision.reason
+          decision.reason,
         );
-        return { ok: true, candidateId: decision.candidateId, action: 'reject' };
-      case 'defer':
+        return { ok: true, candidateId: decision.candidateId, action: "reject" };
+      case "defer":
         this.candidateStore.setReviewStatus(
           decision.candidateId,
-          'deferred',
+          "deferred",
           decision.reviewedBy,
-          decision.reason
+          decision.reason,
         );
-        return { ok: true, candidateId: decision.candidateId, action: 'defer' };
-      case 'promote_customize':
+        return { ok: true, candidateId: decision.candidateId, action: "defer" };
+      case "promote_customize":
         // Mark reviewed; UI opens the skill builder pre-filled
-        this.candidateStore.setReviewStatus(
-          decision.candidateId,
-          'reviewed',
-          decision.reviewedBy
-        );
+        this.candidateStore.setReviewStatus(decision.candidateId, "reviewed", decision.reviewedBy);
         return {
           ok: true,
           candidateId: decision.candidateId,
-          action: 'promote_customize',
+          action: "promote_customize",
           openBuilder: true,
         };
-      case 'promote': {
+      case "promote": {
         // Generate skill from candidate (skill-genesis)
         const genResult = await this.skillGenesis.generateFromCandidate({
           candidateId: decision.candidateId,
           projectId,
         });
-        this.candidateStore.setReviewStatus(
-          decision.candidateId,
-          'promoted',
-          decision.reviewedBy
-        );
+        this.candidateStore.setReviewStatus(decision.candidateId, "promoted", decision.reviewedBy);
         await this.audit.append({
-          kind: 'candidate.promoted_to_skill',
+          kind: "candidate.promoted_to_skill",
           ts: new Date().toISOString(),
           actor: { user: decision.reviewedBy },
           payload: {
             candidateId: decision.candidateId,
             skillName: genResult.skillName,
-            verificationStatus: 'unverified', // Anti-38: must verify before default-enabled
+            verificationStatus: "unverified", // Anti-38: must verify before default-enabled
           },
         });
         return {
           ok: true,
           candidateId: decision.candidateId,
-          action: 'promote',
+          action: "promote",
           generatedSkillName: genResult.skillName,
         };
       }
@@ -186,10 +177,7 @@ export class PromoterService {
     return samples;
   }
 
-  private estimateWeeklySavings(
-    occurrenceCount: number,
-    samples: ObservationSample[]
-  ): number {
+  private estimateWeeklySavings(occurrenceCount: number, samples: ObservationSample[]): number {
     const avgDurationMs =
       samples.length > 0
         ? samples.reduce((s, x) => s + (x.durationMs ?? 0), 0) / samples.length

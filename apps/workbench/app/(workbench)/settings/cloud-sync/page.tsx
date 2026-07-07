@@ -1,10 +1,20 @@
 // SPDX-License-Identifier: Apache-2.0
 // Settings → Cloud Sync , configure optional Cloud Tier connection
 
-'use client';
+"use client";
 
-import { Cloud, RefreshCw, Globe } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Button, Input, Label, Switch } from '@orqenix/ui-primitives';
+import { Cloud, RefreshCw, Globe } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Button,
+  Input,
+  Label,
+  Switch,
+} from "@orqenix/ui-primitives";
 
 export default function SettingsCloudSyncPage() {
   return (
@@ -12,8 +22,8 @@ export default function SettingsCloudSyncPage() {
       <div>
         <h2 className="text-2xl font-bold mb-1">Cloud Sync</h2>
         <p className="text-sm text-muted-foreground">
-          Optional Cloud Tier connection for cross-machine mesh + Web Control Plane.
-          OSS users can fully function without this.
+          Optional Cloud Tier connection for cross-machine mesh + Web Control Plane. OSS users can
+          fully function without this.
         </p>
       </div>
 
@@ -22,14 +32,15 @@ export default function SettingsCloudSyncPage() {
           <div className="flex items-start gap-3">
             <Cloud className="w-5 h-5 text-orqenix-violet mt-0.5" aria-hidden />
             <div className="flex-1">
-              <p className="text-sm font-medium text-foreground">
-                Cloud Sync is optional
-              </p>
+              <p className="text-sm font-medium text-foreground">Cloud Sync is optional</p>
               <p className="text-xs text-muted-foreground mt-1">
                 Workbench is local-first by default. Connect to Orqenix Cloud Tier (or self-hosted
-                operator) only if you need cross-machine mesh, OAuth identity bridge, or
-                Web Control Plane. See{' '}
-                <a href="https://orqenix.dev/docs/cloud-onboarding" className="underline underline-offset-2 hover:text-foreground">
+                operator) only if you need cross-machine mesh, OAuth identity bridge, or Web Control
+                Plane. See{" "}
+                <a
+                  href="https://orqenix.dev/docs/cloud-onboarding"
+                  className="underline underline-offset-2 hover:text-foreground"
+                >
                   Cloud onboarding guide
                 </a>
                 .
@@ -46,7 +57,9 @@ export default function SettingsCloudSyncPage() {
               <Globe className="w-5 h-5" aria-hidden />
               Connection
             </CardTitle>
-            <Badge variant="secondary" className="text-xs">Not connected</Badge>
+            <Badge variant="secondary" className="text-xs">
+              Not connected
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -65,15 +78,8 @@ export default function SettingsCloudSyncPage() {
 
           <div className="space-y-2">
             <Label htmlFor="github-org">GitHub organization (optional)</Label>
-            <Input
-              id="github-org"
-              type="text"
-              placeholder="my-org-name"
-              defaultValue=""
-            />
-            <p className="text-xs text-muted-foreground">
-              Used by Cloud for OAuth identity bridge
-            </p>
+            <Input id="github-org" type="text" placeholder="my-org-name" defaultValue="" />
+            <p className="text-xs text-muted-foreground">Used by Cloud for OAuth identity bridge</p>
           </div>
 
           <div className="flex gap-2 pt-2">
@@ -97,7 +103,9 @@ export default function SettingsCloudSyncPage() {
               <RefreshCw className="w-5 h-5" aria-hidden />
               Sync Settings
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P7 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P7 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -109,12 +117,11 @@ export default function SettingsCloudSyncPage() {
             <Switch disabled />
           </SettingRow>
 
-          <SettingRow
-            label="Heartbeat interval"
-            description="Default 25 seconds"
-            phaseLock="P7"
-          >
-            <select className="rounded-md border border-input bg-background px-3 py-1.5 text-sm" disabled>
+          <SettingRow label="Heartbeat interval" description="Default 25 seconds" phaseLock="P7">
+            <select
+              className="rounded-md border border-input bg-background px-3 py-1.5 text-sm"
+              disabled
+            >
               <option>5 seconds</option>
               <option>10 seconds</option>
               <option selected>25 seconds (default)</option>
@@ -127,7 +134,10 @@ export default function SettingsCloudSyncPage() {
             description="OTLP sampling rate, default 5%"
             phaseLock="P7"
           >
-            <select className="rounded-md border border-input bg-background px-3 py-1.5 text-sm" disabled>
+            <select
+              className="rounded-md border border-input bg-background px-3 py-1.5 text-sm"
+              disabled
+            >
               <option>1%</option>
               <option selected>5% (default)</option>
               <option>10%</option>
@@ -164,9 +174,7 @@ function SettingRow({
             </Badge>
           )}
         </div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div className="flex items-center shrink-0">{children}</div>
     </div>

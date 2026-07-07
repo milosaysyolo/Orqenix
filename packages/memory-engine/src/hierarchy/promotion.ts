@@ -5,22 +5,22 @@
 // Per CR v8.0 Section 4.5. Promotion duplicates an entry to the target level
 // with provenance tracking + audit.
 
-import type { SqliteStore } from '../store/sqlite-store';
-import type { KbKind, MemoryEntry } from '../store/types';
-import type { PromoteInput } from './types';
+import type { SqliteStore } from "../store/sqlite-store";
+import type { KbKind, MemoryEntry } from "../store/types";
+import type { PromoteInput } from "./types";
 
 const KB_TABLE: Record<KbKind, string> = {
-  chat: 'chat_entries',
-  code: 'code_entries',
-  decision: 'decision_entries',
-  lesson: 'lesson_entries',
+  chat: "chat_entries",
+  code: "code_entries",
+  decision: "decision_entries",
+  lesson: "lesson_entries",
 };
 
 export interface PromotionResult {
   newEntryId: string;
   sourceEntryId: string;
-  fromLevel: 'session' | 'branch';
-  toLevel: 'branch' | 'project';
+  fromLevel: "session" | "branch";
+  toLevel: "branch" | "project";
 }
 
 export class PromotionEngine {
@@ -41,13 +41,10 @@ export class PromotionEngine {
     // Determine target level + scope
     const targetLevel = input.to;
     const targetBranchId =
-      input.to === 'branch'
-        ? (input.toBranchId ?? input.fromBranchId)
-        : input.fromBranchId; // project level keeps branch_id for provenance
+      input.to === "branch" ? (input.toBranchId ?? input.fromBranchId) : input.fromBranchId; // project level keeps branch_id for provenance
 
     // Fetch full content (resolves blob if needed)
-    const content =
-      source.content ?? this.store.fetchContent(input.kb, input.entryId) ?? '';
+    const content = source.content ?? this.store.fetchContent(input.kb, input.entryId) ?? "";
 
     // Write the promoted copy at the target level
     const promoted = this.store.write({
@@ -59,12 +56,10 @@ export class PromotionEngine {
       branch_id: targetBranchId,
       // session_id is null at branch/project level
       memory_level: targetLevel,
-      ...(input.from === 'session' && input.fromSessionId
+      ...(input.from === "session" && input.fromSessionId
         ? { promoted_from_session_id: input.fromSessionId }
         : {}),
-      ...(input.from === 'branch'
-        ? { promoted_from_branch_id: input.fromBranchId }
-        : {}),
+      ...(input.from === "branch" ? { promoted_from_branch_id: input.fromBranchId } : {}),
     });
 
     return {
@@ -92,12 +87,12 @@ export class PromotionEngine {
         this.promote({
           entryId,
           kb: input.kb,
-          from: 'session',
-          to: 'branch',
+          from: "session",
+          to: "branch",
           fromSessionId: input.sessionId,
           fromBranchId: input.branchId,
           projectId: input.projectId,
-        })
+        }),
       );
     }
     return results;

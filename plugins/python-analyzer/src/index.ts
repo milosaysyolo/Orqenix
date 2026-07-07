@@ -19,7 +19,7 @@ export async function invoke(input: AnalyzeInput): Promise<AnalyzeOutput> {
   const classes: string[] = [];
   const imports: string[] = [];
 
-  for (const line of input.source.split('\n')) {
+  for (const line of input.source.split("\n")) {
     const fnMatch = /^\s*def\s+(\w+)\s*\(/.exec(line);
     if (fnMatch) functions.push(fnMatch[1]!);
 

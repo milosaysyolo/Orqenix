@@ -8,30 +8,34 @@ import type {
   OutputAdapter,
   SerializedFormat,
   ExportabilityReport,
-} from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
-import { ADAPTER_VERSION, getPreservedForKind } from './shared';
+} from "@orqenix/normalization-engine";
+import type { CanonicalSkillFormat } from "@orqenix/plugin-core";
+import { ADAPTER_VERSION, getPreservedForKind } from "./shared";
 
 export const npmOutputAdapter: OutputAdapter = {
-  kind: 'npm',
+  kind: "npm",
   version: ADAPTER_VERSION,
-  name: 'npm Package',
+  name: "npm Package",
 
   async serialize(csf: CanonicalSkillFormat): Promise<SerializedFormat> {
     // Round-trip from npm: reconstruct the exact package.json
-    const preserved = getPreservedForKind<Record<string, unknown>>(csf, 'npm');
+    const preserved = getPreservedForKind<Record<string, unknown>>(csf, "npm");
     if (preserved) {
-      return { content: JSON.stringify(preserved, null, 2), suggestedPath: 'package.json', format: 'json' };
+      return {
+        content: JSON.stringify(preserved, null, 2),
+        suggestedPath: "package.json",
+        format: "json",
+      };
     }
 
     // Build a fresh package.json from CSF (canonical, lossless mapping)
     const pkg: Record<string, unknown> = {
       name: csf.name,
       version: csf.version,
-      description: csf.manifest.tool?.description ?? '',
+      description: csf.manifest.tool?.description ?? "",
       license: csf.manifest.license,
       main: csf.implementation.entry,
-      keywords: [...csf.manifest.keywords, 'orqenix-plugin'],
+      keywords: [...csf.manifest.keywords, "orqenix-plugin"],
       orqenixPlugin: {
         manifestVersion: csf.manifestVersion,
         kind: csf.kind,
@@ -43,7 +47,7 @@ export const npmOutputAdapter: OutputAdapter = {
       },
     };
     if (csf.manifest.homepage) pkg.homepage = csf.manifest.homepage;
-    return { content: JSON.stringify(pkg, null, 2), suggestedPath: 'package.json', format: 'json' };
+    return { content: JSON.stringify(pkg, null, 2), suggestedPath: "package.json", format: "json" };
   },
 
   validateExportability(_csf: CanonicalSkillFormat): ExportabilityReport {

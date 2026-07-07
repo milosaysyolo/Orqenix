@@ -4,17 +4,17 @@
 // Default transport for Claude Code + most CLI agents. Reads JSON-RPC messages
 // from stdin, writes responses to stdout (newline-delimited).
 
-import type { OrqenixMcpServer } from '../server';
+import type { OrqenixMcpServer } from "../server";
 
 export interface JsonRpcRequest {
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   id: number | string;
   method: string;
   params?: unknown;
 }
 
 export interface JsonRpcResponse {
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   id: number | string;
   result?: unknown;
   error?: { code: number; message: string };
@@ -25,25 +25,25 @@ export interface JsonRpcResponse {
  * to the OrqenixMcpServer protocol handlers.
  */
 export class StdioTransport {
-  private buffer = '';
+  private buffer = "";
 
   constructor(private readonly server: OrqenixMcpServer) {}
 
   /** Starts reading from stdin */
   start(): void {
-    process.stdin.setEncoding('utf-8');
-    process.stdin.on('data', (chunk: string) => {
+    process.stdin.setEncoding("utf-8");
+    process.stdin.on("data", (chunk: string) => {
       this.buffer += chunk;
       this.processLines();
     });
-    process.stdin.on('end', () => {
+    process.stdin.on("end", () => {
       process.exit(0);
     });
   }
 
   private processLines(): void {
     let idx: number;
-    while ((idx = this.buffer.indexOf('\n')) !== -1) {
+    while ((idx = this.buffer.indexOf("\n")) !== -1) {
       const line = this.buffer.slice(0, idx).trim();
       this.buffer = this.buffer.slice(idx + 1);
       if (line.length > 0) {
@@ -58,19 +58,19 @@ export class StdioTransport {
       req = JSON.parse(line);
     } catch {
       this.send({
-        jsonrpc: '2.0',
+        jsonrpc: "2.0",
         id: 0,
-        error: { code: -32700, message: 'Parse error' },
+        error: { code: -32700, message: "Parse error" },
       });
       return;
     }
 
     try {
       const result = await this.dispatch(req);
-      this.send({ jsonrpc: '2.0', id: req.id, result });
+      this.send({ jsonrpc: "2.0", id: req.id, result });
     } catch (err) {
       this.send({
-        jsonrpc: '2.0',
+        jsonrpc: "2.0",
         id: req.id,
         error: { code: -32603, message: (err as Error).message },
       });
@@ -81,31 +81,28 @@ export class StdioTransport {
   private async dispatch(req: JsonRpcRequest): Promise<unknown> {
     const params = (req.params ?? {}) as Record<string, unknown>;
     switch (req.method) {
-      case 'initialize':
+      case "initialize":
         return this.server.handshake();
-      case 'tools/list':
+      case "tools/list":
         return { tools: this.server.listTools() };
-      case 'tools/call':
-        return this.server.callTool(
-          params.name as string,
-          params.arguments
-        );
-      case 'resources/list':
+      case "tools/call":
+        return this.server.callTool(params.name as string, params.arguments);
+      case "resources/list":
         return { resources: this.server.listResources() };
-      case 'resources/read':
+      case "resources/read":
         return this.server.readResource(params.uri as string);
-      case 'prompts/list':
+      case "prompts/list":
         return { prompts: this.server.listPrompts() };
-      case 'prompts/get':
+      case "prompts/get":
         return {
           messages: [
             {
-              role: 'user',
+              role: "user",
               content: {
-                type: 'text',
+                type: "text",
                 text: this.server.getPromptText(
                   params.name as string,
-                  params.arguments as Record<string, unknown>
+                  params.arguments as Record<string, unknown>,
                 ),
               },
             },
@@ -117,6 +114,6 @@ export class StdioTransport {
   }
 
   private send(response: JsonRpcResponse): void {
-    process.stdout.write(JSON.stringify(response) + '\n');
+    process.stdout.write(JSON.stringify(response) + "\n");
   }
 }

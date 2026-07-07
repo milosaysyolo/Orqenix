@@ -4,13 +4,13 @@
 // Aggregates action sequences into patterns + applies frequency + outcome
 // correlation thresholds. Per CR v8.0 Section 9.4.2.
 
-import { blake3 } from '@noble/hashes/blake3';
+import { blake3 } from "@noble/hashes/blake3";
 import {
   type ActionSequence,
   type DetectedPattern,
   type DetectionThresholds,
   DEFAULT_THRESHOLDS,
-} from './types';
+} from "./types";
 
 interface PatternAccumulator {
   actionKinds: string[];
@@ -46,7 +46,7 @@ export class FrequencyAnalyzer {
       acc.totalDurationMs += seq.durationMs;
       // Cap sample IDs at 10 for storage efficiency
       if (acc.sampleIds.length < 10) {
-        acc.sampleIds.push(seq.observationIds[0] ?? '');
+        acc.sampleIds.push(seq.observationIds[0] ?? "");
       }
       accumulators.set(hash, acc);
     }
@@ -73,7 +73,11 @@ export class FrequencyAnalyzer {
         avgDurationMs,
         sampleObservationIds: acc.sampleIds,
         suggestedName: this.suggestName(acc.actionKinds),
-        suggestedDescription: this.suggestDescription(acc.actionKinds, acc.occurrences, successRate),
+        suggestedDescription: this.suggestDescription(
+          acc.actionKinds,
+          acc.occurrences,
+          successRate,
+        ),
         impactScore,
       });
     }
@@ -84,9 +88,12 @@ export class FrequencyAnalyzer {
   // ─── Private ──────────────────────────────────────────────────────────
 
   private hashSequence(actionKinds: string[]): string {
-    const canonical = actionKinds.join('→');
+    const canonical = actionKinds.join("→");
     const h = blake3(new TextEncoder().encode(canonical));
-    return Array.from(h).slice(0, 16).map((b) => b.toString(16).padStart(2, '0')).join('');
+    return Array.from(h)
+      .slice(0, 16)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 
   /**
@@ -102,7 +109,7 @@ export class FrequencyAnalyzer {
   private computeImpactScore(
     frequency: number,
     successRate: number,
-    estTimeSavedMs: number
+    estTimeSavedMs: number,
   ): number {
     // Normalize: frequency (log scale) × success rate × time-saved (minutes)
     const freqFactor = Math.log10(frequency + 1);
@@ -114,9 +121,9 @@ export class FrequencyAnalyzer {
 
   private suggestName(actionKinds: string[]): string {
     // Heuristic: join distinctive verbs from action kinds
-    const simplified = actionKinds.map((k) => k.replace(/_/g, '-'));
+    const simplified = actionKinds.map((k) => k.replace(/_/g, "-"));
     if (simplified.length <= 3) {
-      return `@local/${simplified.join('-then-')}`;
+      return `@local/${simplified.join("-then-")}`;
     }
     return `@local/${simplified[0]}-workflow`;
   }
@@ -124,11 +131,9 @@ export class FrequencyAnalyzer {
   private suggestDescription(
     actionKinds: string[],
     occurrences: number,
-    successRate: number
+    successRate: number,
   ): string {
-    const steps = actionKinds
-      .map((k, i) => `${i + 1}. ${k.replace(/_/g, ' ')}`)
-      .join('; ');
+    const steps = actionKinds.map((k, i) => `${i + 1}. ${k.replace(/_/g, " ")}`).join("; ");
     return `Recurring ${actionKinds.length}-step workflow (${occurrences}× observed, ${(successRate * 100).toFixed(0)}% success): ${steps}`;
   }
 }

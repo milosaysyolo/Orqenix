@@ -7,22 +7,22 @@ import {
   type ScopeId,
   type SendOpts,
   type TransportCtx,
-} from '@orqenix/mesh-transport-core';
-import { HttpMeshTransport } from '@orqenix/mesh-transport-http';
-import { Libp2pMeshTransport } from '@orqenix/mesh-transport-libp2p';
-import { MeshDiscovery, makeMdnsService } from '@orqenix/mesh-discovery';
+} from "@orqenix/mesh-transport-core";
+import { HttpMeshTransport } from "@orqenix/mesh-transport-http";
+import { Libp2pMeshTransport } from "@orqenix/mesh-transport-libp2p";
+import { MeshDiscovery, makeMdnsService } from "@orqenix/mesh-discovery";
 import {
   CapabilityVerifier,
   Ed25519IdentityVerifier,
   Ed25519Signer,
   LRUKeyStore,
   makeSignFn,
-} from '@orqenix/transport-security';
-import { MeshLogger, MeshMetrics } from '@orqenix/mesh-observability';
-import { MeshRouter, MeshRouterBuilder } from '@orqenix/mesh-router';
-import { AddressBook } from './address-book.js';
-import type { LocalIdentity } from './identity-loader.js';
-import type { BootstrapConfig, TransportsConfig } from './config.js';
+} from "@orqenix/transport-security";
+import { MeshLogger, MeshMetrics } from "@orqenix/mesh-observability";
+import { MeshRouter, MeshRouterBuilder } from "@orqenix/mesh-router";
+import { AddressBook } from "./address-book.js";
+import type { LocalIdentity } from "./identity-loader.js";
+import type { BootstrapConfig, TransportsConfig } from "./config.js";
 
 export type AppHandler = (req: MeshRequest, ctx: TransportCtx) => Promise<MeshResponse>;
 
@@ -56,7 +56,7 @@ export interface NodeStatus {
 }
 
 export async function startLocalNode(opts: LocalNodeOptions): Promise<LocalNodeRuntime> {
-  const logger = opts.logger ?? new MeshLogger({ level: 'info' });
+  const logger = opts.logger ?? new MeshLogger({ level: "info" });
   const metrics = opts.metrics ?? new MeshMetrics();
   const hooks = { logger, metrics };
 
@@ -77,8 +77,8 @@ export async function startLocalNode(opts: LocalNodeOptions): Promise<LocalNodeR
 
   for (const t of opts.config.transports) {
     if (!t.enabled) continue;
-    if (t.kind === 'http') {
-      const listen = t.listen[0] ?? 'http://127.0.0.1:0';
+    if (t.kind === "http") {
+      const listen = t.listen[0] ?? "http://127.0.0.1:0";
       const url = new URL(listen);
       const http = new HttpMeshTransport({
         localScopeId: opts.identity.scopeId,
@@ -90,11 +90,11 @@ export async function startLocalNode(opts: LocalNodeOptions): Promise<LocalNodeR
       await http.start();
       registry.register(http);
       httpTransport = http;
-    } else if (t.kind === 'libp2p') {
+    } else if (t.kind === "libp2p") {
       libp2pTransport = new Libp2pMeshTransport({
         localScopeId: opts.identity.scopeId,
         scopeSeed: opts.identity.scopeSeed,
-        adapters: ['tcp', 'websockets'],
+        adapters: ["tcp", "websockets"],
         listen: t.listen,
         verifier: idVerifier,
         sign,
@@ -127,22 +127,38 @@ export async function startLocalNode(opts: LocalNodeOptions): Promise<LocalNodeR
     httpTransport,
     libp2p: libp2pTransport,
     async stop() {
-      try { discovery.stop(); } catch { /* ignore */ }
-      if (libp2pTransport) { try { await libp2pTransport.stop(); } catch { /* ignore */ } }
-      if (httpTransport) { try { await httpTransport.stop(); } catch { /* ignore */ } }
+      try {
+        discovery.stop();
+      } catch {
+        /* ignore */
+      }
+      if (libp2pTransport) {
+        try {
+          await libp2pTransport.stop();
+        } catch {
+          /* ignore */
+        }
+      }
+      if (httpTransport) {
+        try {
+          await httpTransport.stop();
+        } catch {
+          /* ignore */
+        }
+      }
     },
     status() {
-      const transports: NodeStatus['transports'] = [];
+      const transports: NodeStatus["transports"] = [];
       if (httpTransport) {
         transports.push({
-          kind: 'http',
+          kind: "http",
           addresses: [`http://127.0.0.1:${httpTransport.port()}`],
           peers: httpTransport.peers().length,
         });
       }
       if (libp2pTransport) {
         transports.push({
-          kind: 'libp2p',
+          kind: "libp2p",
           addresses: libp2pTransport.multiaddrs(),
           peers: libp2pTransport.peers().length,
         });

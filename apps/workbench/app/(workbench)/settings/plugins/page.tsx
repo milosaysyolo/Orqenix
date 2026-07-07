@@ -1,10 +1,18 @@
 // SPDX-License-Identifier: Apache-2.0
 // Settings → Plugins , sandbox, signing, registry sources
 
-'use client';
+"use client";
 
-import { Package, ShieldCheck, AlertCircle, Settings as SettingsIcon } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Label, Switch } from '@orqenix/ui-primitives';
+import { Package, ShieldCheck, AlertCircle, Settings as SettingsIcon } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Label,
+  Switch,
+} from "@orqenix/ui-primitives";
 
 export default function SettingsPluginsPage() {
   return (
@@ -23,7 +31,9 @@ export default function SettingsPluginsPage() {
               <ShieldCheck className="w-5 h-5" aria-hidden />
               Signing Enforcement
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -56,7 +66,9 @@ export default function SettingsPluginsPage() {
               <SettingsIcon className="w-5 h-5" aria-hidden />
               Sandbox
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -115,13 +127,15 @@ export default function SettingsPluginsPage() {
               <Package className="w-5 h-5" aria-hidden />
               Registry Sources
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <p className="text-sm text-muted-foreground">
-            Plugin Registry sources are interchangeable per CR v8.0 Section 6.3.1.
-            Enable/disable as needed.
+            Plugin Registry sources are interchangeable per CR v8.0 Section 6.3.1. Enable/disable as
+            needed.
           </p>
 
           <div className="space-y-4">
@@ -248,9 +262,7 @@ function SettingRow({
             </Badge>
           )}
         </div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div className="flex items-center shrink-0">{children}</div>
     </div>

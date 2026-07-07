@@ -1,1 +1,73 @@
-{  "name": "@orqenix/plugin-semantic-compression",  "version": "0.8.0-alpha.1",  "description": "Reference compression-strategy plugin: semantic summarization compression.",  "license": "Apache-2.0",  "type": "module",  "main": "./dist/plugin.js",  "files": [    "dist",    "LICENSE",    "README.md"  ],  "scripts": {    "build": "npx tsup src/index.ts --format esm --dts --clean",    "test": "vitest run"  },  "publishConfig": {    "access": "public",    "provenance": true  },  "keywords": [    "orqenix",    "orqenix-plugin",    "compression-strategy"  ],  "engines": {    "node": ">=20.10.0"  },  "orqenixPlugin": {    "manifestVersion": "1.0",    "kind": "compression-strategy",    "compatibility": {      "orqenix": ">=0.8.0"    },    "permissions": [      "memory.read:chat",      "memory.read:decision"    ],    "external_agent_compat": [      "claude-code",      "cursor"    ],    "sandboxMode": "separate_process",    "tool": {      "name": "semantic_compress",      "description": "Compresses memory entries via semantic summarization (honors never_compress)",      "inputSchema": {        "type": "object",        "properties": {          "entries": {            "type": "array"          }        },        "required": [          "entries"        ]      },      "outputSchema": {        "type": "object",        "properties": {          "compressed": {            "type": "array"          }        }      }    }  },  "devDependencies": {    "tsup": "catalog:",    "vitest": "catalog:",    "typescript": "catalog:"  }}
+{
+  "name": "@orqenix/plugin-semantic-compression",
+  "version": "0.8.0-alpha.1",
+  "description": "Reference compression-strategy plugin: semantic summarization compression.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/plugin.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npx tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "compression-strategy"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "orqenixPlugin": {
+    "manifestVersion": "1.0",
+    "kind": "compression-strategy",
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
+    "permissions": [
+      "memory.read:chat",
+      "memory.read:decision"
+    ],
+    "external_agent_compat": [
+      "claude-code",
+      "cursor"
+    ],
+    "sandboxMode": "separate_process",
+    "tool": {
+      "name": "semantic_compress",
+      "description": "Compresses memory entries via semantic summarization (honors never_compress)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "entries": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "entries"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "compressed": {
+            "type": "array"
+          }
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "tsup": "catalog:",
+    "vitest": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -4,10 +4,10 @@
 // Bridges Workbench UI to @orqenix/plugin-core. D8.α.6 wires the persistent
 // registry (SQLite) + sandbox manager; D8.α.4 provides the API shape.
 
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 /**
  * GET /api/plugins
@@ -24,18 +24,15 @@ export async function GET() {
       {
         plugins,
         count: plugins.length,
-        note: 'Plugin registry persistence wires in D8.α.6 (Memory Engine + SQLite)',
+        note: "Plugin registry persistence wires in D8.α.6 (Memory Engine + SQLite)",
       },
       {
         status: 200,
-        headers: { 'Cache-Control': 'no-store' },
-      }
+        headers: { "Cache-Control": "no-store" },
+      },
     );
   } catch (err) {
-    return NextResponse.json(
-      { error: (err as Error).message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }
 
@@ -50,25 +47,19 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json(
-      { error: 'Invalid JSON body' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
   const { action } = body;
   if (!action) {
-    return NextResponse.json(
-      { error: 'Missing required field: action' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Missing required field: action" }, { status: 400 });
   }
 
-  const validActions = ['install', 'activate', 'deactivate', 'uninstall', 'validate'];
+  const validActions = ["install", "activate", "deactivate", "uninstall", "validate"];
   if (!validActions.includes(action)) {
     return NextResponse.json(
-      { error: `Invalid action '${action}'. Must be one of: ${validActions.join(', ')}` },
-      { status: 400 }
+      { error: `Invalid action '${action}'. Must be one of: ${validActions.join(", ")}` },
+      { status: 400 },
     );
   }
 
@@ -77,14 +68,11 @@ export async function POST(req: Request) {
       {
         ok: true,
         action,
-        note: 'Plugin lifecycle execution wires in D8.α.6 (Memory Engine + audit chain + sandbox runtime)',
+        note: "Plugin lifecycle execution wires in D8.α.6 (Memory Engine + audit chain + sandbox runtime)",
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
-    return NextResponse.json(
-      { error: (err as Error).message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }

@@ -4,25 +4,27 @@
 // Per INV-15 + ADR-E-015: import → CSF → export must be byte-identical to the
 // original (modulo whitespace normalization).
 
-import type { InputAdapter, OutputAdapter, ImportInput } from './types';
+import type { InputAdapter, OutputAdapter, ImportInput } from "./types";
 
 /**
  * Whitespace normalization rules applied before round-trip comparison.
  * These rules are documented + stable so fidelity is deterministic.
  */
 export function normalizeWhitespace(content: string): string {
-  return content
-    // Normalize line endings
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n')
-    // Trim trailing whitespace per line
-    .split('\n')
-    .map((line) => line.replace(/\s+$/, ''))
-    .join('\n')
-    // Collapse 3+ blank lines to 1
-    .replace(/\n{3,}/g, '\n\n')
-    // Trim leading/trailing whitespace of whole document
-    .trim();
+  return (
+    content
+      // Normalize line endings
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      // Trim trailing whitespace per line
+      .split("\n")
+      .map((line) => line.replace(/\s+$/, ""))
+      .join("\n")
+      // Collapse 3+ blank lines to 1
+      .replace(/\n{3,}/g, "\n\n")
+      // Trim leading/trailing whitespace of whole document
+      .trim()
+  );
 }
 
 export interface RoundTripResult {
@@ -47,7 +49,7 @@ export async function roundTrip(
   original: string,
   input: InputAdapter,
   output: OutputAdapter,
-  importInput?: Partial<ImportInput>
+  importInput?: Partial<ImportInput>,
 ): Promise<RoundTripResult> {
   // Import
   const csf = await input.parse({
@@ -93,7 +95,7 @@ export async function assertRoundTrip(
   original: string,
   input: InputAdapter,
   output: OutputAdapter,
-  importInput?: Partial<ImportInput>
+  importInput?: Partial<ImportInput>,
 ): Promise<void> {
   const result = await roundTrip(original, input, output, importInput);
   if (!result.identical) {
@@ -102,9 +104,7 @@ export async function assertRoundTrip(
         ? ` First diff at index ${result.firstDiffIndex}: ` +
           `expected "${result.originalNormalized.slice(result.firstDiffIndex, result.firstDiffIndex + 30)}" ` +
           `got "${result.roundTrippedNormalized.slice(result.firstDiffIndex, result.firstDiffIndex + 30)}"`
-        : '';
-    throw new Error(
-      `Round-trip fidelity failed for ${input.kind} <-> ${output.kind}.${context}`
-    );
+        : "";
+    throw new Error(`Round-trip fidelity failed for ${input.kind} <-> ${output.kind}.${context}`);
   }
 }

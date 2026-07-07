@@ -40,22 +40,24 @@ Both present, no mode gating
 
 ## Phase 2: Decision matrix
 
-| Axis | Spec target | Current state | Action |
-|---|---|---|---|
-| 1. Headers prefix | All X-Orqenix-* | 18 occurrences, 0 X-Mesh-* | KEEP |
-| 2. Signing payload | UTF-8(`${request.id}.${toScope}`) | `this.sign(req.id, req.toScope)` | KEEP |
-| 3. Identity injection | IdentityVerifier + SignFn via constructor | Yes, both via constructor opts | KEEP |
-| 4. Msgpack lib | msgpackr only | msgpackr ^1.11.0 only | KEEP |
-| 5. Unified class | Both methods active | onRequest + send, no mode flag | KEEP |
+| Axis                  | Spec target                               | Current state                    | Action |
+| --------------------- | ----------------------------------------- | -------------------------------- | ------ |
+| 1. Headers prefix     | All X-Orqenix-\*                          | 18 occurrences, 0 X-Mesh-\*      | KEEP   |
+| 2. Signing payload    | UTF-8(`${request.id}.${toScope}`)         | `this.sign(req.id, req.toScope)` | KEEP   |
+| 3. Identity injection | IdentityVerifier + SignFn via constructor | Yes, both via constructor opts   | KEEP   |
+| 4. Msgpack lib        | msgpackr only                             | msgpackr ^1.11.0 only            | KEEP   |
+| 5. Unified class      | Both methods active                       | onRequest + send, no mode flag   | KEEP   |
 
 All 5 axes show KEEP. No Phase 3 changes needed.
 
 ## Phase 3: Changes applied
 
 ### Files created
+
 - packages/mesh-transport-http/D6F2-FK-1.2-WIRE-CHECK.ts (structural compatibility test)
 
 ### Files NOT modified (per scope fence)
+
 No source files modified. All axes already correct from D6F1 delivery.
 
 ## Phase 4: Wire-check outcome
@@ -69,21 +71,27 @@ Structural compatibility verified: Ed25519IdentityVerifier, Ed25519Signer, makeS
 ## Phase 5: Verification outputs
 
 ### 5.1 Build
+
 PASS (tsc -p tsconfig.json)
 
 ### 5.2 Tests
+
 PASS (49 tests including G37 gate wrapper)
 
 ### 5.3 G37 wrapper
+
 ALL 8 PASS
 
 ### 5.4 Router
+
 PASS (32 tests)
 
 ### 5.5 Local-node
+
 PASS (20 tests)
 
 ### 5.6 Full orchestrator
+
 ALL GATES PASS (89.51s)
 
 ## Outstanding items

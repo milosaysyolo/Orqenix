@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/marketplace-ui , PluginConfigForm , schema-driven settings form
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Label, Input, Switch, Button } from '@orqenix/ui-primitives';
+import * as React from "react";
+import { Label, Input, Switch, Button } from "@orqenix/ui-primitives";
 
 interface JsonSchemaProperty {
   type?: string;
@@ -20,7 +20,12 @@ export interface PluginConfigFormProps {
   onSave: () => void;
 }
 
-export function PluginConfigForm({ schema, values, onChange, onSave }: PluginConfigFormProps): React.ReactElement {
+export function PluginConfigForm({
+  schema,
+  values,
+  onChange,
+  onSave,
+}: PluginConfigFormProps): React.ReactElement {
   const props = schema.properties ?? {};
   return (
     <div className="space-y-4">
@@ -28,10 +33,12 @@ export function PluginConfigForm({ schema, values, onChange, onSave }: PluginCon
         <div key={key} className="flex items-start justify-between gap-4">
           <div className="flex-1">
             <Label className="text-sm font-medium">{key}</Label>
-            {prop.description && <p className="text-xs text-muted-foreground mt-0.5">{prop.description}</p>}
+            {prop.description && (
+              <p className="text-xs text-muted-foreground mt-0.5">{prop.description}</p>
+            )}
           </div>
           <div className="shrink-0">
-            {prop.type === 'boolean' ? (
+            {prop.type === "boolean" ? (
               <Switch
                 checked={Boolean(values[key] ?? prop.default)}
                 onCheckedChange={(v: boolean) => onChange(key, v)}
@@ -39,15 +46,19 @@ export function PluginConfigForm({ schema, values, onChange, onSave }: PluginCon
             ) : prop.enum ? (
               <select
                 className="rounded-md border border-input bg-background px-3 py-1.5 text-sm"
-                value={String(values[key] ?? prop.default ?? '')}
+                value={String(values[key] ?? prop.default ?? "")}
                 onChange={(e) => onChange(key, e.target.value)}
               >
-                {prop.enum.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                {prop.enum.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
               </select>
             ) : (
               <Input
                 className="w-48"
-                value={String(values[key] ?? prop.default ?? '')}
+                value={String(values[key] ?? prop.default ?? "")}
                 onChange={(e) => onChange(key, e.target.value)}
               />
             )}

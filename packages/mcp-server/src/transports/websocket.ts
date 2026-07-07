@@ -4,8 +4,8 @@
 // For real-time agents requiring bidirectional updates. Bidirectional JSON-RPC
 // over a WebSocket connection. Binds to 127.0.0.1 by default.
 
-import type { OrqenixMcpServer } from '../server';
-import type { JsonRpcRequest, JsonRpcResponse } from './stdio';
+import type { OrqenixMcpServer } from "../server";
+import type { JsonRpcRequest, JsonRpcResponse } from "./stdio";
 
 export interface WebSocketTransportOptions {
   port?: number;
@@ -26,17 +26,17 @@ export class WebSocketTransport {
 
   constructor(
     private readonly mcpServer: OrqenixMcpServer,
-    options: WebSocketTransportOptions = {}
+    options: WebSocketTransportOptions = {},
   ) {
     this.port = options.port ?? 27421;
-    this.bind = options.bind ?? '127.0.0.1';
+    this.bind = options.bind ?? "127.0.0.1";
   }
 
   async start(): Promise<void> {
-    const wsModule = await import('ws').catch(() => null);
+    const wsModule = await import("ws").catch(() => null);
     if (!wsModule) {
       throw new Error(
-        "WebSocket transport requires the 'ws' package. Install it or use stdio/http transport."
+        "WebSocket transport requires the 'ws' package. Install it or use stdio/http transport.",
       );
     }
     const { WebSocketServer } = wsModule as {
@@ -49,12 +49,12 @@ export class WebSocketTransport {
     const wss = new WebSocketServer({ port: this.port, host: this.bind });
     this.wss = wss;
 
-    wss.on('connection', (ws: unknown) => {
+    wss.on("connection", (ws: unknown) => {
       const socket = ws as {
         on(event: string, cb: (data: unknown) => void): void;
         send(data: string): void;
       };
-      socket.on('message', (data: unknown) => {
+      socket.on("message", (data: unknown) => {
         void this.handleMessage(String(data), socket);
       });
     });
@@ -67,36 +67,31 @@ export class WebSocketTransport {
     }
   }
 
-  private async handleMessage(
-    raw: string,
-    socket: { send(data: string): void }
-  ): Promise<void> {
+  private async handleMessage(raw: string, socket: { send(data: string): void }): Promise<void> {
     let req: JsonRpcRequest;
     try {
       req = JSON.parse(raw);
     } catch {
       socket.send(
         JSON.stringify({
-          jsonrpc: '2.0',
+          jsonrpc: "2.0",
           id: 0,
-          error: { code: -32700, message: 'Parse error' },
-        } satisfies JsonRpcResponse)
+          error: { code: -32700, message: "Parse error" },
+        } satisfies JsonRpcResponse),
       );
       return;
     }
 
     try {
       const result = await this.dispatch(req);
-      socket.send(
-        JSON.stringify({ jsonrpc: '2.0', id: req.id, result } satisfies JsonRpcResponse)
-      );
+      socket.send(JSON.stringify({ jsonrpc: "2.0", id: req.id, result } satisfies JsonRpcResponse));
     } catch (err) {
       socket.send(
         JSON.stringify({
-          jsonrpc: '2.0',
+          jsonrpc: "2.0",
           id: req.id,
           error: { code: -32603, message: (err as Error).message },
-        } satisfies JsonRpcResponse)
+        } satisfies JsonRpcResponse),
       );
     }
   }
@@ -104,28 +99,28 @@ export class WebSocketTransport {
   private async dispatch(req: JsonRpcRequest): Promise<unknown> {
     const params = (req.params ?? {}) as Record<string, unknown>;
     switch (req.method) {
-      case 'initialize':
+      case "initialize":
         return this.mcpServer.handshake();
-      case 'tools/list':
+      case "tools/list":
         return { tools: this.mcpServer.listTools() };
-      case 'tools/call':
+      case "tools/call":
         return this.mcpServer.callTool(params.name as string, params.arguments);
-      case 'resources/list':
+      case "resources/list":
         return { resources: this.mcpServer.listResources() };
-      case 'resources/read':
+      case "resources/read":
         return this.mcpServer.readResource(params.uri as string);
-      case 'prompts/list':
+      case "prompts/list":
         return { prompts: this.mcpServer.listPrompts() };
-      case 'prompts/get':
+      case "prompts/get":
         return {
           messages: [
             {
-              role: 'user',
+              role: "user",
               content: {
-                type: 'text',
+                type: "text",
                 text: this.mcpServer.getPromptText(
                   params.name as string,
-                  params.arguments as Record<string, unknown>
+                  params.arguments as Record<string, unknown>,
                 ),
               },
             },

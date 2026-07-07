@@ -3,8 +3,8 @@
 // SAFE: only removes files matching specific known patterns.
 // Idempotent: runs as no-op if already clean.
 
-import { readdir, unlink, stat } from 'node:fs/promises';
-import { join } from 'node:path';
+import { readdir, unlink, stat } from "node:fs/promises";
+import { join } from "node:path";
 
 const ROOT = process.cwd();
 const PATTERNS = [
@@ -36,4 +36,4 @@ for (const f of files) {
 }
 
 console.log(`\n${removed.length} debug artifact(s) removed.`);
-if (removed.length === 0) console.log('Repo root is clean.');
+if (removed.length === 0) console.log("Repo root is clean.");

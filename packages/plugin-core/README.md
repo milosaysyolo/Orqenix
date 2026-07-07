@@ -18,26 +18,26 @@ Provides the foundational plugin architecture for Orqenix:
 
 ### Knowledge Ecosystem (9 kinds)
 
-| Kind | Purpose |
-|---|---|
-| `knowledge-source` | Connect external knowledge bases (Notion, Linear, Jira) |
-| `embedding-model` | Provide embedding generation (BGE, OpenAI, Voyage) |
-| `reranker` | Rerank search results |
-| `compression-strategy` | Alternative memory compression |
-| `memory-injection-strategy` | Alternative context injection (extends Phase 2 A-E) |
-| `prompt-rewriter` | Rewrite prompts for better retrieval |
-| `visualization` | Custom Workbench visualizations |
-| `code-analyzer` | Parse + analyze code in specific languages |
-| `kb-schema` | Extend default 4 KBs with custom schemas |
+| Kind                        | Purpose                                                 |
+| --------------------------- | ------------------------------------------------------- |
+| `knowledge-source`          | Connect external knowledge bases (Notion, Linear, Jira) |
+| `embedding-model`           | Provide embedding generation (BGE, OpenAI, Voyage)      |
+| `reranker`                  | Rerank search results                                   |
+| `compression-strategy`      | Alternative memory compression                          |
+| `memory-injection-strategy` | Alternative context injection (extends Phase 2 A-E)     |
+| `prompt-rewriter`           | Rewrite prompts for better retrieval                    |
+| `visualization`             | Custom Workbench visualizations                         |
+| `code-analyzer`             | Parse + analyze code in specific languages              |
+| `kb-schema`                 | Extend default 4 KBs with custom schemas                |
 
 ### Agent Ecosystem (5 kinds)
 
-| Kind | Purpose |
-|---|---|
-| `mcp-server` | Expose MCP Server endpoints (tools + resources + prompts) |
-| `agent` | Autonomous orchestrator (coordinates skills + subagents) |
-| `subagent` | Specialized helper (no matrix per ADR-E-002) |
-| `skill` | Atomic capability (MCP-tool-compatible) |
+| Kind            | Purpose                                                        |
+| --------------- | -------------------------------------------------------------- |
+| `mcp-server`    | Expose MCP Server endpoints (tools + resources + prompts)      |
+| `agent`         | Autonomous orchestrator (coordinates skills + subagents)       |
+| `subagent`      | Specialized helper (no matrix per ADR-E-002)                   |
+| `skill`         | Atomic capability (MCP-tool-compatible)                        |
 | `agent-binding` | Bridge to external agent platforms (Claude Code, Cursor, etc.) |
 
 ## Sandbox Model
@@ -102,7 +102,9 @@ Plugins declare integration via `orqenixPlugin` field in `package.json`:
     "tool": {
       "name": "git_commit_conventional",
       "description": "Creates Conventional Commits messages",
-      "inputSchema": { /* JSON Schema */ }
+      "inputSchema": {
+        /* JSON Schema */
+      }
     },
     "sandboxMode": "separate_process"
   }
@@ -119,7 +121,7 @@ import {
   PluginLoader,
   SandboxManager,
   validateManifest,
-} from '@orqenix/plugin-core';
+} from "@orqenix/plugin-core";
 
 // Validate manifest
 const result = validateManifest(packageJson);
@@ -129,7 +131,7 @@ if (!result.success) {
 
 // Load + register
 const loader = new PluginLoader();
-const plugin = await loader.load('./node_modules/@example/git-commit-conventional');
+const plugin = await loader.load("./node_modules/@example/git-commit-conventional");
 
 const registry = new PluginRegistry();
 await registry.register(plugin);
@@ -139,9 +141,9 @@ const sandbox = new SandboxManager();
 const handle = await sandbox.activate(plugin);
 
 // Invoke
-const result = await handle.invoke('git_commit_conventional', {
-  type: 'feat',
-  description: 'add cross-project federation',
+const result = await handle.invoke("git_commit_conventional", {
+  type: "feat",
+  description: "add cross-project federation",
 });
 ```
 

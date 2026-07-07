@@ -14,28 +14,28 @@ Full marketplace operations on plugins per CR v8.0 Chapter 6:
 
 ## CRUD operations
 
-| Operation | Description |
-|---|---|
-| Create | Build a new plugin from a CSF template |
-| Read | Browse/search across registry sources |
-| Update | Version bump + re-validate + audit |
-| Delete | Confirmation + cleanup + retain audit |
-| Fork | Clone with renamed namespace |
-| Import | External source → CSF (via normalization-engine) |
-| Export | CSF → target platform format |
-| Install | Resolve + verify + lifecycle install |
-| Uninstall | Deactivate + remove + retain audit |
+| Operation | Description                                      |
+| --------- | ------------------------------------------------ |
+| Create    | Build a new plugin from a CSF template           |
+| Read      | Browse/search across registry sources            |
+| Update    | Version bump + re-validate + audit               |
+| Delete    | Confirmation + cleanup + retain audit            |
+| Fork      | Clone with renamed namespace                     |
+| Import    | External source → CSF (via normalization-engine) |
+| Export    | CSF → target platform format                     |
+| Install   | Resolve + verify + lifecycle install             |
+| Uninstall | Deactivate + remove + retain audit               |
 
 ## Registry sources (interchangeable, Anti-39)
 
-| Source | Backend |
-|---|---|
-| `orqenix-official` | plugins.orqenix.dev (Phase 8.2) |
-| `npm` | npm registry (orqenixPlugin field) |
-| `github` | GitHub topic search |
-| `local-file` | Local filesystem |
-| `private-git` | SSH Git URL |
-| `enterprise` | Operator-configured endpoint |
+| Source             | Backend                            |
+| ------------------ | ---------------------------------- |
+| `orqenix-official` | plugins.orqenix.dev (Phase 8.2)    |
+| `npm`              | npm registry (orqenixPlugin field) |
+| `github`           | GitHub topic search                |
+| `local-file`       | Local filesystem                   |
+| `private-git`      | SSH Git URL                        |
+| `enterprise`       | Operator-configured endpoint       |
 
 ## License
 

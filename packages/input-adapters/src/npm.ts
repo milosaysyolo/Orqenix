@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: Apache-2.0
 // Input adapter: npm , parses a package.json with orqenixPlugin field
 
-import { buildCsf } from '@orqenix/normalization-engine';
-import type { InputAdapter, ImportInput, DetectionResult } from '@orqenix/normalization-engine';
-import type { CanonicalSkillFormat, PluginKind } from '@orqenix/plugin-core';
-import { ADAPTER_VERSION, readContent } from './shared';
+import { buildCsf } from "@orqenix/normalization-engine";
+import type { InputAdapter, ImportInput, DetectionResult } from "@orqenix/normalization-engine";
+import type { CanonicalSkillFormat, PluginKind } from "@orqenix/plugin-core";
+import { ADAPTER_VERSION, readContent } from "./shared";
 
 export const npmInputAdapter: InputAdapter = {
-  kind: 'npm',
+  kind: "npm",
   version: ADAPTER_VERSION,
-  name: 'npm Package',
+  name: "npm Package",
 
   async detect(input: ImportInput): Promise<DetectionResult> {
     const content = await readContent(input);
@@ -24,7 +24,7 @@ export const npmInputAdapter: InputAdapter = {
   },
 
   async parse(input: ImportInput): Promise<CanonicalSkillFormat> {
-    const content = (await readContent(input)) ?? '{}';
+    const content = (await readContent(input)) ?? "{}";
     const pkg = JSON.parse(content) as {
       name: string;
       version: string;
@@ -48,12 +48,12 @@ export const npmInputAdapter: InputAdapter = {
       ...(op.tool ? { tool: op.tool } : {}),
       permissions: op.permissions ?? [],
       external_agent_compat: op.external_agent_compat ?? [],
-      license: pkg.license ?? 'Apache-2.0',
+      license: pkg.license ?? "Apache-2.0",
       keywords: pkg.keywords ?? [],
       ...(pkg.homepage ? { homepage: pkg.homepage } : {}),
-      language: 'typescript',
-      entry: pkg.main ?? './dist/plugin.js',
-      importedFromKind: 'npm',
+      language: "typescript",
+      entry: pkg.main ?? "./dist/plugin.js",
+      importedFromKind: "npm",
       normalizerVersion: ADAPTER_VERSION,
       originalFormatPreserved: pkg,
     });

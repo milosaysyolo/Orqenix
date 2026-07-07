@@ -6,8 +6,8 @@
 //
 // All imports/exports flow through CSF; round-trip fidelity is required.
 
-import { z } from 'zod';
-import { PermissionSchema } from './permissions';
+import { z } from "zod";
+import { PermissionSchema } from "./permissions";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Plugin kinds (14 total, per ADR-E-006)
@@ -15,61 +15,61 @@ import { PermissionSchema } from './permissions';
 
 export const PluginKindSchema = z.enum([
   // Knowledge Ecosystem (9)
-  'knowledge-source',
-  'embedding-model',
-  'reranker',
-  'compression-strategy',
-  'memory-injection-strategy',
-  'prompt-rewriter',
-  'visualization',
-  'code-analyzer',
-  'kb-schema',
+  "knowledge-source",
+  "embedding-model",
+  "reranker",
+  "compression-strategy",
+  "memory-injection-strategy",
+  "prompt-rewriter",
+  "visualization",
+  "code-analyzer",
+  "kb-schema",
   // Agent Ecosystem (5)
-  'mcp-server',
-  'agent',
-  'subagent',
-  'skill',
-  'agent-binding',
+  "mcp-server",
+  "agent",
+  "subagent",
+  "skill",
+  "agent-binding",
 ]);
 
 export type PluginKind = z.infer<typeof PluginKindSchema>;
 
 /** All 14 plugin kinds (for iteration) */
 export const ALL_PLUGIN_KINDS: readonly PluginKind[] = [
-  'knowledge-source',
-  'embedding-model',
-  'reranker',
-  'compression-strategy',
-  'memory-injection-strategy',
-  'prompt-rewriter',
-  'visualization',
-  'code-analyzer',
-  'kb-schema',
-  'mcp-server',
-  'agent',
-  'subagent',
-  'skill',
-  'agent-binding',
+  "knowledge-source",
+  "embedding-model",
+  "reranker",
+  "compression-strategy",
+  "memory-injection-strategy",
+  "prompt-rewriter",
+  "visualization",
+  "code-analyzer",
+  "kb-schema",
+  "mcp-server",
+  "agent",
+  "subagent",
+  "skill",
+  "agent-binding",
 ];
 
 export const KNOWLEDGE_KINDS: readonly PluginKind[] = [
-  'knowledge-source',
-  'embedding-model',
-  'reranker',
-  'compression-strategy',
-  'memory-injection-strategy',
-  'prompt-rewriter',
-  'visualization',
-  'code-analyzer',
-  'kb-schema',
+  "knowledge-source",
+  "embedding-model",
+  "reranker",
+  "compression-strategy",
+  "memory-injection-strategy",
+  "prompt-rewriter",
+  "visualization",
+  "code-analyzer",
+  "kb-schema",
 ];
 
 export const AGENT_KINDS: readonly PluginKind[] = [
-  'mcp-server',
-  'agent',
-  'subagent',
-  'skill',
-  'agent-binding',
+  "mcp-server",
+  "agent",
+  "subagent",
+  "skill",
+  "agent-binding",
 ];
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -77,7 +77,7 @@ export const AGENT_KINDS: readonly PluginKind[] = [
 // ─────────────────────────────────────────────────────────────────────────
 
 export const MCPToolSpecSchema = z.object({
-  name: z.string().regex(/^[a-z][a-z0-9_]*$/, 'Tool name must be snake_case'),
+  name: z.string().regex(/^[a-z][a-z0-9_]*$/, "Tool name must be snake_case"),
   description: z.string().min(1).max(1000),
   inputSchema: z.record(z.unknown()),
   outputSchema: z.record(z.unknown()).optional(),
@@ -105,7 +105,7 @@ export type SkillExample = z.infer<typeof SkillExampleSchema>;
 
 export const CompatibilitySchema = z.object({
   /** Semver range for Orqenix compatibility */
-  orqenix: z.string().regex(/^[\^~]?\d+\.\d+\.\d+/, 'Must be a semver range'),
+  orqenix: z.string().regex(/^[\^~]?\d+\.\d+\.\d+/, "Must be a semver range"),
   /** Optional MCP protocol version range */
   mcp: z.string().optional(),
   /** Optional Node.js version range */
@@ -128,9 +128,9 @@ export const SandboxConfigSchema = z.object({
 export type SandboxConfig = z.infer<typeof SandboxConfigSchema>;
 
 export const SandboxModeSchema = z.enum([
-  'separate_process',
-  'wasm',
-  'in_process_trusted', // discouraged per Anti-pattern 29
+  "separate_process",
+  "wasm",
+  "in_process_trusted", // discouraged per Anti-pattern 29
 ]);
 
 export type SandboxMode = z.infer<typeof SandboxModeSchema>;
@@ -158,12 +158,7 @@ export const ProvenanceSchema = z.object({
   derived_from_observations: z.array(z.string()).optional(),
 
   /** Verification lifecycle status */
-  verification_status: z.enum([
-    'unverified',
-    'replay_tested',
-    'verified',
-    'marketplace-ready',
-  ]),
+  verification_status: z.enum(["unverified", "replay_tested", "verified", "marketplace-ready"]),
 
   /** Optional Sigstore signature (D8.2 ships verification) */
   sigstore_signature: z
@@ -199,12 +194,12 @@ export type PluginLifecycleHooks = z.infer<typeof PluginLifecycleHooksSchema>;
 // ─────────────────────────────────────────────────────────────────────────
 
 export const ImplementationLanguageSchema = z.enum([
-  'typescript',
-  'javascript',
-  'python',
-  'shell',
-  'wasm',
-  'declarative',
+  "typescript",
+  "javascript",
+  "python",
+  "shell",
+  "wasm",
+  "declarative",
 ]);
 
 export type ImplementationLanguage = z.infer<typeof ImplementationLanguageSchema>;
@@ -214,10 +209,7 @@ export const ImplementationSchema = z.object({
   /** Entry point path or function name */
   entry: z.string().min(1),
   /** Inline source code (for declarative plugins) or external reference */
-  source: z.union([
-    z.string(),
-    z.object({ url: z.string().url() }),
-  ]).optional(),
+  source: z.union([z.string(), z.object({ url: z.string().url() })]).optional(),
   /** Runtime dependencies (npm package names) */
   dependencies: z.array(z.string()).optional(),
   /** Examples (used by conformance suite) */
@@ -232,21 +224,16 @@ export type Implementation = z.infer<typeof ImplementationSchema>;
 
 export const CanonicalSkillFormatSchema = z.object({
   /** Plugin name (npm-style: @author/skill-name) */
-  name: z
-    .string()
-    .regex(
-      /^(@[a-z0-9][\w-]*\/)?[a-z0-9][\w-]*$/,
-      'Name must be npm-package-style'
-    ),
+  name: z.string().regex(/^(@[a-z0-9][\w-]*\/)?[a-z0-9][\w-]*$/, "Name must be npm-package-style"),
 
   /** Plugin version (semver) */
-  version: z.string().regex(/^\d+\.\d+\.\d+(-[\w.-]+)?$/, 'Must be semver'),
+  version: z.string().regex(/^\d+\.\d+\.\d+(-[\w.-]+)?$/, "Must be semver"),
 
   /** Plugin kind (one of 14 per ADR-E-006) */
   kind: PluginKindSchema,
 
   /** Manifest schema version (for future evolution) */
-  manifestVersion: z.literal('1.0'),
+  manifestVersion: z.literal("1.0"),
 
   /** Capability declaration */
   manifest: z.object({
@@ -284,14 +271,14 @@ export const CanonicalSkillFormatSchema = z.object({
 
     /** Which hierarchy levels can override these settings */
     settingsHierarchyOverride: z
-      .enum(['session', 'branch', 'project', 'all', 'none'])
-      .default('project'),
+      .enum(["session", "branch", "project", "all", "none"])
+      .default("project"),
 
     /** Lifecycle hooks */
     lifecycle: PluginLifecycleHooksSchema.optional(),
 
     /** Sandbox mode (separate_process default per ADR-E-004) */
-    sandboxMode: SandboxModeSchema.default('separate_process'),
+    sandboxMode: SandboxModeSchema.default("separate_process"),
 
     /** Sandbox configuration overrides */
     sandboxOverrides: SandboxConfigSchema.optional(),

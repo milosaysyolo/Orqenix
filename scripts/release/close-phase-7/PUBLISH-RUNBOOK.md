@@ -9,15 +9,15 @@
 
 ## Pre-flight (do once)
 
-| Item | Why (lesson) | How |
-|------|-------------|-----|
-| Automation npm token -> NPM_AUTH_TOKEN | MFA blocks classic/fine-grained on publish (#2) | npmjs.com -> Access Tokens -> Automation |
-| NPM_CONFIG_PROVENANCE=true CI only | local provenance publish fails (#3) | workflow env only |
-| Classic PAT w/ read:user -> ORQENIX_CHANGELOG_PAT | changelog-github needs it (#4) | github.com tokens (classic) |
-| ORQENIX_COORDINATOR_PAT write 3 repos | cross-repo tag sync (#10) | fine-grained, contents:write x3 |
-| .npmrc ignore-scripts=true | supply-chain (#8) | committed |
-| onlyBuiltDependencies = [better-sqlite3, esbuild, @swc/core] | only these compile (#8) | root package.json |
-| publishable-whitelist.yaml finalized | never publish off-whitelist (#7) | .orqenix/release/ |
+| Item                                                         | Why (lesson)                                    | How                                      |
+| ------------------------------------------------------------ | ----------------------------------------------- | ---------------------------------------- |
+| Automation npm token -> NPM_AUTH_TOKEN                       | MFA blocks classic/fine-grained on publish (#2) | npmjs.com -> Access Tokens -> Automation |
+| NPM_CONFIG_PROVENANCE=true CI only                           | local provenance publish fails (#3)             | workflow env only                        |
+| Classic PAT w/ read:user -> ORQENIX_CHANGELOG_PAT            | changelog-github needs it (#4)                  | github.com tokens (classic)              |
+| ORQENIX_COORDINATOR_PAT write 3 repos                        | cross-repo tag sync (#10)                       | fine-grained, contents:write x3          |
+| .npmrc ignore-scripts=true                                   | supply-chain (#8)                               | committed                                |
+| onlyBuiltDependencies = [better-sqlite3, esbuild, @swc/core] | only these compile (#8)                         | root package.json                        |
+| publishable-whitelist.yaml finalized                         | never publish off-whitelist (#7)                | .orqenix/release/                        |
 
 ## Order (IRREVERSIBLE after step 5)
 
@@ -34,15 +34,15 @@
 
 ## If something goes wrong
 
-| Symptom | Action |
-|---------|--------|
-| Bad version published | npm deprecate <pkg>@0.7.0 "..." \u2014 NEVER unpublish (#1) |
+| Symptom                                    | Action                                                       |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| Bad version published                      | npm deprecate <pkg>@0.7.0 "..." \u2014 NEVER unpublish (#1)  |
 | Published a -phase-7 prerelease by mistake | deprecate it; publish clean 0.7.0; latest will resolve clean |
-| E429 | wait 2h, resume from last batch (#5) |
-| Provenance error locally | you're publishing locally \u2014 STOP, use CI (#3) |
-| 403/EOTP | wrong token \u2014 use Automation token (#2) |
-| changelog fails | PAT lacks read:user \u2014 classic PAT (#4) |
-| Tag on 1-2 repos only | push remaining SAME day (#10) |
+| E429                                       | wait 2h, resume from last batch (#5)                         |
+| Provenance error locally                   | you're publishing locally \u2014 STOP, use CI (#3)           |
+| 403/EOTP                                   | wrong token \u2014 use Automation token (#2)                 |
+| changelog fails                            | PAT lacks read:user \u2014 classic PAT (#4)                  |
+| Tag on 1-2 repos only                      | push remaining SAME day (#10)                                |
 
 ## Post-publish verification
 

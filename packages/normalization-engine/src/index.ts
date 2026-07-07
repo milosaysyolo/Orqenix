@@ -3,18 +3,14 @@
 //
 // Phase 8 (D8.β) , Charter gate G66
 
-export { NormalizationEngine } from './engine';
-export type { NormalizationEngineOptions } from './engine';
+export { NormalizationEngine } from "./engine";
+export type { NormalizationEngineOptions } from "./engine";
 
-export { buildCsf, computeContentHash, getOriginalFormat } from './csf-builder';
-export type { CsfBuilderInput } from './csf-builder';
+export { buildCsf, computeContentHash, getOriginalFormat } from "./csf-builder";
+export type { CsfBuilderInput } from "./csf-builder";
 
-export {
-  roundTrip,
-  assertRoundTrip,
-  normalizeWhitespace,
-} from './round-trip';
-export type { RoundTripResult } from './round-trip';
+export { roundTrip, assertRoundTrip, normalizeWhitespace } from "./round-trip";
+export type { RoundTripResult } from "./round-trip";
 
 export type {
   ImportInput,
@@ -25,11 +21,11 @@ export type {
   ExportabilityReport,
   NormalizationImportResult,
   NormalizationExportResult,
-} from './types';
+} from "./types";
 
 export {
   NormalizationError,
   NoAdapterMatchError,
   AmbiguousMatchError,
   UnsupportedTargetError,
-} from './types';
+} from "./types";

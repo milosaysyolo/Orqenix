@@ -3,7 +3,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Standalone output for distributable bundles
-  output: 'standalone',
+  output: "standalone",
 
   // Workbench is local-first; no external CDN required
   poweredByHeader: false,
@@ -24,23 +24,24 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
           },
           {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://localhost:27420; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'",
+            key: "Content-Security-Policy",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://localhost:27420; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'",
           },
         ],
       },
@@ -49,7 +50,7 @@ const nextConfig = {
 
   // Production assets URL prefix
   // Set ORQENIX_WORKBENCH_BASE_URL=/orqenix if behind reverse proxy
-  basePath: process.env.ORQENIX_WORKBENCH_BASE_URL || '',
+  basePath: process.env.ORQENIX_WORKBENCH_BASE_URL || "",
 };
 
 export default nextConfig;

@@ -1,10 +1,19 @@
 // SPDX-License-Identifier: Apache-2.0
 // Settings → Memory , configure memory hierarchy, injection, compression, branch policies
 
-'use client';
+"use client";
 
-import { Brain, Layers, Compass } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Label, Switch, Slider } from '@orqenix/ui-primitives';
+import { Brain, Layers, Compass } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Label,
+  Switch,
+  Slider,
+} from "@orqenix/ui-primitives";
 
 export default function SettingsMemoryPage() {
   return (
@@ -24,7 +33,9 @@ export default function SettingsMemoryPage() {
               <Brain className="w-5 h-5" aria-hidden />
               Hierarchy Injection
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P8 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P8 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -81,7 +92,9 @@ export default function SettingsMemoryPage() {
               <Compass className="w-5 h-5" aria-hidden />
               Injection Strategy
             </CardTitle>
-            <Badge variant="outline" className="text-xs">P2 locked</Badge>
+            <Badge variant="outline" className="text-xs">
+              P2 locked
+            </Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -110,8 +123,8 @@ export default function SettingsMemoryPage() {
           <p className="text-sm text-muted-foreground">
             Advanced settings include: anti-noise threshold, cluster cosine, recency boost weights,
             tie boost weights, branch copy strategy, clone tiers, compression strategies, cooldown,
-            multi-agent team session default, max subagent depth, distiller cap, and more.
-            Full implementation in D8.α.5 (Settings Registry).
+            multi-agent team session default, max subagent depth, distiller cap, and more. Full
+            implementation in D8.α.5 (Settings Registry).
           </p>
           <div className="rounded-lg border border-dashed border-border p-8 text-center">
             <Layers className="w-10 h-10 text-muted-foreground mx-auto mb-2" aria-hidden />
@@ -147,9 +160,7 @@ function SettingRow({
             </Badge>
           )}
         </div>
-        {description && (
-          <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-        )}
+        {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div className="flex items-center shrink-0">{children}</div>
     </div>

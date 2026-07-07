@@ -8,10 +8,10 @@
 //
 // Per CR v8.0 Section 7.5.
 
-import type { CanonicalSkillFormat } from './csf-schema';
-import { PluginKindRegistry } from './kinds/registry';
-import { validateManifest } from './manifest-validator';
-import { PluginConformanceFailedError } from './errors';
+import type { CanonicalSkillFormat } from "./csf-schema";
+import { PluginKindRegistry } from "./kinds/registry";
+import { validateManifest } from "./manifest-validator";
+import { PluginConformanceFailedError } from "./errors";
 
 export interface ConformanceCheck {
   id: string;
@@ -30,7 +30,7 @@ export interface ConformanceReport {
   checks: Array<{
     id: string;
     description: string;
-    status: 'pass' | 'fail' | 'warn';
+    status: "pass" | "fail" | "warn";
     message?: string;
   }>;
 }
@@ -72,14 +72,14 @@ export class ConformanceSuite {
         report.checks.push({
           id: check.id,
           description: check.description,
-          status: 'pass',
+          status: "pass",
         });
       } else {
         report.failed += 1;
         report.checks.push({
           id: check.id,
           description: check.description,
-          status: 'fail',
+          status: "fail",
           message: failure,
         });
       }
@@ -90,17 +90,17 @@ export class ConformanceSuite {
     if (kindResult.valid) {
       report.passed += 1;
       report.checks.push({
-        id: 'kind-validation',
+        id: "kind-validation",
         description: `Kind-specific validation for '${csf.kind}'`,
-        status: 'pass',
+        status: "pass",
       });
     } else {
       report.failed += 1;
       report.checks.push({
-        id: 'kind-validation',
+        id: "kind-validation",
         description: `Kind-specific validation for '${csf.kind}'`,
-        status: 'fail',
-        message: kindResult.errors.join('; '),
+        status: "fail",
+        message: kindResult.errors.join("; "),
       });
     }
 
@@ -109,9 +109,9 @@ export class ConformanceSuite {
       for (const warning of kindResult.warnings) {
         report.warnings += 1;
         report.checks.push({
-          id: 'kind-warning',
-          description: 'Kind advisory',
-          status: 'warn',
+          id: "kind-warning",
+          description: "Kind advisory",
+          status: "warn",
           message: warning,
         });
       }
@@ -125,7 +125,7 @@ export class ConformanceSuite {
     const report = this.run(csf);
     if (report.failed > 0) {
       const failures = report.checks
-        .filter((c) => c.status === 'fail')
+        .filter((c) => c.status === "fail")
         .map((c) => `${c.id}: ${c.message}`);
       throw new PluginConformanceFailedError(csf.name, failures);
     }
@@ -136,75 +136,69 @@ export class ConformanceSuite {
   private buildGenericChecks(): ConformanceCheck[] {
     return [
       {
-        id: 'has-valid-name',
-        description: 'Plugin has a valid npm-style name',
+        id: "has-valid-name",
+        description: "Plugin has a valid npm-style name",
         run: (csf) =>
           /^(@[a-z0-9][\w-]*\/)?[a-z0-9][\w-]*$/.test(csf.name)
             ? null
             : `Invalid name: ${csf.name}`,
       },
       {
-        id: 'has-semver-version',
-        description: 'Plugin version is valid semver',
+        id: "has-semver-version",
+        description: "Plugin version is valid semver",
         run: (csf) =>
-          /^\d+\.\d+\.\d+(-[\w.-]+)?$/.test(csf.version)
-            ? null
-            : `Invalid semver: ${csf.version}`,
+          /^\d+\.\d+\.\d+(-[\w.-]+)?$/.test(csf.version) ? null : `Invalid semver: ${csf.version}`,
       },
       {
-        id: 'has-license',
-        description: 'Plugin declares a license',
+        id: "has-license",
+        description: "Plugin declares a license",
         run: (csf) =>
           csf.manifest.license && csf.manifest.license.length > 0
             ? null
-            : 'Missing license declaration',
+            : "Missing license declaration",
       },
       {
-        id: 'has-compatibility',
-        description: 'Plugin declares Orqenix compatibility range',
+        id: "has-compatibility",
+        description: "Plugin declares Orqenix compatibility range",
         run: (csf) =>
-          csf.manifest.compatibility.orqenix
-            ? null
-            : 'Missing compatibility.orqenix range',
+          csf.manifest.compatibility.orqenix ? null : "Missing compatibility.orqenix range",
       },
       {
-        id: 'permissions-valid-format',
-        description: 'All permissions follow resource.action[:scope] format',
+        id: "permissions-valid-format",
+        description: "All permissions follow resource.action[:scope] format",
         run: (csf) => {
           const invalid = csf.manifest.permissions.filter(
-            (p) => !/^[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*(:[\w/\-.*]+)?$/.test(p)
+            (p) => !/^[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*(:[\w/\-.*]+)?$/.test(p),
           );
-          return invalid.length > 0
-            ? `Invalid permissions: [${invalid.join(', ')}]`
-            : null;
+          return invalid.length > 0 ? `Invalid permissions: [${invalid.join(", ")}]` : null;
         },
       },
       {
-        id: 'has-content-hash',
-        description: 'Plugin has computed content hash for provenance',
+        id: "has-content-hash",
+        description: "Plugin has computed content hash for provenance",
         run: (csf) =>
           csf.provenance.contentHash &&
           /^[0-9a-f]{32,}$/.test(csf.provenance.contentHash) &&
-          csf.provenance.contentHash !== '0'.repeat(32)
+          csf.provenance.contentHash !== "0".repeat(32)
             ? null
-            : 'Missing or placeholder content hash (loader must compute)',
+            : "Missing or placeholder content hash (loader must compute)",
       },
       {
-        id: 'verification-status-valid',
-        description: 'Verification status is a recognized value',
+        id: "verification-status-valid",
+        description: "Verification status is a recognized value",
         run: (csf) =>
-          ['unverified', 'replay_tested', 'verified', 'marketplace-ready'].includes(
-            csf.provenance.verification_status
+          ["unverified", "replay_tested", "verified", "marketplace-ready"].includes(
+            csf.provenance.verification_status,
           )
             ? null
             : `Invalid verification_status: ${csf.provenance.verification_status}`,
       },
       {
-        id: 'sandbox-mode-not-untrusted-inprocess',
-        description: 'Plugin does not use in_process_trusted without justification',
+        id: "sandbox-mode-not-untrusted-inprocess",
+        description: "Plugin does not use in_process_trusted without justification",
         run: (csf) =>
-          csf.manifest.sandboxMode === 'in_process_trusted'
-            ? 'Plugin uses in_process_trusted sandbox (discouraged per Anti-pattern 29; requires explicit operator trust)'
+          csf.manifest.sandboxMode === "in_process_trusted"
+            ? "Plugin uses in_process_trusted sandbox (discouraged per Anti-pattern 29; requires explicit operator trust)"
             : null,
       },
     ];

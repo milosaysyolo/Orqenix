@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Workbench , Cross-project candidate card (Pro feature — shows upgrade prompt if absent)
 
-'use client';
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@orqenix/ui-primitives';
-import type { CrossProjectCapability } from '../lib/cross-project-provider';
+import { Card, CardContent, CardHeader, CardTitle } from "@orqenix/ui-primitives";
+import type { CrossProjectCapability } from "../lib/cross-project-provider";
 
 interface CrossProjectCandidateCardProps {
   capability: CrossProjectCapability;

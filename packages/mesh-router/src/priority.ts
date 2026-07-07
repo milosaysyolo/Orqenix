@@ -1,13 +1,13 @@
-import type { MeshTransport } from '@orqenix/mesh-transport-core';
+import type { MeshTransport } from "@orqenix/mesh-transport-core";
 
 export interface PriorityList {
   readonly order: ReadonlyArray<string>;
 }
 
-export const DEFAULT_PRIORITY: PriorityList = { order: ['libp2p', 'http'] };
+export const DEFAULT_PRIORITY: PriorityList = { order: ["libp2p", "http"] };
 
 export function priorityList(order: ReadonlyArray<string>): PriorityList {
-  if (order.length === 0) throw new Error('priorityList: must contain at least one transport kind');
+  if (order.length === 0) throw new Error("priorityList: must contain at least one transport kind");
   const seen = new Set<string>();
   for (const k of order) {
     if (seen.has(k)) throw new Error(`priorityList: duplicate kind ${k}`);

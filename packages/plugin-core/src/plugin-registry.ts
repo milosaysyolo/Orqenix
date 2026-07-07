@@ -4,16 +4,9 @@
 // In-memory registry of installed plugins with optional persistence.
 // Tracks lifecycle state, crash counts, invocation stats.
 
-import type { CanonicalSkillFormat } from './csf-schema';
-import type {
-  RegisteredPlugin,
-  PluginLifecycleState,
-  PluginDiscoveryResult,
-} from './types';
-import {
-  PluginAlreadyRegisteredError,
-  PluginNotRegisteredError,
-} from './errors';
+import type { CanonicalSkillFormat } from "./csf-schema";
+import type { RegisteredPlugin, PluginLifecycleState, PluginDiscoveryResult } from "./types";
+import { PluginAlreadyRegisteredError, PluginNotRegisteredError } from "./errors";
 
 /**
  * Interface for persisting registry state (provided by D8.α.6 Memory Engine
@@ -63,7 +56,7 @@ export class PluginRegistry {
   async register(discovery: PluginDiscoveryResult): Promise<RegisteredPlugin> {
     if (!discovery.isValidPlugin) {
       throw new PluginNotRegisteredError(
-        `Cannot register invalid plugin: ${discovery.issues.join('; ')}`
+        `Cannot register invalid plugin: ${discovery.issues.join("; ")}`,
       );
     }
 
@@ -75,7 +68,7 @@ export class PluginRegistry {
     const entry: RegisteredPlugin = {
       csf: discovery.csf,
       packagePath: discovery.packagePath,
-      state: 'installed',
+      state: "installed",
       installedAt: new Date().toISOString(),
       lastActivatedAt: null,
       crashCount: 0,
@@ -92,7 +85,7 @@ export class PluginRegistry {
   async setState(name: string, state: PluginLifecycleState): Promise<void> {
     const entry = this.get(name);
     entry.state = state;
-    if (state === 'active') {
+    if (state === "active") {
       entry.lastActivatedAt = new Date().toISOString();
       entry.crashCount = 0; // reset on successful activation
     }
@@ -103,7 +96,7 @@ export class PluginRegistry {
   async recordCrash(name: string): Promise<number> {
     const entry = this.get(name);
     entry.crashCount += 1;
-    entry.state = 'crashed';
+    entry.state = "crashed";
     await this.flush();
     return entry.crashCount;
   }
@@ -123,12 +116,12 @@ export class PluginRegistry {
   async update(
     name: string,
     newCsf: CanonicalSkillFormat,
-    newPackagePath: string
+    newPackagePath: string,
   ): Promise<RegisteredPlugin> {
     const entry = this.get(name);
     entry.csf = newCsf;
     entry.packagePath = newPackagePath;
-    entry.state = 'installed'; // re-configure + re-activate needed after update
+    entry.state = "installed"; // re-configure + re-activate needed after update
     await this.flush();
     return entry;
   }

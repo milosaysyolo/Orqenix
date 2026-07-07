@@ -2,15 +2,15 @@
 
 ## Pre-flight (do once)
 
-| Item | Why (lesson) | How |
-|------|-------------|-----|
-| Automation npm token in NPM_AUTH_TOKEN | MFA blocks classic/fine-grained on publish (#2) | npmjs.com \u2192 Access Tokens \u2192 Automation |
-| NPM_CONFIG_PROVENANCE=true only in CI | Local provenance publish fails (#3) | Set in workflow env, never local |
-| Classic PAT w/ read:user in ORQENIX_CHANGELOG_PAT | changelog-github needs it (#4) | github.com \u2192 Tokens (classic) |
-| ORQENIX_COORDINATOR_PAT write to 3 repos | cross-repo tag sync (#10) | Fine-grained PAT, 3 repos, contents:write |
-| .npmrc has ignore-scripts=true | supply-chain safety (#8) | committed |
-| onlyBuiltDependencies = [better-sqlite3, esbuild, @swc/core] | only these compile (#8) | root package.json |
-| publishable-whitelist.yaml finalized | never publish off-whitelist (#7) | .orqenix/release/ |
+| Item                                                         | Why (lesson)                                    | How                                              |
+| ------------------------------------------------------------ | ----------------------------------------------- | ------------------------------------------------ |
+| Automation npm token in NPM_AUTH_TOKEN                       | MFA blocks classic/fine-grained on publish (#2) | npmjs.com \u2192 Access Tokens \u2192 Automation |
+| NPM_CONFIG_PROVENANCE=true only in CI                        | Local provenance publish fails (#3)             | Set in workflow env, never local                 |
+| Classic PAT w/ read:user in ORQENIX_CHANGELOG_PAT            | changelog-github needs it (#4)                  | github.com \u2192 Tokens (classic)               |
+| ORQENIX_COORDINATOR_PAT write to 3 repos                     | cross-repo tag sync (#10)                       | Fine-grained PAT, 3 repos, contents:write        |
+| .npmrc has ignore-scripts=true                               | supply-chain safety (#8)                        | committed                                        |
+| onlyBuiltDependencies = [better-sqlite3, esbuild, @swc/core] | only these compile (#8)                         | root package.json                                |
+| publishable-whitelist.yaml finalized                         | never publish off-whitelist (#7)                | .orqenix/release/                                |
 
 ## Order of operations (IRREVERSIBLE after step 4)
 
@@ -27,14 +27,14 @@
 
 ## If something goes wrong
 
-| Symptom | Action |
-|---------|--------|
-| Bad version published | npm deprecate <pkg>@<ver> "use 0.7.x" \u2014 NEVER unpublish (#1) |
-| E429 rate limit | Wait 2h, resume from last batch (#5) |
-| Provenance error locally | You are publishing locally \u2014 STOP, use CI (#3) |
-| Publish 403/EOTP | Wrong token type \u2014 use Automation token (#2) |
-| changelog step fails | PAT lacks read:user \u2014 use classic PAT (#4) |
-| Tag on only 1-2 repos | Push remaining same day; CR Ch 11.7 allows same-day not same-second (#10) |
+| Symptom                  | Action                                                                    |
+| ------------------------ | ------------------------------------------------------------------------- |
+| Bad version published    | npm deprecate <pkg>@<ver> "use 0.7.x" \u2014 NEVER unpublish (#1)         |
+| E429 rate limit          | Wait 2h, resume from last batch (#5)                                      |
+| Provenance error locally | You are publishing locally \u2014 STOP, use CI (#3)                       |
+| Publish 403/EOTP         | Wrong token type \u2014 use Automation token (#2)                         |
+| changelog step fails     | PAT lacks read:user \u2014 use classic PAT (#4)                           |
+| Tag on only 1-2 repos    | Push remaining same day; CR Ch 11.7 allows same-day not same-second (#10) |
 
 ## Post-publish verification
 

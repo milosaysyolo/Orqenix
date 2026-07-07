@@ -4,15 +4,15 @@ import {
   type CapabilityToken,
   type ErrorCodeValue,
   type ScopeId,
-} from '@orqenix/mesh-transport-core';
-import { b64urlDecode, ed25519Verify, importEd25519PublicKey } from './ed25519.js';
+} from "@orqenix/mesh-transport-core";
+import { b64urlDecode, ed25519Verify, importEd25519PublicKey } from "./ed25519.js";
 import {
   canonicalSigningBytes,
   decodeCapabilityToken,
   type CapabilityTokenFields,
-} from './capability-token.js';
-import { LRUKeyStore } from './key-store.js';
-import { compileGlob, matches } from './glob.js';
+} from "./capability-token.js";
+import { LRUKeyStore } from "./key-store.js";
+import { compileGlob, matches } from "./glob.js";
 
 export interface VerifyInput {
   capability: CapabilityToken | string;
@@ -55,8 +55,11 @@ export class CapabilityVerifier {
 
     let token: CapabilityTokenFields;
     try {
-      if (!input.capability || (typeof input.capability === 'string' && input.capability.length === 0)) {
-        return denied(ErrorCode.CAP_MISSING, 'capability missing');
+      if (
+        !input.capability ||
+        (typeof input.capability === "string" && input.capability.length === 0)
+      ) {
+        return denied(ErrorCode.CAP_MISSING, "capability missing");
       }
       token = decodeCapabilityToken(String(input.capability));
     } catch (e) {
@@ -64,15 +67,15 @@ export class CapabilityVerifier {
     }
 
     if (token.nbf !== undefined && now < token.nbf) {
-      return denied(ErrorCode.CAP_EXPIRED, 'token not yet valid');
+      return denied(ErrorCode.CAP_EXPIRED, "token not yet valid");
     }
     if (now >= token.exp) {
-      return denied(ErrorCode.CAP_EXPIRED, 'token expired');
+      return denied(ErrorCode.CAP_EXPIRED, "token expired");
     }
 
     const pubRaw = await this.keyStore.get(token.iss);
     if (!pubRaw) {
-      return denied(ErrorCode.CAP_SIG_INVALID, 'signature invalid');
+      return denied(ErrorCode.CAP_SIG_INVALID, "signature invalid");
     }
     let sigOk = false;
     try {
@@ -83,17 +86,17 @@ export class CapabilityVerifier {
     } catch {
       sigOk = false;
     }
-    if (!sigOk) return denied(ErrorCode.CAP_SIG_INVALID, 'signature invalid');
+    if (!sigOk) return denied(ErrorCode.CAP_SIG_INVALID, "signature invalid");
 
     if (token.sub !== input.fromScope) {
-      return denied(ErrorCode.CAP_SUBJECT_MISMATCH, 'subject mismatch');
+      return denied(ErrorCode.CAP_SUBJECT_MISMATCH, "subject mismatch");
     }
     if (token.iss !== input.toScope) {
-      return denied(ErrorCode.CAP_ISSUER_MISMATCH, 'issuer mismatch');
+      return denied(ErrorCode.CAP_ISSUER_MISMATCH, "issuer mismatch");
     }
 
     if (!this.methodAllowed(token.caps, input.method)) {
-      return denied(ErrorCode.CAP_METHOD_NOT_ALLOWED, 'method not allowed');
+      return denied(ErrorCode.CAP_METHOD_NOT_ALLOWED, "method not allowed");
     }
 
     if (this.delegation) {
@@ -132,5 +135,5 @@ function denied(code: string, message: string): VerifyDenied {
 }
 
 function sanitizeMessage(s: string): string {
-  return s.split('\n')[0].slice(0, 160);
+  return s.split("\n")[0].slice(0, 160);
 }

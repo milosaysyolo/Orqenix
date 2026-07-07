@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/memory-engine , Hierarchy engine types
 
-import type { KbKind, MemoryEntry, SearchResult, ProtectionFlags } from '../store/types';
+import type { KbKind, MemoryEntry, SearchResult, ProtectionFlags } from "../store/types";
 
 /** Level boost factors (CR v8.0 Section 4.4, configurable) */
 export interface LevelBoosts {
@@ -48,13 +48,13 @@ export interface RankedResult extends SearchResult {
   /** Final score after level boost */
   finalScore: number;
   /** Which level this result came from */
-  sourceLevel: 'session' | 'branch' | 'project';
+  sourceLevel: "session" | "branch" | "project";
 }
 
 export interface HierarchyQueryResult {
   results: RankedResult[];
   /** Levels actually queried (depends on active links) */
-  levelsQueried: Array<'session' | 'branch' | 'project'>;
+  levelsQueried: Array<"session" | "branch" | "project">;
   /** Total query duration */
   durationMs: number;
 }
@@ -65,7 +65,7 @@ export interface CreateBranchInput {
   newBranchName: string;
   projectId: string;
   /** Which tiers to clone (default 'all') */
-  cloneTiers?: 'all' | 't1_t2_only' | 't1_only';
+  cloneTiers?: "all" | "t1_t2_only" | "t1_only";
 }
 
 export interface CreateBranchResult {
@@ -82,8 +82,8 @@ export interface PromoteInput {
   entryId: string;
   kb: KbKind;
   /** Direction */
-  from: 'session' | 'branch';
-  to: 'branch' | 'project';
+  from: "session" | "branch";
+  to: "branch" | "project";
   fromSessionId?: string;
   fromBranchId: string;
   toBranchId?: string;

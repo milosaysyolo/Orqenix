@@ -2,11 +2,11 @@
 // Workbench , Self-Learning landing page (UPDATE D8.y.1.3)
 // Full spec from D8.y.1.5 (Part 4)
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Sparkles, Eye, Brain, ListChecks } from 'lucide-react';
-import Link from 'next/link';
+import * as React from "react";
+import { Sparkles, Eye, Brain, ListChecks } from "lucide-react";
+import Link from "next/link";
 
 export default function LearningPage(): React.ReactElement {
   return (
@@ -17,8 +17,8 @@ export default function LearningPage(): React.ReactElement {
           Self-Learning
         </h1>
         <p className="text-muted-foreground">
-          Orqenix observes your workflows, detects recurring patterns, and proposes
-          skills. Review candidates, promote the useful ones.
+          Orqenix observes your workflows, detects recurring patterns, and proposes skills. Review
+          candidates, promote the useful ones.
         </p>
       </div>
 
@@ -29,7 +29,9 @@ export default function LearningPage(): React.ReactElement {
         >
           <Eye className="w-8 h-8 text-orqenix-amber mb-3" aria-hidden />
           <h2 className="font-semibold mb-1">Observer</h2>
-          <p className="text-sm text-muted-foreground">Configure what Orqenix observes and PII filtering.</p>
+          <p className="text-sm text-muted-foreground">
+            Configure what Orqenix observes and PII filtering.
+          </p>
         </Link>
 
         <Link
@@ -38,7 +40,9 @@ export default function LearningPage(): React.ReactElement {
         >
           <Brain className="w-8 h-8 text-orqenix-amber mb-3" aria-hidden />
           <h2 className="font-semibold mb-1">Candidates</h2>
-          <p className="text-sm text-muted-foreground">Review detected patterns and promote to skills.</p>
+          <p className="text-sm text-muted-foreground">
+            Review detected patterns and promote to skills.
+          </p>
         </Link>
 
         <Link
@@ -47,7 +51,9 @@ export default function LearningPage(): React.ReactElement {
         >
           <ListChecks className="w-8 h-8 text-orqenix-amber mb-3" aria-hidden />
           <h2 className="font-semibold mb-1">Insights</h2>
-          <p className="text-sm text-muted-foreground">Verification status, metrics, and manual override.</p>
+          <p className="text-sm text-muted-foreground">
+            Verification status, metrics, and manual override.
+          </p>
         </Link>
       </div>
     </div>

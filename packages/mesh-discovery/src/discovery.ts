@@ -1,11 +1,7 @@
 // packages/mesh-discovery/src/discovery.ts
-import type { ScopeId } from '@orqenix/mesh-transport-core';
-import {
-  DiscoveryStateMachine,
-  type DiscoveryEvent,
-  type Listener,
-} from './events.js';
-import { nextReconnectDelay, type BootstrapConfig } from './bootstrap.js';
+import type { ScopeId } from "@orqenix/mesh-transport-core";
+import { DiscoveryStateMachine, type DiscoveryEvent, type Listener } from "./events.js";
+import { nextReconnectDelay, type BootstrapConfig } from "./bootstrap.js";
 
 export interface MeshDiscoveryOptions {
   bootstrap?: BootstrapConfig;
@@ -49,34 +45,34 @@ export class MeshDiscovery {
   onMdnsPeerLost(scopeId: ScopeId): void {
     if (this.stopped) return;
     const state = this.sm.state(scopeId);
-    if (state && state !== 'Lost') {
-      this.sm.transition(scopeId, 'Lost');
+    if (state && state !== "Lost") {
+      this.sm.transition(scopeId, "Lost");
     }
   }
 
   markConnecting(scopeId: ScopeId): void {
     if (this.stopped) return;
-    if (this.sm.state(scopeId) === 'Discovered' || this.sm.state(scopeId) === 'Stale') {
-      this.sm.transition(scopeId, 'Connecting');
+    if (this.sm.state(scopeId) === "Discovered" || this.sm.state(scopeId) === "Stale") {
+      this.sm.transition(scopeId, "Connecting");
     }
   }
   markConnected(scopeId: ScopeId): void {
     if (this.stopped) return;
     const s = this.sm.state(scopeId);
-    if (s === 'Connecting' || s === 'Stale') {
-      this.sm.transition(scopeId, 'Connected');
+    if (s === "Connecting" || s === "Stale") {
+      this.sm.transition(scopeId, "Connected");
     }
   }
   markStale(scopeId: ScopeId): void {
     if (this.stopped) return;
-    if (this.sm.state(scopeId) === 'Connected') {
-      this.sm.transition(scopeId, 'Stale');
+    if (this.sm.state(scopeId) === "Connected") {
+      this.sm.transition(scopeId, "Stale");
     }
   }
   markLost(scopeId: ScopeId): void {
     if (this.stopped) return;
     const s = this.sm.state(scopeId);
-    if (s && s !== 'Lost') this.sm.transition(scopeId, 'Lost');
+    if (s && s !== "Lost") this.sm.transition(scopeId, "Lost");
   }
 
   scheduleBootstrapAttempt(
@@ -95,7 +91,11 @@ export class MeshDiscovery {
     slot.timer = setTimeout(async () => {
       slot.timer = undefined;
       let ok = false;
-      try { ok = await attemptFn(); } catch { ok = false; }
+      try {
+        ok = await attemptFn();
+      } catch {
+        ok = false;
+      }
       if (ok) {
         slot.attempts = 0;
       } else {
@@ -103,7 +103,7 @@ export class MeshDiscovery {
         if (!this.stopped) this.scheduleBootstrapAttempt(multiaddr, attemptFn, rand);
       }
     }, delay);
-    if (typeof (slot.timer as { unref?: () => void }).unref === 'function') {
+    if (typeof (slot.timer as { unref?: () => void }).unref === "function") {
       (slot.timer as unknown as { unref: () => void }).unref();
     }
   }

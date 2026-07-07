@@ -4,9 +4,9 @@
 // Avoids the memory-engine → self-learning dependency cycle by composing at the
 // Workbench layer. Run once at startup after MemoryEngine.open.
 
-import { MigrationRunner } from '@orqenix/memory-engine';
-import { SELF_LEARNING_MIGRATIONS } from '@orqenix/self-learning-observer';
-import type { MemoryEngine } from '@orqenix/memory-engine';
+import { MigrationRunner } from "@orqenix/memory-engine";
+import { SELF_LEARNING_MIGRATIONS } from "@orqenix/self-learning-observer";
+import type { MemoryEngine } from "@orqenix/memory-engine";
 
 /**
  * Applies self-learning migrations (530) on top of the core engine migrations.

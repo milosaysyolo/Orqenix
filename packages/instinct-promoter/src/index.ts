@@ -1,14 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/instinct-promoter , Public API surface (headless core)
 
-export {
-  PromoterService,
-  NoopPromoterAuditWriter,
-} from './promoter-service';
-export type {
-  PromoterServiceOptions,
-  PromoterAuditWriter,
-} from './promoter-service';
+export { PromoterService, NoopPromoterAuditWriter } from "./promoter-service";
+export type { PromoterServiceOptions, PromoterAuditWriter } from "./promoter-service";
 
 export type {
   ReviewAction,
@@ -16,6 +10,6 @@ export type {
   ObservationSample,
   PromoterCandidate,
   ReviewResult,
-} from './types';
+} from "./types";
 
-export { ReviewDecisionSchema } from './types';
+export { ReviewDecisionSchema } from "./types";

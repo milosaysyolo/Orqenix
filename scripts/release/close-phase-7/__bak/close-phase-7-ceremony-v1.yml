@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Type I-UNDERSTAND-MFA to confirm irreversible publish'
+        description: "Type I-UNDERSTAND-MFA to confirm irreversible publish"
         type: string
         required: true
 
 permissions:
-  contents: write       # tag push + GitHub release
-  packages: write       # ghcr image push
-  id-token: write       # cosign keyless + npm provenance
+  contents: write # tag push + GitHub release
+  packages: write # ghcr image push
+  id-token: write # cosign keyless + npm provenance
 
 jobs:
   guard:
@@ -69,9 +69,9 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
           GITHUB_CHANGELOG_TOKEN: ${{ secrets.ORQENIX_CHANGELOG_PAT }}
           ORQENIX_COORDINATOR_PAT: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
-          NPM_CONFIG_PROVENANCE: 'true'
-          PUBLISH_BATCH_SIZE: '6'
-          PUBLISH_COOLDOWN_SEC: '20'
+          NPM_CONFIG_PROVENANCE: "true"
+          PUBLISH_BATCH_SIZE: "6"
+          PUBLISH_COOLDOWN_SEC: "20"
         run: bash scripts/release/ceremony.sh
 
       - name: Verify tags pushed to 3 repos (same wall-clock day, lesson #10)

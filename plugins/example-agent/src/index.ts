@@ -25,13 +25,13 @@ export async function run(input: AgentInput): Promise<AgentOutput> {
   steps.push(`recall_memory: decisions + lessons for "${input.task}"`);
 
   // Step 2: plan
-  steps.push('plan: review → fix → verify');
+  steps.push("plan: review → fix → verify");
 
   // Step 3: would invoke a subagent (single-level depth per Anti-pattern 36)
-  steps.push('invoke_subagent: code-reviewer (returns to parent, no matrix)');
+  steps.push("invoke_subagent: code-reviewer (returns to parent, no matrix)");
 
   // Step 4: apply + verify
-  steps.push('apply fix + run verification');
+  steps.push("apply fix + run verification");
 
   return { completed: true, steps };
 }

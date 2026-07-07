@@ -4,23 +4,14 @@
 // Verifies cross-project federation is approved before any data crosses
 // project boundaries. Per CR v8.0 ADR-E-011 + INV-18.
 
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { homedir } from 'node:os';
-import { dirname, join } from 'node:path';
-import { existsSync } from 'node:fs';
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { homedir } from "node:os";
+import { dirname, join } from "node:path";
+import { existsSync } from "node:fs";
+import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 
-import {
-  FederationApproval,
-  FederationApprovalsYamlSchema,
-  KbKind,
-  ProjectId,
-} from './types';
-import {
-  ExpiredApprovalError,
-  NoApprovalError,
-  RegistryError,
-} from './errors';
+import { FederationApproval, FederationApprovalsYamlSchema, KbKind, ProjectId } from "./types";
+import { ExpiredApprovalError, NoApprovalError, RegistryError } from "./errors";
 
 export interface PermissionCheckInput {
   sourceProjectId: ProjectId;
@@ -45,8 +36,7 @@ export class PermissionChecker {
   private readonly cacheTtlMs = 30_000; // 30s cache; approvals don't change often
 
   constructor(approvalsPath?: string) {
-    this.approvalsPath =
-      approvalsPath ?? join(homedir(), '.orqenix', 'federation-approvals.yaml');
+    this.approvalsPath = approvalsPath ?? join(homedir(), ".orqenix", "federation-approvals.yaml");
   }
 
   /** Checks if cross-project federation is allowed for the given pair + kind */
@@ -58,13 +48,13 @@ export class PermissionChecker {
     const matching = approvals.find(
       (a) =>
         a.source_project_id === input.sourceProjectId &&
-        a.target_project_id === input.targetProjectId
+        a.target_project_id === input.targetProjectId,
     );
 
     if (!matching) {
       return {
         allowed: false,
-        reason: 'NO_APPROVAL',
+        reason: "NO_APPROVAL",
       };
     }
 
@@ -73,7 +63,7 @@ export class PermissionChecker {
       return {
         allowed: false,
         approval: matching,
-        reason: 'EXPIRED',
+        reason: "EXPIRED",
       };
     }
 
@@ -96,7 +86,7 @@ export class PermissionChecker {
   async assert(input: PermissionCheckInput): Promise<void> {
     const result = await this.check(input);
     if (!result.allowed) {
-      if (result.reason === 'EXPIRED' && result.approval) {
+      if (result.reason === "EXPIRED" && result.approval) {
         throw new ExpiredApprovalError(result.approval.expires_at);
       }
       throw new NoApprovalError(input.sourceProjectId, input.targetProjectId);
@@ -122,7 +112,7 @@ export class PermissionChecker {
         !(
           a.source_project_id === approval.source_project_id &&
           a.target_project_id === approval.target_project_id
-        )
+        ),
     );
 
     const updated = [...filtered, approval];
@@ -131,52 +121,36 @@ export class PermissionChecker {
       await writeFile(
         this.approvalsPath,
         stringifyYaml({ approvals: updated }, { indent: 2 }),
-        'utf-8'
+        "utf-8",
       );
       this.invalidateCache();
     } catch (err) {
-      throw new RegistryError(
-        `Failed to write approvals at ${this.approvalsPath}`,
-        err
-      );
+      throw new RegistryError(`Failed to write approvals at ${this.approvalsPath}`, err);
     }
   }
 
   /** Revokes an approval (deletes entry) */
-  async revokeApproval(
-    sourceProjectId: ProjectId,
-    targetProjectId: ProjectId
-  ): Promise<void> {
+  async revokeApproval(sourceProjectId: ProjectId, targetProjectId: ProjectId): Promise<void> {
     const all = await this.loadApprovals();
     const filtered = all.filter(
-      (a) =>
-        !(
-          a.source_project_id === sourceProjectId &&
-          a.target_project_id === targetProjectId
-        )
+      (a) => !(a.source_project_id === sourceProjectId && a.target_project_id === targetProjectId),
     );
 
     try {
       await writeFile(
         this.approvalsPath,
         stringifyYaml({ approvals: filtered }, { indent: 2 }),
-        'utf-8'
+        "utf-8",
       );
       this.invalidateCache();
     } catch (err) {
-      throw new RegistryError(
-        `Failed to write approvals at ${this.approvalsPath}`,
-        err
-      );
+      throw new RegistryError(`Failed to write approvals at ${this.approvalsPath}`, err);
     }
   }
 
   private async loadApprovals(): Promise<FederationApproval[]> {
     const now = Date.now();
-    if (
-      this.cachedApprovals !== null &&
-      now - this.cacheLoadedAt < this.cacheTtlMs
-    ) {
+    if (this.cachedApprovals !== null && now - this.cacheLoadedAt < this.cacheTtlMs) {
       return this.cachedApprovals;
     }
 
@@ -188,29 +162,23 @@ export class PermissionChecker {
 
     let content: string;
     try {
-      content = await readFile(this.approvalsPath, 'utf-8');
+      content = await readFile(this.approvalsPath, "utf-8");
     } catch (err) {
-      throw new RegistryError(
-        `Failed to read approvals at ${this.approvalsPath}`,
-        err
-      );
+      throw new RegistryError(`Failed to read approvals at ${this.approvalsPath}`, err);
     }
 
     let parsed: unknown;
     try {
       parsed = parseYaml(content);
     } catch (err) {
-      throw new RegistryError(
-        `Failed to parse YAML in ${this.approvalsPath}`,
-        err
-      );
+      throw new RegistryError(`Failed to parse YAML in ${this.approvalsPath}`, err);
     }
 
     const validated = FederationApprovalsYamlSchema.safeParse(parsed);
     if (!validated.success) {
       throw new RegistryError(
         `Invalid schema in ${this.approvalsPath}: ${validated.error.message}`,
-        validated.error
+        validated.error,
       );
     }
 

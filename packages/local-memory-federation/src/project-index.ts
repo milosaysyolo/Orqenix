@@ -5,7 +5,7 @@
 // Default implementation reads from project's .orqenix/memory.db (SQLite).
 // Can be substituted for testing or alternative backends.
 
-import type { KbKind, ProjectId, CandidatePreview } from './types';
+import type { KbKind, ProjectId, CandidatePreview } from "./types";
 
 export interface ProjectIndexQuery {
   query: string;
@@ -48,11 +48,7 @@ export class ProjectIndex implements IProjectIndex {
   private readonly projectName: string;
   private readonly projectPath: string;
 
-  constructor(input: {
-    projectId: ProjectId;
-    projectName: string;
-    projectPath: string;
-  }) {
+  constructor(input: { projectId: ProjectId; projectName: string; projectPath: string }) {
     this.projectId = input.projectId;
     this.projectName = input.projectName;
     this.projectPath = input.projectPath;

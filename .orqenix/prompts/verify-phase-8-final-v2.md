@@ -1,7 +1,9 @@
 # AGENT TASK , D8.verify-4 , Close the 4 REAL blockers
 
 ## Context
+
 D8.verify-3 claimed "ready to tag v0.8.0" but the review identified 5 sai l\u1ec7ch:
+
 1. Workbench (G61) classified as "Phase 7 legacy" , WRONG, it's D8.alpha.1
 2. ui-primitives "Phase 8 excludes UI" , WRONG, it's D8.alpha.2
 3. self-learning-advanced "pre-existing" , WRONG, it shipped in D8.gamma Part 6
@@ -11,6 +13,7 @@ D8.verify-3 claimed "ready to tag v0.8.0" but the review identified 5 sai l\u1ec
 This round closes these. NO more "pre-existing" without git blame.
 
 ## Hard rules
+
 1. **"Pre-existing" requires git blame proof.** Run `verify-pre-existing-claim.mjs`
    to validate every such claim. If `main` branch doesn't have the same failure,
    it's a Phase 8 regression , fix it.
@@ -46,6 +49,7 @@ This round closes these. NO more "pre-existing" without git blame.
 6. CI matrix: `gh workflow run verify-phase-8-full.yml -f branch=phase-8/verify-kit`
 
 ## Deliverable
+
 - `pnpm -r run typecheck` showing workbench INCLUDED and PASSING
 - `pnpm -r run build` showing ui-primitives PASSING
 - `verify-pro-v8.mjs` output showing v0.8.0 Pro packages, all green

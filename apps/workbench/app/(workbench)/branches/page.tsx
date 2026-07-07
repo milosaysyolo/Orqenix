@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Branches tab , browse branches and manage memory hierarchy
 
-'use client';
+"use client";
 
-import { GitBranch, Copy, Trash2, ChevronRight } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@orqenix/ui-primitives';
+import { GitBranch, Copy, Trash2, ChevronRight } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from "@orqenix/ui-primitives";
 
 export default function BranchesPage() {
   return (
@@ -13,7 +13,8 @@ export default function BranchesPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight mb-2">Branches</h1>
           <p className="text-muted-foreground">
-            Browse git branches with their memory matrices. Branch creation = deep copy at creation time.
+            Browse git branches with their memory matrices. Branch creation = deep copy at creation
+            time.
           </p>
         </div>
         <Button variant="outline" className="gap-2">

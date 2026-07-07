@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/input-adapters , Public API surface , all 14 input adapters
 
-import { claudeCodeInputAdapter } from './claude-code';
-import { cursorInputAdapter } from './cursor';
-import { codexInputAdapter } from './codex';
-import { opencodeInputAdapter } from './opencode';
-import { mcpInputAdapter } from './mcp';
-import { continueInputAdapter } from './continue';
-import { aiderInputAdapter } from './aider';
-import { clineInputAdapter } from './cline';
-import { npmInputAdapter } from './npm';
-import { githubInputAdapter } from './github';
-import { urlInputAdapter } from './url';
-import { localFileInputAdapter } from './local-file';
-import { privateGitInputAdapter } from './private-git';
-import { userCustomInputAdapter } from './user-custom';
-import type { InputAdapter } from '@orqenix/normalization-engine';
+import { claudeCodeInputAdapter } from "./claude-code";
+import { cursorInputAdapter } from "./cursor";
+import { codexInputAdapter } from "./codex";
+import { opencodeInputAdapter } from "./opencode";
+import { mcpInputAdapter } from "./mcp";
+import { continueInputAdapter } from "./continue";
+import { aiderInputAdapter } from "./aider";
+import { clineInputAdapter } from "./cline";
+import { npmInputAdapter } from "./npm";
+import { githubInputAdapter } from "./github";
+import { urlInputAdapter } from "./url";
+import { localFileInputAdapter } from "./local-file";
+import { privateGitInputAdapter } from "./private-git";
+import { userCustomInputAdapter } from "./user-custom";
+import type { InputAdapter } from "@orqenix/normalization-engine";
 
 export {
   claudeCodeInputAdapter,

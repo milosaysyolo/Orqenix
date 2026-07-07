@@ -8,8 +8,8 @@
 //   cn('px-2 py-1', condition && 'bg-blue-500', 'text-white')
 //   cn('px-2', 'px-4')  // → 'px-4' (later wins)
 
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 /**
  * Conditionally combine class names with Tailwind-aware de-duplication.

@@ -14,13 +14,13 @@ Enable a user with multiple Orqenix projects on their local machine to query mem
 
 ## Key invariants
 
-| Invariant | Source |
-|---|---|
-| Cross-project sharing OFF by default | CR v8.0 Section 4.3 sharing defaults |
-| Pull-on-demand (no push, no sync) | ADR-E-014 |
-| User approval required per cross-project promotion | ADR-E-011 + INV-18 |
-| Project boundaries are intentional | Section 2.2 |
-| Audit cross-project queries | New audit kind `memory.cross_project_query` |
+| Invariant                                          | Source                                      |
+| -------------------------------------------------- | ------------------------------------------- |
+| Cross-project sharing OFF by default               | CR v8.0 Section 4.3 sharing defaults        |
+| Pull-on-demand (no push, no sync)                  | ADR-E-014                                   |
+| User approval required per cross-project promotion | ADR-E-011 + INV-18                          |
+| Project boundaries are intentional                 | Section 2.2                                 |
+| Audit cross-project queries                        | New audit kind `memory.cross_project_query` |
 
 ## Architecture overview
 
@@ -40,31 +40,31 @@ User query → PermissionChecker → ProjectDiscovery → FederationEngine
 ## Usage
 
 ```ts
-import { FederationEngine } from '@orqenix/local-memory-federation';
+import { FederationEngine } from "@orqenix/local-memory-federation";
 
 const engine = new FederationEngine({
-  currentProjectId: 'blake3:7f2ac8d100000000',
-  userId: 'milo@example.com',
+  currentProjectId: "blake3:7f2ac8d100000000",
+  userId: "milo@example.com",
 });
 
 const results = await engine.crossProjectQuery({
-  query: 'authentication patterns',
+  query: "authentication patterns",
   limit: 20,
   // Optional filters
-  kinds: ['decision', 'lesson'],
+  kinds: ["decision", "lesson"],
 });
 
 // Results contain candidates but data not shared yet
 for (const candidate of results.candidates) {
-  console.log(candidate.preview);  // Surface-level preview
-  console.log(candidate.source_project_id);  // Provenance
-  console.log(candidate.requires_approval);  // Always true for cross-project
+  console.log(candidate.preview); // Surface-level preview
+  console.log(candidate.source_project_id); // Provenance
+  console.log(candidate.requires_approval); // Always true for cross-project
 }
 
 // User explicitly approves a candidate (in Workbench UI)
 await engine.approveCandidate({
-  candidateId: 'cand_xyz',
-  approvedBy: 'milo@example.com',
+  candidateId: "cand_xyz",
+  approvedBy: "milo@example.com",
 });
 // Now data is shared and indexed in current project
 ```
@@ -80,12 +80,12 @@ projects:
     name: orqenix-cloud
     path: /home/milo/code/Orqenix-Cloud
     registered_at: 2026-06-10T12:00:00Z
-    cross_project_sharing_enabled: false  # Default OFF
+    cross_project_sharing_enabled: false # Default OFF
   - id: blake3:3a8c91f200000000
     name: orqenix-os
     path: /home/milo/code/Orqenix
     registered_at: 2026-06-11T09:00:00Z
-    cross_project_sharing_enabled: true   # Opt-in
+    cross_project_sharing_enabled: true # Opt-in
 ```
 
 User must explicitly enable `cross_project_sharing_enabled` per project AND per project pair via Workbench UI.

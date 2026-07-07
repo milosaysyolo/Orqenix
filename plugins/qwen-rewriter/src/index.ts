@@ -18,13 +18,13 @@ export async function invoke(input: RewriteInput): Promise<RewriteOutput> {
   let rewritten = input.prompt.trim();
   // Expand common dev abbreviations to improve retrieval
   const expansions: Record<string, string> = {
-    '\\bfn\\b': 'function',
-    '\\bcfg\\b': 'configuration',
-    '\\bdb\\b': 'database',
-    '\\bauth\\b': 'authentication',
+    "\\bfn\\b": "function",
+    "\\bcfg\\b": "configuration",
+    "\\bdb\\b": "database",
+    "\\bauth\\b": "authentication",
   };
   for (const [pattern, full] of Object.entries(expansions)) {
-    rewritten = rewritten.replace(new RegExp(pattern, 'gi'), full);
+    rewritten = rewritten.replace(new RegExp(pattern, "gi"), full);
   }
   return { rewritten };
 }

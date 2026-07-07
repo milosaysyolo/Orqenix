@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // Audit tab , browse audit chain and verify integrity
 
-'use client';
+"use client";
 
-import { ShieldCheck, FileText, AlertTriangle, Activity } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge } from '@orqenix/ui-primitives';
+import { ShieldCheck, FileText, AlertTriangle, Activity } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, Badge } from "@orqenix/ui-primitives";
 
 export default function AuditPage() {
   return (
@@ -80,8 +80,8 @@ export default function AuditPage() {
             <ShieldCheck className="w-12 h-12 text-muted-foreground mx-auto mb-3" aria-hidden />
             <h3 className="font-semibold mb-2">Audit chain browser</h3>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Full audit log browser with chain verifier (BLAKE3, 1M entries in 24s) ships in D8.α.4.
-              Reuses AuditChainVerifier Web Worker from Phase 7 D7.5.
+              Full audit log browser with chain verifier (BLAKE3, 1M entries in 24s) ships in
+              D8.α.4. Reuses AuditChainVerifier Web Worker from Phase 7 D7.5.
             </p>
             <p className="text-xs text-muted-foreground mt-4">
               Charter gate: G58 + G61 (Workbench UI integration)

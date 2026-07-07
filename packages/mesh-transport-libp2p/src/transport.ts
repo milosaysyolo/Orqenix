@@ -1,5 +1,5 @@
-import { multiaddr } from '@multiformats/multiaddr';
-import type { Connection, Libp2p, PeerId, Stream } from '@libp2p/interface';
+import { multiaddr } from "@multiformats/multiaddr";
+import type { Connection, Libp2p, PeerId, Stream } from "@libp2p/interface";
 import {
   CapabilityError,
   DeadlineExceeded,
@@ -14,10 +14,10 @@ import {
   type ScopeId,
   type SendOpts,
   type TransportCtx,
-} from '@orqenix/mesh-transport-core';
-import { derivePeerFromScope, scopeIdToSaltBytes } from './peer-id.js';
-import { createOrqenixLibp2pNode } from './node-config.js';
-import { PROTOCOL_ID, supportedProtocols } from './protocol.js';
+} from "@orqenix/mesh-transport-core";
+import { derivePeerFromScope, scopeIdToSaltBytes } from "./peer-id.js";
+import { createOrqenixLibp2pNode } from "./node-config.js";
+import { PROTOCOL_ID, supportedProtocols } from "./protocol.js";
 import {
   NoopIdentityVerifier,
   NoopSigner,
@@ -26,11 +26,11 @@ import {
   type CapabilityHandshakeMessage,
   type IdentityVerifier,
   type SignFn,
-} from './handshake.js';
-import { handleRequestStream, sendRequestOverStream } from './streams.js';
-import type { AdapterKind } from './adapters.js';
-import { ConnectionManager } from './connection-manager.js';
-import { Dialer, type DialBackoff } from './dialer.js';
+} from "./handshake.js";
+import { handleRequestStream, sendRequestOverStream } from "./streams.js";
+import type { AdapterKind } from "./adapters.js";
+import { ConnectionManager } from "./connection-manager.js";
+import { Dialer, type DialBackoff } from "./dialer.js";
 
 export interface Libp2pMeshTransportOptions {
   localScopeId: ScopeId;
@@ -51,7 +51,7 @@ interface ConnState {
 }
 
 export class Libp2pMeshTransport implements MeshTransport {
-  readonly kind = 'libp2p' as const;
+  readonly kind = "libp2p" as const;
   readonly localScopeId: ScopeId;
 
   private readonly scopeSeed: Uint8Array;
@@ -72,7 +72,7 @@ export class Libp2pMeshTransport implements MeshTransport {
   constructor(opts: Libp2pMeshTransportOptions) {
     this.localScopeId = opts.localScopeId;
     this.scopeSeed = opts.scopeSeed;
-    this.adapters = opts.adapters ?? ['memory'];
+    this.adapters = opts.adapters ?? ["memory"];
     this.listen = opts.listen;
     this.verifier = opts.verifier ?? new NoopIdentityVerifier();
     this.sign = opts.sign ?? NoopSigner;
@@ -89,13 +89,13 @@ export class Libp2pMeshTransport implements MeshTransport {
   }
 
   peers(): PeerInfo[] {
-    if (this.lifecycle.state !== 'Running' || !this.node) return [];
+    if (this.lifecycle.state !== "Running" || !this.node) return [];
     const out: PeerInfo[] = [];
     for (const conn of this.node.getConnections()) {
       out.push({
-        scopeId: ('peer:' + conn.remotePeer.toString()) as ScopeId,
+        scopeId: ("peer:" + conn.remotePeer.toString()) as ScopeId,
         peerId: conn.remotePeer.toString(),
-        transport: 'libp2p',
+        transport: "libp2p",
         connectedAt: this.connectedAt,
       });
     }
@@ -113,7 +113,7 @@ export class Libp2pMeshTransport implements MeshTransport {
 
   async start(): Promise<void> {
     if (!this.lifecycle.assertCanStart()) return;
-    this.lifecycle.transition('Starting');
+    this.lifecycle.transition("Starting");
     try {
       const saltBytes = scopeIdToSaltBytes(this.localScopeId);
       const derived = await derivePeerFromScope({
@@ -134,10 +134,10 @@ export class Libp2pMeshTransport implements MeshTransport {
           let state = this.connStates.get(connection);
           if (!state) {
             const ourMsg: CapabilityHandshakeMessage = {
-              capability: 'noop-cap-responder',
+              capability: "noop-cap-responder",
               fromScope: this.localScopeId,
-              toScope: 'peer:' + connection.remotePeer.toString(),
-              sig: 'noop-sig-responder',
+              toScope: "peer:" + connection.remotePeer.toString(),
+              sig: "noop-sig-responder",
             };
             const { accepted } = await performResponderHandshake(stream, ourMsg, this.verifier);
             state = { accepted };
@@ -156,7 +156,7 @@ export class Libp2pMeshTransport implements MeshTransport {
           await handleRequestStream(stream, async (req) => {
             this.connMgr.touch(connection);
             if (!this.handler) {
-              return toMeshResponse(req.id, new CapabilityError('no handler', ErrorCode.HANDLER));
+              return toMeshResponse(req.id, new CapabilityError("no handler", ErrorCode.HANDLER));
             }
             try {
               return await this.handler(req, {
@@ -169,7 +169,11 @@ export class Libp2pMeshTransport implements MeshTransport {
             }
           });
         } catch (e) {
-          try { await stream.close(); } catch { /* ignore */ }
+          try {
+            await stream.close();
+          } catch {
+            /* ignore */
+          }
         }
       });
 
@@ -177,16 +181,16 @@ export class Libp2pMeshTransport implements MeshTransport {
       this.node = node;
       this.connMgr.attach(node);
       this.connectedAt = Date.now();
-      this.lifecycle.transition('Running');
+      this.lifecycle.transition("Running");
     } catch (e) {
-      this.lifecycle.transition('Failed');
+      this.lifecycle.transition("Failed");
       throw e;
     }
   }
 
   async stop(): Promise<void> {
     if (!this.lifecycle.assertCanStop()) return;
-    this.lifecycle.transition('Stopping');
+    this.lifecycle.transition("Stopping");
     try {
       const node = this.node;
       this.node = undefined;
@@ -196,24 +200,32 @@ export class Libp2pMeshTransport implements MeshTransport {
       await this.connMgr.drain();
 
       if (node) {
-        try { await node.unhandle(supportedProtocols()); } catch { /* ignore */ }
+        try {
+          await node.unhandle(supportedProtocols());
+        } catch {
+          /* ignore */
+        }
         for (const c of node.getConnections()) {
-          try { await c.close(); } catch { /* ignore */ }
+          try {
+            await c.close();
+          } catch {
+            /* ignore */
+          }
         }
         await node.stop();
       }
     } finally {
-      this.lifecycle.transition('Stopped');
+      this.lifecycle.transition("Stopped");
     }
   }
 
   async send(target: MeshAddress, req: MeshRequest, opts?: SendOpts): Promise<MeshResponse> {
     this.lifecycle.assertCanSend();
-    if (target.kind !== 'libp2p') {
+    if (target.kind !== "libp2p") {
       return toMeshResponse(req.id, new Error(`libp2p cannot reach ${target.kind}`));
     }
     if (!this.node) {
-      return toMeshResponse(req.id, new Error('libp2p node not running'));
+      return toMeshResponse(req.id, new Error("libp2p node not running"));
     }
 
     const remaining = Math.max(0, req.deadlineMs - Date.now());
@@ -248,14 +260,24 @@ export class Libp2pMeshTransport implements MeshTransport {
           state = { accepted: ok };
           this.connStates.set(conn, state);
         } finally {
-          try { await hsStream.close(); } catch { /* ignore */ }
+          try {
+            await hsStream.close();
+          } catch {
+            /* ignore */
+          }
         }
         if (!state.accepted) {
-          return toMeshResponse(req.id, new CapabilityError('peer rejected handshake', ErrorCode.IDENTITY_SIG_INVALID));
+          return toMeshResponse(
+            req.id,
+            new CapabilityError("peer rejected handshake", ErrorCode.IDENTITY_SIG_INVALID),
+          );
         }
       }
       if (!state.accepted) {
-        return toMeshResponse(req.id, new CapabilityError('connection not accepted', ErrorCode.IDENTITY_SIG_INVALID));
+        return toMeshResponse(
+          req.id,
+          new CapabilityError("connection not accepted", ErrorCode.IDENTITY_SIG_INVALID),
+        );
       }
 
       const stream: Stream = await conn.newStream(supportedProtocols());
@@ -266,7 +288,11 @@ export class Libp2pMeshTransport implements MeshTransport {
         this.connMgr.touch(conn);
         return result as MeshResponse;
       } finally {
-        try { await stream.close(); } catch { /* ignore */ }
+        try {
+          await stream.close();
+        } catch {
+          /* ignore */
+        }
       }
     } catch (e) {
       return toMeshResponse(req.id, e);
@@ -274,20 +300,34 @@ export class Libp2pMeshTransport implements MeshTransport {
   }
 }
 
-function raceWithDeadline<T>(p: Promise<T>, ms: number, signal: AbortSignal | undefined, reqId: string): Promise<T | MeshResponse> {
+function raceWithDeadline<T>(
+  p: Promise<T>,
+  ms: number,
+  signal: AbortSignal | undefined,
+  reqId: string,
+): Promise<T | MeshResponse> {
   return new Promise<T | MeshResponse>((resolve, reject) => {
-    const t = setTimeout(() => resolve(toMeshResponse(reqId, new DeadlineExceeded())), Math.max(0, ms));
+    const t = setTimeout(
+      () => resolve(toMeshResponse(reqId, new DeadlineExceeded())),
+      Math.max(0, ms),
+    );
     const onAbort = () => {
       clearTimeout(t);
-      resolve(toMeshResponse(reqId, new DeadlineExceeded('aborted')));
+      resolve(toMeshResponse(reqId, new DeadlineExceeded("aborted")));
     };
     if (signal) {
       if (signal.aborted) return onAbort();
-      signal.addEventListener('abort', onAbort, { once: true });
+      signal.addEventListener("abort", onAbort, { once: true });
     }
     p.then(
-      (v) => { clearTimeout(t); resolve(v); },
-      (e) => { clearTimeout(t); reject(e); },
+      (v) => {
+        clearTimeout(t);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(t);
+        reject(e);
+      },
     );
   });
 }

@@ -5,20 +5,20 @@
 // protection_flags/cloned_from_branch_id + promotion provenance to all 4 KB
 // tables, plus creates session/branch tables and audit_entries hierarchy enrichment.
 
-import { blake3 } from '@noble/hashes/blake3';
+import { blake3 } from "@noble/hashes/blake3";
 
-function checksum(up: string, down = ''): string {
-  const bytes = new TextEncoder().encode(up + '\n' + down);
+function checksum(up: string, down = ""): string {
+  const bytes = new TextEncoder().encode(up + "\n" + down);
   const h = blake3(bytes);
-  let s = '';
+  let s = "";
   for (let i = 0; i < h.length; i++) {
-    s += (h[i] as number).toString(16).padStart(2, '0');
+    s += (h[i] as number).toString(16).padStart(2, "0");
   }
   return s;
 }
 
 // Migration 500: hierarchy columns on the 4 KB tables
-const KB_TABLES = ['chat_entries', 'code_entries', 'decision_entries', 'lesson_entries'];
+const KB_TABLES = ["chat_entries", "code_entries", "decision_entries", "lesson_entries"];
 
 function kbHierarchyUp(table: string): string {
   return [
@@ -33,17 +33,17 @@ function kbHierarchyUp(table: string): string {
     `CREATE INDEX IF NOT EXISTS idx_${table}_branch ON ${table}(branch_id, memory_level);`,
     `CREATE INDEX IF NOT EXISTS idx_${table}_protection ON ${table}(protection_flags) WHERE protection_flags IS NOT NULL;`,
     `CREATE INDEX IF NOT EXISTS idx_${table}_promoted ON ${table}(promoted_from_session_id) WHERE promoted_from_session_id IS NOT NULL;`,
-  ].join('\n');
+  ].join("\n");
 }
 
-const MIGRATION_500_UP = KB_TABLES.map(kbHierarchyUp).join('\n');
+const MIGRATION_500_UP = KB_TABLES.map(kbHierarchyUp).join("\n");
 
 const MIGRATION_500_DOWN = KB_TABLES.flatMap((t) => [
   `DROP INDEX IF EXISTS idx_${t}_session;`,
   `DROP INDEX IF EXISTS idx_${t}_branch;`,
   `DROP INDEX IF EXISTS idx_${t}_protection;`,
   `DROP INDEX IF EXISTS idx_${t}_promoted;`,
-]).join('\n');
+]).join("\n");
 
 // Migration 501: sessions + branches tables
 const MIGRATION_501_UP = `
@@ -177,35 +177,35 @@ export interface Migration {
 export const HIERARCHY_MIGRATIONS: Migration[] = [
   {
     id: 500,
-    name: 'hierarchy-columns',
+    name: "hierarchy-columns",
     up: MIGRATION_500_UP,
     down: MIGRATION_500_DOWN,
     checksum: checksum(MIGRATION_500_UP, MIGRATION_500_DOWN),
   },
   {
     id: 501,
-    name: 'sessions-branches-tables',
+    name: "sessions-branches-tables",
     up: MIGRATION_501_UP,
     down: MIGRATION_501_DOWN,
     checksum: checksum(MIGRATION_501_UP, MIGRATION_501_DOWN),
   },
   {
     id: 502,
-    name: 'audit-entries-blobs',
+    name: "audit-entries-blobs",
     up: MIGRATION_502_UP,
     down: MIGRATION_502_DOWN,
     checksum: checksum(MIGRATION_502_UP, MIGRATION_502_DOWN),
   },
   {
     id: 540,
-    name: 'installed-plugins',
+    name: "installed-plugins",
     up: MIGRATION_540_UP,
     down: MIGRATION_540_DOWN,
     checksum: checksum(MIGRATION_540_UP, MIGRATION_540_DOWN),
   },
   {
     id: 560,
-    name: 'config-overrides',
+    name: "config-overrides",
     up: MIGRATION_560_UP,
     down: MIGRATION_560_DOWN,
     checksum: checksum(MIGRATION_560_UP, MIGRATION_560_DOWN),

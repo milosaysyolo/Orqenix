@@ -4,8 +4,8 @@
 // Captures observation events with PII filtering + opt-out config + 3-level
 // context. Per CR v8.0 Section 9.4.1 + INV-17.
 
-import type { Database } from 'better-sqlite3';
-import { ulid } from '@orqenix/memory-engine';
+import type { Database } from "better-sqlite3";
+import { ulid } from "@orqenix/memory-engine";
 import {
   type CaptureEventInput,
   type ObservationEvent,
@@ -14,7 +14,7 @@ import {
   type PiiFilter,
   DEFAULT_OBSERVER_CONFIG,
   NoopPiiFilter,
-} from './types';
+} from "./types";
 
 export interface ObserverOptions {
   db: Database;
@@ -97,7 +97,7 @@ export class Observer {
       outcome_duration_ms: input.outcomeDurationMs ?? null,
       outcome_payload: outcomePayload,
       pii_redaction_applied: piiApplied,
-      redaction_notes: redactionNotes.length > 0 ? redactionNotes.join('; ') : null,
+      redaction_notes: redactionNotes.length > 0 ? redactionNotes.join("; ") : null,
     };
 
     this.persist(event);
@@ -112,25 +112,25 @@ export class Observer {
     actionKind?: string;
     limit?: number;
   }): ObservationEvent[] {
-    const conditions: string[] = ['project_id = @projectId'];
+    const conditions: string[] = ["project_id = @projectId"];
     const params: Record<string, unknown> = { projectId: input.projectId };
     if (input.branchId) {
-      conditions.push('branch_id = @branchId');
+      conditions.push("branch_id = @branchId");
       params.branchId = input.branchId;
     }
     if (input.sessionId) {
-      conditions.push('session_id = @sessionId');
+      conditions.push("session_id = @sessionId");
       params.sessionId = input.sessionId;
     }
     if (input.actionKind) {
-      conditions.push('action_kind = @actionKind');
+      conditions.push("action_kind = @actionKind");
       params.actionKind = input.actionKind;
     }
     const limit = input.limit ?? 1000;
 
     const rows = this.db
       .prepare(
-        `SELECT * FROM observation_events WHERE ${conditions.join(' AND ')} ORDER BY timestamp ASC LIMIT ${limit}`
+        `SELECT * FROM observation_events WHERE ${conditions.join(" AND ")} ORDER BY timestamp ASC LIMIT ${limit}`,
       )
       .all(params) as Array<Record<string, unknown>>;
     return rows.map((r) => this.rowToEvent(r));
@@ -144,7 +144,7 @@ export class Observer {
       .prepare(
         `INSERT INTO observer_config (scope, hierarchy_id, config_json, updated_at)
          VALUES (?, ?, ?, ?)
-         ON CONFLICT(scope, hierarchy_id) DO UPDATE SET config_json = excluded.config_json, updated_at = excluded.updated_at`
+         ON CONFLICT(scope, hierarchy_id) DO UPDATE SET config_json = excluded.config_json, updated_at = excluded.updated_at`,
       )
       .run(scope, hierarchyId, JSON.stringify(merged), new Date().toISOString());
   }
@@ -152,7 +152,7 @@ export class Observer {
   /** Gets observer config for a scope (default if not set) */
   getConfig(scope: ObserverScope, hierarchyId: string): ObserverConfig {
     const row = this.db
-      .prepare('SELECT config_json FROM observer_config WHERE scope = ? AND hierarchy_id = ?')
+      .prepare("SELECT config_json FROM observer_config WHERE scope = ? AND hierarchy_id = ?")
       .get(scope, hierarchyId) as { config_json: string } | undefined;
     if (!row) return { ...DEFAULT_OBSERVER_CONFIG };
     return { ...DEFAULT_OBSERVER_CONFIG, ...JSON.parse(row.config_json) };
@@ -161,7 +161,7 @@ export class Observer {
   /** Returns total event count for a project */
   count(projectId: string): number {
     const row = this.db
-      .prepare('SELECT COUNT(*) AS c FROM observation_events WHERE project_id = ?')
+      .prepare("SELECT COUNT(*) AS c FROM observation_events WHERE project_id = ?")
       .get(projectId) as { c: number };
     return row.c;
   }
@@ -174,15 +174,15 @@ export class Observer {
     branchId: string | null;
     sessionId: string;
   }): ObserverConfig {
-    const projectCfg = this.getConfig('project', ctx.projectId);
+    const projectCfg = this.getConfig("project", ctx.projectId);
     if (!projectCfg.enabled) return projectCfg;
 
     if (ctx.branchId) {
-      const branchCfg = this.getConfig('branch', ctx.branchId);
+      const branchCfg = this.getConfig("branch", ctx.branchId);
       if (!branchCfg.enabled) return branchCfg;
     }
 
-    const sessionCfg = this.getConfig('session', ctx.sessionId);
+    const sessionCfg = this.getConfig("session", ctx.sessionId);
     if (!sessionCfg.enabled) return sessionCfg;
 
     // All enabled: use the most specific (session) for sampleRate/pii
@@ -202,7 +202,7 @@ export class Observer {
           @agentPlatform, @actorKind, @actorId, @actionKind, @actionPayload,
           @outcomeKind, @outcomeDurationMs, @outcomePayload,
           @piiApplied, @redactionNotes
-        )`
+        )`,
       )
       .run({
         id: event.id,
@@ -233,11 +233,11 @@ export class Observer {
       session_id: row.session_id as string,
       parent_session_id: (row.parent_session_id as string | null) ?? null,
       agent_platform: (row.agent_platform as string | null) ?? null,
-      actor_kind: row.actor_kind as ObservationEvent['actor_kind'],
+      actor_kind: row.actor_kind as ObservationEvent["actor_kind"],
       actor_id: row.actor_id as string,
       action_kind: row.action_kind as string,
-      action_payload: JSON.parse((row.action_payload_json as string) ?? '{}'),
-      outcome_kind: (row.outcome_kind as ObservationEvent['outcome_kind']) ?? null,
+      action_payload: JSON.parse((row.action_payload_json as string) ?? "{}"),
+      outcome_kind: (row.outcome_kind as ObservationEvent["outcome_kind"]) ?? null,
       outcome_duration_ms: (row.outcome_duration_ms as number | null) ?? null,
       outcome_payload: row.outcome_payload_json
         ? JSON.parse(row.outcome_payload_json as string)

@@ -4,10 +4,10 @@
 // Orchestrates sequence detection → frequency analysis → candidate persistence.
 // Implements IDetector for drop-in replacement by Pro advanced detector.
 
-import type { Database } from 'better-sqlite3';
-import { SequenceDetector } from './sequence-detector';
-import { FrequencyAnalyzer } from './frequency-analyzer';
-import { CandidateStore } from './candidate-store';
+import type { Database } from "better-sqlite3";
+import { SequenceDetector } from "./sequence-detector";
+import { FrequencyAnalyzer } from "./frequency-analyzer";
+import { CandidateStore } from "./candidate-store";
 import {
   type DetectionInput,
   type DetectionResult,
@@ -15,7 +15,7 @@ import {
   type IDetector,
   type DetectionThresholds,
   DEFAULT_THRESHOLDS,
-} from './types';
+} from "./types";
 
 export interface BasicDetectorOptions {
   db: Database;
@@ -61,10 +61,10 @@ export class BasicDetector implements IDetector {
           branchId: input.branchId ?? null,
           sessionId: input.sessionId ?? null,
         },
-        thresholds
+        thresholds,
       );
-      if (result === 'created') created += 1;
-      else if (result === 'updated') updated += 1;
+      if (result === "created") created += 1;
+      else if (result === "updated") updated += 1;
       // 'cooldown' → skip
     }
 

@@ -14,18 +14,18 @@ export interface KbSchemaDefinition {
 /** Returns the custom KB schema definition. Called on plugin install. */
 export function defineKB(): KbSchemaDefinition {
   return {
-    kbName: 'design',
+    kbName: "design",
     migrationId: 1000, // >= 1000 per kb-schema convention
     columns: [
-      { name: 'id', type: 'TEXT PRIMARY KEY' },
-      { name: 'title', type: 'TEXT NOT NULL' },
-      { name: 'figma_url', type: 'TEXT' },
-      { name: 'rationale', type: 'TEXT' },
-      { name: 'project_id', type: 'TEXT NOT NULL' },
-      { name: 'branch_id', type: 'TEXT' },
-      { name: 'session_id', type: 'TEXT' },
-      { name: 'memory_level', type: 'TEXT' },
-      { name: 'created_at', type: 'TEXT NOT NULL' },
+      { name: "id", type: "TEXT PRIMARY KEY" },
+      { name: "title", type: "TEXT NOT NULL" },
+      { name: "figma_url", type: "TEXT" },
+      { name: "rationale", type: "TEXT" },
+      { name: "project_id", type: "TEXT NOT NULL" },
+      { name: "branch_id", type: "TEXT" },
+      { name: "session_id", type: "TEXT" },
+      { name: "memory_level", type: "TEXT" },
+      { name: "created_at", type: "TEXT NOT NULL" },
     ],
     migrationSql: `
 CREATE TABLE IF NOT EXISTS design_entries (
