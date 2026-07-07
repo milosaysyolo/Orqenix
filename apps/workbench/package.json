@@ -33,6 +33,7 @@
     "@orqenix/instinct-promoter": "workspace:*",
     "@orqenix/skill-genesis": "workspace:*",
     "@orqenix/verification-loop": "workspace:*",
+    "@orqenix/settings-registry": "workspace:*",
     "@tanstack/react-query": "^5.59.0",
     "cmdk": "^1.0.0",
     "lucide-react": "^0.475.0",
