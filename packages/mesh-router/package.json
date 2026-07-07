@@ -27,8 +27,8 @@
     "lint": "eslint . || true"
   },
   "dependencies": {
-    "@orqenix/mesh-transport-core": "^0.6.0",
-    "@orqenix/mesh-observability": "^0.6.0"
+    "@orqenix/mesh-transport-core": "workspace:*",
+    "@orqenix/mesh-observability": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.7.0",

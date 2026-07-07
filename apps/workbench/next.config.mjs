@@ -12,8 +12,7 @@ const nextConfig = {
   // Workbench runs at port 27420 by default
   // Hostname binding to 127.0.0.1 is enforced at script level
 
-  // Disable SWC minification temporarily for faster dev
-  swcMinify: true,
+  // SWC minification is enabled by default in Next.js 15+ (removed swcMinify option)
 
   experimental: {
     // Enable React 19 features

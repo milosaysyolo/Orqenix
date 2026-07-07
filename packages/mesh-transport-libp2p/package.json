@@ -27,7 +27,7 @@
     "lint": "eslint . || true"
   },
   "dependencies": {
-    "@orqenix/mesh-transport-core": "^0.6.0",
+    "@orqenix/mesh-transport-core": "workspace:*",
     "@chainsafe/libp2p-noise": "^16.0.0",
     "@chainsafe/libp2p-yamux": "^7.0.0",
     "@libp2p/crypto": "^5.0.0",

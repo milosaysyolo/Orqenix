@@ -27,7 +27,7 @@
     "lint": "eslint . || true"
   },
   "dependencies": {
-    "@orqenix/mesh-transport-core": "^0.6.0",
+    "@orqenix/mesh-transport-core": "workspace:*",
     "msgpackr": "^1.11.0",
     "undici": "^6.20.0"
   },
