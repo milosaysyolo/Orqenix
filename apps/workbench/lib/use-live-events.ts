@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
-'use client';
+"use client";
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export interface LiveEvent {
   kind: string;
@@ -31,7 +31,7 @@ export function useLiveEvents(filterKinds?: string[], cap = 200): UseLiveEventsR
 
     const connect = () => {
       if (stopped) return;
-      const es = new EventSource('/api/stream');
+      const es = new EventSource("/api/stream");
       esRef.current = es;
 
       es.onopen = () => {
@@ -39,7 +39,7 @@ export function useLiveEvents(filterKinds?: string[], cap = 200): UseLiveEventsR
         retryRef.current = 0;
       };
 
-      es.addEventListener('orqenix', (ev) => {
+      es.addEventListener("orqenix", (ev) => {
         try {
           const data = JSON.parse((ev as MessageEvent).data) as LiveEvent;
           if (filterKinds && !filterKinds.includes(data.kind)) return;
