@@ -4,23 +4,23 @@ on:
   workflow_call:
     inputs:
       ref:
-        description: 'Tag or ref to validate'
+        description: "Tag or ref to validate"
         type: string
-        default: 'v0.7.0'
+        default: "v0.7.0"
       strict:
-        description: 'Fail fast on P0 FAIL'
+        description: "Fail fast on P0 FAIL"
         type: boolean
         default: true
   workflow_dispatch:
     inputs:
       ref:
         type: string
-        default: 'v0.7.0'
+        default: "v0.7.0"
       strict:
         type: boolean
         default: true
   schedule:
-    - cron: '0 2 * * *'
+    - cron: "0 2 * * *"
 
 permissions:
   contents: read
