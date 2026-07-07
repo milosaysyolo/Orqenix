@@ -4,7 +4,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Upload, Download } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from "@orqenix/ui-primitives";
 import {
   PluginCard,

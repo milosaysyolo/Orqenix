@@ -5,7 +5,7 @@
 
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from "@orqenix/ui-primitives";
+import { Card, CardHeader, CardTitle, CardContent, Button } from "@orqenix/ui-primitives";
 
 export default function PluginDetailPage(): React.ReactElement {
   const params = useParams();

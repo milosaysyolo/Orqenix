@@ -3,7 +3,7 @@
 
 "use client";
 
-import { Package, ShieldCheck, AlertCircle, Settings as SettingsIcon } from "lucide-react";
+import { Package, ShieldCheck, Settings as SettingsIcon } from "lucide-react";
 import {
   Card,
   CardContent,

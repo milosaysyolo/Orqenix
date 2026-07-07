@@ -23,6 +23,8 @@ export function useLiveEvents(filterKinds?: string[], cap = 200): UseLiveEventsR
   const [events, setEvents] = useState<LiveEvent[]>([]);
   const esRef = useRef<EventSource | null>(null);
   const retryRef = useRef(0);
+  const filterKindsRef = useRef(filterKinds);
+  filterKindsRef.current = filterKinds;
 
   const clear = useCallback(() => setEvents([]), []);
 
@@ -42,7 +44,7 @@ export function useLiveEvents(filterKinds?: string[], cap = 200): UseLiveEventsR
       es.addEventListener("orqenix", (ev) => {
         try {
           const data = JSON.parse((ev as MessageEvent).data) as LiveEvent;
-          if (filterKinds && !filterKinds.includes(data.kind)) return;
+          if (filterKindsRef.current && !filterKindsRef.current.includes(data.kind)) return;
           setLatest(data);
           setEvents((prev) => {
             const next = [...prev, data];
@@ -66,8 +68,7 @@ export function useLiveEvents(filterKinds?: string[], cap = 200): UseLiveEventsR
       stopped = true;
       esRef.current?.close();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(filterKinds), cap]);
+  }, [cap]);
 
   return { connected, latest, events, clear };
 }
