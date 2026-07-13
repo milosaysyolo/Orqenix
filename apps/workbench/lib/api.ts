@@ -1,39 +1,33 @@
 // SPDX-License-Identifier: Apache-2.0
 
-export interface ApiResult<T> {
-  ok: boolean;
-  data?: T;
-  error?: string;
-  status: number;
-}
+'use client';
 
-async function request<T>(
-  method: string,
-  path: string,
-  body?: unknown
-): Promise<ApiResult<T>> {
+export interface ApiResult<T> { ok: boolean; status: number; data?: T; error?: string; }
+
+async function call<T>(method: string, url: string, body?: unknown): Promise<ApiResult<T>> {
   try {
-    const res = await fetch(path, {
+    const res = await fetch(url, {
       method,
-      headers: body ? { 'content-type': 'application/json' } : {},
-      body: body ? JSON.stringify(body) : null,
+      headers: body ? { 'Content-Type': 'application/json' } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
       cache: 'no-store',
     });
     const text = await res.text();
-    const json = text ? JSON.parse(text) : undefined;
-    if (!res.ok) {
-      return { ok: false, status: res.status, error: json?.error ?? res.statusText };
+    let data: T | undefined;
+    try {
+      data = text ? (JSON.parse(text) as T) : undefined;
+    } catch {
+      return { ok: false, status: res.status, error: 'Invalid JSON in response body' };
     }
-    return { ok: true, status: res.status, data: json as T };
-  } catch (err) {
-    return { ok: false, status: 0, error: (err as Error).message };
+    return { ok: res.ok, status: res.status, data, error: res.ok ? undefined : (data as { error?: string } | undefined)?.error ?? res.statusText };
+  } catch (e) {
+    return { ok: false, status: 0, error: e instanceof Error ? e.message : 'network error' };
   }
 }
 
 export const api = {
-  get: <T>(path: string) => request<T>('GET', path),
-  post: <T>(path: string, body?: unknown) => request<T>('POST', path, body),
-  put: <T>(path: string, body?: unknown) => request<T>('PUT', path, body),
-  patch: <T>(path: string, body?: unknown) => request<T>('PATCH', path, body),
-  del: <T>(path: string, body?: unknown) => request<T>('DELETE', path, body),
+  get: <T,>(url: string) => call<T>('GET', url),
+  post: <T,>(url: string, body?: unknown) => call<T>('POST', url, body),
+  put: <T,>(url: string, body?: unknown) => call<T>('PUT', url, body),
+  del: <T,>(url: string, body?: unknown) => call<T>('DELETE', url, body),
 };

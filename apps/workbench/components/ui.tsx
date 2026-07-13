@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // ============================================================================
-// AGENT PROMPT
-// File: apps/workbench/components/ui.tsx
-// Purpose: Shared presentational primitives every screen reuses, styled with the
-//   warm editorial tokens. Card, Panel, SectionTitle, Badge, Button, Kbd, Stat.
-//   Keeps all screens visually consistent with the landing page aesthetic.
-// Rules: 'use client'. Tokens only (var(--rust) etc). No external UI lib. Buttons
-//   support variant: primary(rust)/outline/ghost/danger and size sm/md.
+// Shared presentational primitives every screen reuses, styled with the
+// warm editorial tokens. Card, Panel, SectionTitle, Badge, Button, Kbd, Stat,
+// LiveDot. Keeps all screens visually consistent with the landing aesthetic.
+// Rules: 'use client'. Tokens only (var(--rust) etc). No external UI lib.
+//   Buttons support variant: primary(rust)/outline/ghost/danger and size sm/md.
 // ============================================================================
 
 'use client';
@@ -17,9 +15,9 @@ export function cn(...parts: Array<string | false | undefined>): string {
   return parts.filter(Boolean).join(' ');
 }
 
-export function Card({ className, children }: { className?: string; children: React.ReactNode }) {
+export function Card({ className, children, ...props }: { className?: string; children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn('rounded-[13px] border border-[var(--line)] bg-[var(--card)] shadow-[0_8px_22px_rgba(35,36,31,0.05)]', className)}>
+    <div className={cn('rounded-lg border border-[var(--line)] bg-[var(--card)] shadow-[0_8px_22px_rgba(35,36,31,0.05)]', className)} {...props}>
       {children}
     </div>
   );
@@ -29,10 +27,10 @@ export function Panel({ title, action, children, className }: {
   title?: React.ReactNode; action?: React.ReactNode; children: React.ReactNode; className?: string;
 }) {
   return (
-      <Card {...(className ? { className } : {})}>
+    <Card className={className}>
       {(title || action) && (
         <div className="flex items-center justify-between border-b border-[var(--line)] px-4 py-3">
-          {title && <div className="font-mono text-[11px] font-extrabold uppercase tracking-[0.12em] text-[var(--dim)]">{title}</div>}
+          {title && <div className="font-mono text-data-sm font-extrabold uppercase tracking-[0.12em] text-[var(--dim)]">{title}</div>}
           {action}
         </div>
       )}
@@ -43,9 +41,9 @@ export function Panel({ title, action, children, className }: {
 
 export function SectionTitle({ children, sub }: { children: React.ReactNode; sub?: React.ReactNode }) {
   return (
-    <div className="mb-1">
-      <h1 className="font-serif text-[28px] font-semibold tracking-tight text-[var(--ink)]">{children}</h1>
-      {sub && <p className="mt-1 text-[13px] text-[var(--dim)]">{sub}</p>}
+    <div>
+      <h1 className="font-serif text-[26px] font-semibold tracking-tight text-[var(--ink)]">{children}</h1>
+      {sub && <p className="mt-0.5 text-data-lg text-[var(--dim)]">{sub}</p>}
     </div>
   );
 }
@@ -62,7 +60,7 @@ export function Badge({ tone = 'neutral', children, className }: {
   const c = toneColor[tone];
   return (
     <span
-      className={cn('inline-flex items-center gap-1 rounded-[6px] px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wide', className)}
+      className={cn('inline-flex items-center gap-1 rounded-sm px-2 py-0.5 font-mono text-data-xs font-bold uppercase tracking-wide', className)}
       style={{ color: c, background: `color-mix(in oklab, ${c} 14%, transparent)` }}
     >
       {children}
@@ -73,8 +71,8 @@ export function Badge({ tone = 'neutral', children, className }: {
 export function Button({ variant = 'outline', size = 'md', className, ...props }: {
   variant?: 'primary' | 'outline' | 'ghost' | 'danger'; size?: 'sm' | 'md';
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const base = 'inline-flex items-center justify-center gap-1.5 font-mono font-semibold transition-colors disabled:opacity-50';
-  const sizes = size === 'sm' ? 'text-[11px] px-2.5 py-1 rounded-[6px]' : 'text-[12px] px-3.5 py-1.5 rounded-[9px]';
+  const base = 'inline-flex items-center justify-center gap-1.5 font-mono font-semibold transition-all duration-150 active:scale-[0.97] disabled:opacity-50';
+  const sizes = size === 'sm' ? 'text-data-sm px-2.5 py-1 rounded-sm' : 'text-data-base px-3.5 py-1.5 rounded-md';
   const variants: Record<string, string> = {
     primary: 'bg-[var(--rust)] text-[var(--paper)] border border-[var(--rust)] hover:opacity-90',
     outline: 'bg-[var(--card)] text-[var(--ink)] border border-[var(--line2)] hover:border-[var(--ink)]',
@@ -90,13 +88,22 @@ export function Stat({ label, value, delta, accent = 'ink' }: {
   const color = accent === 'ink' ? 'var(--ink)' : toneColor[accent];
   return (
     <Card className="px-4 py-3">
-      <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--faint)]">{label}</div>
-      <div className="mt-1 font-mono text-[22px] font-extrabold" style={{ color }}>{value}</div>
-      {delta && <div className="mt-0.5 font-mono text-[10.5px] text-[var(--olive)]">{delta}</div>}
+      <div className="font-mono text-data-xs uppercase tracking-[0.1em] text-[var(--faint)]">{label}</div>
+      <div className="mt-0.5 font-mono text-[22px] font-extrabold" style={{ color }}>{value}</div>
+      {delta && <div className="mt-0.5 font-mono text-data-sm text-[var(--olive)]">{delta}</div>}
     </Card>
   );
 }
 
 export function LiveDot({ on }: { on: boolean }) {
   return <span className={cn('inline-block h-1.5 w-1.5 rounded-full', on ? 'animate-pulse bg-[var(--olive)]' : 'bg-[var(--faint)]')} />;
+}
+
+/** Keyboard-key hint chip, used by shortcuts overlay and palette. */
+export function Kbd({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="inline-flex h-5 min-w-[20px] items-center justify-center rounded border border-[var(--line2)] bg-[var(--paper2)] px-1.5 font-mono text-[10px] font-bold text-[var(--ink)]">
+      {children}
+    </kbd>
+  );
 }

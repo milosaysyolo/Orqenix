@@ -3,49 +3,35 @@
 'use client';
 
 import * as React from 'react';
-
-type Theme = 'light' | 'dark';
-const ThemeCtx = React.createContext<{ theme: Theme; toggle: () => void }>({
-  theme: 'light',
-  toggle: () => {},
-});
+import { ThemeProvider as NextThemes } from 'next-themes';
+import { Button } from './ui';
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = React.useState<Theme>('light');
-
-  React.useLayoutEffect(() => {
-    const stored = (localStorage.getItem('orqenix-theme') as Theme | null);
-    const system: Theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const initial = stored ?? system;
-    setTheme(initial);
-    document.documentElement.classList.toggle('dark', initial === 'dark');
-  }, []);
-
-  const toggle = React.useCallback(() => {
-    setTheme((prev) => {
-      const next = prev === 'light' ? 'dark' : 'light';
-      localStorage.setItem('orqenix-theme', next);
-      document.documentElement.classList.toggle('dark', next === 'dark');
-      return next;
-    });
-  }, []);
-
-  return <ThemeCtx.Provider value={{ theme, toggle }}>{children}</ThemeCtx.Provider>;
-}
-
-export function useTheme() {
-  return React.useContext(ThemeCtx);
+  return <NextThemes attribute="class" defaultTheme="light" enableSystem={false}>{children}</NextThemes>;
 }
 
 export function ThemeToggle() {
-  const { theme, toggle } = useTheme();
+  const [theme, setTheme] = React.useState<string>('light');
+  React.useEffect(() => {
+    let cancelled = false;
+    const sync = () => {
+      if (cancelled) return;
+      setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    };
+    sync();
+    const obs = new MutationObserver(sync);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => { cancelled = true; obs.disconnect(); };
+  }, []);
+
+  const toggle = () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    document.documentElement.classList.toggle('dark', !isDark);
+  };
+
   return (
-    <button
-      onClick={toggle}
-      aria-label="Toggle theme"
-      className="grid h-8 w-8 place-items-center rounded-md border border-[var(--line)] text-[var(--dim)] transition-colors hover:text-[var(--ink)]"
-    >
-      {theme === 'light' ? '\u263e' : '\u2600'}
-    </button>
+    <Button size="sm" variant="ghost" onClick={toggle} aria-label="Toggle theme">
+      {theme === 'dark' ? '\u263C' : '\u263D'}
+    </Button>
   );
 }

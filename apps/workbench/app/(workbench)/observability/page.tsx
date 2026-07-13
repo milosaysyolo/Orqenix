@@ -39,7 +39,7 @@ export default function ObservabilityPage() {
           <div className="mb-3 font-mono text-[11px] font-extrabold uppercase tracking-wide text-[var(--dim)]">KB distribution</div>
           {obs && Object.entries(obs.kbCounts).map(([kb, c]) => (
             <div key={kb} className="mb-2">
-              <div className="flex justify-between font-mono text-[10.5px]"><span className="text-[var(--ink)]">{kb}KB</span><span className="text-[var(--dim)]">{c.toLocaleString()}</span></div>
+              <div className="flex justify-between font-mono text-[10.5px]"><span className="text-[var(--ink)]">{kb}</span><span className="text-[var(--dim)]">{c.toLocaleString()}</span></div>
               <div className="mt-1 h-2 rounded-full bg-[var(--paper2)]">
                 <div className="h-full rounded-full" style={{ width: `${(c / kbMax) * 100}%`, background: kb === 'code' ? 'var(--teal)' : kb === 'decision' ? 'var(--plum)' : kb === 'chat' ? 'var(--amber)' : 'var(--slate)' }} />
               </div>
@@ -55,12 +55,12 @@ export default function ObservabilityPage() {
                 {obs.latency.queryMs}ms
               </div>
               <div className="mt-1 font-mono text-[11px] text-[var(--dim)]">
-                SLO &lt; {obs.latency.sloMs}ms · {obs.latency.pass ? 'PASS ✓' : 'FAIL ✗'}
+                SLO &lt; {obs.latency.sloMs}ms &middot; {obs.latency.pass ? 'PASS \u2713' : 'FAIL \u2717'}
               </div>
               <div className="mt-3 h-3 rounded-full bg-[var(--paper2)]">
                 <div className="h-full rounded-full" style={{ width: `${Math.min(100, (obs.latency.queryMs / obs.latency.sloMs) * 100)}%`, background: obs.latency.pass ? 'var(--olive)' : 'var(--rust)' }} />
               </div>
-              <div className="mt-1 font-mono text-[9.5px] text-[var(--faint)]">live timed engine.query() · cross-scope hierarchy</div>
+              <div className="mt-1 font-mono text-[9.5px] text-[var(--faint)]">live timed engine.query()</div>
             </>
           )}
         </Card>

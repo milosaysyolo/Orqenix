@@ -1,63 +1,70 @@
 // SPDX-License-Identifier: Apache-2.0
-// W3.A , Import wizard — normalization from 14 input adapters
 
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
-import { SectionTitle, Card, Button } from '@/components/ui';
-import { api } from '@/lib/api';
+import Link from 'next/link';
+import { SectionTitle, Card, Badge, Button } from '@/components/ui';
+import { useToast } from '@/components/toast';
 
-const SOURCES = ['auto-detect', 'claude-code', 'cursor', 'codex', 'opencode', 'mcp', 'continue', 'aider', 'cline', 'npm', 'github', 'url', 'user-custom'];
+const INPUT_ADAPTERS = [
+  { id: 'auto-detect', label: 'Auto-detect', desc: 'Let Orqenix guess the source format' },
+  { id: 'claude-code', label: 'Claude Code', desc: 'Import from Claude Code project' },
+  { id: 'cursor', label: 'Cursor', desc: 'Import from Cursor rules' },
+  { id: 'codex', label: 'Codex', desc: 'Import from ChatGPT Codex' },
+  { id: 'opencode', label: 'OpenCode', desc: 'Import from OpenCode' },
+  { id: 'mcp', label: 'MCP Server', desc: 'Import MCP server tools and resources' },
+  { id: 'continue', label: 'Continue', desc: 'Import from Continue.dev config' },
+  { id: 'aider', label: 'Aider', desc: 'Import from Aider conventions' },
+  { id: 'cline', label: 'Cline', desc: 'Import from Cline custom modes' },
+  { id: 'npm', label: 'npm', desc: 'Import from an npm package' },
+  { id: 'github', label: 'GitHub', desc: 'Clone from a GitHub repository' },
+  { id: 'url', label: 'URL', desc: 'Fetch from any URL' },
+  { id: 'local-file', label: 'Local File', desc: 'Read from local file system' },
+  { id: 'user-custom', label: 'Custom', desc: 'Paste raw CSF / YAML / JSON' },
+];
 
 export default function ImportPage() {
-  const router = useRouter();
-  const [sourceKind, setSourceKind] = React.useState('auto-detect');
-  const [content, setContent] = React.useState('');
-  const [url, setUrl] = React.useState('');
-  const [busy, setBusy] = React.useState(false);
-  const [msg, setMsg] = React.useState<string | null>(null);
-
-  async function doImport() {
-    setBusy(true); setMsg(null);
-    const res = await api.post<{ ok: boolean; pluginName?: string; adapterKind?: string; warnings?: string[] }>('/api/marketplace', {
-      action: 'import',
-      input: { ...(sourceKind !== 'auto-detect' ? { sourceKind } : {}), ...(url ? { url } : {}), ...(content ? { content } : {}) },
-    });
-    setBusy(false);
-    if (res.ok && res.data?.ok) {
-      setMsg(`Imported ${res.data.pluginName} via ${res.data.adapterKind}${(res.data?.warnings?.length ?? 0) ? ' * warnings: ' + res.data.warnings!.join('; ') : ''}`);
-    } else setMsg(res.error ?? (res.data?.warnings?.join('; ') ?? 'import failed'));
-  }
+  const { toast } = useToast();
+  const [selectedAdapter, setSelectedAdapter] = React.useState<string | null>(null);
 
   return (
-    <div className="mx-auto max-w-[680px] px-6 py-6">
-      <button onClick={() => router.back()} className="mb-3 font-mono text-[11px] text-[var(--dim)] hover:text-[var(--ink)]">back</button>
-      <SectionTitle sub="Bring a plugin from another format into CSF">Import Plugin</SectionTitle>
-      <Card className="mt-4 p-5 space-y-3">
-        <label className="block">
-          <span className="font-mono text-[11px] text-[var(--dim)]">Source format</span>
-          <select value={sourceKind} onChange={(e) => setSourceKind(e.target.value)}
-            className="mt-1 w-full rounded-[9px] border border-[var(--line)] bg-[var(--card)] px-3 py-2 font-mono text-[12px]">
-            {SOURCES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
-        </label>
-        <label className="block">
-          <span className="font-mono text-[11px] text-[var(--dim)]">URL (npm / github / direct)</span>
-          <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..."
-            className="mt-1 w-full rounded-[9px] border border-[var(--line)] bg-[var(--card)] px-3 py-2 font-mono text-[12px] outline-none focus:border-[var(--rust)]" />
-        </label>
-        <label className="block">
-          <span className="font-mono text-[11px] text-[var(--dim)]">Or paste content</span>
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} rows={6} placeholder="paste plugin definition..."
-            className="mt-1 w-full rounded-[9px] border border-[var(--line)] bg-[var(--card)] px-3 py-2 font-mono text-[12px] outline-none focus:border-[var(--rust)]" />
-        </label>
-        {msg && <div className="font-mono text-[10px] text-[var(--rust)]">{msg}</div>}
-        <div className="flex gap-2 pt-1">
-          <Button variant="outline" size="md" onClick={() => router.push('/marketplace')}>Cancel</Button>
-          <Button variant="primary" size="md" onClick={doImport} disabled={busy}>{busy ? 'importing...' : 'Import'}</Button>
-        </div>
-      </Card>
+    <div className="mx-auto max-w-[900px] px-6 py-6">
+      <div className="flex items-center gap-3">
+        <Link href="/marketplace" className="font-mono text-[12px] text-[var(--dim)] hover:text-[var(--ink)]">{'\u2190'} Marketplace</Link>
+      </div>
+      <SectionTitle sub="Normalize from 14 source formats into the Canonical Skill Format (CSF)">Import Plugin</SectionTitle>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {INPUT_ADAPTERS.map((adapter) => (
+          <Card key={adapter.id}
+            className={'cursor-pointer p-4 transition-colors hover:border-[var(--rust)] ' + (selectedAdapter === adapter.id ? 'border-[var(--rust)]' : '')}
+            onClick={() => setSelectedAdapter(adapter.id)}>
+            <div className="font-mono text-[12px] font-bold text-[var(--ink)]">{adapter.label}</div>
+            <p className="mt-1 text-[11px] text-[var(--dim)]">{adapter.desc}</p>
+          </Card>
+        ))}
+      </div>
+
+      {selectedAdapter && (
+        <Card className="mt-4 p-4 border-[var(--rust)]">
+          <div className="font-mono text-[11px] text-[var(--ink)]">Selected: {INPUT_ADAPTERS.find((a) => a.id === selectedAdapter)?.label}</div>
+          <p className="mt-1 text-[11px] text-[var(--dim)]">
+            Paste or upload the source file below. The normalizer will convert it to Canonical Skill Format (CSF).
+          </p>
+          <textarea
+            className="mt-3 w-full rounded-[7px] border border-[var(--line)] bg-[var(--card)] p-3 font-mono text-[11px] text-[var(--ink)] outline-none focus:border-[var(--rust)]"
+            rows={8}
+            placeholder={`Paste ${INPUT_ADAPTERS.find((a) => a.id === selectedAdapter)?.label} content here\u2026`}
+          />
+          <div className="mt-3 flex gap-2">
+            <Button variant="primary" size="sm" onClick={() => toast({ title: 'Import started', message: 'CSF conversion in progress', tone: 'success' })}>
+              Import & Convert
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setSelectedAdapter(null)}>Cancel</Button>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

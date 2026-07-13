@@ -1,13 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // ============================================================================
-// AGENT PROMPT
-// File: apps/workbench/components/dashboard/context-pipeline.tsx
-// Purpose: The hero "Live Context Assembly" pipeline from the landing page,
-//   reimplemented as a live React component. 6 stages: recall->distill->sign->
-//   rerank->inject->send. Driven by SSE 'query.stage' events; falls back to a demo
-//   autoplay loop when idle so the screen is never dead.
-// Rules: 'use client'. Use useLiveEvents(['query.stage']). Active stage glows
-//   rust, done stages olive. Show per-stage metrics. Match landing page styling.
+// CONTEXT PIPELINE — live 6-stage context-assembly viz. The query.stage event
+// stream drives which stage is active; completed stages get an olive tint.
 // ============================================================================
 
 'use client';
@@ -17,83 +11,85 @@ import { useLiveEvents } from '@/lib/use-live-events';
 import { Card, LiveDot } from '@/components/ui';
 
 const STAGES = [
-  { key: 'recall', n: '01', label: 'recall' },
-  { key: 'distill', n: '02', label: 'distill' },
-  { key: 'sign', n: '03', label: 'sign' },
-  { key: 'rerank', n: '04', label: 'rerank' },
-  { key: 'inject', n: '05', label: 'inject' },
-  { key: 'send', n: '06', label: 'send' },
+  { key: 'recall', n: '01', label: 'Recall', icon: '\u2191' },
+  { key: 'distill', n: '02', label: 'Distill', icon: '\u2193' },
+  { key: 'sign', n: '03', label: 'Sign', icon: '\u2713' },
+  { key: 'rerank', n: '04', label: 'Rerank', icon: '\u2606' },
+  { key: 'inject', n: '05', label: 'Inject', icon: '\u2192' },
+  { key: 'send', n: '06', label: 'Send', icon: '\u2197' },
 ] as const;
 
-interface StageState { active: number; metrics: Record<string, string>; prompt: string; rid: string; }
-
 const DEMO_METRICS: Record<string, string> = {
-  recall: '742 cand · 248ms', distill: '1240->132 tok', sign: 'Ed25519 · 7',
-  rerank: 'top 0.94', inject: '4192/8192', send: 'opus · stream',
+  recall: '742 cand \u00B7 248ms', distill: '1240\u2192132 tok', sign: 'Ed25519 \u00B7 7',
+  rerank: 'top 0.94', inject: '4192/8192', send: 'opus \u00B7 stream',
 };
 
 export function ContextPipeline() {
   const { connected, latest } = useLiveEvents(['query.stage']);
-  const [state, setState] = React.useState<StageState>({
-    active: -1, metrics: {}, prompt: 'how does our JWT refresh flow handle rotation?', rid: '#1042',
-  });
+  const [active, setActive] = React.useState(-1);
+  const [metrics, setMetrics] = React.useState<Record<string, string>>({});
+  const [prompt, setPrompt] = React.useState('how does our JWT refresh flow handle rotation?');
+  const [rid, setRid] = React.useState('#1042');
+  const [sawLive, setSawLive] = React.useState(false);
 
-  // React to live query.stage events.
   React.useEffect(() => {
     if (!latest || latest.kind !== 'query.stage') return;
     const stage = String(latest.payload.stage ?? '');
     const idx = STAGES.findIndex((s) => s.key === stage);
     if (idx === -1) return;
-    setState((prev) => ({
-      ...prev,
-      active: idx,
-      metrics: { ...prev.metrics, [stage]: String(latest.payload.metric ?? '') },
-      prompt: String(latest.payload.prompt ?? prev.prompt),
-      rid: String(latest.payload.rid ?? prev.rid),
-    }));
-  }, [latest]);
+    if (!sawLive) setSawLive(true);
+    setActive(idx);
+    setMetrics((prev) => ({ ...prev, [stage]: String(latest.payload.metric ?? prev[stage] ?? '\u2014') }));
+    if (latest.payload.prompt) setPrompt(String(latest.payload.prompt));
+    if (latest.payload.rid) setRid(String(latest.payload.rid));
+  }, [latest, sawLive]);
 
-  // Demo autoplay when no live activity (so the hero always feels alive).
   React.useEffect(() => {
-    if (connected && state.active >= 0) return;
+    if (sawLive) return;
     let i = 0;
     const t = setInterval(() => {
-      setState((prev) => ({ ...prev, active: i % 6, metrics: DEMO_METRICS }));
+      setActive(i % STAGES.length);
+      setMetrics(DEMO_METRICS);
       i++;
     }, 900);
     return () => clearInterval(t);
-  }, [connected, state.active]);
+  }, [sawLive]);
 
   return (
-    <Card className="p-5">
-      {/* Prompt request bar */}
-      <div className="mb-4 flex items-center gap-3 rounded-[9px] border border-[var(--line2)] bg-[var(--paper)] px-4 py-3">
+    <Card className="p-4">
+      {/* Prompt banner */}
+      <div className="mb-4 flex items-center gap-3 rounded-md border border-[var(--line2)] bg-[var(--paper)] px-4 py-2.5">
         <LiveDot on={connected} />
-        <span className="font-mono text-[11px] font-extrabold text-[var(--plum)]">prompt ›</span>
-        <span className="flex-1 truncate font-mono text-[13px] font-semibold text-[var(--ink)]">{state.prompt}</span>
-        <span className="font-mono text-[10.5px] font-bold text-[var(--dim)]">req {state.rid}</span>
+        <span className="font-mono text-data-sm font-extrabold text-[var(--plum)]">prompt</span>
+        <span className="flex-1 truncate font-mono text-data-base font-semibold text-[var(--ink)]">{prompt}</span>
+        <span className="rounded-sm bg-[var(--paper2)] px-2 py-0.5 font-mono text-data-xs font-bold text-[var(--dim)]">{rid}</span>
       </div>
 
-      {/* 6-stage pipeline */}
-      <div className="grid grid-cols-6 gap-2">
+      {/* Pipeline stages */}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
         {STAGES.map((s, i) => {
-          const isActive = i === state.active;
-          const isDone = i < state.active;
+          const isActive = i === active;
+          const isDone = active >= 0 && i < active;
           return (
             <div
               key={s.key}
-              className="relative overflow-hidden rounded-[9px] border px-2 py-2.5 text-center transition-all"
+              className="relative flex flex-col items-center rounded-md border px-2 py-3 transition-all duration-300 animate-fade-in"
               style={{
+                animationDelay: `${i * 60}ms`,
                 borderColor: isActive ? 'var(--rust)' : isDone ? 'color-mix(in oklab, var(--olive) 50%, transparent)' : 'var(--line)',
                 background: isActive ? 'color-mix(in oklab, var(--rust) 7%, var(--paper))' : isDone ? 'color-mix(in oklab, var(--olive) 5%, var(--paper))' : 'var(--paper)',
                 boxShadow: isActive ? '0 0 0 2px color-mix(in oklab, var(--rust) 20%, transparent)' : 'none',
               }}
             >
-              <div className="font-mono text-[9.5px] font-extrabold uppercase tracking-[0.08em] text-[var(--amber)]">{s.n}</div>
-              <div className="mt-1 font-mono text-[11.5px] font-extrabold text-[var(--ink)]">{s.label}</div>
-              <div className="mt-1 font-mono text-[9.5px] text-[var(--dim)]">{state.metrics[s.key] ?? '—'}</div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-mono text-[9px] font-bold tracking-wider text-[var(--faint)]">{s.n}</span>
+                <span className="text-[12px]" style={{ color: isActive ? 'var(--rust)' : isDone ? 'var(--olive)' : 'var(--faint)' }}>{s.icon}</span>
+              </div>
+              <div className="mt-1 font-mono text-[12px] font-extrabold text-[var(--ink)]">{s.label}</div>
+              <div className="mt-1 font-mono text-[9px] text-[var(--dim)]">{metrics[s.key] ?? '\u2014'}</div>
+              {isDone && <div className="mt-0.5 font-mono text-[9px] text-[var(--olive)]">{'\u2713'}</div>}
               {i < STAGES.length - 1 && (
-                <span className="absolute right-[-7px] top-1/2 -translate-y-1/2 text-[11px] text-[var(--faint)]">→</span>
+                <span className="absolute -right-2 top-1/2 -translate-y-1/2 text-[10px] text-[var(--faint)] hidden lg:block">{'\u2192'}</span>
               )}
             </div>
           );

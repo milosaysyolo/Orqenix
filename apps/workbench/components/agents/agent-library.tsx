@@ -1,54 +1,63 @@
 // SPDX-License-Identifier: Apache-2.0
 // ============================================================================
-// AGENT PROMPT
-// File: apps/workbench/components/agents/agent-library.tsx
-// Purpose: The Orchestrator's Agent Library rail. Lists agent_definitions (from
-//   /api/agents). Click a card to add it to the canvas (onAdd). Select to open in
-//   the editor. "+ New Agent" creates a blank definition. Search + type filter.
-// Rules: 'use client'. Use lib/api. Cards show name + type tag + model.
+// AGENT LIBRARY — draggable palette of agent types. Drag an item onto the
+// Team Canvas to add a new node. Also acts as a reference of available types.
 // ============================================================================
 
 'use client';
 
 import * as React from 'react';
-import { Panel, Badge, Button } from '@/components/ui';
-import { api } from '@/lib/api';
+import { Panel, Badge } from '@/components/ui';
+import type { TeamNode } from '@/lib/demo-store';
 
-export interface AgentDef { id: string; name: string; type: 'agent' | 'subagent'; model: string | null; markdown: string; }
+const TYPES: Array<{ type: TeamNode['type']; label: string; glyph: string; color: string }> = [
+  { type: 'agent', label: 'Agent', glyph: '\u25C9', color: 'var(--teal)' },
+  { type: 'subagent', label: 'Subagent', glyph: '\u25C7', color: 'var(--plum)' },
+  { type: 'service', label: 'Service', glyph: '\u25A3', color: 'var(--olive)' },
+];
 
-export function AgentLibrary({
-  refreshKey, onAdd, onEdit, onNew,
-}: { refreshKey: number; onAdd: (d: AgentDef) => void; onEdit: (d: AgentDef) => void; onNew: () => void }) {
-  const [defs, setDefs] = React.useState<AgentDef[]>([]);
-  const [q, setQ] = React.useState('');
+const AGENT_NAMES = ['claude-code', 'codex', 'cline', 'gpt-engineer', 'custom-agent'];
+const SUBAGENT_NAMES = ['researcher', 'coder', 'tester', 'planner', 'reviewer'];
+const SERVICE_NAMES = ['memory', 'search', 'embedder', 'compressor'];
 
-  const load = React.useCallback(async () => {
-    const res = await api.get<{ defs: AgentDef[] }>('/api/agents');
-    if (res.ok) setDefs(res.data!.defs);
-  }, []);
-  React.useEffect(() => { void load(); }, [load, refreshKey]);
+function pickName(type: TeamNode['type'], used: string[]): string {
+  const pool = type === 'agent' ? AGENT_NAMES : type === 'subagent' ? SUBAGENT_NAMES : SERVICE_NAMES;
+  const available = pool.filter((n) => !used.includes(n));
+  if (available.length === 0) return `${type}-${Math.floor(Math.random() * 999)}`;
+  return available[Math.floor(Math.random() * available.length)]!;
+}
 
-  const filtered = defs.filter((d) => d.name.toLowerCase().includes(q.toLowerCase()));
+export function AgentLibrary({ existingNodeIds }: { existingNodeIds: string[] }) {
+  const usedNames = React.useRef<string[]>([]);
+
+  function onDragStart(e: React.DragEvent, type: TeamNode['type']) {
+    const id = `${type}_${Date.now().toString(36)}`;
+    const name = pickName(type, usedNames.current);
+    usedNames.current.push(name);
+    e.dataTransfer.setData('application/json', JSON.stringify({ id, type, name }));
+    e.dataTransfer.effectAllowed = 'move';
+  }
 
   return (
-    <Panel title="Agent Library" action={<Button size="sm" variant="primary" onClick={onNew}>+ New</Button>} className="h-full">
-      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="search agents&hellip;"
-        className="mb-2 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-2 py-1 font-mono text-[11px] outline-none focus:border-[var(--rust)]" />
+    <Panel title="Agent Library" action={<Badge tone="neutral">{TYPES.length} types</Badge>}>
       <div className="space-y-1.5">
-        {filtered.length === 0 ? (
-          <div className="py-6 text-center font-mono text-[10.5px] text-[var(--faint)]">No agents yet. Create one &rarr;</div>
-        ) : filtered.map((d) => (
-          <div key={d.id} className="rounded-[9px] border border-[var(--line)] bg-[var(--paper)] p-2">
-            <div className="flex items-center gap-2">
-              <button onClick={() => onEdit(d)} className="flex-1 text-left font-mono text-[11.5px] font-bold text-[var(--ink)]">{d.name}</button>
-              <Badge tone={d.type === 'agent' ? 'teal' : 'plum'}>{d.type}</Badge>
-            </div>
-            <div className="mt-1 flex items-center justify-between">
-              <span className="font-mono text-[9.5px] text-[var(--dim)]">{d.model ?? 'default model'}</span>
-              <button onClick={() => onAdd(d)} className="font-mono text-[10px] text-[var(--rust)] hover:underline">+ add to canvas</button>
+        {TYPES.map((t) => (
+          <div
+            key={t.type}
+            draggable
+            onDragStart={(e) => onDragStart(e, t.type)}
+            className="flex cursor-grab items-center gap-2 rounded-[8px] border border-[var(--line)] bg-[var(--paper)] px-3 py-2 transition-colors hover:border-[var(--ink)] active:cursor-grabbing active:opacity-80"
+          >
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-[14px]" style={{ background: `color-mix(in oklab, ${t.color} 14%, transparent)`, color: t.color }}>{t.glyph}</span>
+            <div>
+              <div className="font-mono text-[11px] font-bold text-[var(--ink)]">{t.label}</div>
+              <div className="font-mono text-[9px] text-[var(--faint)]">drag onto canvas</div>
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-3 border-t border-[var(--line)] pt-2 font-mono text-[9.5px] text-[var(--faint)]">
+        {existingNodeIds.length} nodes on canvas
       </div>
     </Panel>
   );

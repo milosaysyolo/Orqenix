@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: Apache-2.0
 // Workbench , Skill Genesis API (generate skill from candidate)
 
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   let body: { candidateId?: string; language?: string; nameOverride?: string };
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
   if (!body.candidateId) {
-    return NextResponse.json({ error: 'Missing candidateId' }, { status: 400 });
+    return NextResponse.json({ error: "Missing candidateId" }, { status: 400 });
   }
 
   // D8.γ runtime:
@@ -24,9 +24,9 @@ export async function POST(req: Request) {
     {
       ok: true,
       candidateId: body.candidateId,
-      note: 'SkillGenesis wires at runtime; generated skill is unverified (Anti-38)',
-      verificationStatus: 'unverified',
+      note: "SkillGenesis wires at runtime; generated skill is unverified (Anti-38)",
+      verificationStatus: "unverified",
     },
-    { status: 200 }
+    { status: 200 },
   );
 }

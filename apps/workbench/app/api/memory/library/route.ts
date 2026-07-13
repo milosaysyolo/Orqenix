@@ -1,48 +1,24 @@
-import { NextResponse } from 'next/server';
-import { getRuntime } from '@/lib/runtime';
-import { ulid } from '@orqenix/memory-engine';
+// SPDX-License-Identifier: Apache-2.0
 
-export const runtime = 'nodejs';
+import { getLibrary, pinEntry, unpinEntry } from '@/lib/demo-store';
+import type { KbKind } from '@/lib/demo-store';
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
-  try {
-    const rt = await getRuntime();
-    const db = rt.engine.getStore().db;
-    let items: unknown[] = [];
-    try {
-      items = db.prepare('SELECT * FROM memory_library WHERE project_id = ? ORDER BY pinned_at DESC').all(rt.projectId);
-    } catch { /* table */ }
-    return NextResponse.json({ items }, { status: 200, headers: { 'Cache-Control': 'no-store' } });
-  } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
-  }
+export async function GET(): Promise<Response> {
+  return Response.json({ items: getLibrary() });
 }
 
-export async function POST(req: Request) {
-  try {
-    const body = (await req.json()) as { entryId: string; entryKb: string; collection?: string };
-    const rt = await getRuntime();
-    const db = rt.engine.getStore().db;
-    const dup = db.prepare('SELECT id FROM memory_library WHERE project_id = ? AND entry_id = ?').get(rt.projectId, body.entryId);
-    if (!dup) {
-      db.prepare('INSERT INTO memory_library (id, project_id, entry_id, entry_kb, pinned_at, collection) VALUES (?, ?, ?, ?, ?, ?)')
-        .run(ulid(), rt.projectId, body.entryId, body.entryKb, new Date().toISOString(), body.collection ?? null);
-    }
-    return NextResponse.json({ ok: true });
-  } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
-  }
+export async function POST(req: Request): Promise<Response> {
+  const body = (await req.json().catch(() => ({}))) as { entryId?: unknown; entryKb?: unknown };
+  if (typeof body.entryId !== 'string' || typeof body.entryKb !== 'string')
+    return Response.json({ error: 'entryId and entryKb required as strings' }, { status: 400 });
+  const ok = pinEntry(body.entryId, body.entryKb as KbKind);
+  return Response.json({ ok });
 }
 
-export async function DELETE(req: Request) {
-  try {
-    const entryId = new URL(req.url).searchParams.get('entryId');
-    if (!entryId) return NextResponse.json({ error: 'entryId required' }, { status: 400 });
-    const rt = await getRuntime();
-    rt.engine.getStore().db.prepare('DELETE FROM memory_library WHERE project_id = ? AND entry_id = ?').run(rt.projectId, entryId);
-    return NextResponse.json({ ok: true });
-  } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
-  }
+export async function DELETE(req: Request): Promise<Response> {
+  const body = (await req.json().catch(() => ({}))) as { entryId?: unknown };
+  if (typeof body.entryId !== 'string') return Response.json({ error: 'entryId required as string' }, { status: 400 });
+  const ok = unpinEntry(body.entryId);
+  return Response.json({ ok });
 }

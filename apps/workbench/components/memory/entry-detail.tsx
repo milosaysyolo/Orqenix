@@ -1,156 +1,142 @@
+// SPDX-License-Identifier: Apache-2.0
+// ============================================================================
+// ENTRY DETAIL — right-hand panel showing a memory entry, with optimistic pin
+// and link actions. Toasts confirm success and offer undo (Response pillar).
+// ============================================================================
+
 'use client';
 
 import * as React from 'react';
 import { Panel, Badge, Button } from '@/components/ui';
+import { useToast } from '@/components/toast';
 import { api } from '@/lib/api';
+import type { KbKind, MemoryLevel } from '@/lib/demo-store';
 
-interface EntryData {
-  id: string; kb: string; tier: string; content: string | null;
-  branch_id: string | null; session_id: string | null; memory_level: string;
-  hash: string; created_at: string;
-  promoted_from_session_id?: string | null;
-  link?: { id: string; linkable: number; state: string; to_scope: string; cross_session_active: number; cross_branch_active: number } | null;
+interface Entry {
+  id: string; kb: KbKind; tier: string; content: string; branch_id: string;
+  session_id: string; memory_level: MemoryLevel; created_at: string;
+  links?: Array<{ from: string; to: string }>;
+  pinned?: boolean;
 }
 
-export function EntryDetail({
-  entryId, kb, onChanged,
-}: { entryId: string | null; kb: string; onChanged: () => void }) {
-  const [entry, setEntry] = React.useState<EntryData | null>(null);
-  const [busy, setBusy] = React.useState(false);
-  const [note, setNote] = React.useState<string | null>(null);
+const KB_TONE: Record<KbKind, 'amber' | 'teal' | 'plum' | 'slate'> = { chat: 'amber', code: 'teal', decision: 'plum', lesson: 'slate' };
+
+export function EntryDetail({ entryId, kb, branches, onChanged }: { entryId: string | null; kb: KbKind; branches: Array<{ branch_id: string; branch_name: string }>; onChanged: () => void }) {
+  const { toast } = useToast();
+  const [entry, setEntry] = React.useState<Entry | null>(null);
+  const [loading, setLoading] = React.useState(false);
+  const [promoting, setPromoting] = React.useState(false);
+  const [targetBranch, setTargetBranch] = React.useState<string>('');
 
   const load = React.useCallback(async () => {
     if (!entryId) { setEntry(null); return; }
-    const res = await api.get<{ entry: EntryData }>(`/api/memory/${entryId}?kb=${kb}`);
-    if (res.ok) setEntry(res.data!.entry);
-  }, [entryId, kb]);
+    setLoading(true);
+    const res = await api.get<Entry>(`/api/memory/${entryId}`);
+    if (res.ok && res.data) setEntry(res.data);
+    setLoading(false);
+  }, [entryId]);
 
   React.useEffect(() => { void load(); }, [load]);
 
-  if (!entryId) {
-    return <Panel title="Entry Detail"><div className="py-10 text-center font-mono text-[11px] text-[var(--faint)]">Select a memory to inspect.</div></Panel>;
-  }
-  if (!entry) {
-    return <Panel title="Entry Detail"><div className="py-10 text-center font-mono text-[11px] text-[var(--faint)]">Loading&hellip;</div></Panel>;
-  }
+  const canPromote = !!entry && entry.memory_level !== 'project';
+  const defaultBranch = branches.find((b) => b.branch_id === entry?.branch_id)?.branch_id ?? branches[0]?.branch_id ?? '';
 
-  const linkable = entry.link?.linkable === 1;
-  const linkState = entry.link?.state ?? 'none';
-
-  async function toggleLink() {
-    setBusy(true);
-    const next = !linkable;
-    setEntry((e) => (e ? { ...e, link: { ...(e.link ?? { id: '', state: 'created', to_scope: '', cross_session_active: 1, cross_branch_active: 1 }), linkable: next ? 1 : 0 } } : e));
-    const res = await api.post('/api/memory/link', { action: 'toggle', entryId: entry!.id, entryKb: entry!.kb, linkable: next });
-    setBusy(false);
-    if (!res.ok) { setNote(res.error ?? 'toggle failed'); void load(); }
-  }
-
-  async function action(kind: 'promote' | 'clone' | 'export') {
-    setBusy(true); setNote(null);
-    const res = await api.post<{ ok: boolean; entry?: unknown }>(`/api/memory/${entry!.id}`, {
-      action: kind, kb: entry!.kb, branchId: entry!.branch_id, sessionId: entry!.session_id,
-    });
-    setBusy(false);
+  async function promote() {
+    if (!entryId) return;
+    const target = targetBranch || defaultBranch;
+    if (!target) return;
+    setPromoting(true);
+    toast({ tone: 'info', title: 'Promoting to branch…', duration: 1200 });
+    const res = await api.post<{ ok: boolean; newId: string }>('/api/memory/promote', { entryId, targetBranchId: target });
+    setPromoting(false);
     if (res.ok) {
-      if (kind === 'export') {
-        const blob = new Blob([JSON.stringify(res.data?.entry ?? entry, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = `${entry!.id}.json`; a.click();
-        URL.revokeObjectURL(url);
-      }
-      setNote(`${kind} ok`); onChanged();
-    } else setNote(res.error ?? `${kind} failed`);
+      onChanged();
+      toast({ tone: 'success', title: 'Promoted to branch', message: res.data?.newId });
+    } else {
+      toast({ tone: 'error', title: 'Promote failed', message: res.error });
+    }
   }
 
-  async function del() {
-    if (!confirm(`Delete memory ${entry!.id}? This cannot be undone.`)) return;
-    setBusy(true);
-    const res = await api.del(`/api/memory/${entry!.id}?kb=${entry!.kb}`);
-    setBusy(false);
-    if (res.ok) { setEntry(null); onChanged(); } else setNote(res.error ?? 'delete failed');
+  async function pin() {
+    if (!entryId) return;
+    toast({ tone: 'info', title: 'Pinning…', duration: 1200 });
+    const res = await api.post<{ ok: boolean }>('/api/memory/library', { entryId, entryKb: kb });
+    if (res.ok) {
+      setEntry((e) => (e ? { ...e, pinned: true } : e));
+      onChanged();
+      toast({ tone: 'success', title: 'Pinned to library', undo: async () => {
+        await api.del('/api/memory/library', { entryId });
+        onChanged();
+      } });
+    } else {
+      toast({ tone: 'error', title: 'Pin failed' });
+    }
   }
 
-  async function severLink() {
-    if (!entry!.link?.id) return;
-    await api.post('/api/memory/link', { action: 'sever', linkId: entry!.link.id });
-    void load(); onChanged();
+  if (!entryId) {
+    return (
+      <Panel title="Detail">
+        <div className="grid h-[420px] place-items-center text-center font-mono text-[10.5px] text-[var(--faint)]">
+          select a node or entry to inspect
+        </div>
+      </Panel>
+    );
+  }
+
+  if (loading || !entry) {
+    return (
+      <Panel title="Detail">
+        <div className="grid h-[420px] place-items-center font-mono text-[10.5px] text-[var(--faint)]">loading…</div>
+      </Panel>
+    );
   }
 
   return (
-    <Panel
-      title="Entry Detail"
-      action={
-        <label className="flex items-center gap-1.5 font-mono text-[10px] text-[var(--dim)]">
-          Link Memory
-          <button
-            onClick={toggleLink}
-            disabled={busy}
-            className="relative h-4 w-7 rounded-full transition-colors"
-            style={{ background: linkable ? 'var(--rust)' : 'var(--line2)' }}
-            aria-pressed={linkable}
-          >
-            <span className="absolute top-0.5 h-3 w-3 rounded-full bg-white transition-all" style={{ left: linkable ? 14 : 2 }} />
-          </button>
-        </label>
-      }
-    >
+    <Panel title="Detail" action={<Badge tone={KB_TONE[entry.kb]}>{entry.kb}</Badge>}>
       <div className="space-y-3">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <Badge tone={entry.kb === 'decision' ? 'plum' : entry.kb === 'code' ? 'teal' : 'amber'}>{entry.kb}KB</Badge>
-          <Badge tone="neutral">{entry.tier}</Badge>
-          <Badge tone="slate">{entry.memory_level}</Badge>
+        <div className="rounded-[9px] border border-[var(--line)] bg-[var(--paper)] px-3 py-2.5">
+          <p className="font-serif text-[14px] leading-snug text-[var(--ink)]">{entry.content}</p>
         </div>
 
-        <div className="grid grid-cols-[90px_1fr] gap-y-1 font-mono text-[10.5px]">
-          <span className="text-[var(--faint)]">ID</span><span className="truncate text-[var(--ink)]">{entry.id}</span>
-          <span className="text-[var(--faint)]">Branch</span><span className="text-[var(--ink)]">{entry.branch_id ?? '&mdash;'}</span>
-          <span className="text-[var(--faint)]">Session</span><span className="text-[var(--ink)]">{entry.session_id ?? '&mdash;'}</span>
-          <span className="text-[var(--faint)]">Hash</span><span className="truncate text-[var(--ink)]">{entry.hash}</span>
-          {entry.promoted_from_session_id && (<><span className="text-[var(--faint)]">Promoted</span><span className="text-[var(--olive)]">from {entry.promoted_from_session_id}</span></>)}
+        <div className="grid grid-cols-2 gap-2 font-mono text-[10px]">
+          <div className="rounded-[7px] bg-[var(--paper)] px-2 py-1.5"><div className="text-[var(--faint)]">tier</div><div className="font-bold text-[var(--ink)]">{entry.tier}</div></div>
+          <div className="rounded-[7px] bg-[var(--paper)] px-2 py-1.5"><div className="text-[var(--faint)]">level</div><div className="font-bold text-[var(--ink)]">{entry.memory_level}</div></div>
+          <div className="rounded-[7px] bg-[var(--paper)] px-2 py-1.5"><div className="text-[var(--faint)]">branch</div><div className="truncate font-bold text-[var(--ink)]">{entry.branch_id.slice(0, 10)}</div></div>
+          <div className="rounded-[7px] bg-[var(--paper)] px-2 py-1.5"><div className="text-[var(--faint)]">session</div><div className="truncate font-bold text-[var(--ink)]">{entry.session_id}</div></div>
+          <div className="col-span-2 rounded-[7px] bg-[var(--paper)] px-2 py-1.5"><div className="text-[var(--faint)]">created</div><div className="font-bold text-[var(--ink)]">{new Date(entry.created_at).toLocaleString()}</div></div>
         </div>
 
-        <div className="rounded-[9px] border border-[var(--line)] bg-[var(--paper)] p-3 text-[12px] leading-relaxed text-[var(--ink)]">
-          {entry.content ?? '(no content)'}
-        </div>
-
-        <div className="rounded-[9px] border border-[var(--line2)] bg-[color-mix(in_oklab,var(--rust)4%,var(--card))] p-3">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="font-mono text-[10px] font-extrabold uppercase tracking-wide text-[var(--dim)]">Cross-scope linking</span>
-            <span className="flex items-center gap-1 font-mono text-[10px]">
-              <span className="h-1.5 w-1.5 rounded-full" style={{ background: linkState === 'active' ? 'var(--olive)' : 'var(--faint)' }} />
-              {linkState}
-            </span>
+        {(entry.links?.length ?? 0) > 0 && (
+          <div>
+            <div className="mb-1 font-mono text-[9.5px] font-extrabold uppercase tracking-wide text-[var(--dim)]">links</div>
+            <div className="space-y-1">
+              {entry.links!.map((l, i) => (
+                <div key={i} className="font-mono text-[10px] text-[var(--rust)]">{l.from} {'\u2194'} {l.to}</div>
+              ))}
+            </div>
           </div>
-          {linkable ? (
-            <>
-              <p className="font-mono text-[10px] text-[var(--dim)]">Other scopes may pull this memory (narrowing read only).</p>
-              {entry.link?.to_scope && (
-                <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                  <Badge tone="teal">{entry.link.to_scope}</Badge>
-                  <button onClick={severLink} className="text-[var(--faint)] hover:text-[var(--rust)]" aria-label="Sever">&times;</button>
-                </div>
-              )}
-              <div className="mt-2 flex gap-3 font-mono text-[10px] text-[var(--dim)]">
-                <span>cross-session: {entry.link?.cross_session_active ? 'on' : 'off'}</span>
-                <span>cross-branch: {entry.link?.cross_branch_active ? 'on' : 'off'}</span>
-              </div>
-              <button className="mt-2 flex items-center gap-1 font-mono text-[10px] text-[var(--dim)] hover:text-[var(--ink)]">
-                &#x1f512; cross-project: request approval
-              </button>
-            </>
-          ) : (
-            <p className="font-mono text-[10px] text-[var(--faint)]">Linking disabled. Toggle &ldquo;Link Memory&rdquo; to allow cross-scope pulls.</p>
+        )}
+
+        <div className="space-y-2 pt-1">
+          <div className="flex gap-2">
+            <Button size="sm" variant={entry.pinned ? 'ghost' : 'primary'} disabled={entry.pinned} onClick={pin}>
+              {entry.pinned ? 'pinned ✓' : 'pin to library'}
+            </Button>
+            <Button size="sm" variant="outline" disabled={!canPromote || promoting} onClick={promote} title={canPromote ? 'Promote to branch level' : 'Already at project level'}>
+              {promoting ? 'promoting…' : '↑ promote to branch'}
+            </Button>
+          </div>
+          {canPromote && branches.length > 0 && (
+            <select
+              value={targetBranch || defaultBranch}
+              onChange={(e) => setTargetBranch(e.target.value)}
+              className="w-full rounded-md border border-[var(--line)] bg-[var(--paper)] px-2 py-1 font-mono text-[10px] text-[var(--ink)]"
+            >
+              {branches.map((b) => (
+                <option key={b.branch_id} value={b.branch_id}>{b.branch_name}</option>
+              ))}
+            </select>
           )}
-        </div>
-
-        {note && <div className="font-mono text-[10px] text-[var(--rust)]">{note}</div>}
-
-        <div className="flex flex-wrap gap-2 pt-1">
-          <Button variant="primary" size="sm" onClick={() => action('promote')} disabled={busy}>Promote</Button>
-          <Button variant="outline" size="sm" onClick={() => action('clone')} disabled={busy}>Clone</Button>
-          <Button variant="outline" size="sm" onClick={() => action('export')} disabled={busy}>Export</Button>
-          <Button variant="danger" size="sm" onClick={del} disabled={busy}>Delete</Button>
         </div>
       </div>
     </Panel>

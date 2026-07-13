@@ -14,18 +14,20 @@ export default function NetworkPage() {
   const { events } = useLiveEvents();
 
   const load = React.useCallback(async () => {
-    const res = await api.get<{ sessions: Session[] }>('/api/sessions?state=active');
+    const res = await api.get<{ sessions: Session[] }>('/api/agents/network');
     if (res.ok) setSessions(res.data!.sessions);
   }, []);
   React.useEffect(() => { void load(); }, [load]);
   React.useEffect(() => { if (events.length) void load(); }, [events.length, load]);
+
+  const subs = sessions.flatMap((s) => s.subagents ?? []);
 
   return (
     <div className="mx-auto max-w-[1500px] px-6 py-6">
       <SectionTitle sub="Realtime view of all agents, subagents, and services">Network</SectionTitle>
       <div className="mt-4 grid grid-cols-[1fr_340px] gap-4">
         <Card className="min-h-[560px] p-3">
-          <AgentNetwork sessions={sessions} events={events} />
+          <AgentNetwork subs={subs} events={events} />
         </Card>
         <RunLogs />
       </div>

@@ -1,81 +1,73 @@
-// SPDX-License-Identifier: Apache-2.0
-// Workbench , Self-Learning Candidates page (Promoter UI)
-
 'use client';
 
 import * as React from 'react';
-import { Sparkles, ShieldAlert } from 'lucide-react';
-import { Card, CardContent } from '@orqenix/ui-primitives';
-import { CandidateList } from '@orqenix/instinct-promoter/ui';
-import type { PromoterCandidate, ReviewAction } from '@orqenix/instinct-promoter';
+import { SectionTitle, Card, Badge, Button } from '@/components/ui';
+import { api } from '@/lib/api';
 
-export default function CandidatesPage(): React.ReactElement {
-  const [candidates, setCandidates] = React.useState<PromoterCandidate[]>([]);
-  const [loading, setLoading] = React.useState(true);
+interface Candidate {
+  id: string; patternName: string; patternDescription: string;
+  occurrenceCount: number; successRate: number; impactScore: number;
+  estTimeSavedPerWeekMin: number; status: string;
+}
 
-  React.useEffect(() => {
-    void load();
+export default function CandidatesPage() {
+  const [candidates, setCandidates] = React.useState<Candidate[]>([]);
+  const [note, setNote] = React.useState<string | null>(null);
+
+  const load = React.useCallback(async () => {
+    const res = await api.get<{ candidates: Candidate[] }>('/api/learning/candidates');
+    if (res.ok) setCandidates(res.data!.candidates);
   }, []);
+  React.useEffect(() => { void load(); }, [load]);
 
-  async function load(): Promise<void> {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/learning/candidates');
-      if (res.ok) {
-        const data = (await res.json()) as { candidates: PromoterCandidate[] };
-        setCandidates(data.candidates);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleReview(candidateId: string, action: ReviewAction): Promise<void> {
-    const res = await fetch('/api/learning/candidates', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ candidateId, action, reviewedBy: 'local-user' }),
-    });
+  async function review(id: string, action: 'promote' | 'reject' | 'defer') {
+    const res = await api.post<{ ok: boolean; generatedSkillName?: string }>('/api/learning/candidates', { candidateId: id, action });
     if (res.ok) {
-      const data = (await res.json()) as { openBuilder?: boolean; generatedSkillName?: string };
-      if (data.openBuilder) {
-        window.location.href = `/marketplace/new?fromCandidate=${candidateId}`;
-        return;
-      }
-      await load(); // refresh
-    }
+      setNote(res.data?.generatedSkillName ? `promoted -> ${res.data.generatedSkillName}` : `${action} ok`);
+      await load();
+    } else setNote(res.error ?? 'failed');
   }
 
   return (
-    <div className="container mx-auto px-6 py-8 max-w-4xl">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight mb-2 flex items-center gap-2">
-          <Sparkles className="w-7 h-7 text-orqenix-amber" aria-hidden />
-          Candidate Patterns
-        </h1>
-        <p className="text-muted-foreground">
-          Recurring workflows detected by the observer, ranked by impact. Promote useful
-          ones to skills.
-        </p>
-      </div>
+    <div className="mx-auto max-w-[1100px] px-6 py-6">
+      <SectionTitle sub="Review and promote self-learned patterns">Candidate Patterns</SectionTitle>
 
-      <Card className="mb-6 border-orqenix-amber/30 bg-orqenix-amber/5">
-        <CardContent className="py-4">
-          <div className="flex items-start gap-3">
-            <ShieldAlert className="w-5 h-5 text-orqenix-amber mt-0.5 shrink-0" aria-hidden />
-            <div className="flex-1">
-              <p className="text-sm font-medium">Promoted skills require verification</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Per Anti-pattern 38, a promoted skill is created as <strong>unverified</strong>.
-                It must pass the verification loop (replay + cross-validation) before becoming
-                default-enabled. Observation samples are PII-redacted.
-              </p>
-            </div>
-          </div>
-        </CardContent>
+      <Card className="mt-4 p-3 border-[color-mix(in_oklab,var(--amber)35%,transparent)] bg-[color-mix(in_oklab,var(--amber)4%,var(--card))]">
+        <div className="font-mono text-[10.5px] text-[var(--dim)]">
+          Promoted skills require verification (Anti-pattern 38). A promoted skill is created as <strong>unverified</strong> and must pass replay + cross-validation.
+        </div>
       </Card>
 
-      <CandidateList candidates={candidates} onReview={handleReview} loading={loading} />
+      {note && <div className="mt-2 font-mono text-[10px] text-[var(--olive)]">{note}</div>}
+
+      <div className="mt-4 space-y-3">
+        {candidates.filter((c) => c.status === 'pending').length === 0 ? (
+          <Card className="p-10 text-center font-mono text-[11px] text-[var(--faint)]">
+            No pending candidates. All patterns have been reviewed or none detected yet.
+          </Card>
+        ) : candidates.filter((c) => c.status === 'pending').map((c) => (
+          <Card key={c.id} className="p-4">
+            <div className="flex items-center gap-2">
+              <span className="text-[var(--amber)]">{'\u2726'}</span>
+              <span className="font-mono text-[12px] font-bold text-[var(--ink)]">{c.patternName}</span>
+              <Badge tone="rust">impact {c.impactScore.toFixed(1)}</Badge>
+            </div>
+            <p className="mt-1 text-[12px] text-[var(--dim)]">{c.patternDescription}</p>
+            <div className="mt-2 flex flex-wrap gap-3 font-mono text-[10px] text-[var(--dim)]">
+              <span>{c.occurrenceCount}x observed</span>
+              <span>&middot;</span>
+              <span>{Math.round(c.successRate * 100)}% success</span>
+              <span>&middot;</span>
+              <span>~{c.estTimeSavedPerWeekMin} min/week saved</span>
+            </div>
+            <div className="mt-3 flex gap-2">
+              <Button variant="primary" size="sm" onClick={() => review(c.id, 'promote')}>Promote</Button>
+              <Button variant="ghost" size="sm" onClick={() => review(c.id, 'defer')}>Defer</Button>
+              <Button variant="ghost" size="sm" onClick={() => review(c.id, 'reject')}>Reject</Button>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

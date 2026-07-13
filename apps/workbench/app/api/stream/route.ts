@@ -1,49 +1,58 @@
 // SPDX-License-Identifier: Apache-2.0
+// ============================================================================
+// SSE event stream — when the first client connects, starts the activity
+// engine (if not already running) and subscribes to the event bus so every
+// event is forwarded as an SSE frame.
+// ============================================================================
 
-import { eventBus } from '@/lib/event-bus';
-import { getRuntime } from '@/lib/runtime';
-
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function GET(req: Request): Promise<Response> {
-  await getRuntime();
+import { eventBus } from '@/lib/event-bus';
+import { startActivity } from '@/lib/activity-engine';
 
-  const encoder = new TextEncoder();
+const encoder = new TextEncoder();
 
-  const stream = new ReadableStream<Uint8Array>({
+export async function GET(): Promise<Response> {
+  let timer: ReturnType<typeof setInterval> | null = null;
+  let cleanup: (() => void) | null = null;
+
+  const stream = new ReadableStream({
     start(controller) {
-      const send = (event: string, data: unknown) => {
-        controller.enqueue(encoder.encode(`event: ${event}\n`));
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
-      };
+      // Ensure the activity engine is running (idempotent).
+      startActivity();
 
-      for (const e of eventBus.recent(50)) send('orqenix', e);
+      // Send an initial comment to establish the connection
+      controller.enqueue(encoder.encode(':ok\n\n'));
 
-      const unsub = eventBus.subscribe((e) => send('orqenix', e));
-
-      const heartbeat = setInterval(() => {
-        controller.enqueue(encoder.encode(`: ping\n\n`));
-      }, 25000);
-
-      req.signal.addEventListener('abort', () => {
-        clearInterval(heartbeat);
-        unsub();
+      // Subscribe to the event bus — forward every event as an SSE frame.
+      cleanup = eventBus.subscribe((event) => {
         try {
-          controller.close();
+          controller.enqueue(encoder.encode(`event: orqenix\ndata: ${JSON.stringify(event)}\n\n`));
         } catch {
-          /* already closed */
+          // Stream likely closed
         }
       });
+
+      // Keepalive heartbeat so browsers don't timeout
+      timer = setInterval(() => {
+        try {
+          controller.enqueue(encoder.encode(`:keepalive ${Date.now()}\n\n`));
+        } catch {
+          if (timer) clearInterval(timer);
+        }
+      }, 15_000);
+    },
+    cancel() {
+      if (cleanup) cleanup();
+      if (timer) clearInterval(timer);
     },
   });
 
   return new Response(stream, {
     headers: {
       'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache, no-transform',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
       Connection: 'keep-alive',
-      'X-Accel-Buffering': 'no',
     },
   });
 }
