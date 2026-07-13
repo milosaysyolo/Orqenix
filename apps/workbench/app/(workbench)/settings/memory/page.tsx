@@ -3,5 +3,5 @@
 import { SettingsModulePage } from '@/components/settings-module-page';
 
 export default function MemorySettingsPage() {
-  return <SettingsModulePage moduleId="@orqenix/memory" />;
+  return <SettingsModulePage moduleId="@orqenix/memory-engine" />;
 }

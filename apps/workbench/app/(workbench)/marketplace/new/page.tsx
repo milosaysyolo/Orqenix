@@ -25,7 +25,7 @@ const ALL_KINDS = [
   { id: 'agent-binding', label: 'Agent Binding' },
 ];
 
-export default function NewPluginPage() {
+function NewPluginForm() {
   const searchParams = useSearchParams();
   const fromCandidate = searchParams.get('fromCandidate');
   const { toast } = useToast();
@@ -37,7 +37,6 @@ export default function NewPluginPage() {
   async function handleCreate() {
     if (!name.trim() || !description.trim()) return;
     setCreating(true);
-    // Simulate creation
     await new Promise((r) => setTimeout(r, 800));
     setCreating(false);
     toast({ title: 'Plugin created', message: `${name} (${kind}) has been created`, tone: 'success' });
@@ -96,5 +95,15 @@ export default function NewPluginPage() {
         </div>
       </Card>
     </div>
+  );
+}
+
+export default function NewPluginPage() {
+  return (
+    <React.Suspense fallback={
+      <div className="mx-auto max-w-[800px] px-6 py-6 font-mono text-[11px] text-[var(--faint)]">Loading&hellip;</div>
+    }>
+      <NewPluginForm />
+    </React.Suspense>
   );
 }

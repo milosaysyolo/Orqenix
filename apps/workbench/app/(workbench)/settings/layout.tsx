@@ -9,13 +9,13 @@ import { Card, Badge } from '@/components/ui';
 import { api } from '@/lib/api';
 
 const SETTINGS_TABS = [
-  { href: '/settings/memory', label: 'Memory', moduleId: '@orqenix/memory' },
-  { href: '/settings/storage', label: 'Storage', moduleId: '@orqenix/storage' },
-  { href: '/settings/search', label: 'Search', moduleId: '@orqenix/search' },
+  { href: '/settings/memory', label: 'Memory', moduleId: '@orqenix/memory-engine' },
+  { href: '/settings/storage', label: 'Storage', moduleId: '@orqenix/storage-diff' },
+  { href: '/settings/search', label: 'Search', moduleId: '@orqenix/search-hybrid' },
   { href: '/settings/mesh', label: 'Mesh', moduleId: '@orqenix/mesh' },
-  { href: '/settings/cloud-sync', label: 'Cloud Sync', moduleId: '@orqenix/cloud-sync' },
-  { href: '/settings/self-learning', label: 'Self-Learning', moduleId: '@orqenix/self-learning' },
-  { href: '/settings/plugins', label: 'Plugins', moduleId: '@orqenix/plugins' },
+  { href: '/settings/cloud-sync', label: 'Cloud Sync', moduleId: '@orqenix-cloud/relay' },
+  { href: '/settings/self-learning', label: 'Self-Learning', moduleId: '@orqenix/self-learning-observer' },
+  { href: '/settings/plugins', label: 'Plugins', moduleId: '@orqenix/plugin-core' },
 ];
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {

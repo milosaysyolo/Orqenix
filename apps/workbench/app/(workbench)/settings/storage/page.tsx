@@ -3,5 +3,5 @@
 import { SettingsModulePage } from '@/components/settings-module-page';
 
 export default function StorageSettingsPage() {
-  return <SettingsModulePage moduleId="@orqenix/storage" />;
+  return <SettingsModulePage moduleId="@orqenix/storage-diff" />;
 }

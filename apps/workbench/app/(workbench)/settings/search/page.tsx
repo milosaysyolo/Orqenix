@@ -3,5 +3,5 @@
 import { SettingsModulePage } from '@/components/settings-module-page';
 
 export default function SearchSettingsPage() {
-  return <SettingsModulePage moduleId="@orqenix/search" />;
+  return <SettingsModulePage moduleId="@orqenix/search-hybrid" />;
 }

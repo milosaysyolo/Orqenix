@@ -3,5 +3,5 @@
 import { SettingsModulePage } from '@/components/settings-module-page';
 
 export default function PluginSettingsPage() {
-  return <SettingsModulePage moduleId="@orqenix/plugins" />;
+  return <SettingsModulePage moduleId="@orqenix/plugin-core" />;
 }
