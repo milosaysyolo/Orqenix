@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: Apache-2.0
+// Phase 4: wired through engine-init (demo-store fallback)
 
-import { toggleSkill } from '@/lib/demo-store';
 export const dynamic = 'force-dynamic';
 
-export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }): Promise<Response> {
+import { toggleSkillItem } from '@/lib/engine-init';
+
+export async function POST(
+  _req: Request, { params }: { params: Promise<{ id: string }> }
+): Promise<Response> {
   const { id } = await params;
-  const ok = toggleSkill(id);
+  const ok = await toggleSkillItem(id);
   if (!ok) return Response.json({ error: 'skill not found' }, { status: 404 });
   return Response.json({ ok: true });
 }

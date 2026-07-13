@@ -6,7 +6,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "npx next dev --port 27421 --hostname 127.0.0.1",
+    "dev": "npx next dev --port 27420 --hostname 127.0.0.1",
     "build": "npx next build",
     "start": "npx next start --port 27420 --hostname 127.0.0.1",
     "typecheck": "npx tsc --noEmit",

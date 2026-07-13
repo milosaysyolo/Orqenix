@@ -1,10 +1,17 @@
 // SPDX-License-Identifier: Apache-2.0
+// Phase 4: wired to @orqenix/self-learning-observer (demo-store fallback)
 
-import { getObserverConfig, setObserverConfig } from '@/lib/demo-store';
 export const dynamic = 'force-dynamic';
 
+import { getObserverConfigData, setObserverConfigData } from '@/lib/engine-init';
+
 export async function GET(): Promise<Response> {
-  return Response.json({ config: getObserverConfig() });
+  try {
+    const config = await getObserverConfigData();
+    return Response.json({ config });
+  } catch {
+    return Response.json({ config: { enabled: true, piiFilterEnabled: true, notifyOnFirstLaunch: true, sampleRate: 1.0 } });
+  }
 }
 
 export async function POST(req: Request): Promise<Response> {
@@ -12,6 +19,6 @@ export async function POST(req: Request): Promise<Response> {
   if (typeof body.enabled !== 'boolean') {
     return Response.json({ error: 'enabled required as boolean' }, { status: 400 });
   }
-  setObserverConfig(body.enabled);
+  await setObserverConfigData({ enabled: body.enabled });
   return Response.json({ ok: true, enabled: body.enabled });
 }

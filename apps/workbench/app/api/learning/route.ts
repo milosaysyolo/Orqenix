@@ -1,32 +1,33 @@
-import { getCandidates, setCandidateStatus } from '@/lib/demo-store';
+// SPDX-License-Identifier: Apache-2.0
+// Phase 4: wired to @orqenix/instinct-promoter (demo-store fallback)
+
 export const dynamic = 'force-dynamic';
 
+import { getLearningCandidates, reviewCandidate } from '@/lib/engine-init';
+
 export async function GET(): Promise<Response> {
-  const candidates = getCandidates().map((c) => ({
-    id: c.id,
-    patternName: c.name,
-    patternDescription: `Pattern "${c.name}" observed ${c.count} times with ${Math.round(c.successRate * 100)}% success rate.`,
-    occurrenceCount: c.count,
-    successRate: c.successRate,
-    impactScore: c.impact,
-    estTimeSavedPerWeekMin: Math.round(c.impact * 30),
-    status: c.status,
-  }));
-  return Response.json({ candidates });
+  try {
+    const candidates = await getLearningCandidates();
+    return Response.json({ candidates });
+  } catch (err) {
+    console.error('[learning/GET]', err);
+    return Response.json({ candidates: [] });
+  }
 }
 
 export async function POST(req: Request): Promise<Response> {
-  const body = (await req.json().catch(() => ({}))) as { action?: string; candidateId?: string };
-  if (body.action === 'promote' || body.action === 'promote_customize' || body.action === 'reject') {
-    const status = body.action === 'promote' || body.action === 'promote_customize' ? 'approved' : 'rejected';
-    const ok = setCandidateStatus(body.candidateId ?? '', status);
-    if (!ok) return Response.json({ error: 'candidate not found' }, { status: 404 });
-    const result: Record<string, unknown> = { ok: true };
-    if (body.action === 'promote' || body.action === 'promote_customize') {
-      result.generatedSkillName = `${body.candidateId}-skill`;
-      if (body.action === 'promote_customize') result.openBuilder = true;
+  try {
+    const body = (await req.json().catch(() => ({}))) as { action?: string; candidateId?: string };
+    if (!body.action || !body.candidateId) {
+      return Response.json({ error: 'action and candidateId required' }, { status: 400 });
     }
+    if (!['promote', 'promote_customize', 'reject', 'defer'].includes(body.action)) {
+      return Response.json({ error: 'unknown action' }, { status: 400 });
+    }
+    const result = await reviewCandidate(body.candidateId, body.action);
+    if (!result.ok) return Response.json({ error: 'candidate not found' }, { status: 404 });
     return Response.json(result);
+  } catch {
+    return Response.json({ error: 'invalid body' }, { status: 400 });
   }
-  return Response.json({ error: 'unknown action' }, { status: 400 });
 }

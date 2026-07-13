@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
+// Phase 4: skill invocation via demo-store simulation
 
-import { getSkills } from '@/lib/demo-store';
-import { eventBus } from '@/lib/event-bus';
 export const dynamic = 'force-dynamic';
 
+import { getAllSkills } from '@/lib/engine-init';
+import { eventBus } from '@/lib/event-bus';
+
 export async function POST(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  req: Request, { params }: { params: Promise<{ id: string }> }
 ): Promise<Response> {
   const { id } = await params;
-  const skills = getSkills();
+  const skills = await getAllSkills();
   const skill = skills.find((s) => s.id === id);
   if (!skill) return Response.json({ error: 'skill not found' }, { status: 404 });
 
@@ -21,7 +22,6 @@ export async function POST(
     // no body — fine
   }
 
-  // Simulate execution
   const result = {
     ok: true,
     skillId: id,
