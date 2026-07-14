@@ -46,7 +46,6 @@ function HarnessLifecycle({ harness, lastInv }: {
   if (!harness) return null;
 
   const c = harness.constraints;
-  const isRunning = lastInv?.status === undefined;
 
   // Phase A validation checks
   const checks = [

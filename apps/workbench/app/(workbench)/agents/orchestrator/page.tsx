@@ -31,8 +31,6 @@ const PLUGIN_KINDS = [
   { kind: 'agent-binding', label: 'Agent Binding' },
 ];
 
-const LIFECYCLE_STAGES = ['install', 'configure', 'activate', 'deactivate', 'uninstall'] as const;
-
 export default function OrchestratorPage() {
   const { toast } = useToast();
   const { connected } = useLiveEvents();
@@ -43,7 +41,6 @@ export default function OrchestratorPage() {
 
   // Manifest dynamic data
   const [skillNames, setSkillNames] = React.useState<string[]>([]);
-  const [mcpNames, setMcpNames] = React.useState<string[]>([]);
   const [manifestLoading, setManifestLoading] = React.useState(false);
 
   // Plugin lifecycle demo state

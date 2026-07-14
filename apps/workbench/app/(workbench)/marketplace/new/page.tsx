@@ -5,7 +5,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { SectionTitle, Card, Badge, Button } from '@/components/ui';
+import { SectionTitle, Card, Button } from '@/components/ui';
 import { useToast } from '@/components/toast';
 
 const ALL_KINDS = [

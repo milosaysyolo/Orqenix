@@ -19,7 +19,7 @@ import {
   type Node, type Edge, type Connection, type XYPosition,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { nodeTypes, edgeTypes, type FlowNodeData, RectNode } from './flow-nodes';
+import { nodeTypes, edgeTypes, type FlowNodeData } from './flow-nodes';
 import { useHistory } from '@/lib/history';
 import type { TeamNode, TeamEdge } from '@/lib/demo-store';
 
@@ -88,7 +88,7 @@ function CanvasInner({ initialNodes, initialEdges, onChange }: {
   const [edges, setEdges, onEdgesChange] = useEdgesState(toFlowEdges(initialEdges));
   const [snap, setSnap] = React.useState(true);
   const [pending, setPending] = React.useState<PendingConnection | null>(null);
-  const [connecting, setConnecting] = React.useState(false);
+  const [, setConnecting] = React.useState(false);
 
   // Undo/redo history of node+edge arrays.
   const { commit, undo, redo, can } = useHistory<{ nodes: Node<FlowNodeData>[]; edges: Edge[] }>({ nodes: toFlowNodes(initialNodes), edges: toFlowEdges(initialEdges) }, 80);

@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
-import { getSkills, updateSkill } from '@/lib/demo-store';
 import { getSubagents, updateSubagent } from '@/lib/demo-store';
 export const dynamic = 'force-dynamic';
 

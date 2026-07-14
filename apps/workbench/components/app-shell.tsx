@@ -18,7 +18,6 @@ import { useLiveEvents } from '@/lib/use-live-events';
 import { useHotkeys, type KeyHandler } from '@/lib/keyboard';
 import { CommandPalette } from './command-palette';
 import { KeyboardShortcutsOverlay } from './keyboard-shortcuts-overlay';
-import { EventTimelineBar } from './live/event-timeline-bar';
 import { SeedButton } from './seed-button';
 import { Kbd } from './ui';
 

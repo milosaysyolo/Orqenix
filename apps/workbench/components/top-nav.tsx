@@ -20,7 +20,7 @@ import {
   Command,
   HelpCircle,
 } from 'lucide-react';
-import { Button, Badge } from '@orqenix/ui-primitives';
+import { Button } from '@orqenix/ui-primitives';
 
 const TOP_TABS = [
   { href: '/memory', label: 'Memory', icon: Brain, badge: null },

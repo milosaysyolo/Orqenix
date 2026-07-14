@@ -955,7 +955,7 @@ export function setObserverConfig(enabled: boolean) {
 
 // ---- WRITES (emit events) --------------------------------------------------
 
-export function pinEntry(entryId: string, kb: KbKind) {
+export function pinEntry(entryId: string, _kb: KbKind) {
   const s = store();
   const e = s.entries.find((x) => x.id === entryId);
   if (!e) return false;

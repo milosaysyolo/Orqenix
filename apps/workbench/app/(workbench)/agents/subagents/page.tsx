@@ -23,7 +23,7 @@ import { api } from '@/lib/api';
 import { useLiveEvents } from '@/lib/use-live-events';
 import type {
   TeamNode, TeamEdge, SubagentDef, SubagentHarnessData,
-  SubagentInvocationRecord, AgentDefinition,
+  SubagentInvocationRecord,
 } from '@/lib/demo-store';
 
 type SortKey = 'name' | 'tasks';

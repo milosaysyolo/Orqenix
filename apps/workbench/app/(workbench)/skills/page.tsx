@@ -40,7 +40,7 @@ export default function SkillsPage() {
   // Config editor state
   const [configSkillId, setConfigSkillId] = React.useState<string | null>(null);
   const [configContent, setConfigContent] = React.useState('');
-  const [configLoading, setConfigLoading] = React.useState(false);
+  const [, setConfigLoading] = React.useState(false);
 
   const load = React.useCallback(async () => {
     setLoading(true);
