@@ -3,13 +3,11 @@
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { homedir } from 'node:os';
 
 import { MemoryEngine } from '@orqenix/memory-engine';
 import {
   ALL_PHASE_8_CORE_MIGRATIONS,
   MigrationRunner,
-  BASE_KB_BOOTSTRAP,
 } from '@orqenix/memory-engine';
 import { SELF_LEARNING_MIGRATIONS, Observer, BasicPiiFilter } from '@orqenix/self-learning-observer';
 import { BasicDetector } from '@orqenix/self-learning-detection';
@@ -18,17 +16,20 @@ import { PromoterService } from '@orqenix/instinct-promoter';
 import { VerificationLoop, MockSkillExecutor } from '@orqenix/verification-loop';
 import { SettingsRegistry } from '@orqenix/settings-registry';
 import { MarketplaceManager, RegistryResolverRegistry } from '@orqenix/marketplace-core';
+import { PluginRegistry, PluginLifecycle, NoopPluginAuditWriter } from '@orqenix/plugin-core';
 import { NormalizationEngine } from '@orqenix/normalization-engine';
 import { ALL_INPUT_ADAPTERS } from '@orqenix/input-adapters';
 import { ALL_OUTPUT_ADAPTERS } from '@orqenix/output-adapters';
 
 import { SqliteLocalPluginStore } from './marketplace-store';
+import { SqlitePluginPersistence } from './stores/plugin-persistence';
+import { WorkbenchMarketplaceAuditWriter } from './audit/marketplace-audit';
 import { bootstrapSettings } from './settings-bootstrap';
 import { eventBus } from './event-bus';
 import { MEMORY_LINK_MIGRATIONS } from './migrations/570-memory-links';
 import { AGENT_MIGRATIONS } from './migrations/580-agents';
 import { WORKBENCH_STATE_MIGRATIONS } from './migrations/590-workbench-state';
-import { WorkbenchPluginLifecycle } from './plugin-lifecycle';
+import { seedWorkbench } from './engine-init';
 
 export interface OrqenixRuntime {
   projectId: string;
@@ -91,6 +92,9 @@ async function construct(): Promise<OrqenixRuntime> {
   );
   runner.apply(allMigrations, false);
 
+  // Workbench-owned side tables (marketplace_audit, *_meta, etc.) + bootstrap seeds.
+  seedWorkbench(db, projectId);
+
   const observer = new Observer({ db, piiFilter: new BasicPiiFilter() });
   const detector = new BasicDetector({ db });
   const skillGenesis = new SkillGenesis({ db, observer });
@@ -114,12 +118,14 @@ async function construct(): Promise<OrqenixRuntime> {
     inputAdapters: ALL_INPUT_ADAPTERS,
     outputAdapters: ALL_OUTPUT_ADAPTERS,
   });
-  const lifecycle = new WorkbenchPluginLifecycle(engine);
+  const pluginRegistry = new PluginRegistry(new SqlitePluginPersistence(db));
+  await pluginRegistry.init();
+  const lifecycle = new PluginLifecycle({ registry: pluginRegistry, auditWriter: new NoopPluginAuditWriter() });
   const marketplace = new MarketplaceManager({
     store: new SqliteLocalPluginStore(engine),
-    audit: engine.getAuditWriter() as never,
+    audit: new WorkbenchMarketplaceAuditWriter(db),
     normalizationEngine: normalization,
-    lifecycle: lifecycle as never,
+    lifecycle,
     resolverRegistry: new RegistryResolverRegistry(),
     actor: 'workbench-user',
     projectId,

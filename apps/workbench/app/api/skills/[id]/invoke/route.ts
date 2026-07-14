@@ -3,16 +3,13 @@
 
 export const dynamic = 'force-dynamic';
 
-import { getAllSkills } from '@/lib/engine-init';
+import { invokeSkill } from '@/lib/engine-init';
 import { eventBus } from '@/lib/event-bus';
 
 export async function POST(
   req: Request, { params }: { params: Promise<{ id: string }> }
 ): Promise<Response> {
   const { id } = await params;
-  const skills = await getAllSkills();
-  const skill = skills.find((s) => s.id === id);
-  if (!skill) return Response.json({ error: 'skill not found' }, { status: 404 });
 
   let prompt = '';
   try {
@@ -22,19 +19,13 @@ export async function POST(
     // no body — fine
   }
 
-  const result = {
-    ok: true,
-    skillId: id,
-    skillName: skill.name,
-    prompt: prompt.slice(0, 200),
-    output: `[simulated] ${skill.name} executed with prompt: "${prompt.slice(0, 60)}${prompt.length > 60 ? '…' : ''}"`,
-    durationMs: Math.floor(Math.random() * 800) + 200,
-  };
+  const result = await invokeSkill(id, prompt);
+  if (!result) return Response.json({ error: 'skill not found' }, { status: 404 });
 
   eventBus.emit({
     kind: 'session.updated',
     actor: 'system',
-    payload: { op: 'skill.invoke', id, name: skill.name, output: result.output },
+    payload: { op: 'skill.invoke', id, name: result.skillName, output: result.output },
   });
 
   return Response.json(result);
