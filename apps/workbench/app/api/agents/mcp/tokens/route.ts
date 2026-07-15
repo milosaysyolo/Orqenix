@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-import { issueMCPToken } from '@/lib/demo-store';
+import { issueMcpToken } from '@/lib/engine-init';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request): Promise<Response> {
@@ -9,6 +9,6 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json({ error: 'client required as string' }, { status: 400 });
   }
   const scopes = Array.isArray(body.scopes) ? body.scopes.filter((s): s is string => typeof s === 'string') : ['memory.read'];
-  const token = issueMCPToken(body.client, scopes);
+  const token = await issueMcpToken(body.client, scopes);
   return Response.json({ ok: true, token });
 }

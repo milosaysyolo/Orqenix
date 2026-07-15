@@ -57,7 +57,7 @@
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "dev": "tsup --watch",
     "test:watch": "vitest",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@noble/hashes": "^1.5.0",

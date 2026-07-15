@@ -24,7 +24,7 @@
     "gate:G39": "vitest run test/G39-gate-wrapper.test.ts --reporter verbose",
     "lint:no-dht-no-relay": "tsx ../../scripts/lint/no-dht-no-relay.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@orqenix/mesh-transport-core": "^0.6.0",

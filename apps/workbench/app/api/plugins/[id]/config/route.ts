@@ -24,6 +24,7 @@ export async function PUT(
     if (!ok) return Response.json({ error: 'not found' }, { status: 404 });
     return Response.json({ ok: true });
   } catch (e) {
-    return Response.json({ error: String(e) }, { status: 400 });
+    console.error('[plugins/[id]/config]', e);
+    return Response.json({ error: 'Failed to update plugin config' }, { status: 400 });
   }
 }

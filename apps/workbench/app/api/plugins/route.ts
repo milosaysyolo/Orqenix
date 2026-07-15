@@ -27,6 +27,7 @@ export async function POST(req: Request): Promise<Response> {
     });
     return Response.json({ plugin }, { status: 201 });
   } catch (e) {
-    return Response.json({ error: String(e) }, { status: 400 });
+    console.error('[plugins]', e);
+    return Response.json({ error: 'Failed to create plugin' }, { status: 400 });
   }
 }

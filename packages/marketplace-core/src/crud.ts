@@ -4,7 +4,6 @@
 // Create / Update / Delete / Fork operations on local plugins. Per CR v8.0
 // Section 6.4. Each operation audits + validates via plugin-core conformance.
 
-import { blake3 } from '@noble/hashes/blake3';
 import {
   assertValidManifest,
   ConformanceSuite,
@@ -19,6 +18,7 @@ import {
   type CrudResult,
   type MarketplaceAuditKind,
 } from './types';
+import { computeContentHash } from '@orqenix/normalization-engine';
 
 /** Interface for persisting local plugin CSF documents */
 export interface LocalPluginStore {
@@ -70,7 +70,7 @@ export class MarketplaceCrud {
     }
 
     const csf = this.buildCsfFromCreate(input);
-    csf.provenance.contentHash = this.computeHash(csf);
+    csf.provenance.contentHash = computeContentHash(csf);
 
     // Validate
     assertValidManifest(this.csfToPackageJson(csf));
@@ -104,7 +104,7 @@ export class MarketplaceCrud {
       version: newVersion,
       manifest: { ...existing.manifest, ...(input.changes.manifest as object ?? {}) },
     };
-    updated.provenance.contentHash = this.computeHash(updated);
+    updated.provenance.contentHash = computeContentHash(updated);
 
     // Re-validate + conformance check
     assertValidManifest(this.csfToPackageJson(updated));
@@ -172,7 +172,7 @@ export class MarketplaceCrud {
       name: input.newName,
       version: '0.1.0',
     };
-    forked.provenance.contentHash = this.computeHash(forked);
+    forked.provenance.contentHash = computeContentHash(forked);
 
     await this.store.set(forked);
     await this.auditEvent('marketplace.fork_created', {
@@ -247,17 +247,6 @@ export class MarketplaceCrud {
       patch += 1;
     }
     return `${major}.${minor}.${patch}`;
-  }
-
-  private computeHash(csf: CanonicalSkillFormat): string {
-    const canonical = JSON.stringify({
-      name: csf.name,
-      version: csf.version,
-      kind: csf.kind,
-      manifest: csf.manifest,
-    });
-    const h = blake3(new TextEncoder().encode(canonical));
-    return Array.from(h).slice(0, 16).map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
   private async auditEvent(

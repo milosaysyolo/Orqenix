@@ -23,6 +23,7 @@ export async function PUT(
     setAgentConfig(id, config);
     return Response.json({ ok: true });
   } catch (e) {
-    return Response.json({ error: String(e) }, { status: 400 });
+    console.error('[agents/teams/[id]/config]', e);
+    return Response.json({ error: 'Failed to update team config' }, { status: 400 });
   }
 }

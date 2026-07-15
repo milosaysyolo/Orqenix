@@ -128,6 +128,11 @@ const engineStatus: Record<Subsystem, SubsystemStatus> = {
   skills: 'demo',
 };
 
+// Single source of truth for strict mode. Env strings are truthy even when "0",
+// so compare explicitly (README/M8: 0 = demo fallback, 1/true = fail loud).
+export const STRICT =
+  process.env.ORQENIX_STRICT === '1' || process.env.ORQENIX_STRICT === 'true';
+
 // Workbench-owned side tables (created at init; engine tables are package-owned).
 const SIDE_TABLES_DDL = `
 CREATE TABLE IF NOT EXISTS workbench_session_meta (
@@ -171,6 +176,13 @@ CREATE TABLE IF NOT EXISTS marketplace_audit (
   actor TEXT NOT NULL,
   project_id TEXT NOT NULL,
   payload_json TEXT DEFAULT '{}'
+);
+CREATE TABLE IF NOT EXISTS mcp_tokens (
+  id TEXT PRIMARY KEY,
+  client TEXT NOT NULL,
+  scopes_json TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  created_at TEXT NOT NULL
 );
 `;
 
@@ -885,6 +897,53 @@ export async function updatePluginConfig(id: string, config: string): Promise<bo
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// MCP TOKENS (persisted when the engine is real; demo fallback otherwise)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export interface McpToken {
+  id: string;
+  client: string;
+  scopes_json: string;
+  expires_at: string;
+}
+
+export async function issueMcpToken(client: string, scopes: string[]): Promise<McpToken> {
+  const db = getDb();
+  const id = `tok_${Date.now().toString(36)}`;
+  const scopes_json = JSON.stringify(scopes);
+  const expires_at = new Date(Date.now() + 86400000).toISOString();
+  if (!db) {
+    const { issueMCPToken } = await import('@/lib/demo-store');
+    return issueMCPToken(client, scopes);
+  }
+  db.prepare(
+    `INSERT INTO mcp_tokens (id, client, scopes_json, expires_at, created_at)
+     VALUES (?, ?, ?, ?, ?)`,
+  ).run(id, client, scopes_json, expires_at, new Date().toISOString());
+  return { id, client, scopes_json, expires_at };
+}
+
+export async function listMcpTokens(): Promise<McpToken[]> {
+  const db = getDb();
+  if (!db) {
+    const { getMCPTokens } = await import('@/lib/demo-store');
+    return getMCPTokens();
+  }
+  return db
+    .prepare('SELECT id, client, scopes_json, expires_at FROM mcp_tokens ORDER BY created_at DESC')
+    .all() as McpToken[];
+}
+
+export async function revokeMcpToken(id: string): Promise<boolean> {
+  const db = getDb();
+  if (!db) {
+    const { revokeMCPToken } = await import('@/lib/demo-store');
+    return revokeMCPToken(id);
+  }
+  return db.prepare('DELETE FROM mcp_tokens WHERE id = ?').run(id).changes > 0;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // SKILL HELPERS (real CSF store + MarketplaceCrud + side tables)
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1025,7 +1084,7 @@ async function init(): Promise<void> {
       engineStatus.observer = 'real';
     } catch (e) {
       engineStatus.observer = 'demo';
-      if (process.env.ORQENIX_STRICT) throw e;
+      if (STRICT) throw e;
     }
 
     // 4. Detector + SkillGenesis
@@ -1036,7 +1095,7 @@ async function init(): Promise<void> {
       engineStatus.skills = 'real';
     } catch (e) {
       engineStatus.skills = 'demo';
-      if (process.env.ORQENIX_STRICT) throw e;
+      if (STRICT) throw e;
     }
     try {
       globalThis.__orqenixSkillGenesis = new SkillGenesis({
@@ -1047,7 +1106,7 @@ async function init(): Promise<void> {
       engineStatus.skills = 'real';
     } catch (e) {
       engineStatus.skills = 'demo';
-      if (process.env.ORQENIX_STRICT) throw e;
+      if (STRICT) throw e;
     }
 
     // 5. PromoterService
@@ -1062,7 +1121,7 @@ async function init(): Promise<void> {
       engineStatus.promoter = 'real';
     } catch (e) {
       engineStatus.promoter = 'demo';
-      if (process.env.ORQENIX_STRICT) throw e;
+      if (STRICT) throw e;
     }
 
     // 6. Plugins — shared registry + lifecycle (used by both plugin routes and marketplace)
@@ -1078,7 +1137,7 @@ async function init(): Promise<void> {
       engineStatus.plugins = 'real';
     } catch (e) {
       engineStatus.plugins = 'demo';
-      if (process.env.ORQENIX_STRICT) throw e;
+      if (STRICT) throw e;
     }
 
     // 7. Marketplace
@@ -1101,7 +1160,7 @@ async function init(): Promise<void> {
       engineStatus.marketplace = 'real';
     } catch (e) {
       engineStatus.marketplace = 'demo';
-      if (process.env.ORQENIX_STRICT) throw e;
+      if (STRICT) throw e;
     }
 
     // 8. Sessions + branches follow the live engine
@@ -1121,7 +1180,7 @@ async function init(): Promise<void> {
   }
 }
 
-function ensureInit(): Promise<void> {
+export function ensureInit(): Promise<void> {
   if (globalThis.__orqenixSettings) return Promise.resolve();
   if (!globalThis.__orqenixInitPromise) {
     globalThis.__orqenixInitPromise = init();
@@ -1164,6 +1223,9 @@ export async function getMemory(): Promise<MemoryEngine | null> {
 }
 
 /** Sync accessors — only call after ensureInit */
-function getPromoterSync(): PromoterService | null { return globalThis.__orqenixPromoter ?? null; }
-function getSkillGenesisSync(): SkillGenesis | null { return globalThis.__orqenixSkillGenesis ?? null; }
-function getPluginRegistrySync(): PluginRegistry | null { return globalThis.__orqenixPluginRegistry ?? null; }
+export function getPromoterSync(): PromoterService | null { return globalThis.__orqenixPromoter ?? null; }
+export function getSkillGenesisSync(): SkillGenesis | null { return globalThis.__orqenixSkillGenesis ?? null; }
+export function getPluginRegistrySync(): PluginRegistry | null { return globalThis.__orqenixPluginRegistry ?? null; }
+export function getObserverSync(): Observer | null { return globalThis.__orqenixObserver ?? null; }
+export function getDetectorSync(): BasicDetector | null { return globalThis.__orqenixDetector ?? null; }
+export function getMarketplaceSync(): MarketplaceManager | null { return globalThis.__orqenixMarketplace ?? null; }

@@ -36,11 +36,28 @@ const RecallMemoryArgs = z.object({
   limit: z.number().int().positive().max(100).default(20),
 });
 
+const RECALL_PERMISSION_BY_KB: Record<string, string> = {
+  code: 'memory.read:code',
+  decision: 'memory.read:decision',
+  lesson: 'memory.read:lesson',
+  chat: 'memory.read:chat',
+};
+
+/**
+ * Resolves the most-specific read permission for the requested knowledge bases.
+ * If multiple kbs are requested, the first non-chat specific one wins; chat is
+ * the default for unspecified/no-specific cases.
+ */
+export function resolveRecallPermission(kbs?: string[]): string {
+  const specific = kbs?.find((k) => k !== 'chat');
+  return RECALL_PERMISSION_BY_KB[specific ?? 'chat'] ?? 'memory.read:chat';
+}
+
 const recallMemoryTool: McpToolDefinition = {
   name: 'orqenix_recall_memory',
   description:
     'Query memory across the project/branch/session hierarchy. Returns ranked entries with provenance.',
-  permission: 'memory.read:chat',
+  permission: resolveRecallPermission(),
   inputSchema: {
     type: 'object',
     properties: {

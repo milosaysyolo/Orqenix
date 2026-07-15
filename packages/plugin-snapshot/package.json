@@ -55,7 +55,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

@@ -25,7 +25,8 @@ export async function PUT(
     if (!updated) return Response.json({ error: 'not found' }, { status: 404 });
     return Response.json({ skill: updated });
   } catch (e) {
-    return Response.json({ error: String(e) }, { status: 400 });
+    console.error('[skills/[id]]', e);
+    return Response.json({ error: 'Failed to update skill' }, { status: 400 });
   }
 }
 

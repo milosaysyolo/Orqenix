@@ -31,6 +31,6 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json({ ok: true, newId: result.newId });
   } catch (err) {
     console.error('[memory/promote/POST]', err);
-    return Response.json({ error: (err as Error).message }, { status: 500 });
+    return Response.json({ error: 'Failed to promote memory' }, { status: 500 });
   }
 }

@@ -1,4 +1,5 @@
-import { getMCPServers, getMCPPrompts, getMCPTokens } from '@/lib/demo-store';
+import { getMCPServers, getMCPPrompts } from '@/lib/demo-store';
+import { listMcpTokens } from '@/lib/engine-init';
 export const dynamic = 'force-dynamic';
 
 export async function GET(): Promise<Response> {
@@ -24,6 +25,6 @@ export async function GET(): Promise<Response> {
       }))
     ),
     prompts: getMCPPrompts(),
-    tokens: getMCPTokens(),
+    tokens: await listMcpTokens(),
   });
 }

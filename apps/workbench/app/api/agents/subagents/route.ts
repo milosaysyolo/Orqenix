@@ -18,6 +18,7 @@ export async function POST(req: Request): Promise<Response> {
     });
     return Response.json({ subagent: agent }, { status: 201 });
   } catch (e) {
-    return Response.json({ error: String(e) }, { status: 400 });
+    console.error('[agents/subagents]', e);
+    return Response.json({ error: 'Failed to create subagent' }, { status: 400 });
   }
 }

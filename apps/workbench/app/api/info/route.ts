@@ -2,7 +2,7 @@
 // Workbench info endpoint , returns environment and configuration info
 
 import { NextResponse } from "next/server";
-import { getEngineStatus } from "@/lib/engine-init";
+import { getEngineStatus, STRICT } from "@/lib/engine-init";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -18,7 +18,7 @@ export async function GET() {
     port: process.env.PORT || "27420",
     hostname: process.env.HOSTNAME || "127.0.0.1",
     dbPath: process.env.ORQENIX_DB ?? joinDefaultDb(),
-    strict: !!process.env.ORQENIX_STRICT,
+    strict: STRICT,
     license: "Apache-2.0",
     repository: "https://github.com/milosaysyolo/Orqenix",
     documentation: "https://orqenix.dev/docs/workbench",

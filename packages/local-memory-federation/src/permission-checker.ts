@@ -28,6 +28,11 @@ export interface PermissionCheckInput {
   kind: KbKind;
 }
 
+/** Max age of the in-memory approvals cache. Kept short so a revoke/expiry is
+ *  honored quickly; the cache is also invalidated on every write (see
+ *  grantApproval/revokeApproval). */
+const CACHE_TTL_MS = 5000;
+
 export interface PermissionCheckResult {
   allowed: boolean;
   approval?: FederationApproval;
@@ -42,7 +47,7 @@ export class PermissionChecker {
   private readonly approvalsPath: string;
   private cachedApprovals: FederationApproval[] | null = null;
   private cacheLoadedAt = 0;
-  private readonly cacheTtlMs = 30_000; // 30s cache; approvals don't change often
+  private readonly cacheTtlMs = CACHE_TTL_MS;
 
   constructor(approvalsPath?: string) {
     this.approvalsPath =

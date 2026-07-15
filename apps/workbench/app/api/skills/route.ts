@@ -27,6 +27,7 @@ export async function POST(req: Request): Promise<Response> {
     });
     return Response.json({ skill }, { status: 201 });
   } catch (e) {
-    return Response.json({ error: String(e) }, { status: 400 });
+    console.error('[skills]', e);
+    return Response.json({ error: 'Failed to create skill' }, { status: 400 });
   }
 }

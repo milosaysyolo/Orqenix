@@ -26,6 +26,7 @@ export async function POST(req: Request): Promise<Response> {
       verificationStatus: result.verificationStatus,
     });
   } catch (err) {
-    return Response.json({ error: (err as Error).message }, { status: 500 });
+    console.error('[learning/genesis]', err);
+    return Response.json({ error: 'Failed to record genesis' }, { status: 500 });
   }
 }

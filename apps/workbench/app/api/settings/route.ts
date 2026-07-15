@@ -65,7 +65,7 @@ export async function POST(req: Request): Promise<Response> {
   } catch (err) {
     console.error('[settings/POST]', err);
     return Response.json(
-      { error: (err as Error).message },
+      { error: 'Failed to update setting' },
       { status: 500 }
     );
   }

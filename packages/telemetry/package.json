@@ -55,7 +55,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@orqenix/core": "workspace:*"

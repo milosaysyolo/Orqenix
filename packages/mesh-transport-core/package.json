@@ -25,7 +25,7 @@
     "test:watch": "vitest",
     "gate:G36": "tsx ../../scripts/gates/G36-transport-abstraction.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "msgpackr": "^1.11.0",
