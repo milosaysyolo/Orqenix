@@ -17,8 +17,11 @@ import { useToast } from '@/components/toast';
 import { CollapseToggle } from '@/components/collapse-toggle';
 import { ConfigEditor } from '@/components/config-editor';
 import { Modal } from '@/components/modal';
-import { TabbedForm } from '@/components/tabbbed-form';
+import { TabbedForm } from '@/components/tabbed-form';
 import { SubagentDetail } from '@/components/agents/subagent-detail';
+import { SubagentList } from '@/components/agents/SubagentList';
+import { SubagentForm } from '@/components/agents/SubagentForm';
+import { useSubagentForm } from '@/lib/use-subagent-form';
 import { api } from '@/lib/api';
 import { useLiveEvents } from '@/lib/use-live-events';
 import type {
@@ -210,17 +213,8 @@ export default function AgentsPage() {
   const [agentLazyAgents, setAgentLazyAgents] = React.useState('');
   const [agentFallbackModel, setAgentFallbackModel] = React.useState('');
 
-  // ── Subagent form fields ────────────────────────────────────────────────
-  const [saName, setSaName] = React.useState('');
-  const [saRole, setSaRole] = React.useState('');
-  const [saKind, setSaKind] = React.useState('');
-  const [saSystemPrompt, setSaSystemPrompt] = React.useState('');
-  const [saGoal, setSaGoal] = React.useState('');
-  const [saMaxSteps, setSaMaxSteps] = React.useState('5');
-  const [saMaxTime, setSaMaxTime] = React.useState('90');
-  const [saAllowedTools, setSaAllowedTools] = React.useState('');
-  const [saForbiddenTools, setSaForbiddenTools] = React.useState('write_file,git_commit');
-  const [saConfigRaw, setSaConfigRaw] = React.useState('');
+  // ── Subagent form (consolidated hook) ─────────────────────────────────
+  const saForm = useSubagentForm();
 
   // ── Load data ───────────────────────────────────────────────────────────
   const loadAll = React.useCallback(async () => {
@@ -387,37 +381,40 @@ export default function AgentsPage() {
   // ── Subagent CRUD ───────────────────────────────────────────────────────
   function openNewSubagent() {
     setEditSubagent(null);
-    setSaName(''); setSaRole(''); setSaKind('');
-    setSaSystemPrompt(''); setSaGoal(''); setSaMaxSteps('5'); setSaMaxTime('90');
-    setSaAllowedTools(''); setSaForbiddenTools('write_file,git_commit'); setSaConfigRaw('');
+    saForm.reset();
     setShowSubagentForm(true);
   }
 
   function openEditSubagent(sa: SubagentDef) {
     setEditSubagent(sa);
-    setSaName(sa.name); setSaRole(sa.role);
     const harness = harnesses.find((h) => h.subagentKind === sa.name);
-    if (harness) {
-      setSaKind(harness.subagentKind); setSaSystemPrompt(harness.systemPrompt); setSaGoal(harness.goal);
-      setSaMaxSteps(String(harness.constraints.maxSteps)); setSaMaxTime(String(harness.constraints.maxWallTimeSec));
-      setSaAllowedTools(harness.constraints.allowedTools.join(','));
-      setSaForbiddenTools(harness.constraints.forbiddenTools.join(','));
-    }
-    setSaConfigRaw(sa.config ?? '');
+    saForm.reset({
+      name: sa.name,
+      role: sa.role,
+      kind: harness?.subagentKind ?? '',
+      systemPrompt: harness?.systemPrompt ?? '',
+      goal: harness?.goal ?? '',
+      maxSteps: String(harness?.constraints.maxSteps ?? '5'),
+      maxTime: String(harness?.constraints.maxWallTimeSec ?? '90'),
+      allowedTools: harness?.constraints.allowedTools.join(',') ?? '',
+      forbiddenTools: harness?.constraints.forbiddenTools.join(',') ?? 'write_file,git_commit',
+      configRaw: sa.config ?? '',
+    });
     setShowSubagentForm(true);
   }
 
   async function saveSubagent() {
-    if (!saName.trim()) { toast({ tone: 'error', title: 'Validation', message: 'Name is required' }); return; }
+    const { name, role, systemPrompt, goal, maxSteps, maxTime, allowedTools, forbiddenTools, configRaw } = saForm.form;
+    if (!name.trim()) { toast({ tone: 'error', title: 'Validation', message: 'Name is required' }); return; }
     setBusyCrud(true);
-    const configMd = saConfigRaw.trim() || `# ${saName.trim()}\n\nagent type: sub agent\n\n## System Prompt\n${saSystemPrompt || 'No system prompt configured.'}\n\n## Goal\n${saGoal || 'No goal configured.'}\n\n## Constraints\n- Max steps: ${saMaxSteps}\n- Max wall time: ${saMaxTime}s\n- Allowed tools: ${saAllowedTools || 'none'}\n- Forbidden tools: ${saForbiddenTools || 'none'}\n`;
+    const configMd = configRaw.trim() || `# ${name.trim()}\n\nagent type: sub agent\n\n## System Prompt\n${systemPrompt || 'No system prompt configured.'}\n\n## Goal\n${goal || 'No goal configured.'}\n\n## Constraints\n- Max steps: ${maxSteps}\n- Max wall time: ${maxTime}s\n- Allowed tools: ${allowedTools || 'none'}\n- Forbidden tools: ${forbiddenTools || 'none'}\n`;
     if (editSubagent) {
-      const res = await api.put(`/api/agents/subagents/${editSubagent.id}`, { name: saName.trim(), role: saRole.trim(), config: configMd });
-      if (res.ok) { setSubagents((prev) => prev.map((s) => s.id === editSubagent.id ? { ...s, name: saName.trim(), role: saRole.trim(), config: configMd } : s)); toast({ tone: 'success', title: 'Updated', message: `Subagent ${saName.trim()}` }); setShowSubagentForm(false); }
+      const res = await api.put(`/api/agents/subagents/${editSubagent.id}`, { name: name.trim(), role: role.trim(), config: configMd });
+      if (res.ok) { setSubagents((prev) => prev.map((s) => s.id === editSubagent.id ? { ...s, name: name.trim(), role: role.trim(), config: configMd } : s)); toast({ tone: 'success', title: 'Updated', message: `Subagent ${name.trim()}` }); setShowSubagentForm(false); }
       else { toast({ tone: 'error', title: 'Failed', message: res.error ?? 'unknown' }); }
     } else {
-      const res = await api.post<{ subagent: SubagentDef }>('/api/agents/subagents', { name: saName.trim(), role: saRole.trim(), status: 'idle', uptime: '0m', tasksCompleted: 0, config: configMd });
-      if (res.ok && res.data) { setSubagents((prev) => [...prev, res.data!.subagent]); toast({ tone: 'success', title: 'Created', message: `Subagent ${saName.trim()}` }); setShowSubagentForm(false); }
+      const res = await api.post<{ subagent: SubagentDef }>('/api/agents/subagents', { name: name.trim(), role: role.trim(), status: 'idle', uptime: '0m', tasksCompleted: 0, config: configMd });
+      if (res.ok && res.data) { setSubagents((prev) => [...prev, res.data!.subagent]); toast({ tone: 'success', title: 'Created', message: `Subagent ${name.trim()}` }); setShowSubagentForm(false); }
       else { toast({ tone: 'error', title: 'Failed', message: res.error ?? 'unknown' }); }
     }
     setBusyCrud(false);
@@ -514,57 +511,19 @@ export default function AgentsPage() {
           )}
 
           {tab === 'subagents' && (
-            <>
-              <div className="mb-3 flex items-center gap-2">
-                <div className="relative flex-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-[12px] text-[var(--faint)]">{'\u2315'}</span>
-                  <input value={saQuery} onChange={(e) => setSaQuery(e.target.value)} placeholder="Search subagents\u2026"
-                    className="w-full rounded-[9px] border border-[var(--line)] bg-[var(--card)] px-8 py-1.5 font-mono text-[11px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" />
-                </div>
-                <select value={saSort} onChange={(e) => setSaSort(e.target.value as SortKey)}
-                  className="rounded-[9px] border border-[var(--line)] bg-[var(--card)] px-2 py-1.5 font-mono text-[10px] text-[var(--ink)] outline-none">
-                  <option value="name">Name</option><option value="tasks">Tasks</option>
-                </select>
-              </div>
-              {filteredSubagents.length === 0 ? (
-                <Card className="p-10 text-center font-mono text-[11px] text-[var(--faint)]">{saQuery ? 'No subagents match your search.' : 'No subagents defined.'}</Card>
-              ) : (
-                <div className="space-y-2">
-                  {filteredSubagents.map((sa) => {
-                    const harness = harnesses.find((h) => h.subagentKind === sa.name);
-                    const parentName = sa.parentAgentId ? teamNodes.find((n) => n.id === sa.parentAgentId)?.name : undefined;
-                    return (
-                      <Card key={sa.id}
-                        className={`flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors hover:border-[var(--rust)] ${selectedId === sa.id ? 'border-[var(--rust)]' : ''}`}
-                        onClick={() => setSelectedId(sa.id)}>
-                        <span className="font-mono text-[15px] text-[var(--plum)]">{'\u25CB'}</span>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-mono text-[12px] font-bold text-[var(--ink)]">{sa.name}</span>
-                            <Badge tone={sa.status === 'running' ? 'olive' : sa.status === 'error' ? 'rust' : 'plum'}>{sa.status}</Badge>
-                            {harness && (
-                              <span className="rounded-full bg-[var(--plum-light)] px-2 py-0.5 font-mono text-[9px] text-[var(--plum)]">{harness.subagentKind}</span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-3 mt-0.5 font-mono text-[9.5px] text-[var(--faint)]">
-                            <span>{sa.role}</span>
-                            {parentName && <span>managed by {parentName}</span>}
-                            <span>{sa.tasksCompleted} tasks</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button onClick={(e) => { e.stopPropagation(); openEditSubagent(sa); }}
-                            className="rounded-[6px] border border-[var(--line)] px-2 py-0.5 font-mono text-[9px] text-[var(--dim)] hover:text-[var(--ink)]">Edit</button>
-                          <button onClick={(e) => { e.stopPropagation(); setDeleteConfirm(sa.id); }}
-                            className="rounded-[6px] border border-[var(--rust)] px-2 py-0.5 font-mono text-[9px] text-[var(--rust)]">Del</button>
-                        </div>
-                        <span className="font-mono text-[11px] text-[var(--faint)]">{'\u203A'}</span>
-                      </Card>
-                    );
-                  })}
-                </div>
-              )}
-            </>
+            <SubagentList
+              subagents={filteredSubagents}
+              saQuery={saQuery}
+              onSaQueryChange={setSaQuery}
+              saSort={saSort}
+              onSaSortChange={(v: 'name' | 'tasks') => setSaSort(v)}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+              harnesses={harnesses}
+              teamNodes={teamNodes}
+              onEdit={openEditSubagent}
+              onDelete={(id) => setDeleteConfirm(id)}
+            />
           )}
         </div>
 
@@ -782,66 +741,15 @@ export default function AgentsPage() {
         </Modal>
       )}
 
-      {/* ── Subagent Form Modal ──────────────────────────────────────────── */}
-      {showSubagentForm && (
-        <Modal title={editSubagent ? 'Edit Subagent' : 'New Subagent'} onClose={() => setShowSubagentForm(false)} wide>
-          <TabbedForm
-            tabs={[
-              { key: 'identity', label: 'Identity', content: (
-                <div className="space-y-3">
-                  <div><label className="font-mono text-[10px] text-[var(--faint)]">Name *</label>
-                    <input value={saName} onChange={(e) => setSaName(e.target.value)}
-                      className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[12px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" /></div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div><label className="font-mono text-[10px] text-[var(--faint)]">Role</label>
-                      <input value={saRole} onChange={(e) => setSaRole(e.target.value)} placeholder="e.g. code generation"
-                        className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[11px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" /></div>
-                    <div><label className="font-mono text-[10px] text-[var(--faint)]">Kind</label>
-                      <input value={saKind} onChange={(e) => setSaKind(e.target.value)} placeholder="e.g. coder"
-                        className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[11px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" /></div>
-                  </div>
-                </div>
-              )},
-              { key: 'harness', label: 'Harness', content: (
-                <div className="space-y-3">
-                  <div><label className="font-mono text-[10px] text-[var(--faint)]">System Prompt</label>
-                    <textarea value={saSystemPrompt} onChange={(e) => setSaSystemPrompt(e.target.value)} rows={3}
-                      className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[10px] text-[var(--ink)] outline-none focus:border-[var(--rust)] resize-none" /></div>
-                  <div><label className="font-mono text-[10px] text-[var(--faint)]">Goal</label>
-                    <textarea value={saGoal} onChange={(e) => setSaGoal(e.target.value)} rows={2}
-                      className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[10px] text-[var(--ink)] outline-none focus:border-[var(--rust)] resize-none" /></div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div><label className="font-mono text-[10px] text-[var(--faint)]">Max Steps</label>
-                      <input type="number" value={saMaxSteps} onChange={(e) => setSaMaxSteps(e.target.value)}
-                        className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[11px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" /></div>
-                    <div><label className="font-mono text-[10px] text-[var(--faint)]">Max Wall Time (s)</label>
-                      <input type="number" value={saMaxTime} onChange={(e) => setSaMaxTime(e.target.value)}
-                        className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[11px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" /></div>
-                  </div>
-                  <div><label className="font-mono text-[10px] text-[var(--faint)]">Allowed Tools</label>
-                    <input value={saAllowedTools} onChange={(e) => setSaAllowedTools(e.target.value)} placeholder="read_memory,search_code"
-                      className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[11px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" /></div>
-                  <div><label className="font-mono text-[10px] text-[var(--faint)]">Forbidden Tools</label>
-                    <input value={saForbiddenTools} onChange={(e) => setSaForbiddenTools(e.target.value)} placeholder="write_file,git_commit"
-                      className="mt-1 w-full rounded-[7px] border border-[var(--line)] bg-[var(--paper)] px-3 py-1.5 font-mono text-[11px] text-[var(--ink)] outline-none focus:border-[var(--rust)]" /></div>
-                </div>
-              )},
-              { key: 'config', label: 'Config', content: (
-                <div>
-                  <div className="font-mono text-[9.5px] text-[var(--faint)] mb-1">Edit raw markdown config directly</div>
-                  <ConfigEditor value={saConfigRaw} onChange={setSaConfigRaw} language="markdown" height={250} />
-                </div>
-              )},
-            ]}
-            footer={(
-              <div className="flex gap-2 pt-2">
-                <Button variant="primary" size="sm" onClick={() => void saveSubagent()} disabled={busyCrud}>{busyCrud ? '\u2026' : editSubagent ? 'Save Changes' : 'Create Subagent'}</Button>
-                <Button variant="outline" size="sm" onClick={() => setShowSubagentForm(false)}>Cancel</Button>
-              </div>
-            )}
-          />
-        </Modal>
-      )}
+      <SubagentForm
+        open={showSubagentForm}
+        editSubagent={editSubagent}
+        busyCrud={busyCrud}
+        form={saForm.form}
+        setField={saForm.setField}
+        onClose={() => setShowSubagentForm(false)}
+        onSave={() => void saveSubagent()}
+      />
 
       {/* ── Delete Confirmation ───────────────────────────────────────────── */}
       {deleteConfirm && (

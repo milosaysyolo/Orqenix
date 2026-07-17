@@ -12,20 +12,15 @@ import type { KbKind, MemoryEntry } from '@orqenix/memory-engine';
 import { bootstrapSettings } from './settings-bootstrap';
 import {
   getSessions, startSession, resumeSession, pauseSession, abortSession,
-  promoteSessionMemory, getBranches, getPlugins, getSkills, getMarketplace,
-  getObserverConfig, setObserverConfig, createPlugin, updatePlugin, deletePlugin,
-  togglePlugin, createSkill, updateSkill, deleteSkill, toggleSkill,
-  toggleInstall, syncMarketplaceInstall, syncMarketplaceUninstall,
+  promoteSessionMemory, getBranches,
 } from '@/lib/demo-store';
-import type { Session, MarketplaceItem, Plugin, Skill } from '@/lib/demo-store';
+import type { Session } from '@/lib/demo-store';
 import { join } from 'node:path';
 import type { Database } from 'better-sqlite3';
 
 // ── Phase 4: self-learning ───────────────────────────────────────────────
 import { PromoterService } from '@orqenix/instinct-promoter';
-import type { ReviewDecision, PromoterCandidate } from '@orqenix/instinct-promoter';
 import { Observer, BasicPiiFilter } from '@orqenix/self-learning-observer';
-import type { ObserverConfig } from '@orqenix/self-learning-observer';
 import { BasicDetector } from '@orqenix/self-learning-detection';
 import { SkillGenesis } from '@orqenix/skill-genesis';
 import { MigrationRunner, ALL_PHASE_8_CORE_MIGRATIONS } from '@orqenix/memory-engine';
@@ -35,13 +30,11 @@ import { AGENT_MIGRATIONS } from './migrations/580-agents';
 import { WORKBENCH_STATE_MIGRATIONS } from './migrations/590-workbench-state';
 
 // ── Phase 4: marketplace + plugins ───────────────────────────────────────
-import { MarketplaceManager, RegistryResolverRegistry, MarketplaceCrud } from '@orqenix/marketplace-core';
+import { MarketplaceManager, RegistryResolverRegistry } from '@orqenix/marketplace-core';
 import type { MarketplaceAuditWriter } from '@orqenix/marketplace-core';
 import { NormalizationEngine } from '@orqenix/normalization-engine';
 import {
   PluginRegistry, PluginLifecycle, NoopPluginAuditWriter,
-  type PluginDiscoveryResult, type RegisteredPlugin, type CanonicalSkillFormat,
-  type PluginKind,
 } from '@orqenix/plugin-core';
 import { ALL_INPUT_ADAPTERS } from '@orqenix/input-adapters';
 import { ALL_OUTPUT_ADAPTERS } from '@orqenix/output-adapters';
@@ -203,14 +196,14 @@ export function seedWorkbench(db: Database, projectId: string): void {
 // SIDE-TABLE ACCESSORS (sync, on the raw DB)
 // ═══════════════════════════════════════════════════════════════════════════
 
-function readPluginMeta(db: Database, name: string): { description: string; category: string; author: string } {
+export function readPluginMeta(db: Database, name: string): { description: string; category: string; author: string } {
   const row = db
     .prepare(`SELECT description, category, author FROM workbench_plugin_meta WHERE name=?`)
     .get(name) as { description?: string; category?: string; author?: string } | undefined;
   return { description: row?.description ?? '', category: row?.category ?? 'general', author: row?.author ?? 'local' };
 }
 
-function writePluginMeta(
+export function writePluginMeta(
   db: Database, name: string,
   m: { description?: string; category?: string; author?: string },
 ): void {
@@ -227,28 +220,28 @@ function writePluginMeta(
   ).run(name, next.description, next.category, next.author);
 }
 
-function readPluginConfig(db: Database, name: string): string {
+export function readPluginConfig(db: Database, name: string): string {
   const row = db.prepare(`SELECT config_json FROM workbench_plugin_config WHERE name=?`).get(name) as
     | { config_json?: string }
     | undefined;
   return row?.config_json ?? '';
 }
 
-function writePluginConfig(db: Database, name: string, config: string): void {
+export function writePluginConfig(db: Database, name: string, config: string): void {
   db.prepare(
     `INSERT INTO workbench_plugin_config (name, config_json) VALUES (?, ?)
      ON CONFLICT(name) DO UPDATE SET config_json=excluded.config_json`,
   ).run(name, config);
 }
 
-function readSkillState(db: Database, name: string): boolean {
+export function readSkillState(db: Database, name: string): boolean {
   const row = db.prepare(`SELECT enabled FROM workbench_skill_state WHERE name=?`).get(name) as
     | { enabled?: number }
     | undefined;
   return row ? !!row.enabled : true;
 }
 
-function writeSkillState(db: Database, name: string, enabled: boolean, category?: string): void {
+export function writeSkillState(db: Database, name: string, enabled: boolean, category?: string): void {
   if (category !== undefined) {
     const cur = readPluginMeta(db, name);
     writePluginMeta(db, name, { category: category || cur.category });
@@ -259,93 +252,7 @@ function writeSkillState(db: Database, name: string, enabled: boolean, category?
   ).run(name, enabled ? 1 : 0);
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// SHAPE MAPPING (real entities -> UI contract shapes)
-// ═══════════════════════════════════════════════════════════════════════════
-
-function regToPlugin(db: Database, reg: RegisteredPlugin): Plugin {
-  const csf = reg.csf;
-  const meta = readPluginMeta(db, csf.name);
-  return {
-    id: csf.name,
-    name: csf.name,
-    version: csf.version,
-    enabled: reg.state === 'active',
-    description: meta.description || '',
-    author: meta.author || csf.provenance.imported_from?.kind || 'local',
-    config: readPluginConfig(db, csf.name),
-  };
-}
-
-function csfToSkill(db: Database, csf: CanonicalSkillFormat): Skill {
-  const meta = readPluginMeta(db, csf.name);
-  return {
-    id: csf.name,
-    name: csf.name,
-    category: meta.category || 'general',
-    version: csf.version,
-    enabled: readSkillState(db, csf.name),
-    description: meta.description || '',
-    config: readPluginConfig(db, csf.name),
-  };
-}
-
-function csfToMarketplaceItem(db: Database, csf: CanonicalSkillFormat, installed: boolean): MarketplaceItem {
-  const meta = readPluginMeta(db, csf.name);
-  const author = meta.author || csf.provenance.imported_from?.kind || 'local';
-  return {
-    id: csf.name,
-    name: csf.name,
-    kind: csf.kind,
-    description: meta.description || '',
-    author,
-    publisher: author,
-    version: csf.version,
-    downloads: 0,
-    rating: 0,
-    license: csf.manifest.license || 'MIT',
-    source: 'local',
-    verified: false,
-    installed,
-  };
-}
-
-function fallbackRegisteredPlugin(csf: CanonicalSkillFormat): RegisteredPlugin {
-  const now = new Date().toISOString();
-  return {
-    csf,
-    packagePath: csf.name,
-    state: 'installed',
-    installedAt: now,
-    lastActivatedAt: null,
-    crashCount: 0,
-    totalInvocations: 0,
-    totalErrors: 0,
-  };
-}
-
-async function installLocalPlugin(name: string): Promise<boolean> {
-  const reg = globalThis.__orqenixPluginRegistry;
-  const engine = globalThis.__orqenixMemory;
-  if (!reg || !engine) return false;
-  const csf = await new SqliteLocalPluginStore(engine).get(name);
-  if (!csf) return false;
-  const discovery: PluginDiscoveryResult = {
-    csf,
-    packagePath: name,
-    entryPath: '',
-    isValidPlugin: true,
-    issues: [],
-  };
-  try {
-    await reg.register(discovery);
-    await reg.setState(name, 'active');
-    await reg.flush();
-    return true;
-  } catch {
-    return false;
-  }
-}
+// Shape mappers + installLocalPlugin moved to lib/engine/plugins.ts, lib/engine/skills.ts, lib/engine/marketplace.ts
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SETTINGS HELPERS
@@ -442,7 +349,8 @@ export async function queryMemory(
       created_at: r.entry.created_at, score: r.finalScore,
       sourceLevel: r.sourceLevel,
     }));
-  } catch {
+  } catch (err) {
+    console.error('[queryMemory]', err);
     return [];
   }
 }
@@ -475,7 +383,8 @@ export async function promoteMemoryEntry(
       entryId, kb, from: 'session', to: 'branch', fromBranchId: targetBranchId,
     });
     return { newId: entryId + '-promoted' };
-  } catch {
+  } catch (err) {
+    console.error('[promoteMemoryEntry]', err);
     return null;
   }
 }
@@ -564,8 +473,8 @@ export async function createBranchFromParent(
         cloned_from_branch_id: parentBranchId,
         sessions: 0,
       };
-    } catch {
-      // fall through to demo-store
+    } catch (err) {
+      console.error('[initDashboard] engine error, falling back to demo:', err);
     }
   }
   const { createBranch } = await import('@/lib/demo-store');
@@ -580,466 +489,15 @@ export async function createBranchFromParent(
   };
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// SELF-LEARNING HELPERS (real PromoterService + Observer + SkillGenesis)
-// ═══════════════════════════════════════════════════════════════════════════
+// Self-learning helpers moved to lib/engine/learning.ts
 
-export interface LearningCandidateResult {
-  id: string;
-  patternName: string;
-  patternDescription: string;
-  occurrenceCount: number;
-  successRate: number;
-  impactScore: number;
-  estTimeSavedPerWeekMin: number;
-  status: string;
-}
+// Marketplace helpers moved to lib/engine/marketplace.ts
 
-function enrichCandidate(c: PromoterCandidate): LearningCandidateResult {
-  return {
-    id: c.id,
-    patternName: c.patternName,
-    patternDescription: c.patternDescription,
-    occurrenceCount: c.occurrenceCount,
-    successRate: c.successRate,
-    impactScore: c.impactScore,
-    estTimeSavedPerWeekMin: c.estTimeSavedPerWeekMin,
-    status: c.status,
-  };
-}
+// Plugin helpers moved to lib/engine/plugins.ts
 
-export async function getLearningCandidates(): Promise<LearningCandidateResult[]> {
-  const promoter = getPromoterSync();
-  if (promoter) {
-    try {
-      const candidates = await promoter.listForReview(PROJECT_ID);
-      return candidates.map(enrichCandidate);
-    } catch {
-      // fall through
-    }
-  }
-  const { getCandidates } = await import('@/lib/demo-store');
-  return getCandidates().map((c) => ({
-    id: c.id,
-    patternName: c.name,
-    patternDescription: `Pattern "${c.name}" observed ${c.count} times with ${Math.round(c.successRate * 100)}% success rate.`,
-    occurrenceCount: c.count,
-    successRate: c.successRate,
-    impactScore: c.impact,
-    estTimeSavedPerWeekMin: Math.round(c.impact * 30),
-    status: c.status,
-  }));
-}
+// MCP token helpers moved to lib/engine/mcp.ts
 
-export async function reviewCandidate(
-  candidateId: string, action: string
-): Promise<{ ok: boolean; generatedSkillName?: string; openBuilder?: boolean }> {
-  const promoter = getPromoterSync();
-  if (promoter) {
-    try {
-      const decision: ReviewDecision = {
-        candidateId,
-        action: action as ReviewDecision['action'],
-        reviewedBy: 'workbench-user',
-      };
-      const result = await promoter.review(decision, PROJECT_ID);
-      return {
-        ok: result.ok,
-        generatedSkillName: result.generatedSkillName,
-        openBuilder: result.openBuilder,
-      };
-    } catch {
-      // fall through
-    }
-  }
-  const { setCandidateStatus } = await import('@/lib/demo-store');
-  const status = action === 'promote' || action === 'promote_customize' ? 'approved' : action === 'reject' ? 'rejected' : 'pending';
-  const ok = setCandidateStatus(candidateId, status);
-  if (!ok) return { ok: false };
-  const result: { ok: boolean; generatedSkillName?: string; openBuilder?: boolean } = { ok: true };
-  if (action === 'promote' || action === 'promote_customize') {
-    result.generatedSkillName = `${candidateId}-skill`;
-    if (action === 'promote_customize') result.openBuilder = true;
-  }
-  return result;
-}
-
-export async function getObserverConfigData(): Promise<ObserverConfig> {
-  const db = getDb();
-  if (!db) {
-    const cfg = getObserverConfig();
-    return { enabled: cfg.enabled, piiFilterEnabled: true, notifyOnFirstLaunch: true, sampleRate: 1.0 };
-  }
-  const row = db
-    .prepare(`SELECT enabled, pii_filter_enabled, notify_on_first_launch, sample_rate FROM workbench_observer_config WHERE id=1`)
-    .get() as { enabled?: number; pii_filter_enabled?: number; notify_on_first_launch?: number; sample_rate?: number } | undefined;
-  if (!row) return { enabled: true, piiFilterEnabled: true, notifyOnFirstLaunch: true, sampleRate: 1.0 };
-  return {
-    enabled: !!row.enabled,
-    piiFilterEnabled: !!row.pii_filter_enabled,
-    notifyOnFirstLaunch: !!row.notify_on_first_launch,
-    sampleRate: row.sample_rate ?? 1.0,
-  };
-}
-
-export async function setObserverConfigData(config: Partial<ObserverConfig>): Promise<void> {
-  const db = getDb();
-  if (!db) {
-    setObserverConfig(config.enabled ?? true);
-    return;
-  }
-  db.prepare(
-    `INSERT INTO workbench_observer_config (id, enabled, pii_filter_enabled, notify_on_first_launch, sample_rate)
-     VALUES (1, ?, ?, ?, ?)
-     ON CONFLICT(id) DO UPDATE SET
-       enabled=excluded.enabled, pii_filter_enabled=excluded.pii_filter_enabled,
-       notify_on_first_launch=excluded.notify_on_first_launch, sample_rate=excluded.sample_rate`,
-  ).run(config.enabled ? 1 : 0, config.piiFilterEnabled ? 1 : 0, config.notifyOnFirstLaunch ? 1 : 0, config.sampleRate ?? 1.0);
-}
-
-export async function getVerificationCandidates(): Promise<LearningCandidateResult[]> {
-  const candidates = await getLearningCandidates();
-  return candidates.filter((c) => c.status === 'approved' || c.status === 'promoted');
-}
-
-export async function generateSkillFromCandidate(
-  candidateId: string, _language?: string, _nameOverride?: string
-): Promise<{ ok: boolean; skillName?: string; verificationStatus: string }> {
-  const genesis = getSkillGenesisSync();
-  if (genesis) {
-    try {
-      const result = await genesis.generateFromCandidate({
-        candidateId,
-        projectId: PROJECT_ID,
-      });
-      return { ok: true, skillName: result.skillName, verificationStatus: 'unverified' };
-    } catch {
-      // fall through
-    }
-  }
-  return { ok: true, verificationStatus: 'unverified' };
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// MARKETPLACE HELPERS (real CSF catalog + registry install/uninstall)
-// ═══════════════════════════════════════════════════════════════════════════
-
-export const ALL_MARKETPLACE_KINDS = [
-  'knowledge-source', 'embedding-model', 'reranker', 'compression-strategy',
-  'memory-injection-strategy', 'prompt-rewriter', 'visualization', 'code-analyzer',
-  'kb-schema', 'mcp-server', 'agent', 'subagent', 'skill', 'agent-binding',
-] as const;
-
-export async function getMarketplaceItems(
-  kind?: string, query?: string, tab?: string
-): Promise<{ items: MarketplaceItem[]; kinds: readonly string[] }> {
-  const db = getDb();
-  const store = getLocalStore();
-  const reg = getPluginRegistrySync();
-  if (!db || !store) {
-    let items = getMarketplace();
-    if (tab === 'installed') items = items.filter((i) => i.installed);
-    if (kind && kind !== 'all') items = items.filter((i) => i.kind === kind);
-    if (query) {
-      const q = query.toLowerCase();
-      items = items.filter((i) =>
-        i.name.toLowerCase().includes(q) ||
-        i.description.toLowerCase().includes(q) ||
-        i.author.toLowerCase().includes(q));
-    }
-    return { items, kinds: ALL_MARKETPLACE_KINDS };
-  }
-  const csfs = await store.list();
-  let items = csfs.map((csf) => csfToMarketplaceItem(db, csf, reg ? reg.find(csf.name) != null : false));
-  if (tab === 'installed') items = items.filter((i) => i.installed);
-  if (kind && kind !== 'all') items = items.filter((i) => i.kind === kind);
-  if (query) {
-    const q = query.toLowerCase();
-    items = items.filter((i) =>
-      i.name.toLowerCase().includes(q) ||
-      i.description.toLowerCase().includes(q) ||
-      i.author.toLowerCase().includes(q));
-  }
-  return { items, kinds: ALL_MARKETPLACE_KINDS };
-}
-
-export async function marketplaceInstall(name: string): Promise<boolean> {
-  const reg = getPluginRegistrySync();
-  if (!reg) {
-    toggleInstall(name);
-    syncMarketplaceInstall(name);
-    return true;
-  }
-  return installLocalPlugin(name);
-}
-
-export async function marketplaceUninstall(name: string): Promise<boolean> {
-  const reg = getPluginRegistrySync();
-  if (!reg) {
-    toggleInstall(name);
-    syncMarketplaceUninstall(name);
-    return true;
-  }
-  try {
-    await reg.unregister(name);
-    await reg.flush();
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// PLUGIN HELPERS (real PluginRegistry backed by installed_plugins)
-// ═══════════════════════════════════════════════════════════════════════════
-
-export async function getAllPlugins(): Promise<Plugin[]> {
-  const reg = getPluginRegistrySync();
-  const db = getDb();
-  if (!reg || !db) return getPlugins();
-  return reg.list().map((r) => regToPlugin(db, r));
-}
-
-export async function getPluginById(id: string): Promise<Plugin | null> {
-  const reg = getPluginRegistrySync();
-  const db = getDb();
-  if (!reg || !db) return getPlugins().find((p) => p.id === id) ?? null;
-  const r = reg.find(id);
-  return r ? regToPlugin(db, r) : null;
-}
-
-export async function createPluginItem(data: Partial<Plugin>): Promise<Plugin> {
-  const db = getDb();
-  const store = getLocalStore();
-  const reg = getPluginRegistrySync();
-  if (!db || !store || !reg) {
-    return createPlugin({
-      name: data.name ?? 'new-plugin',
-      version: data.version ?? '1.0.0',
-      enabled: data.enabled ?? true,
-      description: data.description ?? '',
-      author: data.author ?? 'user',
-    });
-  }
-  const crud = new MarketplaceCrud(store, new WorkbenchMarketplaceAuditWriter(db));
-  const pluginName = data.name ?? 'new-plugin';
-  const toolName = pluginName.replace(/[^a-z0-9_]/gi, '_').toLowerCase();
-  const res = await crud.create({ name: pluginName, kind: 'skill' as PluginKind, description: data.description ?? '', permissions: [], external_agent_compat: [], tool: { name: toolName, description: data.description ?? '', inputSchema: { type: 'object', properties: {}, required: [] } } });
-  if (!res.ok) throw new Error('plugin create failed');
-  writePluginMeta(db, res.pluginName, { description: data.description ?? '', author: data.author ?? 'local' });
-  if (data.config) writePluginConfig(db, res.pluginName, data.config);
-  const csf = await store.get(res.pluginName);
-  if (!csf) throw new Error('plugin not found after create');
-  if (data.enabled !== false) {
-    await installLocalPlugin(res.pluginName);
-    return regToPlugin(db, reg.get(res.pluginName));
-  }
-  return regToPlugin(db, fallbackRegisteredPlugin(csf));
-}
-
-export async function updatePluginItem(id: string, data: Partial<Plugin>): Promise<Plugin | null> {
-  const reg = getPluginRegistrySync();
-  const db = getDb();
-  if (!reg || !db) return updatePlugin(id, data) ?? null;
-  if (data.description !== undefined || data.author !== undefined) {
-    const cur = readPluginMeta(db, id);
-    writePluginMeta(db, id, { description: data.description ?? cur.description, author: data.author ?? cur.author });
-  }
-  if (data.config !== undefined) writePluginConfig(db, id, data.config);
-  if (data.enabled !== undefined) {
-    const cur = reg.find(id);
-    if (cur) {
-      await reg.setState(id, data.enabled ? 'active' : 'inactive');
-      await reg.flush();
-    }
-  }
-  const r = reg.find(id);
-  return r ? regToPlugin(db, r) : null;
-}
-
-export async function deletePluginItem(id: string): Promise<boolean> {
-  const reg = getPluginRegistrySync();
-  const db = getDb();
-  if (!reg || !db) return deletePlugin(id);
-  try {
-    await reg.unregister(id);
-    await reg.flush();
-  } catch {
-    return false;
-  }
-  db.prepare(`DELETE FROM workbench_plugin_meta WHERE name=?`).run(id);
-  db.prepare(`DELETE FROM workbench_plugin_config WHERE name=?`).run(id);
-  return true;
-}
-
-export async function togglePluginItem(id: string): Promise<boolean> {
-  const reg = getPluginRegistrySync();
-  const db = getDb();
-  if (!reg || !db) return togglePlugin(id);
-  const cur = reg.find(id);
-  if (!cur) return false;
-  await reg.setState(id, cur.state === 'active' ? 'inactive' : 'active');
-  await reg.flush();
-  return true;
-}
-
-export async function getPluginConfig(id: string): Promise<string> {
-  const db = getDb();
-  if (!db) return getPlugins().find((p) => p.id === id)?.config ?? '';
-  return readPluginConfig(db, id);
-}
-
-export async function updatePluginConfig(id: string, config: string): Promise<boolean> {
-  const db = getDb();
-  if (!db) return !!updatePlugin(id, { config });
-  writePluginConfig(db, id, config);
-  return true;
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// MCP TOKENS (persisted when the engine is real; demo fallback otherwise)
-// ═══════════════════════════════════════════════════════════════════════════
-
-export interface McpToken {
-  id: string;
-  client: string;
-  scopes_json: string;
-  expires_at: string;
-}
-
-export async function issueMcpToken(client: string, scopes: string[]): Promise<McpToken> {
-  const db = getDb();
-  const id = `tok_${Date.now().toString(36)}`;
-  const scopes_json = JSON.stringify(scopes);
-  const expires_at = new Date(Date.now() + 86400000).toISOString();
-  if (!db) {
-    const { issueMCPToken } = await import('@/lib/demo-store');
-    return issueMCPToken(client, scopes);
-  }
-  db.prepare(
-    `INSERT INTO mcp_tokens (id, client, scopes_json, expires_at, created_at)
-     VALUES (?, ?, ?, ?, ?)`,
-  ).run(id, client, scopes_json, expires_at, new Date().toISOString());
-  return { id, client, scopes_json, expires_at };
-}
-
-export async function listMcpTokens(): Promise<McpToken[]> {
-  const db = getDb();
-  if (!db) {
-    const { getMCPTokens } = await import('@/lib/demo-store');
-    return getMCPTokens();
-  }
-  return db
-    .prepare('SELECT id, client, scopes_json, expires_at FROM mcp_tokens ORDER BY created_at DESC')
-    .all() as McpToken[];
-}
-
-export async function revokeMcpToken(id: string): Promise<boolean> {
-  const db = getDb();
-  if (!db) {
-    const { revokeMCPToken } = await import('@/lib/demo-store');
-    return revokeMCPToken(id);
-  }
-  return db.prepare('DELETE FROM mcp_tokens WHERE id = ?').run(id).changes > 0;
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// SKILL HELPERS (real CSF store + MarketplaceCrud + side tables)
-// ═══════════════════════════════════════════════════════════════════════════
-
-export async function getAllSkills(): Promise<Skill[]> {
-  const db = getDb();
-  const store = getLocalStore();
-  if (!db || !store) return getSkills();
-  const csfs = await store.list();
-  return csfs.map((csf) => csfToSkill(db, csf));
-}
-
-export async function createSkillItem(data: Partial<Skill>): Promise<Skill> {
-  const db = getDb();
-  const store = getLocalStore();
-  if (!db || !store) {
-    return createSkill({
-      name: data.name ?? 'new-skill',
-      category: data.category ?? 'general',
-      version: data.version ?? '1.0.0',
-      enabled: data.enabled ?? true,
-      description: data.description ?? '',
-    });
-  }
-  const crud = new MarketplaceCrud(store, new WorkbenchMarketplaceAuditWriter(db));
-  const skillName = data.name ?? 'new-skill';
-  const toolName = skillName.replace(/[^a-z0-9_]/gi, '_').toLowerCase();
-  const res = await crud.create({ name: skillName, kind: 'skill' as PluginKind, description: data.description ?? '', permissions: [], external_agent_compat: [], tool: { name: toolName, description: data.description ?? '', inputSchema: { type: 'object', properties: {}, required: [] } } });
-  if (!res.ok) throw new Error('skill create failed');
-  writePluginMeta(db, res.pluginName, { description: data.description ?? '', category: data.category ?? 'general' });
-  if (data.config) writePluginConfig(db, res.pluginName, data.config);
-  writeSkillState(db, res.pluginName, data.enabled !== false);
-  const csf = await store.get(res.pluginName);
-  if (!csf) throw new Error('skill not found after create');
-  return csfToSkill(db, csf);
-}
-
-export async function updateSkillItem(id: string, data: Partial<Skill>): Promise<Skill | null> {
-  const db = getDb();
-  const store = getLocalStore();
-  if (!db || !store) return updateSkill(id, data) ?? null;
-  if (data.description !== undefined) {
-    const cur = readPluginMeta(db, id);
-    writePluginMeta(db, id, { description: data.description ?? cur.description });
-  }
-  if (data.category !== undefined) writePluginMeta(db, id, { category: data.category });
-  if (data.enabled !== undefined) writeSkillState(db, id, data.enabled);
-  if (data.config !== undefined) writePluginConfig(db, id, data.config);
-  const crud = new MarketplaceCrud(store, new WorkbenchMarketplaceAuditWriter(db));
-  await crud.update({ name: id, bump: 'patch', changes: {} });
-  const csf = await store.get(id);
-  return csf ? csfToSkill(db, csf) : null;
-}
-
-export async function deleteSkillItem(id: string): Promise<boolean> {
-  const db = getDb();
-  const store = getLocalStore();
-  if (!db || !store) return deleteSkill(id);
-  const crud = new MarketplaceCrud(store, new WorkbenchMarketplaceAuditWriter(db));
-  try {
-    await crud.delete({ name: id, confirmation: `DELETE ${id}` });
-  } catch {
-    return false;
-  }
-  db.prepare(`DELETE FROM workbench_plugin_meta WHERE name=?`).run(id);
-  db.prepare(`DELETE FROM workbench_plugin_config WHERE name=?`).run(id);
-  db.prepare(`DELETE FROM workbench_skill_state WHERE name=?`).run(id);
-  return true;
-}
-
-export async function toggleSkillItem(id: string): Promise<boolean> {
-  const db = getDb();
-  if (!db) return toggleSkill(id);
-  writeSkillState(db, id, !readSkillState(db, id));
-  return true;
-}
-
-export interface SkillInvocationResult {
-  ok: boolean;
-  skillId: string;
-  skillName: string;
-  prompt: string;
-  output: string;
-  durationMs: number;
-}
-
-export async function invokeSkill(id: string, prompt: string): Promise<SkillInvocationResult | null> {
-  const db = getDb();
-  const store = getLocalStore();
-  if (!db || !store) return null;
-  const csf = await store.get(id);
-  if (!csf) return null;
-  const output = typeof csf.implementation?.source === 'string' ? csf.implementation.source : '[no implementation]';
-  db.prepare(`INSERT INTO workbench_skill_invocations (name, invoked_at, prompt, output) VALUES (?, ?, ?, ?)`)
-    .run(id, new Date().toISOString(), prompt, output);
-  return { ok: true, skillId: id, skillName: csf.name, prompt, output, durationMs: 0 };
-}
+// Skill helpers moved to lib/engine/skills.ts
 
 // ═══════════════════════════════════════════════════════════════════════════
 // INITIALIZATION
@@ -1168,7 +626,7 @@ async function init(): Promise<void> {
     engineStatus.branches = 'real';
   } catch (err) {
     console.error('[engine-init] MemoryEngine init failed, using demo-store fallback:', (err as Error).message);
-    if (process.env.ORQENIX_STRICT) throw err;
+    if (STRICT) throw err;
     engineStatus.memory = 'demo';
     engineStatus.sessions = 'demo';
     engineStatus.branches = 'demo';
@@ -1196,12 +654,12 @@ export function getEngineStatus(): Record<Subsystem, SubsystemStatus> {
   return { ...engineStatus };
 }
 
-function getDb(): Database | null {
+export function getDb(): Database | null {
   const e = globalThis.__orqenixMemory;
   return e ? e.getStore().db : null;
 }
 
-function getLocalStore(): SqliteLocalPluginStore | null {
+export function getLocalStore(): SqliteLocalPluginStore | null {
   const e = globalThis.__orqenixMemory;
   return e ? new SqliteLocalPluginStore(e) : null;
 }
@@ -1229,3 +687,25 @@ export function getPluginRegistrySync(): PluginRegistry | null { return globalTh
 export function getObserverSync(): Observer | null { return globalThis.__orqenixObserver ?? null; }
 export function getDetectorSync(): BasicDetector | null { return globalThis.__orqenixDetector ?? null; }
 export function getMarketplaceSync(): MarketplaceManager | null { return globalThis.__orqenixMarketplace ?? null; }
+
+// Re-exports from domain modules for backward compat
+export { issueMcpToken, listMcpTokens, revokeMcpToken } from './engine/mcp';
+export type { McpToken } from './engine/mcp';
+export {
+  getAllPlugins, getPluginById, createPluginItem, updatePluginItem,
+  deletePluginItem, togglePluginItem, getPluginConfig, updatePluginConfig,
+} from './engine/plugins';
+export {
+  getAllSkills, createSkillItem, updateSkillItem, deleteSkillItem,
+  toggleSkillItem, invokeSkill,
+} from './engine/skills';
+export type { SkillInvocationResult } from './engine/skills';
+export {
+  getLearningCandidates, reviewCandidate, getObserverConfigData,
+  setObserverConfigData, getVerificationCandidates, generateSkillFromCandidate,
+} from './engine/learning';
+export type { LearningCandidateResult } from './engine/learning';
+export {
+  getMarketplaceItems, marketplaceInstall, marketplaceUninstall,
+  ALL_MARKETPLACE_KINDS,
+} from './engine/marketplace';
