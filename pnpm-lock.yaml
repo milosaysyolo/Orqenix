@@ -223,100 +223,6 @@ importers:
         specifier: ^2.1.5
         version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
 
-  apps/workbench-backup-20260713_195430:
-    dependencies:
-      '@noble/hashes':
-        specifier: ^1.5.0
-        version: 1.8.0
-      '@orqenix/input-adapters':
-        specifier: workspace:*
-        version: link:../../packages/input-adapters
-      '@orqenix/instinct-promoter':
-        specifier: workspace:*
-        version: link:../../packages/instinct-promoter
-      '@orqenix/local-memory-federation':
-        specifier: workspace:*
-        version: link:../../packages/local-memory-federation
-      '@orqenix/marketplace-core':
-        specifier: workspace:*
-        version: link:../../packages/marketplace-core
-      '@orqenix/mcp-server':
-        specifier: workspace:*
-        version: link:../../packages/mcp-server
-      '@orqenix/memory-engine':
-        specifier: workspace:*
-        version: link:../../packages/memory-engine
-      '@orqenix/normalization-engine':
-        specifier: workspace:*
-        version: link:../../packages/normalization-engine
-      '@orqenix/output-adapters':
-        specifier: workspace:*
-        version: link:../../packages/output-adapters
-      '@orqenix/plugin-core':
-        specifier: workspace:*
-        version: link:../../packages/plugin-core
-      '@orqenix/self-learning-detection':
-        specifier: workspace:*
-        version: link:../../packages/self-learning-detection
-      '@orqenix/self-learning-observer':
-        specifier: workspace:*
-        version: link:../../packages/self-learning-observer
-      '@orqenix/settings-registry':
-        specifier: workspace:*
-        version: link:../../packages/settings-registry
-      '@orqenix/skill-genesis':
-        specifier: workspace:*
-        version: link:../../packages/skill-genesis
-      '@orqenix/verification-loop':
-        specifier: workspace:*
-        version: link:../../packages/verification-loop
-      better-sqlite3:
-        specifier: ^12.0.0
-        version: 12.10.1
-      next:
-        specifier: 15.5.0
-        version: 15.5.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      next-themes:
-        specifier: ^0.4.4
-        version: 0.4.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      react:
-        specifier: ^19.0.0
-        version: 19.2.7
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.2.7(react@19.2.7)
-      yaml:
-        specifier: ^2.6.1
-        version: 2.9.0
-    devDependencies:
-      '@types/better-sqlite3':
-        specifier: ^7.6.11
-        version: 7.6.13
-      '@types/node':
-        specifier: 20.16.11
-        version: 20.16.11
-      '@types/react':
-        specifier: ^19.0.0
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: ^19.0.0
-        version: 19.2.3(@types/react@19.2.17)
-      autoprefixer:
-        specifier: ^10.4.20
-        version: 10.5.0(postcss@8.5.15)
-      postcss:
-        specifier: ^8.4.49
-        version: 8.5.15
-      tailwindcss:
-        specifier: ^3.4.16
-        version: 3.4.19(tsx@4.22.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
-
   integration:
     devDependencies:
       '@orqenix/kb-code':
@@ -328,9 +234,9 @@ importers:
       '@orqenix/kb-docs':
         specifier: workspace:*
         version: link:../packages/kb-docs
-      '@orqenix/plugin-snapshot':
+      '@orqenix/plugin-ecosystem':
         specifier: workspace:*
-        version: link:../packages/plugin-snapshot
+        version: link:../packages/plugin-ecosystem
       '@types/node':
         specifier: ^22.10.0
         version: 22.19.19
@@ -380,33 +286,6 @@ importers:
       '@noble/hashes':
         specifier: ^1.5.0
         version: 1.8.0
-      '@orqenix/input-adapters':
-        specifier: workspace:*
-        version: link:../input-adapters
-      '@orqenix/local-memory-federation':
-        specifier: workspace:*
-        version: link:../local-memory-federation
-      '@orqenix/memory-engine':
-        specifier: workspace:*
-        version: link:../memory-engine
-      '@orqenix/normalization-engine':
-        specifier: workspace:*
-        version: link:../normalization-engine
-      '@orqenix/output-adapters':
-        specifier: workspace:*
-        version: link:../output-adapters
-      '@orqenix/plugin-core':
-        specifier: workspace:*
-        version: link:../plugin-core
-      '@orqenix/self-learning-detection':
-        specifier: workspace:*
-        version: link:../self-learning-detection
-      '@orqenix/self-learning-observer':
-        specifier: workspace:*
-        version: link:../self-learning-observer
-      '@orqenix/settings-registry':
-        specifier: workspace:*
-        version: link:../settings-registry
     devDependencies:
       '@types/node':
         specifier: 20.16.11
@@ -424,102 +303,14 @@ importers:
         specifier: ^5.6.3
         version: 5.9.3
 
-  packages/binding-aider:
+  packages/binding-adapters:
     dependencies:
       '@orqenix/binding-core':
         specifier: workspace:*
         version: link:../binding-core
-      '@orqenix/mcp-server':
-        specifier: workspace:*
-        version: link:../mcp-server
-    devDependencies:
-      '@types/node':
-        specifier: 20.16.11
-        version: 20.16.11
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
-
-  packages/binding-claude-code:
-    dependencies:
-      '@orqenix/binding-core':
-        specifier: workspace:*
-        version: link:../binding-core
-      '@orqenix/mcp-server':
-        specifier: workspace:*
-        version: link:../mcp-server
-    devDependencies:
-      '@types/node':
-        specifier: 20.16.11
-        version: 20.16.11
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
-
-  packages/binding-cline:
-    dependencies:
-      '@orqenix/binding-core':
-        specifier: workspace:*
-        version: link:../binding-core
-      '@orqenix/mcp-server':
-        specifier: workspace:*
-        version: link:../mcp-server
-    devDependencies:
-      '@types/node':
-        specifier: 20.16.11
-        version: 20.16.11
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
-
-  packages/binding-codex:
-    dependencies:
-      '@orqenix/binding-core':
-        specifier: workspace:*
-        version: link:../binding-core
-      '@orqenix/mcp-server':
-        specifier: workspace:*
-        version: link:../mcp-server
-    devDependencies:
-      '@types/node':
-        specifier: 20.16.11
-        version: 20.16.11
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
-
-  packages/binding-continue:
-    dependencies:
-      '@orqenix/binding-core':
-        specifier: workspace:*
-        version: link:../binding-core
-      '@orqenix/mcp-server':
-        specifier: workspace:*
-        version: link:../mcp-server
+      yaml:
+        specifier: ^2.5.0
+        version: 2.9.0
     devDependencies:
       '@types/node':
         specifier: 20.16.11
@@ -545,50 +336,6 @@ importers:
       vitest:
         specifier: ^2.1.5
         version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/binding-cursor:
-    dependencies:
-      '@orqenix/binding-core':
-        specifier: workspace:*
-        version: link:../binding-core
-      '@orqenix/mcp-server':
-        specifier: workspace:*
-        version: link:../mcp-server
-    devDependencies:
-      '@types/node':
-        specifier: 20.16.11
-        version: 20.16.11
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
-
-  packages/binding-opencode:
-    dependencies:
-      '@orqenix/binding-core':
-        specifier: workspace:*
-        version: link:../binding-core
-      '@orqenix/mcp-server':
-        specifier: workspace:*
-        version: link:../mcp-server
-    devDependencies:
-      '@types/node':
-        specifier: 20.16.11
-        version: 20.16.11
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
 
   packages/capability-tokens:
     dependencies:
@@ -620,18 +367,12 @@ importers:
       '@orqenix/audit-log':
         specifier: workspace:*
         version: link:../audit-log
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
       '@orqenix/detach':
         specifier: workspace:*
         version: link:../detach
       '@orqenix/migration':
         specifier: workspace:*
         version: link:../migration
-      '@orqenix/scope-identity':
-        specifier: workspace:*
-        version: link:../scope-identity
       '@orqenix/scope-link':
         specifier: workspace:*
         version: link:../scope-link
@@ -657,9 +398,6 @@ importers:
       '@orqenix/llm-adapter-ollama':
         specifier: workspace:*
         version: link:../llm-adapter-ollama
-      '@orqenix/memory-tiers':
-        specifier: workspace:*
-        version: link:../memory-tiers
       zod:
         specifier: ^3.25.0
         version: 3.25.76
@@ -728,9 +466,6 @@ importers:
       '@orqenix/audit-log':
         specifier: workspace:*
         version: link:../audit-log
-      '@orqenix/capability-tokens':
-        specifier: workspace:*
-        version: link:../capability-tokens
       '@orqenix/core':
         specifier: workspace:*
         version: link:../core
@@ -765,9 +500,6 @@ importers:
       '@anthropic-ai/sdk':
         specifier: ^0.27.0
         version: 0.27.3
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
       openai:
         specifier: ^4.50.0
         version: 4.104.0(ws@8.21.0)(zod@3.25.76)
@@ -781,9 +513,6 @@ importers:
 
   packages/embedding-local:
     dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
       '@xenova/transformers':
         specifier: ^2.17.0
         version: 2.17.2
@@ -968,12 +697,6 @@ importers:
 
   packages/kb-code:
     dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-      '@orqenix/embedding-local':
-        specifier: workspace:*
-        version: link:../embedding-local
       better-sqlite3:
         specifier: ^12.0.0
         version: 12.10.1
@@ -1051,9 +774,6 @@ importers:
 
   packages/kb-query:
     dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
       '@orqenix/kb-code':
         specifier: workspace:*
         version: link:../kb-code
@@ -1073,9 +793,6 @@ importers:
 
   packages/lifecycle:
     dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
       better-sqlite3:
         specifier: ^12.0.0
         version: 12.10.1
@@ -1101,9 +818,6 @@ importers:
 
   packages/llm-adapter-byok:
     dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
       '@orqenix/llm-adapter-ollama':
         specifier: workspace:*
         version: link:../llm-adapter-ollama
@@ -1173,12 +887,6 @@ importers:
 
   packages/marketplace-client:
     dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-      '@orqenix/lifecycle':
-        specifier: workspace:*
-        version: link:../lifecycle
       '@orqenix/registry':
         specifier: workspace:*
         version: link:../registry
@@ -1204,9 +912,6 @@ importers:
       '@noble/hashes':
         specifier: ^1.5.0
         version: 1.8.0
-      '@orqenix/memory-engine':
-        specifier: workspace:*
-        version: link:../memory-engine
       '@orqenix/normalization-engine':
         specifier: workspace:*
         version: link:../normalization-engine
@@ -1235,9 +940,6 @@ importers:
 
   packages/marketplace-ui:
     dependencies:
-      '@orqenix/marketplace-core':
-        specifier: workspace:*
-        version: link:../marketplace-core
       '@orqenix/ui-primitives':
         specifier: workspace:*
         version: link:../ui-primitives
@@ -1291,9 +993,6 @@ importers:
       '@orqenix/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
-      '@orqenix/plugin-core':
-        specifier: workspace:*
-        version: link:../plugin-core
       '@orqenix/skill-runtime':
         specifier: workspace:*
         version: link:../skill-runtime
@@ -1331,12 +1030,6 @@ importers:
       '@orqenix/memory-tiers':
         specifier: workspace:*
         version: link:../memory-tiers
-      '@orqenix/scope-identity':
-        specifier: workspace:*
-        version: link:../scope-identity
-      '@orqenix/storage-diff':
-        specifier: workspace:*
-        version: link:../storage-diff
       '@orqenix/storage-sqlite':
         specifier: workspace:*
         version: link:../storage-sqlite
@@ -1429,11 +1122,8 @@ importers:
         specifier: ^12.3.0
         version: 12.5.1
       '@orqenix/mesh-transport-core':
-        specifier: ^0.6.0
-        version: 0.6.0
-      '@orqenix/mesh-transport-libp2p':
-        specifier: ^0.6.0
-        version: 0.6.1
+        specifier: workspace:*
+        version: link:../mesh-transport-core
       yaml:
         specifier: ^2.5.0
         version: 2.9.0
@@ -1457,8 +1147,8 @@ importers:
   packages/mesh-observability:
     dependencies:
       '@orqenix/mesh-transport-core':
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: workspace:*
+        version: link:../mesh-transport-core
       blake3-wasm:
         specifier: ^2.0.0
         version: 2.1.5
@@ -1482,11 +1172,11 @@ importers:
   packages/mesh-router:
     dependencies:
       '@orqenix/mesh-observability':
-        specifier: ^0.6.0
-        version: 0.6.1
+        specifier: workspace:*
+        version: link:../mesh-observability
       '@orqenix/mesh-transport-core':
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: workspace:*
+        version: link:../mesh-transport-core
     devDependencies:
       '@types/node':
         specifier: ^22.7.0
@@ -1506,9 +1196,6 @@ importers:
 
   packages/mesh-routing:
     dependencies:
-      '@orqenix/capability-tokens':
-        specifier: workspace:*
-        version: link:../capability-tokens
       '@orqenix/core':
         specifier: workspace:*
         version: link:../core
@@ -1569,8 +1256,8 @@ importers:
   packages/mesh-transport-http:
     dependencies:
       '@orqenix/mesh-transport-core':
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: workspace:*
+        version: link:../mesh-transport-core
       msgpackr:
         specifier: ^1.11.0
         version: 1.12.1
@@ -1578,9 +1265,6 @@ importers:
         specifier: ^6.20.0
         version: 6.26.0
     devDependencies:
-      '@orqenix/transport-security':
-        specifier: workspace:*
-        version: link:../transport-security
       '@types/node':
         specifier: ^22.7.0
         version: 22.19.19
@@ -1627,8 +1311,8 @@ importers:
         specifier: ^12.3.0
         version: 12.5.1
       '@orqenix/mesh-transport-core':
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: workspace:*
+        version: link:../mesh-transport-core
       it-length-prefixed:
         specifier: ^9.1.0
         version: 9.1.1
@@ -1813,7 +1497,7 @@ importers:
         specifier: ^2.1.5
         version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
 
-  packages/plugin-compress-context:
+  packages/plugin-compression:
     dependencies:
       '@orqenix/compress-strategies':
         specifier: workspace:*
@@ -1821,50 +1505,15 @@ importers:
       '@orqenix/core':
         specifier: workspace:*
         version: link:../core
-      '@orqenix/hooks':
-        specifier: workspace:*
-        version: link:../hooks
       '@orqenix/smart-compression':
         specifier: workspace:*
         version: link:../smart-compression
-      '@orqenix/telemetry':
-        specifier: workspace:*
-        version: link:../telemetry
       zod:
         specifier: ^3.25.0
         version: 3.25.76
     devDependencies:
-      typescript:
-        specifier: ^5.5.0
-        version: 5.9.3
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
-
-  packages/plugin-compress-input:
-    dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-    devDependencies:
       tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.0
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-compress-output:
-    dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-    devDependencies:
-      tsup:
-        specifier: ^8.3.0
+        specifier: ^8.5.1
         version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
       typescript:
         specifier: ^5.6.0
@@ -1907,7 +1556,7 @@ importers:
         specifier: ^2.1.5
         version: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
 
-  packages/plugin-cost-tracker:
+  packages/plugin-ecosystem:
     dependencies:
       '@orqenix/core':
         specifier: workspace:*
@@ -1921,24 +1570,6 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-detach:
-    devDependencies:
-      '@types/node':
-        specifier: ^22.10.0
-        version: 22.19.19
-      rimraf:
-        specifier: ^6.0.1
-        version: 6.1.3
-      tsup:
-        specifier: ^8.3.5
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.7.2
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.8
         version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/plugin-host:
@@ -1957,147 +1588,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
-  packages/plugin-knowledge-workflow:
-    dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-    devDependencies:
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.0
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-lazy-loader:
-    dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-    devDependencies:
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.0
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-marketplace:
-    devDependencies:
-      '@types/node':
-        specifier: ^22.10.0
-        version: 22.19.19
-      rimraf:
-        specifier: ^6.0.1
-        version: 6.1.3
-      tsup:
-        specifier: ^8.3.5
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.7.2
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-picker:
-    dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-    devDependencies:
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.0
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-sandbox:
-    devDependencies:
-      '@types/node':
-        specifier: ^22.10.0
-        version: 22.19.19
-      rimraf:
-        specifier: ^6.0.1
-        version: 6.1.3
-      tsup:
-        specifier: ^8.3.5
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.7.2
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-semantic-cache:
-    dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-    devDependencies:
-      tsup:
-        specifier: ^8.3.0
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.6.0
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.0
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-snapshot:
-    devDependencies:
-      '@types/node':
-        specifier: ^22.10.0
-        version: 22.19.19
-      rimraf:
-        specifier: ^6.0.1
-        version: 6.1.3
-      tsup:
-        specifier: ^8.3.5
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.7.2
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
-  packages/plugin-versioning:
-    devDependencies:
-      '@types/node':
-        specifier: ^22.10.0
-        version: 22.19.19
-      rimraf:
-        specifier: ^6.0.1
-        version: 6.1.3
-      tsup:
-        specifier: ^8.3.5
-        version: 8.5.1(jiti@1.21.7)(postcss@8.5.15)(tsx@4.22.3)(typescript@5.9.3)(yaml@2.9.0)
-      typescript:
-        specifier: ^5.7.2
-        version: 5.9.3
-      vitest:
-        specifier: ^2.1.8
-        version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
-
   packages/prompt-rewriter:
     dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
       '@orqenix/injection-strategies':
         specifier: workspace:*
         version: link:../injection-strategies
@@ -2148,12 +1640,6 @@ importers:
 
   packages/registry:
     dependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
-      '@orqenix/lifecycle':
-        specifier: workspace:*
-        version: link:../lifecycle
       better-sqlite3:
         specifier: ^12.0.0
         version: 12.10.1
@@ -2176,9 +1662,6 @@ importers:
       '@orqenix/file-watcher':
         specifier: workspace:*
         version: link:../file-watcher
-      '@orqenix/hooks':
-        specifier: workspace:*
-        version: link:../hooks
       '@orqenix/storage-diff':
         specifier: workspace:*
         version: link:../storage-diff
@@ -2593,8 +2076,8 @@ importers:
   packages/transport-security:
     dependencies:
       '@orqenix/mesh-transport-core':
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: workspace:*
+        version: link:../mesh-transport-core
       msgpackr:
         specifier: ^1.11.0
         version: 1.12.1
@@ -2696,9 +2179,6 @@ importers:
       '@orqenix/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
-      '@orqenix/plugin-core':
-        specifier: workspace:*
-        version: link:../plugin-core
       '@orqenix/self-learning-observer':
         specifier: workspace:*
         version: link:../self-learning-observer
@@ -2733,9 +2213,6 @@ importers:
       '@orqenix/scope-identity':
         specifier: workspace:*
         version: link:../scope-identity
-      '@orqenix/scope-link':
-        specifier: workspace:*
-        version: link:../scope-link
       '@orqenix/storage-sqlite':
         specifier: workspace:*
         version: link:../storage-sqlite
@@ -3964,31 +3441,16 @@ packages:
       '@emnapi/core': ^1.7.1
       '@emnapi/runtime': ^1.7.1
 
-  '@next/env@15.5.0':
-    resolution: {integrity: sha512-sDaprBAfzCQiOgo2pO+LhnV0Wt2wBgartjrr+dpcTORYVnnXD0gwhHhiiyIih9hQbq+JnbqH4odgcFWhqCGidw==}
-
   '@next/env@15.5.19':
     resolution: {integrity: sha512-sWWluFvcv5v3Fxznmf2ZfjyoVQt/64oCnYqS90inQWGzMPK1VjvekPiz3OPHKmFT30EnHrjlbyaHLt3M0vWabw==}
 
   '@next/eslint-plugin-next@15.5.19':
     resolution: {integrity: sha512-Ctwb4qYuMbHN/1oXLlTdMchwG8h8Xzwq+wGZZMgF3o6+uwyBKAI2c96bdOsl+C62PaUD0Jkh+QpNkhUeDlam0Q==}
 
-  '@next/swc-darwin-arm64@15.5.0':
-    resolution: {integrity: sha512-v7Jj9iqC6enxIRBIScD/o0lH7QKvSxq2LM8UTyqJi+S2w2QzhMYjven4vgu/RzgsdtdbpkyCxBTzHl/gN5rTRg==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [darwin]
-
   '@next/swc-darwin-arm64@15.5.19':
     resolution: {integrity: sha512-jx9wWlTKueHKPvVOndyr7WuaevWCkuYqsQ8gC0TMPKAVWG3MhcdMrjfo9tvIZNXd0QOUYXXvAcZ325y8Uq7uzg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
-    os: [darwin]
-
-  '@next/swc-darwin-x64@15.5.0':
-    resolution: {integrity: sha512-s2Nk6ec+pmYmAb/utawuURy7uvyYKDk+TRE5aqLRsdnj3AhwC9IKUBmhfnLmY/+P+DnwqpeXEFIKe9tlG0p6CA==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
     os: [darwin]
 
   '@next/swc-darwin-x64@15.5.19':
@@ -3997,20 +3459,8 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-linux-arm64-gnu@15.5.0':
-    resolution: {integrity: sha512-mGlPJMZReU4yP5fSHjOxiTYvZmwPSWn/eF/dcg21pwfmiUCKS1amFvf1F1RkLHPIMPfocxLViNWFvkvDB14Isg==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-
   '@next/swc-linux-arm64-gnu@15.5.19':
     resolution: {integrity: sha512-WeH+nelQyyMeE2f8FxBRZNrGipya5zHZV2vjzfCOAYyiI6am+NbnWAAldOBFQBB2w0DjJcsvrKqoFT2b7+5YoA==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@next/swc-linux-arm64-musl@15.5.0':
-    resolution: {integrity: sha512-biWqIOE17OW/6S34t1X8K/3vb1+svp5ji5QQT/IKR+VfM3B7GvlCwmz5XtlEan2ukOUf9tj2vJJBffaGH4fGRw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -4021,20 +3471,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@next/swc-linux-x64-gnu@15.5.0':
-    resolution: {integrity: sha512-zPisT+obYypM/l6EZ0yRkK3LEuoZqHaSoYKj+5jiD9ESHwdr6QhnabnNxYkdy34uCigNlWIaCbjFmQ8FY5AlxA==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-
   '@next/swc-linux-x64-gnu@15.5.19':
     resolution: {integrity: sha512-LTxRmMgqqMv05Had879W00Fm53quiJd3Zuz8h1JSNJ3nGSlbZ/7Tjs1tKyScgN3Au3t3MyPsjPlq60fMmSHLsg==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-
-  '@next/swc-linux-x64-musl@15.5.0':
-    resolution: {integrity: sha512-+t3+7GoU9IYmk+N+FHKBNFdahaReoAktdOpXHFIPOU1ixxtdge26NgQEEkJkCw2dHT9UwwK5zw4mAsURw4E8jA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -4045,22 +3483,10 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@next/swc-win32-arm64-msvc@15.5.0':
-    resolution: {integrity: sha512-d8MrXKh0A+c9DLiy1BUFwtg3Hu90Lucj3k6iKTUdPOv42Ve2UiIG8HYi3UAb8kFVluXxEfdpCoPPCSODk5fDcw==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [win32]
-
   '@next/swc-win32-arm64-msvc@15.5.19':
     resolution: {integrity: sha512-6UNt2dFuCHOe446sm/Kp69nUe8/wIhnh9bm6Xcqw4qEWCOppLMOvhTBVgvM7invVUNr4SPpP6NOQsACtn2IN9Q==}
     engines: {node: '>= 10'}
     cpu: [arm64]
-    os: [win32]
-
-  '@next/swc-win32-x64-msvc@15.5.0':
-    resolution: {integrity: sha512-Fe1tGHxOWEyQjmygWkkXSwhFcTJuimrNu52JEuwItrKJVV4iRjbWp9I7zZjwqtiNnQmxoEvoisn8wueFLrNpvQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
     os: [win32]
 
   '@next/swc-win32-x64-msvc@15.5.19':
@@ -4107,19 +3533,6 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
-
-  '@orqenix/mesh-observability@0.6.1':
-    resolution: {integrity: sha512-4XvDDep6Bz1j0h6b4Txq3g8IPER2oBQmhOas+r2Fe0RbHbibkxafHcrYOEXxjY9YSBOw+0//FH1yzLUu6/gzfA==}
-    engines: {node: '>=22.0.0'}
-
-  '@orqenix/mesh-transport-core@0.6.0':
-    resolution: {integrity: sha512-ibcEPowNBfSzisIAyoqJ9jdmWCWqdjdfyqvKlVCK2Gi3UGH2N2HzIB4dhNEH7A3AKjiL7r3u0Nr/JxTDXun0gQ==}
-    engines: {node: '>=22.0.0'}
-    deprecated: Use @orqenix/mesh-transport-core@^0.6.0 - v0.6.0 is functionally identical.
-
-  '@orqenix/mesh-transport-libp2p@0.6.1':
-    resolution: {integrity: sha512-/R/O4DaqQJbI4ifXXt16q1uXWyA57ToUme98mhh7iJ/3t+JYKzK7SfeOfVIhg5gKv2Q4LK9t8x3LByPIiH5EcQ==}
-    engines: {node: '>=22.0.0'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -6893,28 +6306,6 @@ packages:
       react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
       react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
 
-  next@15.5.0:
-    resolution: {integrity: sha512-N1lp9Hatw3a9XLt0307lGB4uTKsXDhyOKQo7uYMzX4i0nF/c27grcGXkLdb7VcT8QPYLBa8ouIyEoUQJ2OyeNQ==}
-    engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
-    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
-    hasBin: true
-    peerDependencies:
-      '@opentelemetry/api': ^1.1.0
-      '@playwright/test': ^1.51.1
-      babel-plugin-react-compiler: '*'
-      react: ^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0
-      react-dom: ^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0
-      sass: ^1.3.0
-    peerDependenciesMeta:
-      '@opentelemetry/api':
-        optional: true
-      '@playwright/test':
-        optional: true
-      babel-plugin-react-compiler:
-        optional: true
-      sass:
-        optional: true
-
   next@15.5.19:
     resolution: {integrity: sha512-xNOW6tYshGX1/Oi3F8uuk4gpDeWsSUE/1Z0G5uUMekIxaQ0xc03UXd9II0VQHYMWviMeA0OHpJFAKsHf8bTYVg==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
@@ -9460,57 +8851,31 @@ snapshots:
       '@tybys/wasm-util': 0.10.3
     optional: true
 
-  '@next/env@15.5.0': {}
-
   '@next/env@15.5.19': {}
 
   '@next/eslint-plugin-next@15.5.19':
     dependencies:
       fast-glob: 3.3.1
 
-  '@next/swc-darwin-arm64@15.5.0':
-    optional: true
-
   '@next/swc-darwin-arm64@15.5.19':
-    optional: true
-
-  '@next/swc-darwin-x64@15.5.0':
     optional: true
 
   '@next/swc-darwin-x64@15.5.19':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@15.5.0':
-    optional: true
-
   '@next/swc-linux-arm64-gnu@15.5.19':
-    optional: true
-
-  '@next/swc-linux-arm64-musl@15.5.0':
     optional: true
 
   '@next/swc-linux-arm64-musl@15.5.19':
     optional: true
 
-  '@next/swc-linux-x64-gnu@15.5.0':
-    optional: true
-
   '@next/swc-linux-x64-gnu@15.5.19':
-    optional: true
-
-  '@next/swc-linux-x64-musl@15.5.0':
     optional: true
 
   '@next/swc-linux-x64-musl@15.5.19':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@15.5.0':
-    optional: true
-
   '@next/swc-win32-arm64-msvc@15.5.19':
-    optional: true
-
-  '@next/swc-win32-x64-msvc@15.5.0':
     optional: true
 
   '@next/swc-win32-x64-msvc@15.5.19':
@@ -9545,37 +8910,6 @@ snapshots:
       fastq: 1.20.1
 
   '@nolyfill/is-core-module@1.0.39': {}
-
-  '@orqenix/mesh-observability@0.6.1':
-    dependencies:
-      '@orqenix/mesh-transport-core': 0.6.0
-      blake3-wasm: 2.1.5
-
-  '@orqenix/mesh-transport-core@0.6.0':
-    dependencies:
-      msgpackr: 1.12.1
-      ulidx: 2.4.1
-
-  '@orqenix/mesh-transport-libp2p@0.6.1':
-    dependencies:
-      '@chainsafe/libp2p-noise': 16.1.5
-      '@chainsafe/libp2p-yamux': 7.0.4
-      '@libp2p/crypto': 5.1.19
-      '@libp2p/interface': 2.11.0
-      '@libp2p/memory': 1.1.14
-      '@libp2p/peer-id': 5.1.9
-      '@libp2p/tcp': 10.1.19
-      '@libp2p/websockets': 9.2.19
-      '@multiformats/multiaddr': 12.5.1
-      '@orqenix/mesh-transport-core': 0.6.0
-      it-length-prefixed: 9.1.1
-      it-pipe: 3.0.1
-      libp2p: 2.10.0
-      msgpackr: 1.12.1
-      uint8arrays: 5.1.1
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -10466,7 +9800,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.16
       tinyrainbow: 1.2.0
-      vitest: 2.1.9(@types/node@20.16.11)(@vitest/ui@2.1.9)
+      vitest: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   '@vitest/utils@1.6.1':
     dependencies:
@@ -12609,29 +11943,6 @@ snapshots:
     dependencies:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
-
-  next@15.5.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
-    dependencies:
-      '@next/env': 15.5.0
-      '@swc/helpers': 0.5.15
-      caniuse-lite: 1.0.30001799
-      postcss: 8.4.31
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
-      styled-jsx: 5.1.6(react@19.2.7)
-    optionalDependencies:
-      '@next/swc-darwin-arm64': 15.5.0
-      '@next/swc-darwin-x64': 15.5.0
-      '@next/swc-linux-arm64-gnu': 15.5.0
-      '@next/swc-linux-arm64-musl': 15.5.0
-      '@next/swc-linux-x64-gnu': 15.5.0
-      '@next/swc-linux-x64-musl': 15.5.0
-      '@next/swc-win32-arm64-msvc': 15.5.0
-      '@next/swc-win32-x64-msvc': 15.5.0
-      sharp: 0.34.5
-    transitivePeerDependencies:
-      - '@babel/core'
-      - babel-plugin-macros
 
   next@15.5.19(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:

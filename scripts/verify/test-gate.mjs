@@ -36,13 +36,7 @@ const PHASE_8_PACKAGES = new Set([
   '@orqenix/skill-genesis',
   '@orqenix/instinct-promoter',
   '@orqenix/verification-loop',
-  '@orqenix/binding-claude-code',
-  '@orqenix/binding-cursor',
-  '@orqenix/binding-codex',
-  '@orqenix/binding-opencode',
-  '@orqenix/binding-cline',
-  '@orqenix/binding-aider',
-  '@orqenix/binding-continue',
+  '@orqenix/binding-adapters',
   '@orqenix/workbench',
 ]);
 

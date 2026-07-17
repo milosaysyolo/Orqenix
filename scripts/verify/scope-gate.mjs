@@ -18,13 +18,7 @@ const PHASE_8_SCOPE = [
   '@orqenix/mcp-server',                 // D8.alpha.7, G63
   '@orqenix/skill-runtime',              // D8.alpha.7
   '@orqenix/binding-core',               // D8.alpha.7
-  '@orqenix/binding-claude-code',        // D8.alpha.7
-  '@orqenix/binding-cursor',
-  '@orqenix/binding-codex',
-  '@orqenix/binding-opencode',
-  '@orqenix/binding-cline',
-  '@orqenix/binding-aider',
-  '@orqenix/binding-continue',
+  '@orqenix/binding-adapters',           // D8.alpha.7 (merged: aider, claude-code, cline, codex, continue, cursor, opencode)
   // D8.beta Marketplace
   '@orqenix/marketplace-core',           // G65
   '@orqenix/marketplace-ui',
