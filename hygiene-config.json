@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "testExempt": [
+    { "package": "@orqenix/_meta", "reason": "Meta/workspace package, no runtime code" },
+    { "package": "@orqenix/testing", "reason": "Test helper utilities, not tested itself" },
+    { "package": "@orqenix/bench", "reason": "Benchmark package, uses .bench.ts files not unit tests" },
+    { "package": "@orqenix/relay-core", "reason": "Benchmark-only package, no src/ directory" },
+    { "package": "@orqenix/schema", "reason": "Scaffold only (Part-1), no real implementation" },
+    { "package": "@orqenix/teams-built-in", "reason": "Stub maintained for Phase 5 baseline, replaced by plugin discovery in Part 12" }
+  ]
+}
