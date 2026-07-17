@@ -15,10 +15,20 @@ import {
   DEFAULT_OBSERVER_CONFIG,
   NoopPiiFilter,
 } from './types';
+import {
+  type SelfLearningGovernance,
+  DEFAULT_GOVERNANCE,
+} from './governance';
 
 export interface ObserverOptions {
   db: Database;
   piiFilter?: PiiFilter;
+  /**
+   * Optional governance config for the self-learning loop.
+   * When set, caps iterations, checks cooldown, and provides
+   * backpressure. Omit for unlimited behavior (legacy).
+   */
+  governance?: SelfLearningGovernance;
 }
 
 /**
@@ -31,10 +41,57 @@ export interface ObserverOptions {
 export class Observer {
   private readonly db: Database;
   private readonly piiFilter: PiiFilter;
+  readonly governance: SelfLearningGovernance;
+  iterationCount = 0;
+  lastIterationTimestamp = 0;
 
   constructor(options: ObserverOptions) {
     this.db = options.db;
     this.piiFilter = options.piiFilter ?? new NoopPiiFilter();
+    this.governance = options.governance ?? DEFAULT_GOVERNANCE;
+  }
+
+  // ─── Governance (loop-level) ──────────────────────────────────────────
+
+  /** Returns true if the loop may run another iteration */
+  canIterate(): boolean {
+    if (this.iterationCount >= this.governance.maxIterationsPerSession) {
+      return false;
+    }
+    if (Date.now() - this.lastIterationTimestamp < this.governance.cooldownMs) {
+      return false;
+    }
+    return true;
+  }
+
+  /** Records that one loop iteration completed */
+  recordIteration(): void {
+    this.iterationCount++;
+    this.lastIterationTimestamp = Date.now();
+  }
+
+  /** Resets iteration counter (e.g. new session) */
+  resetIterations(): void {
+    this.iterationCount = 0;
+    this.lastIterationTimestamp = 0;
+  }
+
+  /** Returns a snapshot of loop governance status */
+  getLoopStatus(): {
+    iterationCount: number;
+    maxIterationsPerSession: number;
+    canIterate: boolean;
+    remainingIterations: number;
+  } {
+    return {
+      iterationCount: this.iterationCount,
+      maxIterationsPerSession: this.governance.maxIterationsPerSession,
+      canIterate: this.canIterate(),
+      remainingIterations: Math.max(
+        0,
+        this.governance.maxIterationsPerSession - this.iterationCount
+      ),
+    };
   }
 
   /**
