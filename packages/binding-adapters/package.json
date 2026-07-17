@@ -1,7 +1,7 @@
 {
-  "name": "@orqenix/binding-cline",
-  "version": "0.8.0-alpha.1",
-  "description": "Apache-2.0 Orqenix binding for Cline. Bridges Orqenix via VS Code extension.",
+  "name": "@orqenix/binding-adapters",
+  "version": "0.9.0",
+  "description": "Apache-2.0 Orqenix platform binding adapters (aider, claude-code, cline, codex, continue, cursor, opencode). Merged from 7 individual binding-* packages.",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -21,10 +21,10 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "build": "npx tsup",
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "npx vitest run tests/"
   },
   "publishConfig": {
     "access": "public",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@orqenix/binding-core": "workspace:*",
-    "@orqenix/mcp-server": "workspace:*"
+    "yaml": "^2.5.0"
   },
   "devDependencies": {
     "@types/node": "20.16.11",
@@ -43,7 +43,14 @@
   "keywords": [
     "orqenix",
     "binding",
+    "adapters",
+    "aider",
+    "claude-code",
     "cline",
+    "codex",
+    "continue",
+    "cursor",
+    "opencode",
     "mcp",
     "apache-2.0"
   ],

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// @orqenix/binding-claude-code , Claude Code binding
+// @orqenix/binding-adapters — Claude Code binding
 //
 // Bridges Orqenix to Claude Code by writing .mcp.json pointing to orqenix-mcp.
 // Per CR v8.0 Section 9.3.1.
@@ -28,7 +28,6 @@ export class ClaudeCodeBinding implements AgentBinding {
     const mcpJsonPath = join(config.projectPath, '.mcp.json');
     const { command, args } = buildMcpCommand(config);
 
-    // Read existing .mcp.json or create a new structure
     let mcpConfig: { mcpServers?: Record<string, unknown> } = {};
     if (existsSync(mcpJsonPath)) {
       try {
@@ -102,8 +101,6 @@ export class ClaudeCodeBinding implements AgentBinding {
   }
 
   async testConnection(config: BindingConfig): Promise<ConnectionTestResult> {
-    // For stdio transport, "connection" is launching the bin; verify it resolves.
-    // For http/ws, ping the health endpoint.
     if (config.transport === 'stdio') {
       return { ok: true, serverCapabilities: { tools: 10, resources: 9, prompts: 6 } };
     }
@@ -126,15 +123,7 @@ export class ClaudeCodeBinding implements AgentBinding {
     return { ok: false, error: 'No endpoint configured' };
   }
 
-  async exportSkillsToPlatform(config: BindingConfig): Promise<ExportResult> {
-    // Claude Code reads skills via the MCP tools/list (orqenix_invoke_skill).
-    // Skills surface dynamically; no static export needed. Auto-register handled
-    // by the MCP server's tools/list. Return informational result.
-    void config;
-    return {
-      ok: true,
-      skillsExported: 0,
-      filesWritten: [],
-    };
+  async exportSkillsToPlatform(_config: BindingConfig): Promise<ExportResult> {
+    return { ok: true, skillsExported: 0, filesWritten: [] };
   }
 }

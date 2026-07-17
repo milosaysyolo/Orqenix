@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// @orqenix/binding-cursor , Cursor binding
+// @orqenix/binding-adapters — Cursor binding
 //
 // Bridges Orqenix to Cursor. Cursor supports MCP via its settings; this binding
 // writes the Cursor MCP config + a .cursorrules note. Per CR v8.0 Section 9.3.2.

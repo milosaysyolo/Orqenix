@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// @orqenix/binding-continue , Continue.dev binding
+// @orqenix/binding-adapters — Continue.dev binding
 //
 // Continue.dev supports MCP via its config.json. This binding adds an Orqenix
 // MCP server entry. Per CR v8.0 Section 9.3.7.

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// @orqenix/binding-codex , ChatGPT Codex binding
+// @orqenix/binding-adapters — ChatGPT Codex binding
 //
 // Codex (web) integrates via HTTP transport. This binding writes a config
 // pointing Codex at the Orqenix MCP HTTP endpoint. Per CR v8.0 Section 9.3.3.
@@ -20,7 +20,6 @@ export class CodexBinding implements AgentBinding {
   readonly platformName = 'codex';
 
   async install(config: BindingConfig): Promise<InstallResult> {
-    // Codex uses HTTP transport (web-based). Write a connection descriptor.
     const descriptorPath = join(config.projectPath, '.orqenix', 'codex-connection.json');
     const endpoint = config.endpoint ?? 'http://127.0.0.1:27420/rpc';
 

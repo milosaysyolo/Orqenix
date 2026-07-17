@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
-// @orqenix/binding-aider , Aider binding
+// @orqenix/binding-adapters — OpenCode binding
 //
-// Aider integrates via a config file + a wrapper that surfaces Orqenix context.
-// Per CR v8.0 Section 9.3.6.
+// OpenCode has native MCP support. This binding writes the OpenCode MCP config.
+// Per CR v8.0 Section 9.3.4.
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -18,59 +18,65 @@ import {
   buildMcpCommand,
 } from '@orqenix/binding-core';
 
-export class AiderBinding implements AgentBinding {
-  readonly platformName = 'aider';
+export class OpenCodeBinding implements AgentBinding {
+  readonly platformName = 'opencode';
 
   async install(config: BindingConfig): Promise<InstallResult> {
-    // Aider reads .aider.conf.yml; we add an orqenix mcp section.
-    const confPath = join(config.projectPath, '.aider.conf.yml');
+    const configPath = join(config.projectPath, '.opencode', 'mcp.yaml');
     const { command, args } = buildMcpCommand(config);
 
-    let conf: Record<string, unknown> = {};
-    if (existsSync(confPath)) {
+    let cfg: { mcp_servers?: Record<string, unknown> } = {};
+    if (existsSync(configPath)) {
       try {
-        conf = parseYaml(await readFile(confPath, 'utf-8')) ?? {};
+        cfg = parseYaml(await readFile(configPath, 'utf-8')) ?? {};
       } catch {
-        conf = {};
+        cfg = {};
       }
     }
-    conf['orqenix-mcp'] = {
-      command: `${command} ${args.join(' ')} --client-id aider`,
-      enabled: true,
+    cfg.mcp_servers = cfg.mcp_servers ?? {};
+    cfg.mcp_servers.orqenix = {
+      command,
+      args: [...args, '--client-id', 'opencode'],
     };
 
-    await mkdir(dirname(confPath), { recursive: true });
-    await writeFile(confPath, stringifyYaml(conf, { indent: 2 }));
+    await mkdir(dirname(configPath), { recursive: true });
+    await writeFile(configPath, stringifyYaml(cfg, { indent: 2 }));
 
     return {
       ok: true,
-      filesWritten: [confPath],
-      summary: `Registered Orqenix MCP in ${confPath}.`,
+      filesWritten: [configPath],
+      summary: `Registered Orqenix MCP in ${configPath}.`,
     };
   }
 
   async uninstall(config: BindingConfig): Promise<void> {
-    const confPath = join(config.projectPath, '.aider.conf.yml');
-    if (!existsSync(confPath)) return;
+    const configPath = join(config.projectPath, '.opencode', 'mcp.yaml');
+    if (!existsSync(configPath)) return;
     try {
-      const conf = parseYaml(await readFile(confPath, 'utf-8')) as Record<string, unknown>;
-      delete conf['orqenix-mcp'];
-      await writeFile(confPath, stringifyYaml(conf, { indent: 2 }));
+      const cfg = parseYaml(await readFile(configPath, 'utf-8')) as {
+        mcp_servers?: Record<string, unknown>;
+      };
+      if (cfg.mcp_servers) {
+        delete cfg.mcp_servers.orqenix;
+        await writeFile(configPath, stringifyYaml(cfg, { indent: 2 }));
+      }
     } catch {
       // ignore
     }
   }
 
   async status(config: BindingConfig): Promise<BindingStatus> {
-    const confPath = join(config.projectPath, '.aider.conf.yml');
-    if (!existsSync(confPath)) {
+    const configPath = join(config.projectPath, '.opencode', 'mcp.yaml');
+    if (!existsSync(configPath)) {
       return { platformName: this.platformName, state: 'not_installed', configPresent: false };
     }
     try {
-      const conf = parseYaml(await readFile(confPath, 'utf-8')) as Record<string, unknown>;
+      const cfg = parseYaml(await readFile(configPath, 'utf-8')) as {
+        mcp_servers?: Record<string, unknown>;
+      };
       return {
         platformName: this.platformName,
-        state: conf['orqenix-mcp'] ? 'active' : 'inactive',
+        state: cfg.mcp_servers?.orqenix ? 'active' : 'inactive',
         configPresent: true,
       };
     } catch (err) {

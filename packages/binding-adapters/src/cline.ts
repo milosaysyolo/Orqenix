@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// @orqenix/binding-cline , Cline binding
+// @orqenix/binding-adapters — Cline binding
 //
 // Cline (VS Code) supports MCP via its settings. This binding writes the Cline
 // MCP settings file. Per CR v8.0 Section 9.3.5.
@@ -54,10 +54,10 @@ export class ClineBinding implements AgentBinding {
     if (!existsSync(settingsPath)) return;
     try {
       const settings = JSON.parse(await readFile(settingsPath, 'utf-8')) as {
-        mcpServers?: Record<string, unknown>;
+        mcpServers?: Record<string, { disabled?: boolean }>;
       };
-      if (settings.mcpServers) {
-        delete settings.mcpServers.orqenix;
+      if (settings.mcpServers?.orqenix) {
+        settings.mcpServers.orqenix.disabled = true;
         await writeFile(settingsPath, JSON.stringify(settings, null, 2));
       }
     } catch {
