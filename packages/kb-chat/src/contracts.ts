@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { z } from "zod";
 import { OrqenixError, type Brand } from "@orqenix/core";
 import { SCOPE_ID_PATTERN } from "@orqenix/scope-identity";

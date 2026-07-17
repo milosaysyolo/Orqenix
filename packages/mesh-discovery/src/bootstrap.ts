@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 // packages/mesh-discovery/src/bootstrap.ts
 import { readFile } from 'node:fs/promises';
 import { parse as parseYaml } from 'yaml';

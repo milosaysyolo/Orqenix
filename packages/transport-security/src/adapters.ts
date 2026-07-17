@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import type { ScopeId } from '@orqenix/mesh-transport-core';
 import { b64urlDecode, ed25519Verify, importEd25519PublicKey } from './ed25519.js';
 import { LRUKeyStore } from './key-store.js';

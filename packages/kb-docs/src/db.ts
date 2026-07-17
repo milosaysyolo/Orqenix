@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import Database from "better-sqlite3";
 import * as sqliteVec from "sqlite-vec";
 import type { DocRecord, FtsHit, VecHit, DocQueryResult } from "./types.js";

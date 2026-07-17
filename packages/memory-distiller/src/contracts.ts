@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { z } from "zod";
 import { OrqenixError } from "@orqenix/core";
 import { MEMORY_TYPES, type MemoryType } from "@orqenix/memory-tiers";

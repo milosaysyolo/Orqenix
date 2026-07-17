@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 export { parseRange, bumpRule, type VersionRange } from "./version/semver.js";
 export { contentHash } from "./version/content-hash.js";
 export { canTransition, transition, type State } from "./state-machine/transitions.js";

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { memory } from '@libp2p/memory';
 import { tcp } from '@libp2p/tcp';
 import { webSockets } from '@libp2p/websockets';

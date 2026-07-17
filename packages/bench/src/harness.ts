@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { performance } from 'node:perf_hooks';
 
 export interface BenchOptions {

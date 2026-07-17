@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { applyDelta, decodeFull } from "./delta.js";
 import { verifyContentHash } from "./hash.js";
 import { DiffChainError, type DiffEntry } from "./contracts.js";

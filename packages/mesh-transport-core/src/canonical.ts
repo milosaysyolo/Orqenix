@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 export function canonicalize<T>(value: T): T {
   if (value === null || value === undefined) return value;
   if (value instanceof Uint8Array) return value;

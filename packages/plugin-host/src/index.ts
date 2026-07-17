@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { Plugin } from "@orqenix/core";
 import type { OrqenixPlugin, PluginContext } from "@orqenix/core";
 

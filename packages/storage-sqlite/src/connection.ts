@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import Database, { type Database as DB, type Statement } from "better-sqlite3";
 import * as sqliteVec from "sqlite-vec";
 import {

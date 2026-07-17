@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import type { MemoryTier, MemoryType } from "./contracts.js";
 
 export function classifyInitialTier(type: MemoryType, confidence: number): MemoryTier {

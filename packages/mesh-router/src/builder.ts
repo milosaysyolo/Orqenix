@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import type { ObservabilityHooks } from '@orqenix/mesh-observability';
 import type { ScopeId, TransportRegistry } from '@orqenix/mesh-transport-core';
 import { MeshRouter, type AddressResolver, type MeshRouterOptions } from './router.js';

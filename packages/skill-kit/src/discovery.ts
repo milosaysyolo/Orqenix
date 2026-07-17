@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";

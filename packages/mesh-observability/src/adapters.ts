@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { MeshLogger } from './logger.js';
 import { METRIC_NAMES, MeshMetrics } from './metrics.js';
 import { summarizePayload } from './redaction.js';
