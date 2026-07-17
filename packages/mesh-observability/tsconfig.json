@@ -1,5 +1,5 @@
 {
-  "compilerOptions": {
+  "extends": "../../tsconfig.base.json","compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
