@@ -1,1 +1,28 @@
-{  "name": "@orqenix/binding-core",  "version": "0.8.0-alpha.1",  "license": "Apache-2.0",  "type": "module",  "main": "./dist/index.js",  "module": "./dist/index.js",  "types": "./dist/index.d.ts",  "exports": {    ".": {      "types": "./dist/index.d.ts",      "import": "./dist/index.js",      "require": "./dist/index.cjs"    }  },  "scripts": {    "build": "tsup",    "typecheck": "tsc --noEmit",    "test": "vitest run",    "lint": "exit 0"  },  "dependencies": {},  "devDependencies": {    "tsup": "^8.3.0",    "typescript": "^5.6.3",    "vitest": "^2.1.5"  }}
+{
+  "name": "@orqenix/binding-core",
+  "version": "0.9.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "exit 0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  }
+}

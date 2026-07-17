@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/memory-tiers",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "description": "4-tier memory classification (working/episodic/semantic/procedural) for Orqenix Memory Matrix",
   "license": "Apache-2.0",
   "author": {

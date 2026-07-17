@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/memory-distiller",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "description": "Heuristic memory distiller for Orqenix (OSS tier, regex+sentence patterns + background worker)",
   "license": "Apache-2.0",
   "author": {
@@ -60,8 +60,6 @@
   "dependencies": {
     "@orqenix/core": "workspace:*",
     "@orqenix/storage-sqlite": "workspace:*",
-    "@orqenix/storage-diff": "workspace:*",
-    "@orqenix/scope-identity": "workspace:*",
     "@orqenix/memory-tiers": "workspace:*",
     "@orqenix/kb-chat": "workspace:*",
     "zod": "^3.25.0"

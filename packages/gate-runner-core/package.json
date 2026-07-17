@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/gate-runner-core",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "description": "Shared base for Orqenix charter gate runners (G1 through G35)",
   "license": "Apache-2.0",
   "author": {

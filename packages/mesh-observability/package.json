@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mesh-observability",
-  "version": "0.6.1",
+  "version": "0.9.0",
   "description": "Structured logs, OpenTelemetry-compatible metrics, W3C traceparent propagation, and strict redaction for the Orqenix mesh.",
   "type": "module",
   "license": "Apache-2.0",
@@ -27,7 +27,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@orqenix/mesh-transport-core": "^0.6.0",
+    "@orqenix/mesh-transport-core": "workspace:*",
     "blake3-wasm": "^2.0.0"
   },
   "devDependencies": {

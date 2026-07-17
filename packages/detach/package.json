@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/detach",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "description": "Safe detach: clean unlink + .orqenix directory teardown with explicit confirmation (CR v7.1 Ch.16)",
   "license": "Apache-2.0",
   "author": {
@@ -63,7 +63,6 @@
     "@orqenix/scope-link": "workspace:*",
     "@orqenix/workspace": "workspace:*",
     "@orqenix/audit-log": "workspace:*",
-    "@orqenix/capability-tokens": "workspace:*",
     "@orqenix/storage-sqlite": "workspace:*",
     "@orqenix/storage-diff": "workspace:*",
     "zod": "^3.25.0"

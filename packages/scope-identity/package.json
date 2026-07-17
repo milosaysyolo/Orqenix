@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/scope-identity",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "description": "Ed25519-based scope identity for Orqenix local-first mesh (CR v7.1 L4 Mesh+Identity)",
   "license": "Apache-2.0",
   "author": {
