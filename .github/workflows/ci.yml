@@ -71,6 +71,9 @@ jobs:
       - name: Prettier check
         run: pnpm exec prettier --check .
 
+      - name: Audit package hygiene
+        run: node scripts/audit/dead-deps.mjs && node scripts/audit/version-consistency.mjs
+
       - name: Build
         run: pnpm build
 

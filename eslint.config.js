@@ -31,6 +31,19 @@ export default [
         },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/await-thenable': 'error',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/dist/**'],
+              message: 'Import from package entry point, not dist/.',
+            },
+          ],
+        },
+      ],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
