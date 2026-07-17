@@ -18,6 +18,8 @@
   --plum: #73579c;
   --olive: #5f8038;
   --slate: #4a6b88;
+  --stone: #78716c;
+  --blue:  #3b82f6;
 
   --radius-sm: 6px; --radius-md: 9px; --radius-lg: 13px; --radius-xl: 18px;
 
@@ -41,6 +43,8 @@
   --plum: #9b7fc4;
   --olive: #82a155;
   --slate: #6e91b4;
+  --stone: #a8a39a;
+  --blue:  #60a5fa;
 }
 
 html { font-family: var(--sans); scroll-behavior: smooth; }

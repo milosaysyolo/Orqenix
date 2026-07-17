@@ -48,7 +48,7 @@ export function SectionTitle({ children, sub }: { children: React.ReactNode; sub
   );
 }
 
-type BadgeTone = 'rust' | 'amber' | 'teal' | 'plum' | 'olive' | 'slate' | 'neutral';
+export type BadgeTone = 'rust' | 'amber' | 'teal' | 'plum' | 'olive' | 'slate' | 'neutral';
 const toneColor: Record<BadgeTone, string> = {
   rust: 'var(--rust)', amber: 'var(--amber)', teal: 'var(--teal)',
   plum: 'var(--plum)', olive: 'var(--olive)', slate: 'var(--slate)', neutral: 'var(--dim)',

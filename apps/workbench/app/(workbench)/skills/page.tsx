@@ -40,7 +40,6 @@ export default function SkillsPage() {
   // Config editor state
   const [configSkillId, setConfigSkillId] = React.useState<string | null>(null);
   const [configContent, setConfigContent] = React.useState('');
-  const [, setConfigLoading] = React.useState(false);
 
   const load = React.useCallback(async () => {
     setLoading(true);
@@ -252,7 +251,7 @@ export default function SkillsPage() {
                 ) : (
                   <>
                     <Button variant="ghost" size="sm" onClick={() => { setInvokeId(s.id); setInvokePrompt(''); }}>{'>'} Invoke</Button>
-                    <button onClick={() => { setConfigSkillId(s.id); setConfigContent(s.config ?? ''); setConfigLoading(false); }}
+                    <button onClick={() => { setConfigSkillId(s.id);           setConfigContent(s.config ?? ''); }}
                       className="rounded-[6px] border border-[var(--teal)] px-2 py-1 font-mono text-[9px] text-[var(--teal)] hover:bg-[color-mix(in_oklab,var(--teal)_8%,transparent)]">
                       Config
                     </button>

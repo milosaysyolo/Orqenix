@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { SectionTitle, Card, Badge, Button } from '@/components/ui';
+import { SectionTitle, Card, Badge, Button, type BadgeTone } from '@/components/ui';
 import { useToast } from '@/components/toast';
 import { api } from '@/lib/api';
 
@@ -359,7 +359,7 @@ export default function MarketplacePage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-[12px] font-bold text-[var(--ink)]">{item.name}</span>
-                  <Badge tone={KIND_TONE[item.kind] as any || 'neutral'}>{KIND_LABEL[item.kind] ?? item.kind}</Badge>
+                  <Badge tone={(KIND_TONE[item.kind] as BadgeTone) ?? 'neutral'}>{KIND_LABEL[item.kind] ?? item.kind}</Badge>
                   {item.verified && <Badge tone="teal">verified</Badge>}
                 </div>
                 <Badge tone="neutral">v{item.version}</Badge>
@@ -394,7 +394,7 @@ export default function MarketplacePage() {
                     <button onClick={() => setSelected(null)} className="font-mono text-[14px] text-[var(--faint)] hover:text-[var(--ink)] ml-1">{'\u00D7'}</button>
                   </div>
                 </div>
-                <Badge tone={(KIND_TONE[selected.kind] || 'neutral') as any}>{KIND_LABEL[selected.kind] ?? selected.kind}</Badge>
+                <Badge tone={(KIND_TONE[selected.kind] as BadgeTone) ?? 'neutral'}>{KIND_LABEL[selected.kind] ?? selected.kind}</Badge>
                 <p className="text-[12px] text-[var(--dim)]">{selected.description}</p>
 
                 {/* Screenshots placeholder */}

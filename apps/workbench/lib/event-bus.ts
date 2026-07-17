@@ -60,8 +60,8 @@ class EventBus {
     for (const fn of [...this.listeners]) {
       try {
         fn(full);
-      } catch {
-        /* a bad listener must not break the bus */
+      } catch (err) {
+        console.warn('[EventBus] listener error:', err);
       }
     }
     return full;
