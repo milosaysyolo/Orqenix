@@ -1091,6 +1091,7 @@ flowchart TB
 | Audit logs are append-only. | Debuggability and accountability require immutable history. |
 | Plugin installs require policy. | Marketplace and supply-chain risk must be bounded. |
 | Learning promotion requires verification. | Self-learning without verification creates drift. |
+| Vulnerability reporting must have a clear path. | See [SECURITY.md](./SECURITY.md) for the disclosure process. |
 
 ---
 
