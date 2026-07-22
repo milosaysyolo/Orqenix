@@ -111,14 +111,14 @@ declare global {
 
 const engineStatus: Record<Subsystem, SubsystemStatus> = {
   settings: 'real',
-  memory: 'demo',
-  sessions: 'demo',
-  branches: 'demo',
-  promoter: 'demo',
-  observer: 'demo',
-  marketplace: 'demo',
-  plugins: 'demo',
-  skills: 'demo',
+  memory: 'real',
+  sessions: 'real',
+  branches: 'real',
+  promoter: 'real',
+  observer: 'real',
+  marketplace: 'real',
+  plugins: 'real',
+  skills: 'real',
 };
 
 // Single source of truth for strict mode. Env strings are truthy even when "0",
@@ -511,12 +511,12 @@ async function init(): Promise<void> {
   engineStatus.settings = 'real';
 
   // 2. Memory Engine + all dependent subsystems (each guarded independently)
+  const dbPath = process.env.ORQENIX_DB ?? join(process.cwd(), '.orqenix', 'memory.db');
   try {
-    const dbPath = process.env.ORQENIX_DB ?? join(process.cwd(), '.orqenix', 'memory.db');
     const engine = await MemoryEngine.open(dbPath, {
       projectId: PROJECT_ID,
       bootstrapBaseTables: true,
-      failOnDrift: false,
+      failOnDrift: process.env.NODE_ENV === 'production' || process.env.ORQENIX_STRICT === '1',
     });
     globalThis.__orqenixMemory = engine;
     const db = engine.getStore().db;
@@ -625,8 +625,18 @@ async function init(): Promise<void> {
     engineStatus.sessions = 'real';
     engineStatus.branches = 'real';
   } catch (err) {
-    console.error('[engine-init] MemoryEngine init failed, using demo-store fallback:', (err as Error).message);
-    if (STRICT) throw err;
+    const sysErr = err as Error & { code?: string };
+    const code = sysErr.code;
+    if (code === 'EACCES') {
+      console.error('[engine-init] PERMISSION DENIED: Cannot open database at', dbPath, '— check file permissions');
+      if (STRICT) throw err;
+    } else if (code === 'ENOENT') {
+      console.warn('[engine-init] No .orqenix/ directory found — first launch. Falling back to demo mode. Run `orqenix init` to initialize persistent storage.');
+      // ENOENT is expected on first launch — never fatal even under STRICT
+    } else {
+      console.error('[engine-init] MemoryEngine init failed, using demo-store fallback:', sysErr.message);
+      if (STRICT) throw err;
+    }
     engineStatus.memory = 'demo';
     engineStatus.sessions = 'demo';
     engineStatus.branches = 'demo';
