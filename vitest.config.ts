@@ -28,7 +28,10 @@ function buildWorkspaceAliases(): Record<string, string> {
 
 export default defineConfig({
   resolve: {
-    alias: buildWorkspaceAliases(),
+    alias: {
+      ...buildWorkspaceAliases(),
+      '@mongodb-js/zstd': resolve(__dirname, '__mocks__/@mongodb-js/zstd.js'),
+    },
   },
   optimizeDeps: {
     include: ["@noble/hashes/blake3", "@noble/hashes", "jsonc-parser"],
