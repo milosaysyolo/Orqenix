@@ -10,6 +10,7 @@ const PROJECT = 'blake3:proj0001';
 function setupDb(): DB {
   const db = new Database(':memory:');
   for (const m of SELF_LEARNING_MIGRATIONS) db.exec(m.up);
+  db.exec('CREATE TABLE IF NOT EXISTS local_plugins (name TEXT PRIMARY KEY, csf_json TEXT)');
   return db;
 }
 
