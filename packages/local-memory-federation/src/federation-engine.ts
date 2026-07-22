@@ -123,7 +123,9 @@ export class FederationEngine {
 
     if (otherProjects.length === 0) {
       // No other projects opted in, return empty result (not an error)
-      return this.makeEmptyResult(validated, startTime, false);
+      const emptyResult = this.makeEmptyResult(validated, startTime, false);
+      this.cache.set(this.config.currentProjectId, validated, emptyResult);
+      return emptyResult;
     }
 
     // 4. Filter by per-pair approval for at least one KB kind
@@ -161,7 +163,9 @@ export class FederationEngine {
     }
 
     if (eligibleProjects.length === 0) {
-      return this.makeEmptyResult(validated, startTime, false);
+      const emptyResult = this.makeEmptyResult(validated, startTime, false);
+      this.cache.set(this.config.currentProjectId, validated, emptyResult);
+      return emptyResult;
     }
 
     // 5. Run parallel queries
