@@ -6,7 +6,6 @@
 //
 // Per CR v8.0 INV-14 + ADR-E-004.
 
-import type { CanonicalSkillFormat } from '../csf-schema';
 import type {
   PluginInvocationRequest,
   PluginInvocationResult,

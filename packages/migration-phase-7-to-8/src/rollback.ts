@@ -4,7 +4,6 @@
 // Restores a project to its pre-migration state from a backup. Per CR v8.0
 // Section 11.4 (rollback within 30 days).
 
-import { cp, rm, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { type MigrationRollbackResult, MigrationError } from './types';
@@ -49,7 +48,7 @@ export class Rollback {
     }
 
     // Copy backup contents back into .orqenix (excluding the backup dir itself)
-    const { readdir } = await import('node:fs/promises');
+    const { readdir, rm, cp } = await import('node:fs/promises');
     const entries = await readdir(backupPath, { withFileTypes: true });
     for (const entry of entries) {
       const src = join(backupPath, entry.name);

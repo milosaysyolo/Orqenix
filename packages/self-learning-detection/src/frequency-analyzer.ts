@@ -94,7 +94,7 @@ export class FrequencyAnalyzer {
    * invocation saves roughly the sequence duration minus a nominal invoke cost.
    * (Advanced estimation ships in Pro.)
    */
-  private estimateTimeSaved(actionKinds: string[], avgDurationMs: number): number {
+  private estimateTimeSaved(_actionKinds: string[], avgDurationMs: number): number {
     const invokeCostMs = 2000; // nominal cost of invoking a skill
     return Math.max(0, avgDurationMs - invokeCostMs);
   }
