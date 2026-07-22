@@ -10,7 +10,10 @@
     "declarationMap": true,
     "sourceMap": true,
     "composite": true,
-    "strict": true
+    "strict": true,
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts"
+  ]
 }

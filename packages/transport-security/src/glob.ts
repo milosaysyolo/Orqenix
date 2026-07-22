@@ -40,7 +40,7 @@ function matchHelper(
     }
     if (mi >= parts.length) return false;
     if (seg === '*') {
-      if (parts[mi].length === 0) return false;
+      if (!parts[mi] || parts[mi].length === 0) return false;
       pi++;
       mi++;
       continue;

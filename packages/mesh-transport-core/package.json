@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "vitest run --coverage",
+    "test": "vitest run",
     "test:watch": "vitest",
     "gate:G36": "tsx ../../scripts/gates/G36-transport-abstraction.ts",
     "typecheck": "tsc --noEmit",

@@ -142,6 +142,6 @@ export class MeshMetrics {
 function summarize(samples: number[]): HistogramSummary {
   if (samples.length === 0) return { count: 0, p50: 0, p95: 0, p99: 0, max: 0 };
   const sorted = samples.slice().sort((a, b) => a - b);
-  const at = (q: number) => sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * q))];
-  return { count: sorted.length, p50: at(0.5), p95: at(0.95), p99: at(0.99), max: sorted[sorted.length - 1] };
+  const at = (q: number) => sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * q))]!;
+  return { count: sorted.length, p50: at(0.5), p95: at(0.95), p99: at(0.99), max: sorted[sorted.length - 1]! };
 }

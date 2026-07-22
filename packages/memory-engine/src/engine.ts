@@ -7,7 +7,6 @@
 
 import { SqliteStore } from './store/sqlite-store';
 import { HybridSearch } from './store/hybrid-search';
-import { BlobStore } from './store/blob-store';
 import { HierarchyQuery } from './hierarchy/hierarchy-query';
 import { BranchStore } from './hierarchy/branch-store';
 import { PromotionEngine } from './hierarchy/promotion';
