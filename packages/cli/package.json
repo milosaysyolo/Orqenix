@@ -58,12 +58,14 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@orqenix/scope-identity": "workspace:*",
     "@orqenix/scope-link": "workspace:*",
     "@orqenix/workspace": "workspace:*",
     "@orqenix/audit-log": "workspace:*",
     "@orqenix/detach": "workspace:*",
     "@orqenix/migration": "workspace:*",
-    "@orqenix/storage-sqlite": "workspace:*"
+    "@orqenix/storage-sqlite": "workspace:*",
+    "@noble/ed25519": "^2.1.0"
   },
   "devDependencies": {
     "vitest": "^1.6.0",
