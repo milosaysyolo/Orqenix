@@ -1,4 +1,48 @@
-﻿## v0.6.1 - 2026-06-11 (clean semver republish)
+﻿## v1.0.0 - 2026-07-22
+
+Stable v1.0.0 release. Production-hardened Workbench, real CLI commands, event bus with proper ID uniqueness, CSP headers, error boundaries, loading states, and a new `@orqenix/security` barrel package. Phase-X stubs replaced throughout. Engine init now fails loud on schema drift in production.
+
+### Added
+
+- `@orqenix/security` barrel package: re-exports `@orqenix/scope-identity`, `@orqenix/capability-tokens`, `@orqenix/audit-log` from one import. v0.9.0.
+- CLI `init` command: real implementation using `@orqenix/scope-identity.initScope`. Generates Ed25519 keypair, writes scope.yaml and identity.key.
+- CLI `doctor` command: verifies Node.js version (>=20), scope.yaml validity, identity key permissions (0600), SQLite migration readiness, and Ed25519 signing round-trip.
+- CLI auto-help: `--help` flag prints usage.
+- CLI version from package.json: reads `version` field, no longer hardcoded.
+- Loading states: skeleton cards on dashboard, memory, sessions, settings, marketplace screens.
+- Error boundary: `error.tsx` with warning icon, error message, digest, and try-again button.
+- CSP report-only headers: `default-src 'self'; script-src 'unsafe-inline' 'unsafe-eval'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ws:`.
+- MCP API route (`/api/agents/mcp`): wired to live `OrqenixMcpServer` backed by `MemoryEngine` + `SkillRuntime`. Lists tools, resources, prompts, and tokens.
+- SSE event streaming (`/api/stream`): real-time event bus for workbench UI.
+- Engine init pipeline: real MemoryEngine, Observer, Detector, PromoterService, PluginRegistry, PluginLifecycle, MarketplaceManager, and SettingsRegistry.
+- DB migration: memory links table (570-memory-links), agent definitions and teams tables (580-agents), config overrides and MCP tokens tables (590-workbench-state).
+
+### Fixed
+
+- Event bus ID collision: IDs changed from `Math.random().toString(36).slice(2)` to `evt_${crypto.randomUUID()}`. Guarantees uniqueness across concurrent sessions.
+- CLI scope ID placeholder: `ORQENIX_SCOPE` default changed from `"placeholder"` to `""`. All scoped commands now emit a clear error when no scope ID is set.
+- Build errors resolved in 4 packages (stabilization for v1.0.0).
+- Workbench MatrixViz: removed fake/hardcoded entry counts. Now renders real data from memory engine via API.
+
+### Changed
+
+- CLI `init` and `doctor` from stubs to real commands (previously "coming in v0.10.0").
+- Phase-X stub markers removed from 6 packages. Stub versions, placeholder exports, and "TODO Part 12" markers cleaned out.
+- Engine init defaults flipped: `failOnDrift` is `true` in production (`NODE_ENV=production` or `ORQENIX_STRICT=1`). Schema drift at startup is now fatal.
+- `@orqenix/security` promoted from no barrel to full re-export at v0.9.0.
+
+### Breaking Changes
+
+- `@orqenix/security` now re-exports all symbols from `scope-identity`, `capability-tokens`, and `audit-log`. If you imported from sub-packages directly, your imports still work. If you had a local file named `@orqenix/security`, it now shadows the barrel.
+- CLI requires `orqenix init` before any scoped command (scope info, link, workspace, audit, detach). No more `"placeholder"` default.
+- Node 22 required for `@orqenix/local-node` (mesh node binary). Node 20.10+ for workbench.
+- DB schema: new tables added for workbench state. Existing databases migrate automatically on first boot, but downgrade is not supported.
+
+### Migration
+
+See [MIGRATION-v1.0.0.md](./MIGRATION-v1.0.0.md) for step-by-step upgrade instructions.
+
+## v0.6.1 - 2026-06-11 (clean semver republish)
 
 ### Changed
 - All 7 Phase 6 packages republished with clean semver (no -phase-6 suffix)
@@ -12,7 +56,7 @@
 
 All notable changes to the Orqenix main repo. Format based on Keep a Changelog 1.1.
 
-## [0.6.0-phase-6] â€” 2026-06-10
+## [0.6.0-phase-6] - 2026-06-10
 
 ### Summary
 
@@ -35,7 +79,7 @@ Pro CLI @orqenix-pro/cli@0.6.0-phase-6 also published.
 
 See [GitHub Release](https://github.com/milosaysyolo/Orqenix/releases/tag/v0.6.0-phase-6) for full notes.
 
-## [0.5.0-phase-5] â€” 2026-06-03
+## [0.5.0-phase-5] - 2026-06-03
 
 ### Summary
 
@@ -48,54 +92,54 @@ migrate. Phase 4 v1 plugin contract preserved end-to-end.
 
 #### Identity, tokens, storage foundation (Parts 2 through 4)
 
-- `@orqenix/scope-identity` â€” Ed25519 keypair + scope_id derivation via BLAKE3
-- `@orqenix/capability-tokens` â€” JWT-style format, 6 permission scenarios, revocation
-- `@orqenix/storage-sqlite` â€” better-sqlite3 wrapper with migrations + sqlite-vec
-- `@orqenix/storage-diff` â€” BLAKE3 content hashing + zstd-delta encoding
-- `@orqenix/kb-chat` â€” hash-chained ChatKB with capability-gated writes
+- `@orqenix/scope-identity` - Ed25519 keypair + scope_id derivation via BLAKE3
+- `@orqenix/capability-tokens` - JWT-style format, 6 permission scenarios, revocation
+- `@orqenix/storage-sqlite` - better-sqlite3 wrapper with migrations + sqlite-vec
+- `@orqenix/storage-diff` - BLAKE3 content hashing + zstd-delta encoding
+- `@orqenix/kb-chat` - hash-chained ChatKB with capability-gated writes
 
 #### Memory + recall (Parts 5 through 6)
 
-- `@orqenix/memory-tiers` â€” 4-tier model (working/episodic/semantic/procedural)
-- `@orqenix/memory-distiller` â€” heuristic extraction with CPU throttling
-- `@orqenix/llm-adapter-ollama` â€” local LLM via Qwen 2.5 7B default
-- `@orqenix/llm-adapter-byok` â€” OpenAI, Anthropic, Google, DeepSeek + FallbackChain
-- `@orqenix/injection-strategies` â€” 5 strategies (A through E) per CR v7.1 Ch.8
-- `@orqenix/prompt-rewriter` â€” keyword recall + injection orchestrator
+- `@orqenix/memory-tiers` - 4-tier model (working/episodic/semantic/procedural)
+- `@orqenix/memory-distiller` - heuristic extraction with CPU throttling
+- `@orqenix/llm-adapter-ollama` - local LLM via Qwen 2.5 7B default
+- `@orqenix/llm-adapter-byok` - OpenAI, Anthropic, Google, DeepSeek + FallbackChain
+- `@orqenix/injection-strategies` - 5 strategies (A through E) per CR v7.1 Ch.8
+- `@orqenix/prompt-rewriter` - keyword recall + injection orchestrator
 
 #### Compression + telemetry (Part 7)
 
-- `@orqenix/hooks` â€” typed event bus, 7 events, listener error isolation
-- `@orqenix/telemetry` â€” counters, gauges, histograms, MetricSink interface
-- `@orqenix/compress-strategies` â€” 4 strategies (Drop, Summarize, Distill, CompressChain)
-- `@orqenix/smart-compression` â€” 105% overflow cap, Token Visibility UX helpers
-- `@orqenix/plugin-compress-context` v2 â€” Phase 4 v1 contract preserved verbatim
+- `@orqenix/hooks` - typed event bus, 7 events, listener error isolation
+- `@orqenix/telemetry` - counters, gauges, histograms, MetricSink interface
+- `@orqenix/compress-strategies` - 4 strategies (Drop, Summarize, Distill, CompressChain)
+- `@orqenix/smart-compression` - 105% overflow cap, Token Visibility UX helpers
+- `@orqenix/plugin-compress-context` v2 - Phase 4 v1 contract preserved verbatim
 
 #### File watcher + reindex + RTK (Part 8)
 
-- `@orqenix/file-watcher` â€” chokidar wrapper with 150ms debounce + ignore defaults
-- `@orqenix/reindex-incremental` â€” BLAKE3 content-hash-driven incremental reindex
-- `@orqenix/rtk-hooks` â€” shell command capture with redaction + size caps + timeout
+- `@orqenix/file-watcher` - chokidar wrapper with 150ms debounce + ignore defaults
+- `@orqenix/reindex-incremental` - BLAKE3 content-hash-driven incremental reindex
+- `@orqenix/rtk-hooks` - shell command capture with redaction + size caps + timeout
 
 #### Mesh routing + cross-scope (Part 9)
 
-- `@orqenix/scope-link` â€” bidirectional trust edges with state machine
-- `@orqenix/provenance` â€” tamper-evident BLAKE3 chains
-- `@orqenix/workspace` â€” owner / contributor / observer roles + transferOwnership
-- `@orqenix/mesh-routing` â€” parallel fanout, quorum check, auto-link suggestions
+- `@orqenix/scope-link` - bidirectional trust edges with state machine
+- `@orqenix/provenance` - tamper-evident BLAKE3 chains
+- `@orqenix/workspace` - owner / contributor / observer roles + transferOwnership
+- `@orqenix/mesh-routing` - parallel fanout, quorum check, auto-link suggestions
 
 #### Audit + detach + migration + CLI (Part 12)
 
-- `@orqenix/audit-log` â€” append-only hash-chained log, 16 event kinds
-- `@orqenix/detach` â€” 2-step destructive pattern with confirmation token
-- `@orqenix/migration` â€” Phase 4 to Phase 5 migration with BLAKE3-verified rollback
-- `@orqenix/cli` â€” `orqenix` command with 16 subcommands
+- `@orqenix/audit-log` - append-only hash-chained log, 16 event kinds
+- `@orqenix/detach` - 2-step destructive pattern with confirmation token
+- `@orqenix/migration` - Phase 4 to Phase 5 migration with BLAKE3-verified rollback
+- `@orqenix/cli` - `orqenix` command with 16 subcommands
 
 ### Charter Gates
 
 G1, G2, G3, G4, G5, G7, G8, G9, G10, G11, G12, G13, G14, G15, G16, G17, G18,
 G19, G20, G21, G22, G23, G24, G25, G26, G27, G28, G29, G30, G31, G32, G33,
-G34, G35 â€” 31 gates, ~201 checks, ALL PASS.
+G34, G35 - 31 gates, ~201 checks, ALL PASS.
 
 ### Breaking Changes
 
