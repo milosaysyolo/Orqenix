@@ -161,6 +161,9 @@ importers:
       '@orqenix/skill-genesis':
         specifier: workspace:*
         version: link:../../packages/skill-genesis
+      '@orqenix/skill-runtime':
+        specifier: workspace:*
+        version: link:../../packages/skill-runtime
       '@orqenix/ui-primitives':
         specifier: workspace:*
         version: link:../../packages/ui-primitives
@@ -279,7 +282,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/bench:
     dependencies:
@@ -364,6 +367,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@noble/ed25519':
+        specifier: ^2.1.0
+        version: 2.3.0
       '@orqenix/audit-log':
         specifier: workspace:*
         version: link:../audit-log
@@ -373,6 +379,9 @@ importers:
       '@orqenix/migration':
         specifier: workspace:*
         version: link:../migration
+      '@orqenix/scope-identity':
+        specifier: workspace:*
+        version: link:../scope-identity
       '@orqenix/scope-link':
         specifier: workspace:*
         version: link:../scope-link
@@ -388,7 +397,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/compress-strategies:
     dependencies:
@@ -407,7 +416,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/config:
     devDependencies:
@@ -493,7 +502,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/embedding-cloud:
     dependencies:
@@ -509,7 +518,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/embedding-local:
     dependencies:
@@ -525,7 +534,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/file-watcher:
     dependencies:
@@ -544,7 +553,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/gate-runner-core:
     devDependencies:
@@ -569,7 +578,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/injection-strategies:
     dependencies:
@@ -693,7 +702,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/kb-code:
     dependencies:
@@ -724,7 +733,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/kb-decisions:
     devDependencies:
@@ -789,7 +798,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/lifecycle:
     dependencies:
@@ -814,7 +823,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/llm-adapter-byok:
     dependencies:
@@ -905,7 +914,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/marketplace-core:
     dependencies:
@@ -1042,7 +1051,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/memory-engine:
     dependencies:
@@ -1111,7 +1120,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/mesh-discovery:
     dependencies:
@@ -1226,7 +1235,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/mesh-transport-core:
     dependencies:
@@ -1383,7 +1392,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/migration-phase-7-to-8:
     dependencies:
@@ -1636,7 +1645,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/registry:
     dependencies:
@@ -1652,7 +1661,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/reindex-incremental:
     dependencies:
@@ -1677,7 +1686,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/rtk-hooks:
     dependencies:
@@ -1699,7 +1708,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/schema:
     devDependencies:
@@ -1758,7 +1767,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/sdk:
     devDependencies:
@@ -1770,6 +1779,16 @@ importers:
         version: 2.1.9(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/security:
+    dependencies:
+      '@orqenix/audit-log':
+        specifier: workspace:*
+        version: link:../audit-log
+      '@orqenix/capability-tokens':
+        specifier: workspace:*
+        version: link:../capability-tokens
+      '@orqenix/scope-identity':
+        specifier: workspace:*
+        version: link:../scope-identity
     devDependencies:
       typescript:
         specifier: ^5.6.0
@@ -1996,7 +2015,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/storage-diff:
     dependencies:
@@ -2018,7 +2037,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/storage-sqlite:
     dependencies:
@@ -2043,7 +2062,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/teams-built-in:
     devDependencies:
@@ -2062,7 +2081,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   packages/testing:
     devDependencies:
@@ -2225,7 +2244,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^1.6.0
-        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9))
+        version: 1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9)
 
   plugins/bge-embedding:
     devDependencies:
@@ -13408,7 +13427,7 @@ snapshots:
       '@types/node': 22.19.19
       fsevents: 2.3.3
 
-  vitest@1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9(vitest@2.1.9)):
+  vitest@1.6.1(@types/node@22.19.19)(@vitest/ui@2.1.9):
     dependencies:
       '@vitest/expect': 1.6.1
       '@vitest/runner': 1.6.1
