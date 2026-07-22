@@ -35,10 +35,8 @@ export interface OrqenixEvent {
 
 type Listener = (e: OrqenixEvent) => void;
 
-let seq = 0;
 function newId(): string {
-  seq = (seq + 1) % 1_000_000;
-  return `evt_${Date.now().toString(36)}_${seq.toString(36)}`;
+  return `evt_${crypto.randomUUID()}`;
 }
 
 class EventBus {
