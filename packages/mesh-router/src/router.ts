@@ -87,7 +87,7 @@ export class MeshRouter {
     let lastResponse: MeshResponse | undefined;
 
     for (let i = 0; i < candidates.length; i++) {
-      const t = candidates[i];
+      const t = candidates[i]!;
       const remaining = Math.max(0, req.deadlineMs - Date.now());
       if (remaining <= 0) break;
       const candidatesLeft = candidates.length - i;
