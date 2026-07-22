@@ -29,7 +29,7 @@ export function useHistory<T>(initial: T, cap = 100) {
     presentRef.current = next;
     setPresent(next);
     recompute(past.current, future.current);
-  }, [cap]);
+  }, [cap, recompute]);
 
   /** Replace present without touching the history stack (live/external updates). */
   const setSilent = useCallback((next: T) => {
@@ -46,7 +46,7 @@ export function useHistory<T>(initial: T, cap = 100) {
     setPresent(prev);
     recompute(past.current, future.current);
     return prev;
-  }, []);
+  }, [recompute]);
 
   const redo = useCallback((): T | null => {
     const next = future.current.pop();
@@ -57,7 +57,7 @@ export function useHistory<T>(initial: T, cap = 100) {
     setPresent(next);
     recompute(past.current, future.current);
     return next;
-  }, []);
+  }, [recompute]);
 
   return { present, commit, setSilent, undo, redo, can };
 }

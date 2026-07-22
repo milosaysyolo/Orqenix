@@ -30,9 +30,7 @@ export interface OrqenixRuntime {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __orqenixRuntime: OrqenixRuntime | undefined;
-  // eslint-disable-next-line no-var
   var __orqenixRuntimePromise: Promise<OrqenixRuntime> | undefined;
 }
 

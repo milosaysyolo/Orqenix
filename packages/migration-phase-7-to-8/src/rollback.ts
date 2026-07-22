@@ -39,6 +39,7 @@ export class Rollback {
     }
 
     // Restore: remove current Phase 8 files, copy backup contents back
+    const { rm, cp, readdir } = await import('node:fs/promises');
     const phase8Files = ['project.yaml', 'memory.db', 'memory.db-wal', 'memory.db-shm'];
     for (const f of phase8Files) {
       const p = join(orqenixDir, f);
@@ -48,7 +49,6 @@ export class Rollback {
     }
 
     // Copy backup contents back into .orqenix (excluding the backup dir itself)
-    const { readdir, rm, cp } = await import('node:fs/promises');
     const entries = await readdir(backupPath, { withFileTypes: true });
     for (const entry of entries) {
       const src = join(backupPath, entry.name);

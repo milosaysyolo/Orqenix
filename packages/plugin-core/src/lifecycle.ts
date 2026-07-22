@@ -4,7 +4,6 @@
 // Coordinates the 5-phase lifecycle: install → configure → activate →
 // deactivate → uninstall. Per CR v8.0 Section 7.3.
 
-import type { CanonicalSkillFormat } from './csf-schema';
 import type { PluginDiscoveryResult, RegisteredPlugin } from './types';
 import { PluginRegistry } from './plugin-registry';
 import { PluginLoader } from './plugin-loader';

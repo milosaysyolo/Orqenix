@@ -7,7 +7,6 @@
 import {
   CanonicalSkillFormatSchema,
   type CanonicalSkillFormat,
-  type PluginKind,
 } from './csf-schema';
 import { PluginKindRegistry } from './kinds/registry';
 import { validatePermissions } from './permissions';

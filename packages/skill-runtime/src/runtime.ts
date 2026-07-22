@@ -63,12 +63,10 @@ export class SkillInputInvalidError extends Error {
  *   5. Validate output against outputSchema (advisory)
  */
 export class SkillRuntime {
-  private readonly engine: MemoryEngine;
   private readonly sandbox: SandboxManager;
   private readonly registry: PluginRegistry;
 
   constructor(options: SkillRuntimeOptions) {
-    this.engine = options.engine;
     this.sandbox = options.sandboxManager ?? new SandboxManager();
     this.registry = options.registry ?? new PluginRegistry();
   }

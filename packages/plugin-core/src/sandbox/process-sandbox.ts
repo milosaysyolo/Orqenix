@@ -19,7 +19,6 @@ import {
   PluginActivateFailedError,
   PluginCrashedError,
   PluginTimeoutError,
-  PluginDeniedError,
 } from '../errors';
 import {
   type ResolvedResourceLimits,
