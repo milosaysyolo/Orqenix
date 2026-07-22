@@ -38,8 +38,6 @@ export class QueryAggregator {
   async aggregate(
     input: QueryAggregatorInput
   ): Promise<QueryAggregatorResult> {
-    const startTime = Date.now();
-
     // Parallel query (per INV-12: no short-circuit, no early-exit)
     const perProjectResults = await Promise.allSettled(
       input.indexes.map(async (index) => {
