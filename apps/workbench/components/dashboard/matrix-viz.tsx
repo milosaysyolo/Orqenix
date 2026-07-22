@@ -20,7 +20,7 @@ export function MatrixViz({ matrix: initialMatrix }: { matrix: Record<string, Re
   const { latest } = useLiveEvents(['memory.write']);
   const [flash, setFlash] = React.useState<Set<string>>(new Set());
 
-  const [cells, setCells] = React.useState<Record<string, number>>(() => {
+  const [cells] = React.useState<Record<string, number>>(() => {
     const m: Record<string, number> = {};
     for (const t of TIERS) for (const k of KBS) m[`${t}:${k}`] = initialMatrix[t]?.[k] ?? 0;
     return m;

@@ -12,7 +12,7 @@
 'use client';
 
 import * as React from 'react';
-import { SectionTitle, Card, Badge, Button } from '@/components/ui';
+import { SectionTitle, Card, Button } from '@/components/ui';
 import { useToast } from '@/components/toast';
 import { CollapseToggle } from '@/components/collapse-toggle';
 import { ConfigEditor } from '@/components/config-editor';
