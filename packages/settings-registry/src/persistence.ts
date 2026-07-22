@@ -5,7 +5,7 @@
 // D8.α.6 wires SQLite-backed persistence (.orqenix config_overrides table,
 // Migration 560).
 
-import type { SettingsLevel, SettingsOverride } from './types';
+import type { SettingsOverride } from './types';
 
 /**
  * Interface for persisting setting overrides.

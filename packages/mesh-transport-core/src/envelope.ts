@@ -7,7 +7,7 @@
 import { Packr, Unpackr } from 'msgpackr';
 import { ulid } from 'ulidx';
 import type { MeshRequest, MeshResponse } from './types.js';
-import { canonicalize, bytesEqual } from './canonical.js';
+import { canonicalize } from './canonical.js';
 
 const packr = new Packr({
   useRecords: false,

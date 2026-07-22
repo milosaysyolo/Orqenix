@@ -11,7 +11,6 @@ import type {
   SettingsOverride,
   UpdateSettingInput,
   SettingsAuditWriter,
-  SettingsValidationResult,
 } from './types';
 import { NoopSettingsAuditWriter } from './types';
 import { SettingsResolver, getByPath } from './resolver';

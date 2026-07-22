@@ -5,9 +5,9 @@
 // samples, executes review decisions. On Promote, delegates to skill-genesis
 
 import type { Database } from 'better-sqlite3';
-import { CandidateStore, type IDetector } from '@orqenix/self-learning-detection';
+import { CandidateStore, type IDetector, type InstinctCandidate } from '@orqenix/self-learning-detection';
 import { Observer, DEFAULT_GOVERNANCE } from '@orqenix/self-learning-observer';
-import type { SelfLearningGovernance } from '@orqenix/self-learning-observer';
+import type { SelfLearningGovernance, ObservationEvent } from '@orqenix/self-learning-observer';
 import { SkillGenesis } from '@orqenix/skill-genesis';
 import {  type PromoterCandidate,  type ObservationSample,  type ReviewDecision,  type ReviewResult,} from './types';
 
@@ -44,7 +44,6 @@ export class PromoterService {
   private readonly observer: Observer;
   private readonly skillGenesis: SkillGenesis;
   private readonly audit: PromoterAuditWriter;
-  private readonly detector?: IDetector;
   private readonly governance: SelfLearningGovernance;
   private iterationResults: string[][] = [];
 
@@ -55,7 +54,6 @@ export class PromoterService {
     this.skillGenesis = options.skillGenesis ?? new SkillGenesis({ db: this.db });
     this.audit = options.audit ?? new NoopPromoterAuditWriter();
     this.governance = options.observer?.governance ?? DEFAULT_GOVERNANCE;
-    if (options.detector) this.detector = options.detector;
   }
 
   // ─── Convergence ─────────────────────────────────────────────────────
@@ -108,7 +106,7 @@ export class PromoterService {
    */
   async listForReview(projectId: string, limit = 50): Promise<PromoterCandidate[]> {
     const candidates = this.candidateStore.list(projectId, 'detected', limit);
-    return candidates.map((c) => {
+    return candidates.map((c: InstinctCandidate) => {
       const sampleIds = JSON.parse(c.sample_observation_ids) as string[];
       const samples = this.fetchSamples(projectId, sampleIds);
       const estTimeSavedPerWeekMin = this.estimateWeeklySavings(
@@ -217,7 +215,7 @@ export class PromoterService {
   private fetchSamples(projectId: string, ids: string[]): ObservationSample[] {
     const samples: ObservationSample[] = [];
     const events = this.observer.query({ projectId, limit: 1000 });
-    const byId = new Map(events.map((e) => [e.id, e]));
+    const byId = new Map(events.map((e: ObservationEvent) => [e.id, e]));
     for (const id of ids.slice(0, 5)) {
       const e = byId.get(id);
       if (!e) continue;
