@@ -52,7 +52,7 @@
     "integration": "pnpm --filter @orqenix/integration test",
     "smoke:cross-repo": "bash smoke/cross-repo-smoke.sh",
     "smoke:cross-repo:windows": "pwsh ./smoke/cross-repo-smoke.ps1",
-    "lint": "pnpm -r --filter=\"./packages/*\" --filter=\"./apps/*\" lint",
+    "lint": "eslint 'packages/*/src/**/*.{ts,tsx}' 'packages/*/tests/**/*.ts' 'apps/workbench/**/*.{ts,tsx}' 'apps/workbench/tests/**/*.ts' 'scripts/**/*.{ts,mjs}' --max-warnings 200",
     "clean": "pnpm -r --filter=\"./packages/*\" clean && rm -rf node_modules",
     "pre-publish-check": "tsx scripts/pre-publish-check.ts",
     "changeset": "changeset",

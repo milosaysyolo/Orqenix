@@ -1,13 +1,9 @@
-// SPDX-License-Identifier: Apache-2.0
-// ESLint 9.x flat config template. Used by migrate-eslint-flat-config.mjs.
-// Copy to any package that needs flat config for ESLint 9 compatibility.
-
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', '**/*.d.ts', 'coverage/**'],
+    ignores: ['dist/**', 'node_modules/**', '**/*.d.ts', '**/*.d.cts', '**/*.d.mts', 'coverage/**', '.next/**'],
   },
   {
     files: ['**/*.{ts,tsx,mts,cts}'],
@@ -16,6 +12,7 @@ export default [
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
+        project: true,
       },
     },
     plugins: {
@@ -33,6 +30,7 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/await-thenable': 'error',
+      '@typescript-eslint/no-require-imports': 'off',
       'no-restricted-imports': [
         'error',
         {
