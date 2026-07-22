@@ -57,6 +57,11 @@
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "lint": "eslint ."
   },
+  "dependencies": {
+    "@orqenix/scope-identity": "workspace:*",
+    "@orqenix/capability-tokens": "workspace:*",
+    "@orqenix/audit-log": "workspace:*"
+  },
   "devDependencies": {
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"

@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
-// Scaffold for Part-3
-// TODO_Part_3: implement Security logic
-
-export const PACKAGE_VERSION = "0.5.0-phase-5";
-export const TODO = "Part_3" as const;
-
-console.info("@orqenix/security: scaffold loaded, TODO: " + TODO);
+// @orqenix/security — Security primitives for Orqenix
+// Identity (scope-identity) + Capability tokens (capability-tokens) + Audit trail (audit-log)
+export * from '@orqenix/scope-identity';
+export * from '@orqenix/capability-tokens';
+export * from '@orqenix/audit-log';
+export const PACKAGE_VERSION = '0.9.0';
