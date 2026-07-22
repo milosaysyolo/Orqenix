@@ -1,5 +1,4 @@
-import { multiaddr } from '@multiformats/multiaddr';
-import type { Connection, Libp2p, PeerId } from '@libp2p/interface';
+import type { Connection, Libp2p } from '@libp2p/interface';
 
 export interface DialBackoff {
   maxAttempts?: number;

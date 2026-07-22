@@ -1,5 +1,4 @@
-import { multiaddr } from '@multiformats/multiaddr';
-import type { Connection, Libp2p, PeerId, Stream } from '@libp2p/interface';
+import type { Connection, Libp2p, Stream } from '@libp2p/interface';
 import {
   CapabilityError,
   DeadlineExceeded,
@@ -17,7 +16,7 @@ import {
 } from '@orqenix/mesh-transport-core';
 import { derivePeerFromScope, scopeIdToSaltBytes } from './peer-id.js';
 import { createOrqenixLibp2pNode } from './node-config.js';
-import { PROTOCOL_ID, supportedProtocols } from './protocol.js';
+import { supportedProtocols } from './protocol.js';
 import {
   NoopIdentityVerifier,
   NoopSigner,
@@ -64,7 +63,6 @@ export class Libp2pMeshTransport implements MeshTransport {
 
   private lifecycle = new TransportLifecycle();
   private node?: Libp2p;
-  private peerId?: PeerId;
   private handler?: Handler;
   private connStates = new WeakMap<Connection, ConnState>();
   private connectedAt = 0;
@@ -120,8 +118,6 @@ export class Libp2pMeshTransport implements MeshTransport {
         scopeSeed: this.scopeSeed,
         scopeIdBytes: saltBytes,
       });
-      this.peerId = derived.peerId;
-
       const node = await createOrqenixLibp2pNode({
         privateKey: derived.privateKey,
         adapters: this.adapters,
