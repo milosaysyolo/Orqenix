@@ -29,6 +29,7 @@
     "@orqenix/self-learning-observer": "workspace:*",
     "@orqenix/settings-registry": "workspace:*",
     "@orqenix/skill-genesis": "workspace:*",
+    "@orqenix/skill-runtime": "workspace:*",
     "@orqenix/ui-primitives": "workspace:*",
     "@orqenix/verification-loop": "workspace:*",
     "@xyflow/react": "^12.3.5",
