@@ -1,3 +1,4 @@
+import { multiaddr } from '@multiformats/multiaddr';
 import type { Connection, Libp2p } from '@libp2p/interface';
 
 export interface DialBackoff {

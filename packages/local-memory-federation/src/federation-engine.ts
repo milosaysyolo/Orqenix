@@ -14,23 +14,17 @@ import { ProjectIndex, IProjectIndex } from './project-index';
 import { QueryAggregator } from './query-aggregator';
 
 import {
-  ApproveCandidateRequest,
   ApproveCandidateRequestSchema,
   CandidatePreview,
   CrossProjectQuery,
   CrossProjectQuerySchema,
-  FederationApproval,
   FederationEngineConfig,
   FederationResult,
   KbKind,
-  ProjectId,
 } from './types';
 
 import {
   CandidateNotFoundError,
-  FederationDisabledError,
-  NoApprovalError,
-  ProjectNotFoundError,
 } from './errors';
 
 /**
