@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "npx tsc --noEmit",
     "bench": "node --expose-gc --import tsx scripts/run-all-benchmarks.mjs",
     "bench:phase": "node --expose-gc --import tsx scripts/run-phase.mjs",
     "bench:gate": "node --import tsx scripts/regression-gate.mjs",
