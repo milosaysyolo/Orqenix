@@ -15,10 +15,6 @@ const KBS = ['chat', 'code', 'decision', 'lesson'] as const;
 const TIERS = ['T1', 'T2', 'T3', 'T4'] as const;
 const KB_COLOR: Record<string, string> = { chat: 'var(--amber)', code: 'var(--teal)', decision: 'var(--plum)', lesson: 'var(--slate)' };
 
-function randInt(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 export function MatrixViz({ matrix: initialMatrix }: { matrix: Record<string, Record<string, number>> }) {
   const router = useRouter();
   const { latest } = useLiveEvents(['memory.write']);
@@ -29,19 +25,6 @@ export function MatrixViz({ matrix: initialMatrix }: { matrix: Record<string, Re
     for (const t of TIERS) for (const k of KBS) m[`${t}:${k}`] = initialMatrix[t]?.[k] ?? 0;
     return m;
   });
-
-  // Drift every 12s
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCells((prev) => {
-        const key = `${TIERS[randInt(0, 3)]}:${KBS[randInt(0, 3)]}`;
-        const v = (prev[key] ?? 0);
-        const delta = Math.random() < 0.5 ? randInt(1, 3) : -1;
-        return { ...prev, [key]: Math.max(0, v + delta) };
-      });
-    }, 12_000);
-    return () => clearInterval(interval);
-  }, []);
 
   React.useEffect(() => {
     if (!latest || latest.kind !== 'memory.write') return;

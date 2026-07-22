@@ -22,6 +22,7 @@ interface DashboardData {
   sessions: { active: number; total: number };
   auditValid: boolean;
   learning: LearningCandidate[];
+  engineStatus?: 'real' | 'demo';
 }
 
 export function DashboardWrapper({
@@ -71,8 +72,15 @@ export function DashboardWrapper({
   const enabledMcp = mcp ? (mcp.transports.filter((t) => t.kind !== undefined).length) : 0;
   const pendingCandidates = (initialData?.learning ?? []).filter((c) => c.status === 'pending').length;
 
+  const isDemo = initialData?.engineStatus === 'demo';
+
   return (
     <div className="mx-auto max-w-[1500px] px-6 py-6">
+      {isDemo && (
+        <div className="mb-4 rounded-sm border border-[var(--rust)] bg-[color-mix(in_oklab,var(--rust)_8%,transparent)] px-4 py-2 font-mono text-data-xs text-[var(--rust)]">
+          🔴 Engine offline &mdash; showing demo data
+        </div>
+      )}
       {/* ===== Stats Row ===== */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard label="Memory Entries" value={initialData?.totalEntries ?? 0} accent="teal" />
