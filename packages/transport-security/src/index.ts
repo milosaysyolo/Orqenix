@@ -5,3 +5,4 @@ export * from './glob.js';
 export * from './verifier.js';
 export * from './signer.js';
 export * from './adapters.js';
+export * from './token-bridge.js';
