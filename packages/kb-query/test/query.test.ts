@@ -18,7 +18,7 @@ describe("KnowledgeQueryEngine query shape", () => {
     const engine = new KnowledgeQueryEngine(
       { query: async () => [docResult] } as any,
       { query: async () => [codeResult] } as any,
-      { semanticSearch: async () => [decisionResult] } as any,
+      { listByType: async () => [decisionResult] } as any,
     );
 
     const results = await engine.query({ text: "test", scope: "s1", topK: 10 });
@@ -38,7 +38,7 @@ describe("KnowledgeQueryEngine query shape", () => {
     const engine = new KnowledgeQueryEngine(
       { query: async () => [{ id: "d1", text: "x", score: 0.5, path: "", heading: "" }] } as any,
       { query: async () => [{ id: "c1", name: "fn", score: 0.5, path: "", kind: "" }] } as any,
-      { semanticSearch: async () => [] } as any,
+      { listByType: async () => [] } as any,
     );
 
     const results = await engine.query({ text: "test", scope: "s1", kbs: [], topK: 10 });
@@ -51,7 +51,7 @@ describe("KnowledgeQueryEngine empty query", () => {
     const engine = new KnowledgeQueryEngine(
       { query: async () => [] } as any,
       { query: async () => [] } as any,
-      { semanticSearch: async () => [] } as any,
+      { listByType: async () => [] } as any,
     );
 
     const results = await engine.query({ text: "", scope: "s1" });
@@ -62,7 +62,7 @@ describe("KnowledgeQueryEngine empty query", () => {
     const engine = new KnowledgeQueryEngine(
       { query: async () => [{ id: "d1", text: "", score: 0.5, path: "", heading: "" }] } as any,
       { query: async () => [] } as any,
-      { semanticSearch: async () => [] } as any,
+      { listByType: async () => [] } as any,
     );
 
     const results = await engine.query({ text: "", scope: "s1" });
@@ -75,7 +75,7 @@ describe("KnowledgeQueryEngine invalid input", () => {
     const engine = new KnowledgeQueryEngine(
       { query: async () => [{ id: "d1", text: "x", score: 0.5, path: "", heading: "" }] } as any,
       { query: async () => [] } as any,
-      { semanticSearch: async () => [] } as any,
+      { listByType: async () => [] } as any,
     );
 
     const q: any = { text: "test", scope: "s1" };
@@ -93,7 +93,7 @@ describe("KnowledgeQueryEngine invalid input", () => {
     const engine = new KnowledgeQueryEngine(
       { query: async () => [] } as any,
       { query: async () => [] } as any,
-      { semanticSearch: async () => [] } as any,
+      { listByType: async () => [] } as any,
     );
 
     // Partial retrieval config - missing rerank and grader
