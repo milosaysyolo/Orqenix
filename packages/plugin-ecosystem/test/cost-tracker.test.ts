@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { PluginRegistry } from "@orqenix/core";
+import { PluginHookRegistry } from "@orqenix/core";
 import { costTrackerPlugin as plugin, ledger } from "../src/index.js";
 import { computeCost } from "../src/cost-tracker/pricing.js";
 
@@ -18,7 +18,7 @@ describe("cost-tracker plugin", () => {
   });
 
   it("ledgers a call when llm.call.after fires", async () => {
-    const reg = new PluginRegistry();
+    const reg = new PluginHookRegistry();
     reg.setContextProvider(() => ({
       scope: null,
       config: {},
@@ -52,7 +52,7 @@ describe("cost-tracker plugin", () => {
   });
 
   it("aggregates cost by agent and model", async () => {
-    const reg = new PluginRegistry();
+    const reg = new PluginHookRegistry();
     reg.setContextProvider(() => ({
       scope: null,
       config: {},

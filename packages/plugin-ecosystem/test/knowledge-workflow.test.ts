@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { PluginRegistry } from "@orqenix/core";
+import { PluginHookRegistry } from "@orqenix/core";
 import { createKnowledgeWorkflowPlugin, noopDeps } from "../src/index.js";
 
 describe("knowledge-workflow plugin", () => {
   it("injects briefing into task systemPrelude", async () => {
-    const reg = new PluginRegistry();
+    const reg = new PluginHookRegistry();
     reg.setContextProvider(() => ({
       scope: null,
       config: {},
@@ -29,7 +29,7 @@ describe("knowledge-workflow plugin", () => {
   });
 
   it("respects reindex_after=none", async () => {
-    const reg = new PluginRegistry();
+    const reg = new PluginHookRegistry();
     reg.setContextProvider(() => ({
       scope: null,
       config: {},

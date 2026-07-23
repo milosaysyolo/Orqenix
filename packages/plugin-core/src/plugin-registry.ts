@@ -10,6 +10,7 @@ import type {
   PluginLifecycleState,
   PluginDiscoveryResult,
 } from './types';
+import type { PluginRegistry as PluginRegistryInterface } from './registry-interface';
 import {
   PluginAlreadyRegisteredError,
   PluginNotRegisteredError,
@@ -42,7 +43,7 @@ export class InMemoryRegistryPersistence implements RegistryPersistence {
 /**
  * Registry of installed plugins.
  */
-export class PluginRegistry {
+export class PluginRegistry implements PluginRegistryInterface {
   private plugins: Map<string, RegisteredPlugin> = new Map();
   private readonly persistence: RegistryPersistence;
 

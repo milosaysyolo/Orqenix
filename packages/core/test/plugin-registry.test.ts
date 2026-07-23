@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { PluginRegistry } from "../src/plugin/registry.js";
+import { PluginHookRegistry } from "../src/plugin/registry.js";
 import type { OrqenixPlugin } from "../src/plugin/types.js";
 
 function makePlugin(name: string, priority = 0): OrqenixPlugin {
@@ -11,11 +11,11 @@ function makePlugin(name: string, priority = 0): OrqenixPlugin {
   };
 }
 
-describe("PluginRegistry", () => {
-  let registry: PluginRegistry;
+describe("PluginHookRegistry", () => {
+  let registry: PluginHookRegistry;
 
   beforeEach(() => {
-    registry = new PluginRegistry();
+    registry = new PluginHookRegistry();
     registry.setContextProvider(() => ({
       scope: null,
       config: {},

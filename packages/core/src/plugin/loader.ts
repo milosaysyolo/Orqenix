@@ -9,11 +9,11 @@ import {
   projectOpencodeDir,
   projectOrqenixDir,
 } from "../util/paths.js";
-import type { PluginRegistry } from "./registry.js";
+import type { PluginHookRegistry } from "./registry.js";
 import type { OrqenixPlugin } from "./types.js";
 
 export interface LoaderOptions {
-  registry: PluginRegistry;
+  registry: PluginHookRegistry;
   projectRoot?: string;
   npmPlugins?: string[];
 }
