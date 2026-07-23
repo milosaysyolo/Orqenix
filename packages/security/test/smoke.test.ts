@@ -4,6 +4,6 @@ import { PACKAGE_VERSION } from "../src/index.js";
 
 describe("@orqenix/security", () => {
   it("exports PACKAGE_VERSION as a string", () => {
-    expect(PACKAGE_VERSION).toBe("0.5.0-phase-5");
+    expect(PACKAGE_VERSION).toBe("0.9.0");
   });
 });

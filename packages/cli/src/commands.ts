@@ -453,7 +453,7 @@ const COMMAND_META: Record<string, string> = {
 
 export function usage(): string {
   return [
-    "orqenix v0.5.0-phase-5",
+    `orqenix v${version}`,
     "",
     "Commands:",
     ...Object.values(COMMAND_META),

@@ -85,3 +85,14 @@ jobs:
           HF_HUB_OFFLINE: "1"
           TRANSFORMERS_OFFLINE: "1"
         run: pnpm test
+
+      - name: Lint
+        run: pnpm exec turbo run lint
+
+      - name: Version staleness gate
+        run: |
+          if grep -rn "0\.5\.0-phase-5\|0\.2\.0-dev" --include="*.ts" --include="*.json" --exclude-dir=node_modules . | grep -vE '("version"|VERSION|version:)' | grep -v 'dist/\|\.d\.\(ts\|cts\|mts\)'; then
+            echo "Found stale version strings"
+            exit 1
+          fi
+        shell: bash
