@@ -7,6 +7,7 @@
 
 import type { Database } from 'better-sqlite3';
 import { blake3 } from '@noble/hashes/blake3';
+import { bytesToHex } from '@noble/hashes/utils';
 import { ulid } from '../store/ulid';
 import type {
   AuditEntry,
@@ -209,12 +210,7 @@ export class AuditChainWriter {
 
   private hash(input: string): string {
     const bytes = new TextEncoder().encode(input);
-    const h = blake3(bytes);
-    let s = '';
-    for (let i = 0; i < 32; i++) {
-      s += (h[i] as number).toString(16).padStart(2, '0');
-    }
-    return s;
+    return bytesToHex(blake3(bytes));
   }
 
   private rowToEntry(row: Record<string, unknown>): AuditEntry {
