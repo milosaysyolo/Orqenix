@@ -53,7 +53,7 @@ describe("config loader", () => {
     expect(cfg.webui.port).toBe(12345);
   });
 
-  it("arrays are replaced not concatenated", async () => {
+  it("arrays are concat'd + dedup'd across layers", async () => {
     writeFileSync(
       join(configHome, "orqenix", "config.jsonc"),
       JSON.stringify({ context: { compressContext: { protectPatterns: ["A"] } } }),
@@ -63,7 +63,8 @@ describe("config loader", () => {
       JSON.stringify({ context: { compressContext: { protectPatterns: ["B"] } } }),
     );
     const cfg = await loadConfig(workDir);
-    expect(cfg.context.compressContext.protectPatterns).toEqual(["B"]);
+    expect(cfg.context.compressContext.protectPatterns).toContain("A");
+    expect(cfg.context.compressContext.protectPatterns).toContain("B");
   });
 
   it("invalid JSONC logs but does not throw", async () => {

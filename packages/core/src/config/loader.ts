@@ -51,7 +51,8 @@ export async function loadConfig(projectRoot?: string): Promise<OrqenixConfig> {
   if (process.env.ORQENIX_CONFIG_CONTENT) {
     const inline = safeJsonc(process.env.ORQENIX_CONFIG_CONTENT);
     if (inline) {
-      layers.push(inline);
+      const safe = stripProtoKeys(inline);
+      layers.push(safe);
       log.debug("config: loaded inline");
     }
   }
@@ -62,7 +63,8 @@ export async function loadConfig(projectRoot?: string): Promise<OrqenixConfig> {
 async function readJsoncIfExists(path: string): Promise<Partial<OrqenixConfig> | null> {
   if (!existsSync(path)) return null;
   const raw = await readFile(path, "utf-8");
-  return safeJsonc(raw);
+  const parsed = safeJsonc(raw);
+  return parsed ? (stripProtoKeys(parsed) as Partial<OrqenixConfig>) : null;
 }
 
 function safeJsonc(raw: string): Partial<OrqenixConfig> | null {
@@ -74,7 +76,19 @@ function safeJsonc(raw: string): Partial<OrqenixConfig> | null {
   return (parsed as Partial<OrqenixConfig>) ?? null;
 }
 
-/** Deep-merge layers; later layers override earlier on conflicts; arrays are replaced. */
+/** Recursively strip `__proto__` and `constructor` keys from untrusted input. */
+function stripProtoKeys(input: any): any {
+  if (input === null || typeof input !== "object") return input;
+  if (Array.isArray(input)) return input.map(stripProtoKeys);
+  const out: Record<string, any> = {};
+  for (const k of Object.keys(input)) {
+    if (k === "__proto__" || k === "constructor") continue;
+    out[k] = stripProtoKeys((input as Record<string, any>)[k]);
+  }
+  return out;
+}
+
+/** Deep-merge layers; later layers override earlier on conflicts; arrays concat'd + dedup'd. */
 function deepMerge(layers: Array<Partial<OrqenixConfig>>): OrqenixConfig {
   const out: any = {};
   for (const layer of layers) {
@@ -86,12 +100,16 @@ function deepMerge(layers: Array<Partial<OrqenixConfig>>): OrqenixConfig {
 function mergeInto(target: any, source: any): void {
   if (!source || typeof source !== "object") return;
   for (const [k, v] of Object.entries(source)) {
-    if (
-      v !== null &&
+    if (k === "__proto__" || k === "constructor") continue;
+    if (v === null || v === undefined) continue;
+    if (Array.isArray(v) && Array.isArray(target[k])) {
+      target[k] = [...new Set([...target[k], ...v])];
+    } else if (
       typeof v === "object" &&
       !Array.isArray(v) &&
       typeof target[k] === "object" &&
-      !Array.isArray(target[k])
+      !Array.isArray(target[k]) &&
+      target[k] !== null
     ) {
       mergeInto(target[k], v);
     } else {

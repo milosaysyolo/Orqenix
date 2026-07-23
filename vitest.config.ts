@@ -41,7 +41,7 @@ export default defineConfig({
     environment: "node",
     root: rootDir,
     retry: 2,
-    include: ["packages/*/test/**/*.test.ts", "tests/**/*.test.ts"],
+    include: ["packages/*/test/**/*.test.ts", "packages/*/tests/**/*.test.ts", "tests/**/*.test.ts"],
     reporters: ["default", resolve(rootDir, "scripts/vitest-charter-reporter.ts")],
     coverage: {
       provider: "v8",
