@@ -161,7 +161,7 @@ jobs:
         run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --pending --config.ignore-scripts=false
 
       - name: Build all packages
-        run: pnpm -r build
+        run: pnpm build
 
       - name: Run pre-publish checks (C01 to C24) if script exists
         run: |
@@ -259,7 +259,7 @@ jobs:
         run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --pending --config.ignore-scripts=false
 
       - name: Build all packages
-        run: pnpm -r build
+        run: pnpm build
 
       - name: Convert cross-scope deps for publish
         run: |
