@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
-// @orqenix/self-learning-detection , CandidateStore testsimport { describe, it, expect, beforeAll, afterAll } from 'vitest';
+// @orqenix/self-learning-detection , CandidateStore tests
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import Database from "better-sqlite3";
 import { CandidateStore } from "../src/candidate-store";
 import type { DetectedPattern, DetectionThresholds } from "../src/types";

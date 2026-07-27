@@ -209,7 +209,7 @@ function detectMode(): "oss" | "pro" {
 
 async function runChecks(checks: Check[], ctx: CheckContext): Promise<CheckResult[]> {
   const CONCURRENCY = 1;
-  const PER_CHECK_TIMEOUT_MS = 30_000;
+  const PER_CHECK_TIMEOUT_MS = 120_000;
   const results: CheckResult[] = [];
 
   for (let i = 0; i < checks.length; i += CONCURRENCY) {

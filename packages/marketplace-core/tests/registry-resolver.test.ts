@@ -5,7 +5,6 @@ import { buildDefaultResolvers } from "../src/resolvers/index";
 import { LocalFileResolver } from "../src/resolvers/local-file";
 import { OrqenixOfficialResolver } from "../src/resolvers/orqenix-official";
 import { NpmRegistryResolver } from "../src/resolvers/npm";
-import type { PluginListing, RegistrySource } from "../src/types";
 
 describe("RegistryResolverRegistry", () => {
   let registry: RegistryResolverRegistry;
