@@ -7,13 +7,17 @@ import {
   type ScopeId,
   type SendOpts,
   type TransportRegistry,
-} from '@orqenix/mesh-transport-core';
-import type { ObservabilityHooks } from '@orqenix/mesh-observability';
-import { onFailover } from '@orqenix/mesh-observability';
-import { CircuitBreaker } from './circuit-breaker.js';
-import { CrossTransportDedup } from './dedup.js';
-import { DEFAULT_PRIORITY, sortByPriority, type PriorityList } from './priority.js';
-import { makeInboundDispatch, type AppHandler, type StructuralCapabilityVerifier } from './inbound.js';
+} from "@orqenix/mesh-transport-core";
+import type { ObservabilityHooks } from "@orqenix/mesh-observability";
+import { onFailover } from "@orqenix/mesh-observability";
+import { CircuitBreaker } from "./circuit-breaker.js";
+import { CrossTransportDedup } from "./dedup.js";
+import { DEFAULT_PRIORITY, sortByPriority, type PriorityList } from "./priority.js";
+import {
+  makeInboundDispatch,
+  type AppHandler,
+  type StructuralCapabilityVerifier,
+} from "./inbound.js";
 
 export type AddressResolver = (kind: string, scopeId: ScopeId) => MeshAddress | undefined;
 
@@ -46,7 +50,8 @@ export class MeshRouter {
     this.verifier = opts.verifier;
     this.addressResolver = opts.addressResolver;
     this.priority = opts.priority ?? DEFAULT_PRIORITY;
-    this.breaker = opts.breaker ?? new CircuitBreaker({ hooks: opts.hooks, scopeId: opts.localScopeId });
+    this.breaker =
+      opts.breaker ?? new CircuitBreaker({ hooks: opts.hooks, scopeId: opts.localScopeId });
     this.dedup = opts.dedup ?? new CrossTransportDedup();
     this.hooks = opts.hooks;
     this.handler = opts.handler;
@@ -76,12 +81,12 @@ export class MeshRouter {
     const ordered = sortByPriority(all, this.priority);
 
     if (ordered.length === 0) {
-      return toMeshResponse(req.id, new Error('no transports reachable for target scope'));
+      return toMeshResponse(req.id, new Error("no transports reachable for target scope"));
     }
 
     const candidates = ordered.filter((t) => this.breaker.canAttempt(t.kind));
     if (candidates.length === 0) {
-      return toMeshResponse(req.id, new Error('all transports open by circuit breaker'));
+      return toMeshResponse(req.id, new Error("all transports open by circuit breaker"));
     }
 
     let lastResponse: MeshResponse | undefined;
@@ -102,7 +107,7 @@ export class MeshRouter {
       const attempt = await this.sendOne(t, addr, req, { ...opts, timeoutMs: perAttempt });
       lastResponse = attempt;
 
-      if (attempt.status === 'denied' || attempt.status === 'ok') {
+      if (attempt.status === "denied" || attempt.status === "ok") {
         this.breaker.recordSuccess(t.kind);
         return attempt;
       }
@@ -111,13 +116,14 @@ export class MeshRouter {
 
       const next = candidates[i + 1];
       if (next && Date.now() < req.deadlineMs) {
-        if (this.hooks) onFailover(this.hooks, { scopeId: this.localScopeId, from: t.kind, to: next.kind });
+        if (this.hooks)
+          onFailover(this.hooks, { scopeId: this.localScopeId, from: t.kind, to: next.kind });
         continue;
       }
       break;
     }
 
-    return lastResponse ?? { id: req.id, status: 'timeout' };
+    return lastResponse ?? { id: req.id, status: "timeout" };
   }
 
   private async sendOne(
@@ -133,7 +139,7 @@ export class MeshRouter {
     }
   }
 
-  breakerStateOf(kind: string): ReturnType<CircuitBreaker['stateOf']> {
+  breakerStateOf(kind: string): ReturnType<CircuitBreaker["stateOf"]> {
     return this.breaker.stateOf(kind);
   }
 

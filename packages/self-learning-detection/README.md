@@ -12,10 +12,10 @@ to reusable skills. This is the BASIC (OSS) detection. Advanced algorithms
 
 ## Algorithms (basic OSS)
 
-| Algorithm | Description |
-|---|---|
-| Sequence detection | Identifies recurring N-action sequences |
-| Frequency threshold | Minimum 5 occurrences (configurable) |
+| Algorithm           | Description                                  |
+| ------------------- | -------------------------------------------- |
+| Sequence detection  | Identifies recurring N-action sequences      |
+| Frequency threshold | Minimum 5 occurrences (configurable)         |
 | Outcome correlation | Filters by success rate (≥80%, configurable) |
 
 ## Promotion thresholds (configurable per CR v8.0)

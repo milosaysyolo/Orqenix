@@ -5,8 +5,8 @@
 // Enables branch deep-copy to share blob content via reference (ADR-E-003):
 // index rows are duplicated per branch, but blob content is deduplicated.
 
-import type { Database } from 'better-sqlite3';
-import { blake3 } from '@noble/hashes/blake3';
+import type { Database } from "better-sqlite3";
+import { blake3 } from "@noble/hashes/blake3";
 
 /**
  * Content-addressed blob store. Blobs are keyed by BLAKE3 hash; identical
@@ -26,15 +26,13 @@ export class BlobStore {
     const bytes = new TextEncoder().encode(content);
     const hash = this.computeHash(bytes);
 
-    const existing = this.db
-      .prepare('SELECT ref_count FROM blobs WHERE hash = ?')
-      .get(hash) as { ref_count: number } | undefined;
+    const existing = this.db.prepare("SELECT ref_count FROM blobs WHERE hash = ?").get(hash) as
+      | { ref_count: number }
+      | undefined;
 
     if (existing) {
       // Dedup: increment ref count
-      this.db
-        .prepare('UPDATE blobs SET ref_count = ref_count + 1 WHERE hash = ?')
-        .run(hash);
+      this.db.prepare("UPDATE blobs SET ref_count = ref_count + 1 WHERE hash = ?").run(hash);
       return hash;
     }
 
@@ -43,7 +41,7 @@ export class BlobStore {
     // owns actual zstd compression and is composed at a higher layer.
     this.db
       .prepare(
-        'INSERT INTO blobs (hash, content, size_bytes, zstd_level, ref_count, created_at) VALUES (?, ?, ?, ?, 1, ?)'
+        "INSERT INTO blobs (hash, content, size_bytes, zstd_level, ref_count, created_at) VALUES (?, ?, ?, ?, 1, ?)",
       )
       .run(hash, Buffer.from(bytes), bytes.length, zstdLevel, new Date().toISOString());
 
@@ -52,50 +50,46 @@ export class BlobStore {
 
   /** Retrieves content by hash. Returns null if not found. */
   get(hash: string): string | null {
-    const row = this.db
-      .prepare('SELECT content FROM blobs WHERE hash = ?')
-      .get(hash) as { content: Buffer } | undefined;
+    const row = this.db.prepare("SELECT content FROM blobs WHERE hash = ?").get(hash) as
+      | { content: Buffer }
+      | undefined;
     if (!row) return null;
     return new TextDecoder().decode(row.content);
   }
 
   /** Decrements ref count; deletes blob when count reaches 0. */
   release(hash: string): void {
-    const row = this.db
-      .prepare('SELECT ref_count FROM blobs WHERE hash = ?')
-      .get(hash) as { ref_count: number } | undefined;
+    const row = this.db.prepare("SELECT ref_count FROM blobs WHERE hash = ?").get(hash) as
+      | { ref_count: number }
+      | undefined;
     if (!row) return;
 
     if (row.ref_count <= 1) {
-      this.db.prepare('DELETE FROM blobs WHERE hash = ?').run(hash);
+      this.db.prepare("DELETE FROM blobs WHERE hash = ?").run(hash);
     } else {
-      this.db
-        .prepare('UPDATE blobs SET ref_count = ref_count - 1 WHERE hash = ?')
-        .run(hash);
+      this.db.prepare("UPDATE blobs SET ref_count = ref_count - 1 WHERE hash = ?").run(hash);
     }
   }
 
   /** Increments ref count without storing (used by branch deep-copy). */
   addRef(hash: string): void {
-    this.db
-      .prepare('UPDATE blobs SET ref_count = ref_count + 1 WHERE hash = ?')
-      .run(hash);
+    this.db.prepare("UPDATE blobs SET ref_count = ref_count + 1 WHERE hash = ?").run(hash);
   }
 
   /** Returns the ref count for a blob (for diagnostics + tests). */
   refCount(hash: string): number {
-    const row = this.db
-      .prepare('SELECT ref_count FROM blobs WHERE hash = ?')
-      .get(hash) as { ref_count: number } | undefined;
+    const row = this.db.prepare("SELECT ref_count FROM blobs WHERE hash = ?").get(hash) as
+      | { ref_count: number }
+      | undefined;
     return row?.ref_count ?? 0;
   }
 
   /** Computes BLAKE3 hash (16 hex chars truncated) */
   computeHash(bytes: Uint8Array): string {
     const h = blake3(bytes);
-    let s = '';
+    let s = "";
     for (let i = 0; i < 32; i++) {
-      s += (h[i] as number).toString(16).padStart(2, '0');
+      s += (h[i] as number).toString(16).padStart(2, "0");
     }
     return s;
   }

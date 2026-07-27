@@ -4,7 +4,7 @@
 // via `?`. Lists every binding grouped by category.
 // ============================================================================
 
-'use client';
+"use client";
 
 import { Card, Kbd } from './ui';
 
@@ -13,7 +13,7 @@ interface Group { category: string; bindings: Binding[]; }
 
 const GROUPS: Group[] = [
   {
-    category: 'Navigation',
+    category: "Navigation",
     bindings: [
       { keys: ['\u2318', 'K'], desc: 'Open command palette' },
       { keys: ['G', 'D'], desc: 'Go to Dashboard' },
@@ -41,7 +41,7 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    category: 'General',
+    category: "General",
     bindings: [
       { keys: ['?'], desc: 'Show this overlay' },
       { keys: ['\u2318', '\\'], desc: 'Toggle theme' },

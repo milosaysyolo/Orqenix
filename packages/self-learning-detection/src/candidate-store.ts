@@ -3,13 +3,9 @@
 //
 // Persists detected patterns as instinct_candidates with cooldown handling.
 
-import type { Database } from 'better-sqlite3';
-import { ulid } from '@orqenix/memory-engine';
-import type {
-  DetectedPattern,
-  InstinctCandidate,
-  DetectionThresholds,
-} from './types';
+import type { Database } from "better-sqlite3";
+import { ulid } from "@orqenix/memory-engine";
+import type { DetectedPattern, InstinctCandidate, DetectionThresholds } from "./types";
 
 export class CandidateStore {
   constructor(private readonly db: Database) {}
@@ -24,20 +20,20 @@ export class CandidateStore {
   upsert(
     pattern: DetectedPattern,
     ctx: { projectId: string; branchId?: string | null; sessionId?: string | null },
-    thresholds: DetectionThresholds
-  ): 'created' | 'updated' | 'cooldown' {
+    thresholds: DetectionThresholds,
+  ): "created" | "updated" | "cooldown" {
     const existing = this.db
-      .prepare('SELECT * FROM instinct_candidates WHERE project_id = ? AND pattern_hash = ?')
+      .prepare("SELECT * FROM instinct_candidates WHERE project_id = ? AND pattern_hash = ?")
       .get(ctx.projectId, pattern.patternHash) as Record<string, unknown> | undefined;
 
     if (existing) {
       // Cooldown check for rejected/deferred candidates
       const status = existing.status as string;
-      if ((status === 'rejected' || status === 'deferred') && existing.reviewed_at) {
+      if ((status === "rejected" || status === "deferred") && existing.reviewed_at) {
         const reviewedMs = new Date(existing.reviewed_at as string).getTime();
         const cooldownMs = thresholds.cooldownHours * 3600 * 1000;
         if (Date.now() - reviewedMs < cooldownMs) {
-          return 'cooldown';
+          return "cooldown";
         }
       }
 
@@ -49,7 +45,7 @@ export class CandidateStore {
             success_rate = ?, impact_score = ?, detected_at = ?,
             sample_observation_ids = ?,
             status = CASE WHEN status IN ('rejected','deferred') THEN 'detected' ELSE status END
-           WHERE project_id = ? AND pattern_hash = ?`
+           WHERE project_id = ? AND pattern_hash = ?`,
         )
         .run(
           pattern.occurrenceCount,
@@ -60,9 +56,9 @@ export class CandidateStore {
           new Date().toISOString(),
           JSON.stringify(pattern.sampleObservationIds),
           ctx.projectId,
-          pattern.patternHash
+          pattern.patternHash,
         );
-      return 'updated';
+      return "updated";
     }
 
     // Create new candidate
@@ -78,7 +74,7 @@ export class CandidateStore {
           @patternDescription, @occ, @succ, @total,
           @successRate, @sampleIds, @detectedAt, @impactScore,
           'detected', NULL, NULL, NULL, 0, NULL
-        )`
+        )`,
       )
       .run({
         id: ulid(),
@@ -96,15 +92,15 @@ export class CandidateStore {
         detectedAt: new Date().toISOString(),
         impactScore: pattern.impactScore,
       });
-    return 'created';
+    return "created";
   }
 
   /** Lists candidates by status, ranked by impact */
-  list(projectId: string, status = 'detected', limit = 50): InstinctCandidate[] {
+  list(projectId: string, status = "detected", limit = 50): InstinctCandidate[] {
     const rows = this.db
       .prepare(
         `SELECT * FROM instinct_candidates WHERE project_id = ? AND status = ?
-         ORDER BY impact_score DESC LIMIT ?`
+         ORDER BY impact_score DESC LIMIT ?`,
       )
       .all(projectId, status, limit) as Array<Record<string, unknown>>;
     return rows.map((r) => this.rowToCandidate(r));
@@ -112,22 +108,22 @@ export class CandidateStore {
 
   /** Gets a single candidate by ID */
   get(id: string): InstinctCandidate | null {
-    const row = this.db
-      .prepare('SELECT * FROM instinct_candidates WHERE id = ?')
-      .get(id) as Record<string, unknown> | undefined;
+    const row = this.db.prepare("SELECT * FROM instinct_candidates WHERE id = ?").get(id) as
+      | Record<string, unknown>
+      | undefined;
     return row ? this.rowToCandidate(row) : null;
   }
 
   /** Updates a candidate's review status (Promote/Reject/Defer) */
   setReviewStatus(
     id: string,
-    status: 'reviewed' | 'promoted' | 'rejected' | 'deferred',
+    status: "reviewed" | "promoted" | "rejected" | "deferred",
     reviewedBy: string,
-    decision?: string
+    decision?: string,
   ): void {
     this.db
       .prepare(
-        `UPDATE instinct_candidates SET status = ?, reviewed_at = ?, reviewed_by = ?, review_decision = ? WHERE id = ?`
+        `UPDATE instinct_candidates SET status = ?, reviewed_at = ?, reviewed_by = ?, review_decision = ? WHERE id = ?`,
       )
       .run(status, new Date().toISOString(), reviewedBy, decision ?? null, id);
   }
@@ -148,7 +144,7 @@ export class CandidateStore {
       sample_observation_ids: row.sample_observation_ids as string,
       detected_at: row.detected_at as string,
       impact_score: row.impact_score as number,
-      status: row.status as InstinctCandidate['status'],
+      status: row.status as InstinctCandidate["status"],
       reviewed_at: (row.reviewed_at as string | null) ?? null,
       reviewed_by: (row.reviewed_by as string | null) ?? null,
       review_decision: (row.review_decision as string | null) ?? null,

@@ -21,15 +21,15 @@ gh workflow run close-phase-7-ceremony.yml --ref main -f confirm=I-UNDERSTAND-MF
 
 Phase 7 is CLOSED only when ALL blocks are GREEN:
 
-| Block | Name | Gate |
-|-------|------|------|
-| 1 | Fix code drift | bench files real, D7.4 clean |
-| 2 | Fix Pro deps | Pro deps fixed, build/test OK |
-| 6sec | Security pre-flight | 7 security checks pass |
-| 3 | Release ceremony | published + signed + tagged (3 repos) |
-| 4 | v2 validation | verdict GO on Linux |
-| 5 | Defer limitations | deferred issues filed (milestone v0.7.1) |
-| 7 | Docs + announce | docs measured + memory checkpoint |
+| Block | Name                | Gate                                     |
+| ----- | ------------------- | ---------------------------------------- |
+| 1     | Fix code drift      | bench files real, D7.4 clean             |
+| 2     | Fix Pro deps        | Pro deps fixed, build/test OK            |
+| 6sec  | Security pre-flight | 7 security checks pass                   |
+| 3     | Release ceremony    | published + signed + tagged (3 repos)    |
+| 4     | v2 validation       | verdict GO on Linux                      |
+| 5     | Defer limitations   | deferred issues filed (milestone v0.7.1) |
+| 7     | Docs + announce     | docs measured + memory checkpoint        |
 
 ## State
 

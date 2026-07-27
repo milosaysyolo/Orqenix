@@ -90,10 +90,10 @@ FIXTURE FAIL: blake3-wasm import error: Cannot find package 'blake3-wasm' import
 **Fallback inline check (blake3-wasm not installed):**
 
 ```js
-const { hash } = require('blake3-wasm');
-const hex = Buffer.from(hash('orqenix-phase-6-native-matrix')).toString('hex');
-const expected = '2a5b50f7feeb2368934d55d2bd7b3ea6f0a6f7f0f1613654c2c1663e830a3ffd';
-console.log(hex === expected ? 'FIXTURE OK' : 'FAIL: ' + hex);
+const { hash } = require("blake3-wasm");
+const hex = Buffer.from(hash("orqenix-phase-6-native-matrix")).toString("hex");
+const expected = "2a5b50f7feeb2368934d55d2bd7b3ea6f0a6f7f0f1613654c2c1663e830a3ffd";
+console.log(hex === expected ? "FIXTURE OK" : "FAIL: " + hex);
 ```
 
 **Result: SKIPPED (blake3-wasm not installed — optional CI-only fixture)**
@@ -190,18 +190,18 @@ Coverage enabled with v8
 
 ## Tag Readiness Checklist
 
-| # | Check | Status |
-|---|-------|--------|
-| 1 | D6F2 commit log captured | ✅ |
-| 2 | All 7 required D6F2 documents present | ✅ |
-| 3 | Build (FK packages) — teams-built-in fail is pre-existing, out of FK scope | ⚠️ Known pre-existing |
-| 4 | Tests (FK packages) — core/sqlite-adapter failures are pre-existing | ⚠️ Known pre-existing |
-| 5 | FK-1.2 Wire Check | ✅ PASS |
-| 6 | BLAKE3 fixture (CI-only, blake3-wasm not in deps) | ⬜ Skipped (optional) |
-| 7 | Phase 6 verify orchestrator — ALL GATES PASS | ✅ PASS |
-| 8 | G40 p95 bench — 0.597ms (well under threshold) | ✅ PASS |
-| 9a | mesh-discovery branch coverage 83.69% (≥80%) | ✅ PASS |
-| 9b | local-node statement coverage 80.06% (≥80%) | ✅ PASS |
+| #   | Check                                                                      | Status                |
+| --- | -------------------------------------------------------------------------- | --------------------- |
+| 1   | D6F2 commit log captured                                                   | ✅                    |
+| 2   | All 7 required D6F2 documents present                                      | ✅                    |
+| 3   | Build (FK packages) — teams-built-in fail is pre-existing, out of FK scope | ⚠️ Known pre-existing |
+| 4   | Tests (FK packages) — core/sqlite-adapter failures are pre-existing        | ⚠️ Known pre-existing |
+| 5   | FK-1.2 Wire Check                                                          | ✅ PASS               |
+| 6   | BLAKE3 fixture (CI-only, blake3-wasm not in deps)                          | ⬜ Skipped (optional) |
+| 7   | Phase 6 verify orchestrator — ALL GATES PASS                               | ✅ PASS               |
+| 8   | G40 p95 bench — 0.597ms (well under threshold)                             | ✅ PASS               |
+| 9a  | mesh-discovery branch coverage 83.69% (≥80%)                               | ✅ PASS               |
+| 9b  | local-node statement coverage 80.06% (≥80%)                                | ✅ PASS               |
 
 **Overall verdict: REPO IS READY FOR TAG v0.6.0-phase-6**
 

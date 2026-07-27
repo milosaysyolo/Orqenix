@@ -4,13 +4,13 @@
 // Atomic capability (MCP-tool-compatible). Stateless, invokable from any
 // agent platform that declares external_agent_compat.
 
-import type { CanonicalSkillFormat } from '../csf-schema';
-import type { PluginKindHandler, ValidationResult } from '../types';
+import type { CanonicalSkillFormat } from "../csf-schema";
+import type { PluginKindHandler, ValidationResult } from "../types";
 
-export const skillHandler: PluginKindHandler<'skill'> = {
-  kind: 'skill',
+export const skillHandler: PluginKindHandler<"skill"> = {
+  kind: "skill",
   description:
-    'Atomic capability (MCP-tool-compatible). Stateless, invokable from any agent platform.',
+    "Atomic capability (MCP-tool-compatible). Stateless, invokable from any agent platform.",
 
   validateManifest(csf: CanonicalSkillFormat): ValidationResult {
     const errors: string[] = [];
@@ -18,17 +18,15 @@ export const skillHandler: PluginKindHandler<'skill'> = {
 
     // Skills MUST declare a tool (the invokable function)
     if (!csf.manifest.tool) {
-      errors.push(
-        'skill plugins MUST declare manifest.tool with name + description + inputSchema'
-      );
+      errors.push("skill plugins MUST declare manifest.tool with name + description + inputSchema");
     } else {
       if (!csf.manifest.tool.inputSchema) {
-        errors.push('skill manifest.tool MUST declare inputSchema');
+        errors.push("skill manifest.tool MUST declare inputSchema");
       }
       // Skills should declare outputSchema for conformance testing
       if (!csf.manifest.tool.outputSchema) {
         warnings.push(
-          'skill plugins should declare manifest.tool.outputSchema for conformance verification'
+          "skill plugins should declare manifest.tool.outputSchema for conformance verification",
         );
       }
     }
@@ -36,17 +34,14 @@ export const skillHandler: PluginKindHandler<'skill'> = {
     // Skills should declare external_agent_compat for cross-platform portability
     if (csf.manifest.external_agent_compat.length === 0) {
       warnings.push(
-        'skill plugins should declare external_agent_compat for cross-platform portability (e.g., ["claude-code", "cursor", "codex"])'
+        'skill plugins should declare external_agent_compat for cross-platform portability (e.g., ["claude-code", "cursor", "codex"])',
       );
     }
 
     // Skills should provide examples for conformance + documentation
-    if (
-      !csf.implementation.examples ||
-      csf.implementation.examples.length === 0
-    ) {
+    if (!csf.implementation.examples || csf.implementation.examples.length === 0) {
       warnings.push(
-        'skill plugins should provide implementation.examples for conformance testing + documentation'
+        "skill plugins should provide implementation.examples for conformance testing + documentation",
       );
     }
 

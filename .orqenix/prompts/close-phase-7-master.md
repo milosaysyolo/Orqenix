@@ -9,9 +9,9 @@ memory after each block.
 
 ## VERSIONING — clean semver ONLY (project-wide LOCKED decision)
 
-- npm published version: `0.7.0`  (NEVER `0.7.0-phase-7`)
-- dependency range in package.json: `^0.7.0`  (NEVER `^0.7.0-phase-7`)
-- git tag: `v0.7.0`  (NEVER `v0.7.0-phase-7`)
+- npm published version: `0.7.0` (NEVER `0.7.0-phase-7`)
+- dependency range in package.json: `^0.7.0` (NEVER `^0.7.0-phase-7`)
+- git tag: `v0.7.0` (NEVER `v0.7.0-phase-7`)
 - Rationale: `-phase-7` is a semver PRERELEASE. `npm install <pkg>` without a
   version will NOT resolve a prerelease, breaking default install (Phase 5 bug).
 - Internal report/dir names (D7.x, out/...) may keep a phase label — they do
@@ -38,16 +38,16 @@ memory after each block.
 
 ## Execution order (fail-fast, checkpoint each)
 
-| Block | Name                  | Gate                                     | Where    |
-|-------|-----------------------|------------------------------------------|----------|
-| 0     | Revert bad -phase-7   | .bak restored, no `-phase-7` in deps     | local    |
-| 1     | Fix code drift        | bench files real + D7.4 clean            | local    |
-| 2     | Fix Pro deps + BOM    | workspace:*/file: → ^0.7.0, build OK     | local    |
-| 6sec  | Security pre-flight   | 7 security checks PASS (Cloud repo)      | CI/Cloud |
-| 3     | Release ceremony      | publish 0.7.0 + sign + tag v0.7.0 (x3)   | CI only  |
-| 4     | v2 validation         | verdict GO on Linux                      | CI only  |
-| 5     | Defer limitations     | issues filed, milestone v0.7.1           | local    |
-| 7     | Docs + announce       | release notes measured, memory written   | local    |
+| Block | Name                | Gate                                   | Where    |
+| ----- | ------------------- | -------------------------------------- | -------- |
+| 0     | Revert bad -phase-7 | .bak restored, no `-phase-7` in deps   | local    |
+| 1     | Fix code drift      | bench files real + D7.4 clean          | local    |
+| 2     | Fix Pro deps + BOM  | workspace:\*/file: → ^0.7.0, build OK  | local    |
+| 6sec  | Security pre-flight | 7 security checks PASS (Cloud repo)    | CI/Cloud |
+| 3     | Release ceremony    | publish 0.7.0 + sign + tag v0.7.0 (x3) | CI only  |
+| 4     | v2 validation       | verdict GO on Linux                    | CI only  |
+| 5     | Defer limitations   | issues filed, milestone v0.7.1         | local    |
+| 7     | Docs + announce     | release notes measured, memory written | local    |
 
 ## Run
 

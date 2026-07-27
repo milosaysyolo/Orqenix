@@ -23,7 +23,7 @@ export async function activate(input: { projectPath: string }): Promise<BindingA
   // Production: write `${projectPath}/.mcp.json` with mcpServers.orqenix
   return {
     ok: true,
-    platform: 'claude-code',
+    platform: "claude-code",
     configWritten: `${input.projectPath}/.mcp.json`,
   };
 }
@@ -35,4 +35,4 @@ export async function deactivate(input: { projectPath: string }): Promise<{ ok: 
 }
 
 /** The target platform this binding bridges to */
-export const targetPlatform = 'claude-code';
+export const targetPlatform = "claude-code";

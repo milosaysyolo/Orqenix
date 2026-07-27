@@ -3,13 +3,12 @@
 //
 // Render custom visualizations in Workbench (timeline, graph, charts, dashboards).
 
-import type { CanonicalSkillFormat } from '../csf-schema';
-import type { PluginKindHandler, ValidationResult } from '../types';
+import type { CanonicalSkillFormat } from "../csf-schema";
+import type { PluginKindHandler, ValidationResult } from "../types";
 
-export const visualizationHandler: PluginKindHandler<'visualization'> = {
-  kind: 'visualization',
-  description:
-    'Renders custom Workbench visualizations (timeline, graph, charts, dashboards).',
+export const visualizationHandler: PluginKindHandler<"visualization"> = {
+  kind: "visualization",
+  description: "Renders custom Workbench visualizations (timeline, graph, charts, dashboards).",
 
   validateManifest(csf: CanonicalSkillFormat): ValidationResult {
     const errors: string[] = [];
@@ -17,22 +16,20 @@ export const visualizationHandler: PluginKindHandler<'visualization'> = {
 
     // Visualizations run in the Workbench UI context (React/Web Component)
     if (
-      csf.implementation.language !== 'typescript' &&
-      csf.implementation.language !== 'javascript' &&
-      csf.implementation.language !== 'wasm'
+      csf.implementation.language !== "typescript" &&
+      csf.implementation.language !== "javascript" &&
+      csf.implementation.language !== "wasm"
     ) {
       errors.push(
-        `visualization plugins must use typescript/javascript/wasm (got '${csf.implementation.language}')`
+        `visualization plugins must use typescript/javascript/wasm (got '${csf.implementation.language}')`,
       );
     }
 
     // Visualizations are read-only views; should NOT request write permissions
-    const writePerms = csf.manifest.permissions.filter(
-      (p) => p.includes('.write')
-    );
+    const writePerms = csf.manifest.permissions.filter((p) => p.includes(".write"));
     if (writePerms.length > 0) {
       warnings.push(
-        `visualization plugins are read-only views; requesting write permissions is unusual: [${writePerms.join(', ')}]`
+        `visualization plugins are read-only views; requesting write permissions is unusual: [${writePerms.join(", ")}]`,
       );
     }
 

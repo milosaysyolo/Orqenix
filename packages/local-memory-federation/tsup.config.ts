@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: Apache-2.0
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: {
-    index: 'src/index.ts',
+    index: "src/index.ts",
   },
-  format: ['esm', 'cjs'],
+  format: ["esm", "cjs"],
   dts: true,
   splitting: false,
   sourcemap: true,
   clean: true,
   treeshake: true,
-  target: 'es2022',
+  target: "es2022",
   banner: {
-    js: '// @orqenix/local-memory-federation , Apache-2.0 , https://orqenix.dev',
+    js: "// @orqenix/local-memory-federation , Apache-2.0 , https://orqenix.dev",
   },
 });

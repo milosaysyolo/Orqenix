@@ -13,31 +13,31 @@
 // Design tokens (separate subpath export for tree-shaking)
 // ─────────────────────────────────────────────────────────────────────────
 
-export { tokens } from './design-tokens';
-export type { Tokens, ColorScale, BrandColors, SemanticColors } from './design-tokens';
+export { tokens } from "./design-tokens";
+export type { Tokens, ColorScale, BrandColors, SemanticColors } from "./design-tokens";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Utility helpers
 // ─────────────────────────────────────────────────────────────────────────
 
-export { cn } from './lib/cn';
+export { cn } from "./lib/cn";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Primitives, re-export everything from each component module
 // ─────────────────────────────────────────────────────────────────────────
 
 // Form primitives
-export { Button, buttonVariants } from './components/button';
-export type { ButtonProps } from './components/button';
+export { Button, buttonVariants } from "./components/button";
+export type { ButtonProps } from "./components/button";
 
-export { Input } from './components/input';
-export type { InputProps } from './components/input';
+export { Input } from "./components/input";
+export type { InputProps } from "./components/input";
 
-export { Label } from './components/label';
+export { Label } from "./components/label";
 
-export { Switch } from './components/switch';
+export { Switch } from "./components/switch";
 
-export { Slider } from './components/slider';
+export { Slider } from "./components/slider";
 
 export {
   Select,
@@ -48,7 +48,7 @@ export {
   SelectLabel,
   SelectItem,
   SelectSeparator,
-} from './components/select';
+} from "./components/select";
 
 // Layout primitives
 export {
@@ -58,10 +58,10 @@ export {
   CardTitle,
   CardDescription,
   CardContent,
-} from './components/card';
+} from "./components/card";
 
-export { Badge, badgeVariants } from './components/badge';
-export type { BadgeProps } from './components/badge';
+export { Badge, badgeVariants } from "./components/badge";
+export type { BadgeProps } from "./components/badge";
 
 export {
   Dialog,
@@ -74,14 +74,9 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-} from './components/dialog';
+} from "./components/dialog";
 
-export {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from './components/tabs';
+export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/tabs";
 
 export {
   Toast,
@@ -93,10 +88,7 @@ export {
   ToastViewport,
   Toaster,
   useToast,
-} from './components/toast';
-export type {
-  ToastProps,
-  ToastActionElement,
-} from './components/toast';
+} from "./components/toast";
+export type { ToastProps, ToastActionElement } from "./components/toast";
 
-export { Separator } from './components/separator';
+export { Separator } from "./components/separator";

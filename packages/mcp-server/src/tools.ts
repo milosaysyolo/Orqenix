@@ -4,9 +4,9 @@
 // 10 MCP tools exposing Orqenix memory + skills + mesh per CR v8.0 Section 9.2.1.
 // Each tool has a name + description + inputSchema + handler.
 
-import { z } from 'zod';
-import type { MemoryEngine, KbKind } from '@orqenix/memory-engine';
-import type { SkillRuntime } from '@orqenix/skill-runtime';
+import { z } from "zod";
+import type { MemoryEngine, KbKind } from "@orqenix/memory-engine";
+import type { SkillRuntime } from "@orqenix/skill-runtime";
 
 export interface ToolContext {
   engine: MemoryEngine;
@@ -32,7 +32,7 @@ export interface McpToolDefinition {
 
 const RecallMemoryArgs = z.object({
   query: z.string().min(1),
-  kbs: z.array(z.enum(['chat', 'code', 'decision', 'lesson'])).optional(),
+  kbs: z.array(z.enum(["chat", "code", "decision", "lesson"])).optional(),
   limit: z.number().int().positive().max(100).default(20),
 });
 
@@ -54,22 +54,22 @@ export function resolveRecallPermission(kbs?: string[]): string {
 }
 
 const recallMemoryTool: McpToolDefinition = {
-  name: 'orqenix_recall_memory',
+  name: "orqenix_recall_memory",
   description:
     'Query memory across the project/branch/session hierarchy. Returns ranked entries with provenance.',
   permission: resolveRecallPermission(),
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      query: { type: 'string', description: 'Search query' },
+      query: { type: "string", description: "Search query" },
       kbs: {
-        type: 'array',
-        items: { enum: ['chat', 'code', 'decision', 'lesson'] },
-        description: 'Optional KB filter',
+        type: "array",
+        items: { enum: ["chat", "code", "decision", "lesson"] },
+        description: "Optional KB filter",
       },
-      limit: { type: 'number', default: 20 },
+      limit: { type: "number", default: 20 },
     },
-    required: ['query'],
+    required: ["query"],
   },
   async handler(args, ctx) {
     const parsed = RecallMemoryArgs.parse(args);
@@ -77,7 +77,7 @@ const recallMemoryTool: McpToolDefinition = {
       query: parsed.query,
       ...(parsed.kbs ? { kbs: parsed.kbs } : {}),
       ...(ctx.sessionId ? { sessionId: ctx.sessionId } : {}),
-      branchId: ctx.branchId ?? '',
+      branchId: ctx.branchId ?? "",
       limit: parsed.limit,
     });
     return {
@@ -88,7 +88,7 @@ const recallMemoryTool: McpToolDefinition = {
         content: r.entry.content,
         score: r.finalScore,
         sourceLevel: r.sourceLevel,
-        isSubagentReturn: r.entry.protection_flags?.kind === 'subagent_return',
+        isSubagentReturn: r.entry.protection_flags?.kind === "subagent_return",
       })),
       levelsQueried: result.levelsQueried,
       durationMs: result.durationMs,
@@ -104,7 +104,7 @@ const RecordDecisionArgs = z.object({
   title: z.string().min(1),
   rationale: z.string().min(1),
   alternatives: z.array(z.string()).optional(),
-  status: z.enum(['proposed', 'accepted', 'superseded']).default('accepted'),
+  status: z.enum(["proposed", "accepted", "superseded"]).default("accepted"),
 });
 
 const recordDecisionTool: McpToolDefinition = {
@@ -112,14 +112,14 @@ const recordDecisionTool: McpToolDefinition = {
   description: 'Record an architectural decision with rationale and alternatives.',
   permission: 'memory.write:decision',
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      title: { type: 'string' },
-      rationale: { type: 'string' },
-      alternatives: { type: 'array', items: { type: 'string' } },
-      status: { enum: ['proposed', 'accepted', 'superseded'], default: 'accepted' },
+      title: { type: "string" },
+      rationale: { type: "string" },
+      alternatives: { type: "array", items: { type: "string" } },
+      status: { enum: ["proposed", "accepted", "superseded"], default: "accepted" },
     },
-    required: ['title', 'rationale'],
+    required: ["title", "rationale"],
   },
   async handler(args, ctx) {
     const parsed = RecordDecisionArgs.parse(args);
@@ -130,11 +130,11 @@ const recordDecisionTool: McpToolDefinition = {
       status: parsed.status,
     });
     const entry = await ctx.engine.write({
-      kb: 'decision',
+      kb: "decision",
       content,
-      branch_id: ctx.branchId ?? '',
+      branch_id: ctx.branchId ?? "",
       ...(ctx.sessionId ? { session_id: ctx.sessionId } : {}),
-      memory_level: ctx.sessionId ? 'session' : 'branch',
+      memory_level: ctx.sessionId ? "session" : "branch",
     });
     return { entryId: entry.id, status: parsed.status };
   },
@@ -156,14 +156,14 @@ const recordLessonTool: McpToolDefinition = {
   description: 'Record a lesson learned from debugging, incidents, or post-mortems.',
   permission: 'memory.write:lesson',
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      title: { type: 'string' },
-      context: { type: 'string' },
-      lesson: { type: 'string' },
-      references: { type: 'array', items: { type: 'string' } },
+      title: { type: "string" },
+      context: { type: "string" },
+      lesson: { type: "string" },
+      references: { type: "array", items: { type: "string" } },
     },
-    required: ['title', 'context', 'lesson'],
+    required: ["title", "context", "lesson"],
   },
   async handler(args, ctx) {
     const parsed = RecordLessonArgs.parse(args);
@@ -174,11 +174,11 @@ const recordLessonTool: McpToolDefinition = {
       references: parsed.references ?? [],
     });
     const entry = await ctx.engine.write({
-      kb: 'lesson',
+      kb: "lesson",
       content,
-      branch_id: ctx.branchId ?? '',
+      branch_id: ctx.branchId ?? "",
       ...(ctx.sessionId ? { session_id: ctx.sessionId } : {}),
-      memory_level: ctx.sessionId ? 'session' : 'branch',
+      memory_level: ctx.sessionId ? "session" : "branch",
     });
     return { entryId: entry.id };
   },
@@ -199,20 +199,20 @@ const queryCodeKbTool: McpToolDefinition = {
   description: 'Query the CodeKB for code snippets, ASTs, and symbols.',
   permission: 'memory.read:code',
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      codePattern: { type: 'string' },
-      language: { type: 'string' },
-      limit: { type: 'number', default: 20 },
+      codePattern: { type: "string" },
+      language: { type: "string" },
+      limit: { type: "number", default: 20 },
     },
   },
   async handler(args, ctx) {
     const parsed = QueryCodeKbArgs.parse(args);
     const result = await ctx.engine.query({
-      query: parsed.codePattern ?? '',
-      kbs: ['code'],
+      query: parsed.codePattern ?? "",
+      kbs: ["code"],
       ...(ctx.sessionId ? { sessionId: ctx.sessionId } : {}),
-      branchId: ctx.branchId ?? '',
+      branchId: ctx.branchId ?? "",
       limit: parsed.limit,
     });
     return {
@@ -239,12 +239,12 @@ const invokeSkillTool: McpToolDefinition = {
   description: 'Invoke a registered Orqenix skill by name with input matching its schema.',
   permission: 'skill.invoke',
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      skillName: { type: 'string' },
-      input: { type: 'object' },
+      skillName: { type: "string" },
+      input: { type: "object" },
     },
-    required: ['skillName', 'input'],
+    required: ["skillName", "input"],
   },
   async handler(args, ctx) {
     const parsed = InvokeSkillArgs.parse(args);
@@ -271,13 +271,13 @@ const linkScopeTool: McpToolDefinition = {
   description: 'Link two scopes with a capability transfer (directional).',
   permission: 'scope.write',
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      fromScopeId: { type: 'string' },
-      toScopeId: { type: 'string' },
-      capabilities: { type: 'array', items: { type: 'string' } },
+      fromScopeId: { type: "string" },
+      toScopeId: { type: "string" },
+      capabilities: { type: "array", items: { type: "string" } },
     },
-    required: ['fromScopeId', 'toScopeId', 'capabilities'],
+    required: ["fromScopeId", "toScopeId", "capabilities"],
   },
   async handler(args, _ctx) {
     const parsed = LinkScopeArgs.parse(args);
@@ -317,31 +317,31 @@ const verifyAuditChainTool: McpToolDefinition = {
 
 const PromoteToBranchArgs = z.object({
   entryId: z.string(),
-  kb: z.enum(['chat', 'code', 'decision', 'lesson']),
+  kb: z.enum(["chat", "code", "decision", "lesson"]),
   reason: z.string().optional(),
 });
 
 const promoteToBranchTool: McpToolDefinition = {
-  name: 'orqenix_promote_to_branch',
-  description: 'Promote a session-level memory entry to branch level.',
+  name: "orqenix_promote_to_branch",
+  description: "Promote a session-level memory entry to branch level.",
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      entryId: { type: 'string' },
-      kb: { enum: ['chat', 'code', 'decision', 'lesson'] },
-      reason: { type: 'string' },
+      entryId: { type: "string" },
+      kb: { enum: ["chat", "code", "decision", "lesson"] },
+      reason: { type: "string" },
     },
-    required: ['entryId', 'kb'],
+    required: ["entryId", "kb"],
   },
   async handler(args, ctx) {
     const parsed = PromoteToBranchArgs.parse(args);
     await ctx.engine.promote({
       entryId: parsed.entryId,
       kb: parsed.kb as KbKind,
-      from: 'session',
-      to: 'branch',
+      from: "session",
+      to: "branch",
       ...(ctx.sessionId ? { fromSessionId: ctx.sessionId } : {}),
-      fromBranchId: ctx.branchId ?? '',
+      fromBranchId: ctx.branchId ?? "",
       ...(parsed.reason ? { reason: parsed.reason } : {}),
     });
     return { promoted: true };
@@ -362,12 +362,12 @@ const reportSessionStartTool: McpToolDefinition = {
   description: 'Report a new session to Orqenix (for self-learning + hierarchy).',
   permission: 'scope.read',
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      agentPlatform: { type: 'string' },
-      parentSessionId: { type: 'string' },
+      agentPlatform: { type: "string" },
+      parentSessionId: { type: "string" },
     },
-    required: ['agentPlatform'],
+    required: ["agentPlatform"],
   },
   async handler(args, ctx) {
     const parsed = ReportSessionStartArgs.parse(args);
@@ -382,9 +382,9 @@ const reportSessionResumeTool: McpToolDefinition = {
   description: 'Report resumption of a previous session.',
   permission: 'scope.read',
   inputSchema: {
-    type: 'object',
-    properties: { sessionId: { type: 'string' } },
-    required: ['sessionId'],
+    type: "object",
+    properties: { sessionId: { type: "string" } },
+    required: ["sessionId"],
   },
   async handler(args, _ctx) {
     const parsed = z.object({ sessionId: z.string() }).parse(args);
@@ -393,7 +393,7 @@ const reportSessionResumeTool: McpToolDefinition = {
 };
 
 function generateSessionId(): string {
-  return '01' + Math.random().toString(36).slice(2, 26).toUpperCase().padEnd(24, '0');
+  return "01" + Math.random().toString(36).slice(2, 26).toUpperCase().padEnd(24, "0");
 }
 
 // ─────────────────────────────────────────────────────────────────────────

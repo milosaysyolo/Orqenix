@@ -13,7 +13,7 @@ export const DEFAULT_SUBAGENT_CONSTRAINTS: SubagentConstraints = {
   maxSteps: 5,
   maxWallTimeSec: 90,
   allowedTools: [],
-  forbiddenTools: ['write_file', 'git_commit'],
+  forbiddenTools: ["write_file", "git_commit"],
 };
 
 /** Harness package injected by parent into subagent (CR v8.0 Section 5.1 Phase A) */

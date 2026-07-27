@@ -4,7 +4,7 @@
 // Universally Unique Lexicographically Sortable Identifier. Used for
 // session_id + memory entry id. Time-sortable, monotonic per CR v8.0 Section 4.1.
 
-const ENCODING = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; // Crockford base32
+const ENCODING = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford base32
 const ENCODING_LEN = ENCODING.length;
 const TIME_LEN = 10;
 const RANDOM_LEN = 16;
@@ -27,12 +27,12 @@ export function ulid(seedTime?: number): string {
     timeChars = encodeTime(now);
   }
 
-  return timeChars + lastRandom.map((i) => ENCODING[i]).join('');
+  return timeChars + lastRandom.map((i) => ENCODING[i]).join("");
 }
 
 function encodeTime(now: number): string {
   let mod: number;
-  let str = '';
+  let str = "";
   let t = now;
   for (let i = TIME_LEN - 1; i >= 0; i--) {
     mod = t % ENCODING_LEN;

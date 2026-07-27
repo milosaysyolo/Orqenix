@@ -4,14 +4,11 @@
 // Cross-machine settings portability per G64-06 + G64-07.
 // Supports JSON + YAML formats with provenance metadata.
 
-import { stringify as stringifyYaml, parse as parseYaml } from 'yaml';
-import { z } from 'zod';
+import { stringify as stringifyYaml, parse as parseYaml } from "yaml";
+import { z } from "zod";
 
-import type { SettingsRegistry } from './registry';
-import {
-  SettingsOverrideSchema,
-  type SettingsOverride,
-} from './types';
+import type { SettingsRegistry } from "./registry";
+import { SettingsOverrideSchema, type SettingsOverride } from "./types";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Export
@@ -19,9 +16,9 @@ import {
 
 export interface ExportOptions {
   /** Which levels to export (default: all) */
-  level?: 'session' | 'branch' | 'project' | 'user' | 'system' | 'all';
+  level?: "session" | "branch" | "project" | "user" | "system" | "all";
   /** Output format (default: yaml) */
-  format?: 'json' | 'yaml';
+  format?: "json" | "yaml";
   /** Filter to a specific module (default: all modules) */
   moduleId?: string;
   /** User performing the export (for metadata) */
@@ -53,7 +50,7 @@ const ExportedSettingsSchema = z.object({
   overrides: z.array(SettingsOverrideSchema),
 });
 
-const REGISTRY_VERSION = '0.8.0-alpha.1';
+const REGISTRY_VERSION = "0.8.0-alpha.1";
 
 /**
  * Exports settings overrides to a serialized string (JSON or YAML).
@@ -63,10 +60,10 @@ const REGISTRY_VERSION = '0.8.0-alpha.1';
  */
 export async function exportSettings(
   registry: SettingsRegistry,
-  options: ExportOptions = {}
+  options: ExportOptions = {},
 ): Promise<string> {
-  const format = options.format ?? 'yaml';
-  const level = options.level ?? 'all';
+  const format = options.format ?? "yaml";
+  const level = options.level ?? "all";
 
   const persistence = registry.getPersistence();
   let overrides: SettingsOverride[] = options.moduleId
@@ -74,23 +71,23 @@ export async function exportSettings(
     : await persistence.list();
 
   // Filter by level if not 'all'
-  if (level !== 'all') {
+  if (level !== "all") {
     overrides = overrides.filter((o) => o.level === level);
   }
 
   const exported: ExportedSettings = {
     version: 1,
     exported_at: new Date().toISOString(),
-    exported_by: options.exportedBy ?? 'unknown',
+    exported_by: options.exportedBy ?? "unknown",
     source: { settingsRegistryVersion: REGISTRY_VERSION },
     overrides,
   };
 
   // Audit the export
   await registry.getAuditWriter().append({
-    kind: 'settings.exported',
+    kind: "settings.exported",
     ts: new Date().toISOString(),
-    actor: { user: options.exportedBy ?? 'unknown' },
+    actor: { user: options.exportedBy ?? "unknown" },
     payload: {
       level,
       format,
@@ -99,7 +96,7 @@ export async function exportSettings(
     },
   });
 
-  if (format === 'json') {
+  if (format === "json") {
     return JSON.stringify(exported, null, 2);
   }
   return stringifyYaml(exported, { indent: 2 });
@@ -111,7 +108,7 @@ export async function exportSettings(
 
 export interface ImportOptions {
   /** merge: add overrides without removing existing; replace: overwrite all */
-  mode?: 'merge' | 'replace';
+  mode?: "merge" | "replace";
   /** User performing the import */
   importedBy?: string;
   /** Skip overrides for modules not currently registered (default: false = warn) */
@@ -133,15 +130,15 @@ export interface ImportResult {
 export async function importSettings(
   registry: SettingsRegistry,
   serialized: string,
-  options: ImportOptions = {}
+  options: ImportOptions = {},
 ): Promise<ImportResult> {
-  const mode = options.mode ?? 'merge';
+  const mode = options.mode ?? "merge";
   const warnings: string[] = [];
 
   // Parse (try JSON first, fall back to YAML)
   let parsed: unknown;
   const trimmed = serialized.trim();
-  if (trimmed.startsWith('{')) {
+  if (trimmed.startsWith("{")) {
     try {
       parsed = JSON.parse(trimmed);
     } catch (err) {
@@ -158,16 +155,14 @@ export async function importSettings(
   // Validate schema
   const result = ExportedSettingsSchema.safeParse(parsed);
   if (!result.success) {
-    throw new Error(
-      `Invalid settings export format: ${result.error.message}`
-    );
+    throw new Error(`Invalid settings export format: ${result.error.message}`);
   }
 
   const exported = result.data;
   const persistence = registry.getPersistence();
 
   // Replace mode: clear all existing overrides first
-  if (mode === 'replace') {
+  if (mode === "replace") {
     const existing = await persistence.list();
     for (const o of existing) {
       await persistence.delete(o.moduleId, o.settingPath, o.level, o.hierarchyId);
@@ -177,9 +172,7 @@ export async function importSettings(
   // Apply imported overrides
   let imported = 0;
   let skipped = 0;
-  const registeredModules = new Set(
-    registry.listContracts().map((c) => c.moduleId)
-  );
+  const registeredModules = new Set(registry.listContracts().map((c) => c.moduleId));
 
   for (const override of exported.overrides) {
     // Skip overrides for modules not registered
@@ -189,7 +182,7 @@ export async function importSettings(
         continue;
       }
       warnings.push(
-        `Override for unregistered module '${override.moduleId}' (setting: ${override.settingPath}). Applied anyway; register the module to use it.`
+        `Override for unregistered module '${override.moduleId}' (setting: ${override.settingPath}). Applied anyway; register the module to use it.`,
       );
     }
 
@@ -204,9 +197,9 @@ export async function importSettings(
 
   // Audit the import
   await registry.getAuditWriter().append({
-    kind: 'settings.imported',
+    kind: "settings.imported",
     ts: new Date().toISOString(),
-    actor: { user: options.importedBy ?? 'unknown' },
+    actor: { user: options.importedBy ?? "unknown" },
     payload: {
       mode,
       imported,

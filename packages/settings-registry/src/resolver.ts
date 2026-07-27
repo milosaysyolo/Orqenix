@@ -9,16 +9,16 @@ import type {
   ResolvedSetting,
   SettingsContext,
   HierarchyOverride,
-} from './types';
-import type { SettingsPersistence } from './persistence';
+} from "./types";
+import type { SettingsPersistence } from "./persistence";
 
 /** Resolution order from most specific to least specific */
-const RESOLUTION_ORDER: Array<'session' | 'branch' | 'project' | 'user' | 'system'> = [
-  'session',
-  'branch',
-  'project',
-  'user',
-  'system',
+const RESOLUTION_ORDER: Array<"session" | "branch" | "project" | "user" | "system"> = [
+  "session",
+  "branch",
+  "project",
+  "user",
+  "system",
 ];
 
 export class SettingsResolver {
@@ -33,7 +33,7 @@ export class SettingsResolver {
   async resolve(
     contract: ModuleSettingsContract,
     settingPath: string,
-    context: SettingsContext
+    context: SettingsContext,
   ): Promise<ResolvedSetting> {
     for (const level of RESOLUTION_ORDER) {
       if (!this.canOverride(contract.hierarchyOverride, level)) {
@@ -43,7 +43,7 @@ export class SettingsResolver {
       const hierarchyId = this.hierarchyIdForLevel(level, context);
       // session/branch/project require a hierarchyId; skip if absent
       if (
-        (level === 'session' || level === 'branch' || level === 'project') &&
+        (level === "session" || level === "branch" || level === "project") &&
         hierarchyId === null
       ) {
         continue;
@@ -53,7 +53,7 @@ export class SettingsResolver {
         contract.moduleId,
         settingPath,
         level,
-        hierarchyId
+        hierarchyId,
       );
 
       if (override !== undefined) {
@@ -71,7 +71,7 @@ export class SettingsResolver {
     const defaultValue = getByPath(contract.defaults, settingPath);
     return {
       value: defaultValue,
-      source: 'built-in-default',
+      source: "built-in-default",
       inherits: true,
       provenance: contract.provenance,
       hotReloadable: contract.hotReloadable,
@@ -84,7 +84,7 @@ export class SettingsResolver {
   async resolveValue(
     contract: ModuleSettingsContract,
     settingPath: string,
-    context: SettingsContext
+    context: SettingsContext,
   ): Promise<unknown> {
     return (await this.resolve(contract, settingPath, context)).value;
   }
@@ -92,38 +92,38 @@ export class SettingsResolver {
   /** Whether a module permits override at a given level */
   private canOverride(
     override: HierarchyOverride,
-    level: 'session' | 'branch' | 'project' | 'user' | 'system'
+    level: "session" | "branch" | "project" | "user" | "system",
   ): boolean {
     switch (override) {
-      case 'all':
+      case "all":
         return true;
-      case 'session':
+      case "session":
         // session can override at session + everything below it
         return true;
-      case 'branch':
-        return level !== 'session';
-      case 'project':
-        return level === 'project' || level === 'user' || level === 'system';
-      case 'none':
-        return level === 'system';
+      case "branch":
+        return level !== "session";
+      case "project":
+        return level === "project" || level === "user" || level === "system";
+      case "none":
+        return level === "system";
     }
   }
 
   /** Maps a level to its hierarchy ID from context */
   private hierarchyIdForLevel(
-    level: 'session' | 'branch' | 'project' | 'user' | 'system',
-    context: SettingsContext
+    level: "session" | "branch" | "project" | "user" | "system",
+    context: SettingsContext,
   ): string | null {
     switch (level) {
-      case 'session':
+      case "session":
         return context.sessionId ?? null;
-      case 'branch':
+      case "branch":
         return context.branchId ?? null;
-      case 'project':
+      case "project":
         return context.projectId ?? null;
-      case 'user':
+      case "user":
         return context.userId ?? null;
-      case 'system':
+      case "system":
         return null; // system level has no hierarchy ID
     }
   }
@@ -137,20 +137,17 @@ export class SettingsResolver {
  * NESTED objects: { hierarchy: { level_boost: { session: 1.5 } } }. This function
  * supports BOTH — it checks the flat key first, then falls back to nested traversal.
  */
-export function getByPath(
-  obj: Record<string, unknown>,
-  path: string
-): unknown {
+export function getByPath(obj: Record<string, unknown>, path: string): unknown {
   // 1. Flat key match first (settings-bootstrap convention)
   if (Object.prototype.hasOwnProperty.call(obj, path)) {
     return obj[path];
   }
 
   // 2. Nested traversal fallback
-  const parts = path.split('.');
+  const parts = path.split(".");
   let cur: unknown = obj;
   for (const part of parts) {
-    if (cur === null || typeof cur !== 'object') {
+    if (cur === null || typeof cur !== "object") {
       return undefined;
     }
     cur = (cur as Record<string, unknown>)[part];

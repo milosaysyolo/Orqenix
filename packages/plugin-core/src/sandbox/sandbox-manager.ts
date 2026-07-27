@@ -11,19 +11,13 @@ import type {
   PluginInvocationResult,
   PluginRuntimeHandle,
   RegisteredPlugin,
-} from '../types';
-import { ProcessSandbox } from './process-sandbox';
-import { CrashHandler } from './crash-handler';
-import {
-  resolveResourceLimits,
-  type ResolvedResourceLimits,
-} from './resource-limits';
-import type { PluginAuditWriter } from '../audit-kinds';
-import { NoopPluginAuditWriter } from '../audit-kinds';
-import {
-  PluginActivateFailedError,
-  PluginNotRegisteredError,
-} from '../errors';
+} from "../types";
+import { ProcessSandbox } from "./process-sandbox";
+import { CrashHandler } from "./crash-handler";
+import { resolveResourceLimits, type ResolvedResourceLimits } from "./resource-limits";
+import type { PluginAuditWriter } from "../audit-kinds";
+import { NoopPluginAuditWriter } from "../audit-kinds";
+import { PluginActivateFailedError, PluginNotRegisteredError } from "../errors";
 
 export interface SandboxManagerOptions {
   auditWriter?: PluginAuditWriter;
@@ -76,10 +70,7 @@ export class SandboxManager {
    * @param plugin Registered plugin to activate
    * @param entryPath Resolved entry path (from loader)
    */
-  async activate(
-    plugin: RegisteredPlugin,
-    entryPath: string
-  ): Promise<PluginRuntimeHandle> {
+  async activate(plugin: RegisteredPlugin, entryPath: string): Promise<PluginRuntimeHandle> {
     const name = plugin.csf.name;
 
     if (this.sandboxes.has(name)) {
@@ -87,10 +78,7 @@ export class SandboxManager {
       return this.sandboxes.get(name)!;
     }
 
-    const limits = resolveResourceLimits(
-      plugin.csf.manifest.sandboxOverrides,
-      this.operatorLimits
-    );
+    const limits = resolveResourceLimits(plugin.csf.manifest.sandboxOverrides, this.operatorLimits);
 
     const sandbox = new ProcessSandbox({
       csf: plugin.csf,
@@ -113,9 +101,9 @@ export class SandboxManager {
       await sandbox.spawn();
     } catch (err) {
       await this.audit.append({
-        kind: 'plugin.activate_failed',
+        kind: "plugin.activate_failed",
         ts: new Date().toISOString(),
-        actor: { system: 'sandbox-manager' },
+        actor: { system: "sandbox-manager" },
         payload: { name, error: (err as Error).message },
       });
       throw err instanceof PluginActivateFailedError
@@ -127,9 +115,9 @@ export class SandboxManager {
     this.crashHandler.reset(name);
 
     await this.audit.append({
-      kind: 'plugin.activated',
+      kind: "plugin.activated",
       ts: new Date().toISOString(),
-      actor: { system: 'sandbox-manager' },
+      actor: { system: "sandbox-manager" },
       payload: { name, version: plugin.csf.version, pid: sandbox.pid },
     });
 
@@ -139,23 +127,19 @@ export class SandboxManager {
   /**
    * Invokes a tool on an active plugin.
    */
-  async invoke(
-    request: PluginInvocationRequest
-  ): Promise<PluginInvocationResult> {
+  async invoke(request: PluginInvocationRequest): Promise<PluginInvocationResult> {
     const sandbox = this.sandboxes.get(request.pluginName);
     if (!sandbox) {
-      throw new PluginNotRegisteredError(
-        `${request.pluginName} is not active. Activate it first.`
-      );
+      throw new PluginNotRegisteredError(`${request.pluginName} is not active. Activate it first.`);
     }
 
     const startMs = Date.now();
     try {
       const result = await sandbox.invoke(request);
       await this.audit.append({
-        kind: 'plugin.invocation',
+        kind: "plugin.invocation",
         ts: new Date().toISOString(),
-        actor: { system: 'sandbox-manager' },
+        actor: { system: "sandbox-manager" },
         payload: {
           name: request.pluginName,
           toolName: request.toolName,
@@ -168,9 +152,9 @@ export class SandboxManager {
       return result;
     } catch (err) {
       await this.audit.append({
-        kind: 'plugin.invocation_failed',
+        kind: "plugin.invocation_failed",
         ts: new Date().toISOString(),
-        actor: { system: 'sandbox-manager' },
+        actor: { system: "sandbox-manager" },
         payload: {
           name: request.pluginName,
           toolName: request.toolName,
@@ -193,9 +177,9 @@ export class SandboxManager {
     this.sandboxes.delete(pluginName);
 
     await this.audit.append({
-      kind: 'plugin.deactivated',
+      kind: "plugin.deactivated",
       ts: new Date().toISOString(),
-      actor: { system: 'sandbox-manager' },
+      actor: { system: "sandbox-manager" },
       payload: { name: pluginName },
     });
   }

@@ -3,12 +3,12 @@
 //
 // Per CR v8.0 Section 9.4.1. Wired into memory-engine migrations.
 
-import { blake3 } from '@noble/hashes/blake3';
+import { blake3 } from "@noble/hashes/blake3";
 
-function checksum(up: string, down = ''): string {
-  const h = blake3(new TextEncoder().encode(up + '\n' + down));
-  let s = '';
-  for (let i = 0; i < h.length; i++) s += (h[i] as number).toString(16).padStart(2, '0');
+function checksum(up: string, down = ""): string {
+  const h = blake3(new TextEncoder().encode(up + "\n" + down));
+  let s = "";
+  for (let i = 0; i < h.length; i++) s += (h[i] as number).toString(16).padStart(2, "0");
   return s;
 }
 
@@ -105,7 +105,7 @@ export interface SelfLearningMigration {
 export const SELF_LEARNING_MIGRATIONS: SelfLearningMigration[] = [
   {
     id: 530,
-    name: 'self-learning-observer',
+    name: "self-learning-observer",
     up: MIGRATION_530_UP,
     down: MIGRATION_530_DOWN,
     checksum: checksum(MIGRATION_530_UP, MIGRATION_530_DOWN),

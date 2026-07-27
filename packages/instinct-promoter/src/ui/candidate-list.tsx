@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/instinct-promoter/ui , CandidateList component
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Sparkles } from 'lucide-react';
-import { CandidateCard } from './candidate-card';
-import type { PromoterCandidate, ReviewAction } from '../types';
+import * as React from "react";
+import { Sparkles } from "lucide-react";
+import { CandidateCard } from "./candidate-card";
+import type { PromoterCandidate, ReviewAction } from "../types";
 
 export interface CandidateListProps {
   candidates: PromoterCandidate[];
@@ -14,7 +14,11 @@ export interface CandidateListProps {
   loading?: boolean;
 }
 
-export function CandidateList({ candidates, onReview, loading }: CandidateListProps): React.ReactElement {
+export function CandidateList({
+  candidates,
+  onReview,
+  loading,
+}: CandidateListProps): React.ReactElement {
   const [busyId, setBusyId] = React.useState<string | null>(null);
 
   async function handleReview(candidateId: string, action: ReviewAction): Promise<void> {
@@ -27,7 +31,9 @@ export function CandidateList({ candidates, onReview, loading }: CandidateListPr
   }
 
   if (loading) {
-    return <div className="text-center py-8 text-sm text-muted-foreground">Loading candidates...</div>;
+    return (
+      <div className="text-center py-8 text-sm text-muted-foreground">Loading candidates...</div>
+    );
   }
 
   if (candidates.length === 0) {

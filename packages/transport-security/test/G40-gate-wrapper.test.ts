@@ -1,42 +1,43 @@
-import { describe, it, expect } from 'vitest';
-import { CapabilityVerifier } from '../src/verifier.js';
-import { LRUKeyStore } from '../src/key-store.js';
+import { describe, it, expect } from "vitest";
+import { CapabilityVerifier } from "../src/verifier.js";
+import { LRUKeyStore } from "../src/key-store.js";
 import {
   b64urlEncode,
   ed25519Sign,
   exportEd25519PublicKeyRaw,
   generateEd25519Keypair,
-} from '../src/ed25519.js';
+} from "../src/ed25519.js";
 import {
   canonicalSigningBytes,
   encodeCapabilityToken,
   type CapabilityTokenFields,
-} from '../src/capability-token.js';
-import type { ScopeId } from '@orqenix/mesh-transport-core';
+} from "../src/capability-token.js";
+import type { ScopeId } from "@orqenix/mesh-transport-core";
 
-describe('G40: Transport Security Gate', () => {
-  it('C1: missing capability -> denied E_CAP_MISSING', async () => {
+describe("G40: Transport Security Gate", () => {
+  it("C1: missing capability -> denied E_CAP_MISSING", async () => {
     const v = new CapabilityVerifier({ keyStore: new LRUKeyStore() });
     const r = await v.verify({
-      capability: '',
-      fromScope: 'a' as ScopeId,
-      toScope: 'b' as ScopeId,
-      method: 'memory.query',
+      capability: "",
+      fromScope: "a" as ScopeId,
+      toScope: "b" as ScopeId,
+      method: "memory.query",
     });
     expect(r.ok).toBe(false);
-    expect((r as { code: string }).code).toBe('E_CAP_MISSING');
+    expect((r as { code: string }).code).toBe("E_CAP_MISSING");
   });
 
-  it('C2: expired -> denied E_CAP_EXPIRED', async () => {
+  it("C2: expired -> denied E_CAP_EXPIRED", async () => {
     const kp = await generateEd25519Keypair();
     const pubRaw = await exportEd25519PublicKeyRaw(kp.publicKey);
-    const iss = 'scp_b3_B' as ScopeId;
-    const sub = 'scp_b3_A' as ScopeId;
-    const base: Omit<CapabilityTokenFields, 'sig'> = {
-      iss, sub,
-      caps: ['memory.query', 'kb.recall.*'],
+    const iss = "scp_b3_B" as ScopeId;
+    const sub = "scp_b3_A" as ScopeId;
+    const base: Omit<CapabilityTokenFields, "sig"> = {
+      iss,
+      sub,
+      caps: ["memory.query", "kb.recall.*"],
       exp: Date.now() - 10,
-      jti: 'jti-gate',
+      jti: "jti-gate",
     };
     const sig = await ed25519Sign(kp.privateKey, canonicalSigningBytes(base));
     const token: CapabilityTokenFields = { ...base, sig: b64urlEncode(sig) };
@@ -47,22 +48,23 @@ describe('G40: Transport Security Gate', () => {
       capability: encodeCapabilityToken(token),
       fromScope: sub,
       toScope: iss,
-      method: 'memory.query',
+      method: "memory.query",
     });
     expect(r.ok).toBe(false);
-    expect((r as { code: string }).code).toBe('E_CAP_EXPIRED');
+    expect((r as { code: string }).code).toBe("E_CAP_EXPIRED");
   });
 
-  it('C3: subject mismatch -> denied E_CAP_SUBJECT_MISMATCH', async () => {
+  it("C3: subject mismatch -> denied E_CAP_SUBJECT_MISMATCH", async () => {
     const kp = await generateEd25519Keypair();
     const pubRaw = await exportEd25519PublicKeyRaw(kp.publicKey);
-    const iss = 'scp_b3_B' as ScopeId;
-    const sub = 'scp_b3_A' as ScopeId;
-    const base: Omit<CapabilityTokenFields, 'sig'> = {
-      iss, sub,
-      caps: ['memory.query', 'kb.recall.*'],
+    const iss = "scp_b3_B" as ScopeId;
+    const sub = "scp_b3_A" as ScopeId;
+    const base: Omit<CapabilityTokenFields, "sig"> = {
+      iss,
+      sub,
+      caps: ["memory.query", "kb.recall.*"],
       exp: Date.now() + 600_000,
-      jti: 'jti-gate',
+      jti: "jti-gate",
     };
     const sig = await ed25519Sign(kp.privateKey, canonicalSigningBytes(base));
     const token: CapabilityTokenFields = { ...base, sig: b64urlEncode(sig) };
@@ -71,24 +73,25 @@ describe('G40: Transport Security Gate', () => {
     const v = new CapabilityVerifier({ keyStore: ks });
     const r = await v.verify({
       capability: encodeCapabilityToken(token),
-      fromScope: 'scp_b3_other' as ScopeId,
+      fromScope: "scp_b3_other" as ScopeId,
       toScope: iss,
-      method: 'memory.query',
+      method: "memory.query",
     });
     expect(r.ok).toBe(false);
-    expect((r as { code: string }).code).toBe('E_CAP_SUBJECT_MISMATCH');
+    expect((r as { code: string }).code).toBe("E_CAP_SUBJECT_MISMATCH");
   });
 
-  it('C4: method not allowed -> denied E_CAP_METHOD_NOT_ALLOWED', async () => {
+  it("C4: method not allowed -> denied E_CAP_METHOD_NOT_ALLOWED", async () => {
     const kp = await generateEd25519Keypair();
     const pubRaw = await exportEd25519PublicKeyRaw(kp.publicKey);
-    const iss = 'scp_b3_B' as ScopeId;
-    const sub = 'scp_b3_A' as ScopeId;
-    const base: Omit<CapabilityTokenFields, 'sig'> = {
-      iss, sub,
-      caps: ['memory.query'],
+    const iss = "scp_b3_B" as ScopeId;
+    const sub = "scp_b3_A" as ScopeId;
+    const base: Omit<CapabilityTokenFields, "sig"> = {
+      iss,
+      sub,
+      caps: ["memory.query"],
       exp: Date.now() + 600_000,
-      jti: 'jti-gate',
+      jti: "jti-gate",
     };
     const sig = await ed25519Sign(kp.privateKey, canonicalSigningBytes(base));
     const token: CapabilityTokenFields = { ...base, sig: b64urlEncode(sig) };
@@ -99,36 +102,37 @@ describe('G40: Transport Security Gate', () => {
       capability: encodeCapabilityToken(token),
       fromScope: sub,
       toScope: iss,
-      method: 'kb.recall.advanced',
+      method: "kb.recall.advanced",
     });
     expect(r.ok).toBe(false);
-    expect((r as { code: string }).code).toBe('E_CAP_METHOD_NOT_ALLOWED');
+    expect((r as { code: string }).code).toBe("E_CAP_METHOD_NOT_ALLOWED");
   });
 
-  it('C5: p95 verify latency < 10ms (CI tolerance +5ms)', async () => {
+  it("C5: p95 verify latency < 10ms (CI tolerance +5ms)", async () => {
     const ITER = 10_000; // faster for unit test; benchmark uses 100k
     const CI_TOLERANCE_MS = 5;
     const kp = await generateEd25519Keypair();
     const ks = new LRUKeyStore();
-    const iss = 'scp_b3_B' as ScopeId;
-    const sub = 'scp_b3_A' as ScopeId;
+    const iss = "scp_b3_B" as ScopeId;
+    const sub = "scp_b3_A" as ScopeId;
     ks.put(iss, await exportEd25519PublicKeyRaw(kp.publicKey));
-    const base: Omit<CapabilityTokenFields, 'sig'> = {
-      iss, sub,
-      caps: ['memory.query', 'kb.recall.*'],
+    const base: Omit<CapabilityTokenFields, "sig"> = {
+      iss,
+      sub,
+      caps: ["memory.query", "kb.recall.*"],
       exp: Date.now() + 600_000,
-      jti: 'jti-bench',
+      jti: "jti-bench",
     };
     const signed = await ed25519Sign(kp.privateKey, canonicalSigningBytes(base));
     const wire = encodeCapabilityToken({ ...base, sig: b64urlEncode(signed) });
     const v = new CapabilityVerifier({ keyStore: ks });
     for (let i = 0; i < 1_000; i++) {
-      await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: 'memory.query' });
+      await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: "memory.query" });
     }
     const samples = new Float64Array(ITER);
     for (let i = 0; i < ITER; i++) {
       const start = performance.now();
-      await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: 'memory.query' });
+      await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: "memory.query" });
       samples[i] = performance.now() - start;
     }
     const sorted = Array.from(samples).sort((a, b) => a - b);
@@ -137,15 +141,16 @@ describe('G40: Transport Security Gate', () => {
     expect(p95).toBeLessThan(10 + CI_TOLERANCE_MS);
   }, 60_000);
 
-  it('C6: pipeline preserves order -> bad sig denies before scope/method match', async () => {
+  it("C6: pipeline preserves order -> bad sig denies before scope/method match", async () => {
     const kp = await generateEd25519Keypair();
-    const iss = 'scp_b3_B' as ScopeId;
-    const sub = 'scp_b3_A' as ScopeId;
-    const base: Omit<CapabilityTokenFields, 'sig'> = {
-      iss, sub,
-      caps: ['memory.query', 'kb.recall.*'],
+    const iss = "scp_b3_B" as ScopeId;
+    const sub = "scp_b3_A" as ScopeId;
+    const base: Omit<CapabilityTokenFields, "sig"> = {
+      iss,
+      sub,
+      caps: ["memory.query", "kb.recall.*"],
       exp: Date.now() + 600_000,
-      jti: 'jti-gate',
+      jti: "jti-gate",
     };
     const sig = await ed25519Sign(kp.privateKey, canonicalSigningBytes(base));
     const token: CapabilityTokenFields = { ...base, sig: b64urlEncode(sig) };
@@ -157,9 +162,9 @@ describe('G40: Transport Security Gate', () => {
       capability: broken,
       fromScope: sub,
       toScope: iss,
-      method: 'memory.query',
+      method: "memory.query",
     });
     expect(r.ok).toBe(false);
-    expect((r as { code: string }).code).toBe('E_CAP_SIG_INVALID');
+    expect((r as { code: string }).code).toBe("E_CAP_SIG_INVALID");
   });
 });

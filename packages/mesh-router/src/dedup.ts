@@ -1,4 +1,4 @@
-import type { MeshResponse } from '@orqenix/mesh-transport-core';
+import type { MeshResponse } from "@orqenix/mesh-transport-core";
 
 interface Entry {
   resp: MeshResponse;

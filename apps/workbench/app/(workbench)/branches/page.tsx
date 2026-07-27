@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-'use client';
+"use client";
 
 import * as React from 'react';
 import { SectionTitle, Card, Badge, Button } from '@/components/ui';

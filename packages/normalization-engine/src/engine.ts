@@ -4,7 +4,7 @@
 // Orchestrates import (auto-detect adapter → CSF) and export (CSF → target).
 // Per CR v8.0 Chapter 8.
 
-import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
+import type { CanonicalSkillFormat } from "@orqenix/plugin-core";
 import {
   type InputAdapter,
   type OutputAdapter,
@@ -15,7 +15,7 @@ import {
   AmbiguousMatchError,
   UnsupportedTargetError,
   NormalizationError,
-} from './types';
+} from "./types";
 
 export interface NormalizationEngineOptions {
   inputAdapters: InputAdapter[];
@@ -46,9 +46,9 @@ export class NormalizationEngine {
       csf = await adapter.parse(input);
     } catch (err) {
       throw new NormalizationError(
-        'PARSE_FAILED',
+        "PARSE_FAILED",
         `Adapter '${adapter.kind}' failed to parse: ${(err as Error).message}`,
-        err
+        err,
       );
     }
 
@@ -56,7 +56,7 @@ export class NormalizationEngine {
     const warnings: string[] = [];
     if (csf.provenance.imported_from?.kind !== adapter.kind) {
       warnings.push(
-        `Provenance kind mismatch: expected ${adapter.kind}, got ${csf.provenance.imported_from?.kind}`
+        `Provenance kind mismatch: expected ${adapter.kind}, got ${csf.provenance.imported_from?.kind}`,
       );
     }
 
@@ -66,10 +66,7 @@ export class NormalizationEngine {
   /**
    * Exports CSF → target platform format.
    */
-  async export(
-    csf: CanonicalSkillFormat,
-    targetKind: string
-  ): Promise<NormalizationExportResult> {
+  async export(csf: CanonicalSkillFormat, targetKind: string): Promise<NormalizationExportResult> {
     const adapter = this.outputAdapters.get(targetKind);
     if (!adapter) {
       throw new UnsupportedTargetError(targetKind);
@@ -99,8 +96,8 @@ export class NormalizationEngine {
       const adapter = this.inputAdapters.get(input.sourceKind);
       if (!adapter) {
         throw new NormalizationError(
-          'UNKNOWN_SOURCE_KIND',
-          `No input adapter for sourceKind '${input.sourceKind}'`
+          "UNKNOWN_SOURCE_KIND",
+          `No input adapter for sourceKind '${input.sourceKind}'`,
         );
       }
       return adapter;
@@ -135,7 +132,7 @@ export class NormalizationEngine {
         candidates.slice(0, 3).map((c) => ({
           kind: c.adapter.kind,
           confidence: c.confidence,
-        }))
+        })),
       );
     }
 

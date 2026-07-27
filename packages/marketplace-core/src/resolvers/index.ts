@@ -3,13 +3,13 @@
 //
 // Builds the standard set of 6 resolvers. Operators customize via options.
 
-import { RegistryResolverRegistry } from '../registry-resolver';
-import { OrqenixOfficialResolver, type OrqenixOfficialOptions } from './orqenix-official';
-import { NpmRegistryResolver, type NpmResolverOptions } from './npm';
-import { GithubResolver, type GithubResolverOptions } from './github';
-import { LocalFileResolver, type LocalFileResolverOptions } from './local-file';
-import { PrivateGitResolver, type PrivateGitResolverOptions } from './private-git';
-import { EnterpriseResolver, type EnterpriseResolverOptions } from './enterprise';
+import { RegistryResolverRegistry } from "../registry-resolver";
+import { OrqenixOfficialResolver, type OrqenixOfficialOptions } from "./orqenix-official";
+import { NpmRegistryResolver, type NpmResolverOptions } from "./npm";
+import { GithubResolver, type GithubResolverOptions } from "./github";
+import { LocalFileResolver, type LocalFileResolverOptions } from "./local-file";
+import { PrivateGitResolver, type PrivateGitResolverOptions } from "./private-git";
+import { EnterpriseResolver, type EnterpriseResolverOptions } from "./enterprise";
 
 export {
   OrqenixOfficialResolver,
@@ -34,7 +34,7 @@ export interface DefaultResolversConfig {
  * Per Anti-pattern 39: resolvers are constructed here, never hardcoded in core.
  */
 export function buildDefaultResolvers(
-  config: DefaultResolversConfig = {}
+  config: DefaultResolversConfig = {},
 ): RegistryResolverRegistry {
   return new RegistryResolverRegistry([
     new OrqenixOfficialResolver(config.orqenixOfficial),

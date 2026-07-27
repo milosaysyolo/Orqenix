@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/instinct-promoter , Type definitions
 
-import { z } from 'zod';
+import { z } from "zod";
 
 /** Review action a user takes on a candidate */
-export type ReviewAction = 'promote' | 'promote_customize' | 'reject' | 'defer';
+export type ReviewAction = "promote" | "promote_customize" | "reject" | "defer";
 
 export const ReviewDecisionSchema = z.object({
   candidateId: z.string(),
-  action: z.enum(['promote', 'promote_customize', 'reject', 'defer']),
+  action: z.enum(["promote", "promote_customize", "reject", "defer"]),
   reviewedBy: z.string(),
   /** Optional reason (for reject/defer) */
   reason: z.string().optional(),
@@ -42,7 +42,7 @@ export interface PromoterCandidate {
   crossScopeSources: string[];
   /** Redacted observation samples */
   samples: ObservationSample[];
-  status: 'detected' | 'reviewed' | 'promoted' | 'rejected' | 'deferred';
+  status: "detected" | "reviewed" | "promoted" | "rejected" | "deferred";
 }
 
 export interface ReviewResult {

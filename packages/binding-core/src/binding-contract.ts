@@ -4,7 +4,7 @@
 // All 7 platform bindings implement AgentBinding. Per CR v8.0 Section 9.3 +
 // Anti-pattern 41 (no vendor lock-in, all Apache-2.0).
 
-export type BindingStatusState = 'active' | 'inactive' | 'error' | 'not_installed';
+export type BindingStatusState = "active" | "inactive" | "error" | "not_installed";
 
 export interface BindingStatus {
   platformName: string;
@@ -21,7 +21,7 @@ export interface BindingConfig {
   /** Path to the Orqenix project (.orqenix/) */
   projectPath: string;
   /** MCP transport the binding should use */
-  transport: 'stdio' | 'http' | 'websocket';
+  transport: "stdio" | "http" | "websocket";
   /** For http/ws transports: the endpoint */
   endpoint?: string;
   /** Auto-register installed Orqenix skills with the platform */
@@ -90,7 +90,7 @@ export interface AgentBinding {
 export function resolveMcpBinPath(): string {
   // The orqenix-mcp bin is installed alongside @orqenix/mcp-server.
   // Bindings reference it via npx or the resolved node_modules path.
-  return 'orqenix-mcp';
+  return "orqenix-mcp";
 }
 
 /** Helper: builds the standard MCP server command for a config */
@@ -98,10 +98,10 @@ export function buildMcpCommand(config: BindingConfig): {
   command: string;
   args: string[];
 } {
-  const args = ['--project', config.projectPath, '--transport', config.transport];
-  if (config.endpoint && config.transport !== 'stdio') {
+  const args = ["--project", config.projectPath, "--transport", config.transport];
+  if (config.endpoint && config.transport !== "stdio") {
     const url = new URL(config.endpoint);
-    args.push('--port', url.port || '27420');
+    args.push("--port", url.port || "27420");
   }
   return { command: resolveMcpBinPath(), args };
 }

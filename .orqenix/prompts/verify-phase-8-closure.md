@@ -1,7 +1,9 @@
 # AGENT TASK — D8.verify-5 — Final Closure
 
 ## Context
+
 D8.verify-4 closed 4 blockers but introduced 3 evidence gaps:
+
 1. **14 reference plugins** classified as "stretch/deferred" — WRONG, they're G70.
 2. **CI matrix not re-run** on the fix-4 commits.
 3. **vitest binding fix unproven** — no post-fix capture exists.
@@ -9,6 +11,7 @@ D8.verify-4 closed 4 blockers but introduced 3 evidence gaps:
 This round closes these. After this passes, Phase 8 CORE is tag-ready.
 
 ## Hard rules
+
 1. **G70 = 14 reference plugins.** They are NOT "stretch", NOT "deferred".
 2. **"Pre-existing" claim requires git blame.** No exceptions.
 3. **CI matrix must run on the LATEST fix-4 commit.**

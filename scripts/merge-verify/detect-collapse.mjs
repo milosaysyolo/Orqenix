@@ -13,28 +13,28 @@
 //
 // Exit codes: 0 = no critical findings, 1 = critical collapses found
 
-import { readFile, stat } from 'node:fs/promises';
-import { execSync } from 'node:child_process';
-import { resolve, extname, relative } from 'node:path';
+import { readFile, stat } from "node:fs/promises";
+import { execSync } from "node:child_process";
+import { resolve, extname, relative } from "node:path";
 
 const ROOT = process.cwd();
-const FIX_MODE = process.argv.includes('--fix');
-const JSON_MODE = process.argv.includes('--json');
+const FIX_MODE = process.argv.includes("--fix");
+const JSON_MODE = process.argv.includes("--json");
 
 const findings = [];
 
 function classify(content, filePath) {
-  const lines = content.split('\n');
+  const lines = content.split("\n");
   const nonBlank = lines.filter((l) => l.trim().length > 0);
   const maxLineLen = Math.max(...lines.map((l) => l.length), 0);
-  const byteSize = Buffer.byteLength(content, 'utf-8');
+  const byteSize = Buffer.byteLength(content, "utf-8");
 
   const issues = [];
 
   // CRITICAL: file has content but almost no newlines
   if (nonBlank.length <= 3 && byteSize > 200) {
     issues.push({
-      severity: 'CRITICAL',
+      severity: "CRITICAL",
       message: `Collapsed to ${nonBlank.length} non-blank lines (${byteSize} bytes)`,
     });
   }
@@ -42,7 +42,7 @@ function classify(content, filePath) {
   // WARNING: individual line too long
   if (maxLineLen > 800) {
     issues.push({
-      severity: 'WARNING',
+      severity: "WARNING",
       message: `Longest line is ${maxLineLen} chars`,
     });
   }
@@ -50,7 +50,7 @@ function classify(content, filePath) {
   // WARNING: file too short for its size
   if (lines.length <= 5 && byteSize > 500) {
     issues.push({
-      severity: 'WARNING',
+      severity: "WARNING",
       message: `Only ${lines.length} lines for ${byteSize} bytes`,
     });
   }
@@ -61,14 +61,14 @@ function classify(content, filePath) {
 async function scan() {
   let sources;
   try {
-    sources = execSync(
-      'git ls-files "**/*.ts" "**/*.tsx" "!**/node_modules/**" "!**/dist/**"',
-      { cwd: ROOT, encoding: 'utf-8' }
-    )
-      .split('\n')
+    sources = execSync('git ls-files "**/*.ts" "**/*.tsx" "!**/node_modules/**" "!**/dist/**"', {
+      cwd: ROOT,
+      encoding: "utf-8",
+    })
+      .split("\n")
       .filter(Boolean);
   } catch {
-    console.error('Failed to list git files. Ensure this is a git repository.');
+    console.error("Failed to list git files. Ensure this is a git repository.");
     process.exit(1);
   }
 
@@ -76,14 +76,14 @@ async function scan() {
     const abs = resolve(ROOT, rel);
     let content;
     try {
-      content = await readFile(abs, 'utf-8');
+      content = await readFile(abs, "utf-8");
     } catch {
       continue;
     }
 
     const issues = classify(content, rel);
     if (issues.length > 0) {
-      findings.push({ file: rel, issues, size: Buffer.byteLength(content, 'utf-8') });
+      findings.push({ file: rel, issues, size: Buffer.byteLength(content, "utf-8") });
     }
   }
 
@@ -97,19 +97,19 @@ function printReport(findings) {
   }
 
   if (findings.length === 0) {
-    console.log('  OK No collapsed files detected');
+    console.log("  OK No collapsed files detected");
     return;
   }
 
-  const criticals = findings.filter((f) => f.issues.some((i) => i.severity === 'CRITICAL'));
-  const warnings = findings.filter((f) => !f.issues.some((i) => i.severity === 'CRITICAL'));
+  const criticals = findings.filter((f) => f.issues.some((i) => i.severity === "CRITICAL"));
+  const warnings = findings.filter((f) => !f.issues.some((i) => i.severity === "CRITICAL"));
 
   console.log(`\n  Found ${findings.length} suspicious file(s):`);
   console.log(`    ${criticals.length} CRITICAL, ${warnings.length} WARNING\n`);
 
   for (const f of findings) {
-    const rel = relative(ROOT, f.file).replace(/\\/g, '/');
-    const sev = f.issues.some((i) => i.severity === 'CRITICAL') ? 'CRITICAL' : 'WARNING';
+    const rel = relative(ROOT, f.file).replace(/\\/g, "/");
+    const sev = f.issues.some((i) => i.severity === "CRITICAL") ? "CRITICAL" : "WARNING";
     console.log(`  [${sev}] ${rel}`);
     for (const issue of f.issues) {
       console.log(`         ${issue.message}`);
@@ -121,8 +121,10 @@ function printReport(findings) {
 const result = await scan();
 printReport(result);
 
-const hasCritical = result.some((f) => f.issues.some((i) => i.severity === 'CRITICAL'));
+const hasCritical = result.some((f) => f.issues.some((i) => i.severity === "CRITICAL"));
 if (hasCritical) {
-  console.log(`\n  ${result.length} file(s) need attention. Run fix scripts to restore proper formatting.`);
+  console.log(
+    `\n  ${result.length} file(s) need attention. Run fix scripts to restore proper formatting.`,
+  );
 }
 process.exit(hasCritical ? 1 : 0);

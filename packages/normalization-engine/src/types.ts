@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/normalization-engine , Adapter contract types
 
-import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
+import type { CanonicalSkillFormat } from "@orqenix/plugin-core";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Import input
@@ -57,7 +57,7 @@ export interface SerializedFormat {
   /** Suggested file path/name */
   suggestedPath?: string;
   /** Content MIME type / format */
-  format: 'json' | 'yaml' | 'markdown' | 'text';
+  format: "json" | "yaml" | "markdown" | "text";
 }
 
 export interface ExportabilityReport {
@@ -109,14 +109,14 @@ export class NormalizationError extends Error {
     public override readonly cause?: unknown
   ) {
     super(message);
-    this.name = 'NormalizationError';
+    this.name = "NormalizationError";
     Object.setPrototypeOf(this, NormalizationError.prototype);
   }
 }
 
 export class NoAdapterMatchError extends NormalizationError {
   constructor() {
-    super('NO_ADAPTER_MATCH', 'No input adapter could parse this input');
+    super("NO_ADAPTER_MATCH", "No input adapter could parse this input");
     Object.setPrototypeOf(this, NoAdapterMatchError.prototype);
   }
 }
@@ -124,8 +124,8 @@ export class NoAdapterMatchError extends NormalizationError {
 export class AmbiguousMatchError extends NormalizationError {
   constructor(public readonly candidates: Array<{ kind: string; confidence: number }>) {
     super(
-      'AMBIGUOUS_MATCH',
-      `Multiple adapters matched: ${candidates.map((c) => c.kind).join(', ')}. Specify sourceKind.`
+      "AMBIGUOUS_MATCH",
+      `Multiple adapters matched: ${candidates.map((c) => c.kind).join(", ")}. Specify sourceKind.`,
     );
     Object.setPrototypeOf(this, AmbiguousMatchError.prototype);
   }
@@ -133,7 +133,7 @@ export class AmbiguousMatchError extends NormalizationError {
 
 export class UnsupportedTargetError extends NormalizationError {
   constructor(kind: string) {
-    super('UNSUPPORTED_TARGET', `Output adapter not found for: ${kind}`);
+    super("UNSUPPORTED_TARGET", `Output adapter not found for: ${kind}`);
     Object.setPrototypeOf(this, UnsupportedTargetError.prototype);
   }
 }

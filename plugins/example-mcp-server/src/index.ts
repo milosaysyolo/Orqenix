@@ -22,12 +22,12 @@ export async function echo(input: EchoInput): Promise<EchoOutput> {
 
 /** MCP server registration metadata (consumed by the activate script) */
 export const mcpServer = {
-  name: 'example-echo-server',
-  transport: 'stdio' as const,
+  name: "example-echo-server",
+  transport: "stdio" as const,
   tools: [
     {
-      name: 'echo',
-      description: 'Echoes input back',
+      name: "echo",
+      description: "Echoes input back",
       handler: echo,
     },
   ],

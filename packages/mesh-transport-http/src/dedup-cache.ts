@@ -4,11 +4,17 @@
  * Bounded LRU dedup cache keyed by request.id.
  * Agent note: per CR v7.2 Chapter 3.5, TTL equals request.deadlineMs. O(1) ops.
  */
-import type { MeshResponse } from '@orqenix/mesh-transport-core';
+import type { MeshResponse } from "@orqenix/mesh-transport-core";
 
-interface Entry { resp: MeshResponse; expiresAt: number; }
+interface Entry {
+  resp: MeshResponse;
+  expiresAt: number;
+}
 
-export interface DedupCacheOptions { maxEntries?: number; now?: () => number; }
+export interface DedupCacheOptions {
+  maxEntries?: number;
+  now?: () => number;
+}
 
 export class DedupCache {
   private readonly map = new Map<string, Entry>();
@@ -23,7 +29,10 @@ export class DedupCache {
   get(id: string): MeshResponse | undefined {
     const e = this.map.get(id);
     if (!e) return undefined;
-    if (this.now() >= e.expiresAt) { this.map.delete(id); return undefined; }
+    if (this.now() >= e.expiresAt) {
+      this.map.delete(id);
+      return undefined;
+    }
     this.map.delete(id);
     this.map.set(id, e);
     return e.resp;
@@ -39,5 +48,7 @@ export class DedupCache {
     }
   }
 
-  size(): number { return this.map.size; }
+  size(): number {
+    return this.map.size;
+  }
 }

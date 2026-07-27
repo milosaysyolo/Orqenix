@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: Apache-2.0
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import Database from 'better-sqlite3';
-import type { Database as DB } from 'better-sqlite3';
-import { PromoterService } from '../src/promoter-service';
-import { SELF_LEARNING_MIGRATIONS } from '@orqenix/self-learning-observer';
-import { CandidateStore } from '@orqenix/self-learning-detection';
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import Database from "better-sqlite3";
+import type { Database as DB } from "better-sqlite3";
+import { PromoterService } from "../src/promoter-service";
+import { SELF_LEARNING_MIGRATIONS } from "@orqenix/self-learning-observer";
+import { CandidateStore } from "@orqenix/self-learning-detection";
 
-const PROJECT = 'blake3:proj0001';
+const PROJECT = "blake3:proj0001";
 
 function setupDb(): DB {
-  const db = new Database(':memory:');
+  const db = new Database(":memory:");
   for (const m of SELF_LEARNING_MIGRATIONS) db.exec(m.up);
   return db;
 }
@@ -21,11 +21,18 @@ function seedCandidate(db: DB, id: string): void {
       pattern_description, observation_count, success_count, total_count,
       success_rate, sample_observation_ids, detected_at, impact_score,
       status, reviewed_at, reviewed_by, review_decision, cross_scope, cross_scope_sources_json
-    ) VALUES (?, ?, NULL, NULL, ?, ?, ?, 6, 6, 6, 1.0, '[]', ?, 8.5, 'detected', NULL, NULL, NULL, 0, NULL)`
-  ).run(id, PROJECT, `hash-${id}`, '@local/test-then-commit', 'Test then commit', new Date().toISOString());
+    ) VALUES (?, ?, NULL, NULL, ?, ?, ?, 6, 6, 6, 1.0, '[]', ?, 8.5, 'detected', NULL, NULL, NULL, 0, NULL)`,
+  ).run(
+    id,
+    PROJECT,
+    `hash-${id}`,
+    "@local/test-then-commit",
+    "Test then commit",
+    new Date().toISOString(),
+  );
 }
 
-describe('PromoterService', () => {
+describe("PromoterService", () => {
   let db: DB;
   let service: PromoterService;
 
@@ -33,64 +40,64 @@ describe('PromoterService', () => {
     db = setupDb();
     // Mock skill genesis to avoid full code synthesis in this test
     const mockGenesis = {
-      generateFromCandidate: async () => ({ skillName: '@local/generated', csfHash: 'abc' }),
+      generateFromCandidate: async () => ({ skillName: "@local/generated", csfHash: "abc" }),
     };
     service = new PromoterService({ db, skillGenesis: mockGenesis as never });
   });
 
   afterEach(() => db.close());
 
-  it('lists candidates ranked by impact', async () => {
-    seedCandidate(db, 'c1');
+  it("lists candidates ranked by impact", async () => {
+    seedCandidate(db, "c1");
     const candidates = await service.listForReview(PROJECT);
     expect(candidates).toHaveLength(1);
-    expect(candidates[0]?.patternName).toBe('@local/test-then-commit');
+    expect(candidates[0]?.patternName).toBe("@local/test-then-commit");
     expect(candidates[0]?.impactScore).toBe(8.5);
   });
 
-  it('reject marks candidate rejected', async () => {
-    seedCandidate(db, 'c2');
+  it("reject marks candidate rejected", async () => {
+    seedCandidate(db, "c2");
     const result = await service.review(
-      { candidateId: 'c2', action: 'reject', reviewedBy: 'milo', reason: 'not useful' },
-      PROJECT
+      { candidateId: "c2", action: "reject", reviewedBy: "milo", reason: "not useful" },
+      PROJECT,
     );
-    expect(result.action).toBe('reject');
+    expect(result.action).toBe("reject");
     const store = new CandidateStore(db);
-    expect(store.get('c2')?.status).toBe('rejected');
+    expect(store.get("c2")?.status).toBe("rejected");
   });
 
-  it('defer marks candidate deferred', async () => {
-    seedCandidate(db, 'c3');
+  it("defer marks candidate deferred", async () => {
+    seedCandidate(db, "c3");
     const result = await service.review(
-      { candidateId: 'c3', action: 'defer', reviewedBy: 'milo' },
-      PROJECT
+      { candidateId: "c3", action: "defer", reviewedBy: "milo" },
+      PROJECT,
     );
-    expect(result.action).toBe('defer');
+    expect(result.action).toBe("defer");
     const store = new CandidateStore(db);
-    expect(store.get('c3')?.status).toBe('deferred');
+    expect(store.get("c3")?.status).toBe("deferred");
   });
 
-  it('promote generates a skill + marks promoted', async () => {
-    seedCandidate(db, 'c4');
+  it("promote generates a skill + marks promoted", async () => {
+    seedCandidate(db, "c4");
     const result = await service.review(
-      { candidateId: 'c4', action: 'promote', reviewedBy: 'milo' },
-      PROJECT
+      { candidateId: "c4", action: "promote", reviewedBy: "milo" },
+      PROJECT,
     );
-    expect(result.action).toBe('promote');
-    expect(result.generatedSkillName).toBe('@local/generated');
+    expect(result.action).toBe("promote");
+    expect(result.generatedSkillName).toBe("@local/generated");
     const store = new CandidateStore(db);
-    expect(store.get('c4')?.status).toBe('promoted');
+    expect(store.get("c4")?.status).toBe("promoted");
   });
 
-  it('promote_customize opens builder + marks reviewed', async () => {
-    seedCandidate(db, 'c5');
+  it("promote_customize opens builder + marks reviewed", async () => {
+    seedCandidate(db, "c5");
     const result = await service.review(
-      { candidateId: 'c5', action: 'promote_customize', reviewedBy: 'milo' },
-      PROJECT
+      { candidateId: "c5", action: "promote_customize", reviewedBy: "milo" },
+      PROJECT,
     );
     expect(result.openBuilder).toBe(true);
     const store = new CandidateStore(db);
-    expect(store.get('c5')?.status).toBe('reviewed');
+    expect(store.get("c5")?.status).toBe("reviewed");
   });
 
   it('detects convergence when last N results are identical', async () => {
@@ -139,7 +146,7 @@ describe('PromoterService', () => {
 
   it('throws for unknown candidate', async () => {
     await expect(
-      service.review({ candidateId: 'nope', action: 'reject', reviewedBy: 'milo' }, PROJECT)
+      service.review({ candidateId: "nope", action: "reject", reviewedBy: "milo" }, PROJECT),
     ).rejects.toThrow(/not found/);
   });
 });

@@ -16,6 +16,7 @@
 ## Phase 2: Anti-pattern + audit doc verification
 
 Anti-pattern grep results:
+
 - "as any" in packages/mesh-transport-libp2p/src/: EMPTY (clean)
 - "CombinedHttpTransport" in packages/ + apps/: EMPTY (clean)
 - "X-Mesh-"/"x-mesh-" in packages/ : Substring match only in identifiers (orqenix-mesh-), NOT HTTP header prefix (clean)
@@ -25,6 +26,7 @@ Anti-pattern grep results:
 - no-dht-no-relay lint: PASS
 
 Audit doc status:
+
 - OK: D6F2-MASTER-AUDIT.md
 - OK: docs/runbook/phase-6-rollback.md
 - OK: docs/ci/native-matrix.md
@@ -48,6 +50,7 @@ git ls-remote --tags origin | grep v0.6.0-phase-6:
 ## Phase 5: GitHub Release
 
 gh release view v0.6.0-phase-6:
+
 - title: v0.6.0-phase-6 - Real Mesh, Local-First
 - tag: v0.6.0-phase-6
 - draft: false

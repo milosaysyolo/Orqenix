@@ -7,10 +7,10 @@
 // The subagent itself has no matrix; its return becomes high-priority parent
 // memory that is NEVER compressed or tier-moved, and surfaces with ×10 boost.
 
-import type { SqliteStore } from '../store/sqlite-store';
-import { makeSubagentReturnFlags } from '../hierarchy/compress-guard';
-import type { SubagentReturn } from './types';
-import type { AbsorbResult } from './types';
+import type { SqliteStore } from "../store/sqlite-store";
+import { makeSubagentReturnFlags } from "../hierarchy/compress-guard";
+import type { SubagentReturn } from "./types";
+import type { AbsorbResult } from "./types";
 
 /** Subagent return summaries larger than this go to blob storage */
 const SUMMARY_INLINE_MAX = 4096;
@@ -52,25 +52,25 @@ export class ReturnAbsorber {
 
     // Write to T1
     const t1 = this.store.write({
-      kb: 'chat',
+      kb: "chat",
       content,
-      tier: 'T1',
+      tier: "T1",
       project_id: input.projectId,
       branch_id: input.branchId,
       session_id: input.parentSessionId,
-      memory_level: 'session',
+      memory_level: "session",
       protection_flags: protectionFlags,
     });
 
     // Duplicate to T2 (redundancy per INV-13 duplicate_in_tiers)
     const t2 = this.store.write({
-      kb: 'chat',
+      kb: "chat",
       content,
-      tier: 'T2',
+      tier: "T2",
       project_id: input.projectId,
       branch_id: input.branchId,
       session_id: input.parentSessionId,
-      memory_level: 'session',
+      memory_level: "session",
       protection_flags: protectionFlags,
     });
 
@@ -82,9 +82,9 @@ export class ReturnAbsorber {
   }
 
   private summarize(ret: SubagentReturn): string {
-    const status = ret.outputMatchesSchema ? 'success' : 'schema-mismatch';
+    const status = ret.outputMatchesSchema ? "success" : "schema-mismatch";
     const outputPreview =
-      typeof ret.output === 'string'
+      typeof ret.output === "string"
         ? ret.output.slice(0, 200)
         : JSON.stringify(ret.output).slice(0, 200);
     return `[subagent-return ${status}] ${outputPreview} (${ret.stepsTaken} steps, ${ret.wallTimeMs}ms)`;

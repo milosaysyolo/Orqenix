@@ -1,1 +1,174 @@
-name: "Close Phase 7 \u2014 Release Ceremony (v0.7.0)"on:  workflow_dispatch:    inputs:      confirm:        description: 'Type I-UNDERSTAND-MFA to confirm irreversible publish'        type: string        required: trueenv:  RELEASE_VERSION: '0.7.0'     # clean semver \u2014 NO -phase-7  RELEASE_TAG: 'v0.7.0'permissions:  contents: write  packages: write  id-token: write              # cosign keyless + npm provenancejobs:  guard:    runs-on: ubuntu-latest    steps:      - name: Confirm gate        run: |          if [[ "${{ inputs.confirm }}" != "I-UNDERSTAND-MFA" ]]; then            echo "::error::Confirmation required. npm MFA blocks unpublish (Phase 5/6 lesson)."            exit 1          fi      - name: Assert clean semver (no -phase-7)        run: |          if [[ "${RELEASE_VERSION}" == *"-phase-7"* || "${RELEASE_TAG}" == *"-phase-7"* ]]; then            echo "::error::Version/tag must be clean semver (0.7.0 / v0.7.0)."            exit 1          fi          echo "Clean semver confirmed: ${RELEASE_VERSION} / ${RELEASE_TAG}"  ceremony:    needs: guard    runs-on: ubuntu-latest    timeout-minutes: 75    steps:      - name: Checkout Orqenix (OSS)        uses: actions/checkout@v4        with: { ref: main, fetch-depth: 0 }      - name: Checkout Orqenix-Pro (sibling)        uses: actions/checkout@v4        with:          repository: milosaysyolo/Orqenix-Pro          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}          path: Orqenix-Pro-checkout          ref: main      - name: Checkout Orqenix-Cloud (sibling)        uses: actions/checkout@v4        with:          repository: milosaysyolo/Orqenix-Cloud          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}          path: Orqenix-Cloud-checkout          ref: main      - name: Place sibling repos next to OSS root        run: |          PARENT="$(dirname "${GITHUB_WORKSPACE}")"          mv "${GITHUB_WORKSPACE}/Orqenix-Cloud-checkout" "${PARENT}/Orqenix-Cloud"          mv "${GITHUB_WORKSPACE}/Orqenix-Pro-checkout"   "${PARENT}/Orqenix-Pro"          ls -la "${PARENT}"      - uses: pnpm/action-setup@v4        with: { version: 9 }      - uses: actions/setup-node@v4        with:          node-version: 20          cache: pnpm          registry-url: https://registry.npmjs.org      - uses: docker/setup-buildx-action@v3      - uses: sigstore/cosign-installer@v3      - uses: anchore/sbom-action/download-syft@v0      - name: Login to GHCR        uses: docker/login-action@v3        with:          registry: ghcr.io          username: ${{ github.actor }}          password: ${{ secrets.GITHUB_TOKEN }}      - name: Install deps (ignore-scripts via .npmrc)        run: pnpm install --frozen-lockfile      - name: Block 0 + 1 + 2 (clean semver fixes)        run: |          node scripts/release/close-phase-7/close-phase-7-master.mjs --block 0 --strict          node scripts/release/close-phase-7/close-phase-7-master.mjs --from 1 --to 2 --strict      - name: Block 6sec \u2014 security pre-flight (Cloud repo)        run: node scripts/release/close-phase-7/close-phase-7-master.mjs --block 6 --strict      - name: Guard \u2014 no -phase-7 leaked into any package.json        run: |          PARENT="$(dirname "${GITHUB_WORKSPACE}")"          if grep -rqsE '"\^?0\.7\.0-phase-7"' \               "${GITHUB_WORKSPACE}/packages" \               "${PARENT}/Orqenix-Cloud/packages" \               "${PARENT}/Orqenix-Pro/packages" 2>/dev/null ; then            echo "::error::Found -phase-7 prerelease range in a package.json"            exit 1          fi          echo "No -phase-7 ranges found."      - name: Run release ceremony (publish 0.7.0, sign, tag v0.7.0)        env:          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}          NPM_TOKEN_PRO: ${{ secrets.NPM_TOKEN_PRO }}          GITHUB_CHANGELOG_TOKEN: ${{ secrets.ORQENIX_CHANGELOG_PAT }}          ORQENIX_COORDINATOR_PAT: ${{ secrets.ORQENIX_COORDINATOR_PAT }}          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          NPM_CONFIG_PROVENANCE: 'true'          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}          RELEASE_TAG: ${{ env.RELEASE_TAG }}          PUBLISH_BATCH_SIZE: '6'          PUBLISH_COOLDOWN_SEC: '20'        run: bash scripts/release/ceremony.sh      - name: Verify clean tags pushed to 3 repos (same day, #10)        run: |          for r in Orqenix Orqenix-Pro Orqenix-Cloud; do            git ls-remote --tags "https://github.com/milosaysyolo/$r.git" "${RELEASE_TAG}" \              | grep -q "${RELEASE_TAG}" \              && echo "TAG $r ${RELEASE_TAG} OK" \              || { echo "::error::Tag ${RELEASE_TAG} missing on $r"; exit 1; }          done      - name: Post-publish \u2014 confirm latest dist-tag = 0.7.0        env:          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}        run: |          for p in relay-protocol relay-transport sdk billing-design phase6-to-phase7; do            npm view @orqenix-cloud/$p dist-tags || true          done          npm view @orqenix/cli dist-tags || true      - name: Upload closure evidence        if: always()        uses: actions/upload-artifact@v4        with:          name: close-phase-7-ceremony-${{ github.run_id }}          path: out/close-phase-7/          retention-days: 90      - name: Surface closure-memory line to job summary        if: always()        run: |          if [[ -f out/close-phase-7/closure-memory.txt ]]; then            {              echo "## Phase 7 Closure Memory"              echo ""              echo '```'              cat out/close-phase-7/closure-memory.txt              echo '```'              echo ""              echo "If this shows the FULLY CLOSED line (not 'DO NOT RECORD'),"              echo "record it to long-term memory to finalize Phase 7."            } >> "$GITHUB_STEP_SUMMARY"          fi  validate:    needs: ceremony    uses: ./.github/workflows/post-release-validation-v2.yml    with:      ref: v0.7.0      strict: true    secrets: inherit
+name: Close Phase 7 \u2014 Release Ceremony (v0.7.0)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type I-UNDERSTAND-MFA to confirm irreversible publish"
+        type: string
+        required: true
+
+env:
+  RELEASE_VERSION: "0.7.0" # clean semver \u2014 NO -phase-7
+  RELEASE_TAG: "v0.7.0"
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write # cosign keyless + npm provenance
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm gate
+        run: |
+          if [[ "${{ inputs.confirm }}" != "I-UNDERSTAND-MFA" ]]; then
+            echo "::error::Confirmation required. npm MFA blocks unpublish (Phase 5/6 lesson)."
+            exit 1
+          fi
+      - name: Assert clean semver (no -phase-7)
+        run: |
+          if [[ "${RELEASE_VERSION}" == *"-phase-7"* || "${RELEASE_TAG}" == *"-phase-7"* ]]; then
+            echo "::error::Version/tag must be clean semver (0.7.0 / v0.7.0)."
+            exit 1
+          fi
+          echo "Clean semver confirmed: ${RELEASE_VERSION} / ${RELEASE_TAG}"
+
+  ceremony:
+    needs: guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - name: Checkout Orqenix (OSS)
+        uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+
+      - name: Checkout Orqenix-Pro (sibling)
+        uses: actions/checkout@v4
+        with:
+          repository: milosaysyolo/Orqenix-Pro
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          path: Orqenix-Pro-checkout
+          ref: main
+
+      - name: Checkout Orqenix-Cloud (sibling)
+        uses: actions/checkout@v4
+        with:
+          repository: milosaysyolo/Orqenix-Cloud
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          path: Orqenix-Cloud-checkout
+          ref: main
+
+      - name: Place sibling repos next to OSS root
+        run: |
+          PARENT="$(dirname "${GITHUB_WORKSPACE}")"
+          mv "${GITHUB_WORKSPACE}/Orqenix-Cloud-checkout" "${PARENT}/Orqenix-Cloud"
+          mv "${GITHUB_WORKSPACE}/Orqenix-Pro-checkout"   "${PARENT}/Orqenix-Pro"
+          ls -la "${PARENT}"
+
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      # --- Image signing toolchain ---
+      - uses: docker/setup-buildx-action@v3
+      - uses: sigstore/cosign-installer@v3
+      - uses: anchore/sbom-action/download-syft@v0
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install deps (ignore-scripts via .npmrc)
+        run: pnpm install --frozen-lockfile
+
+      - name: Block 0 + 1 + 2 (clean semver fixes)
+        run: |
+          node scripts/release/close-phase-7/close-phase-7-master.mjs --block 0 --strict
+          node scripts/release/close-phase-7/close-phase-7-master.mjs --from 1 --to 2 --strict
+
+      - name: Block 6sec \u2014 security pre-flight (Cloud repo)
+        run: node scripts/release/close-phase-7/close-phase-7-master.mjs --block 6 --strict
+
+      - name: Guard \u2014 no -phase-7 leaked into any package.json
+        run: |
+          PARENT="$(dirname "${GITHUB_WORKSPACE}")"
+          if grep -rqsE '"\^?0\.7\.0-phase-7"' \
+               "${GITHUB_WORKSPACE}/packages" \
+               "${PARENT}/Orqenix-Cloud/packages" \
+               "${PARENT}/Orqenix-Pro/packages" 2>/dev/null ; then
+            echo "::error::Found -phase-7 prerelease range in a package.json"
+            exit 1
+          fi
+          echo "No -phase-7 ranges found."
+
+      - name: Run release ceremony (publish 0.7.0, sign, tag v0.7.0)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_CLOUD }}
+          NPM_TOKEN_CLOUD: ${{ secrets.NPM_TOKEN_CLOUD }}
+          GITHUB_CHANGELOG_TOKEN: ${{ secrets.ORQENIX_CHANGELOG_PAT }}
+          ORQENIX_COORDINATOR_PAT: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          RELEASE_TAG: ${{ env.RELEASE_TAG }}
+          PUBLISH_BATCH_SIZE: "6"
+          PUBLISH_COOLDOWN_SEC: "20"
+        run: bash scripts/release/ceremony.sh
+
+      - name: Verify clean tags pushed to 3 repos (same day, #10)
+        run: |
+          for r in Orqenix Orqenix-Pro Orqenix-Cloud; do
+            git ls-remote --tags "https://github.com/milosaysyolo/$r.git" "${RELEASE_TAG}" \
+              | grep -q "${RELEASE_TAG}" \
+              && echo "TAG $r ${RELEASE_TAG} OK" \
+              || { echo "::error::Tag ${RELEASE_TAG} missing on $r"; exit 1; }
+          done
+
+      - name: Post-publish \u2014 confirm latest dist-tag = 0.7.0
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_CLOUD }}
+        run: |
+          for p in relay-protocol relay-transport sdk billing-design phase6-to-phase7; do
+            npm view @orqenix-cloud/$p dist-tags || true
+          done
+          npm view @orqenix/cli dist-tags || true
+
+      - name: Upload closure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: close-phase-7-ceremony-${{ github.run_id }}
+          path: out/close-phase-7/
+          retention-days: 90
+
+      - name: Surface closure-memory line to job summary
+        if: always()
+        run: |
+          if [[ -f out/close-phase-7/closure-memory.txt ]]; then
+            {
+              echo "## Phase 7 Closure Memory"
+              echo ""
+              echo '```'
+              cat out/close-phase-7/closure-memory.txt
+              echo '```'
+              echo ""
+              echo "If this shows the FULLY CLOSED line (not 'DO NOT RECORD'),"
+              echo "record it to long-term memory to finalize Phase 7."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  validate:
+    needs: ceremony
+    uses: ./.github/workflows/post-release-validation-v2.yml
+    with:
+      ref: v0.7.0
+      strict: true
+    secrets: inherit

@@ -77,8 +77,8 @@ export class SkillGenesis {
 
     // 3. Synthesize code
     const language = input.language ?? this.codeSynth.inferLanguage(sampleEvents);
-    const actionKinds = this.extractActionKinds(candidate.pattern_name ?? '', sampleEvents);
-    const skillName = input.nameOverride ?? candidate.pattern_name ?? '@local/generated-skill';
+    const actionKinds = this.extractActionKinds(candidate.pattern_name ?? "", sampleEvents);
+    const skillName = input.nameOverride ?? candidate.pattern_name ?? "@local/generated-skill";
     const code = this.codeSynth.synthesize({
       skillName,
       actionKinds,
@@ -91,39 +91,40 @@ export class SkillGenesis {
     const fixtures = this.fixtureGen.generate(sampleEvents, parameters);
 
     // 5. Build CSF (Anti-38: unverified)
-    const toolName = skillName.split('/').pop()!.replace(/-/g, '_');
+    const toolName = skillName.split("/").pop()!.replace(/-/g, "_");
     const csf: CanonicalSkillFormat = buildCsf({
       name: skillName,
-      version: '0.1.0',
-      kind: 'skill',
+      version: "0.1.0",
+      kind: "skill",
       tool: {
         name: toolName,
-        description: candidate.pattern_description ?? 'Generated from observed workflow',
+        description: candidate.pattern_description ?? "Generated from observed workflow",
         inputSchema,
         outputSchema: {
-          type: 'object',
-          properties: { success: { type: 'boolean' }, result: {} },
-          required: ['success'],
+          type: "object",
+          properties: { success: { type: "boolean" }, result: {} },
+          required: ["success"],
         },
       },
       permissions: this.inferPermissions(sampleEvents),
-      external_agent_compat: ['claude-code', 'cursor', 'codex', 'opencode'],
+      external_agent_compat: ["claude-code", "cursor", "codex", "opencode"],
       language,
-      entry: language === 'python' ? './skill.py' : language === 'shell' ? './skill.sh' : './skill.ts',
+      entry:
+        language === "python" ? "./skill.py" : language === "shell" ? "./skill.sh" : "./skill.ts",
       source: code,
       examples: fixtures.map((f) => ({
         name: f.name,
         input: f.input,
-        expectedOutput: { success: f.expectedOutcome === 'success' },
+        expectedOutput: { success: f.expectedOutcome === "success" },
       })),
-      importedFromKind: 'self-learning',
-      normalizerVersion: '0.8.0-alpha.1',
+      importedFromKind: "self-learning",
+      normalizerVersion: "0.8.0-alpha.1",
       originalFormatPreserved: { generatedFromCandidate: candidate.id },
     });
 
     // Tag derived_from_observations provenance
     csf.provenance.derived_from_observations = sampleIds;
-    csf.provenance.verification_status = 'unverified'; // Anti-38
+    csf.provenance.verification_status = "unverified"; // Anti-38
 
     // Persist into local_plugins (marketplace store) if available
     this.persistGenerated(csf);
@@ -150,32 +151,32 @@ export class SkillGenesis {
     for (const e of sorted) {
       if (kinds[kinds.length - 1] !== e.action_kind) kinds.push(e.action_kind);
     }
-    return kinds.length > 0 ? kinds : ['tool_call'];
+    return kinds.length > 0 ? kinds : ["tool_call"];
   }
 
   private inferPermissions(events: ObservationEvent[]): string[] {
     const perms = new Set<string>();
     for (const e of events) {
       switch (e.action_kind) {
-        case 'shell_command':
-          perms.add('command.execute:limited');
+        case "shell_command":
+          perms.add("command.execute:limited");
           break;
-        case 'git_operation':
-          perms.add('git.write');
+        case "git_operation":
+          perms.add("git.write");
           break;
-        case 'file_edit':
-          perms.add('fs.write');
+        case "file_edit":
+          perms.add("fs.write");
           break;
-        case 'file_read':
-          perms.add('fs.read');
+        case "file_read":
+          perms.add("fs.read");
           break;
-        case 'memory_write':
-        case 'decision_recorded':
-        case 'lesson_recorded':
-          perms.add('memory.write:decision');
+        case "memory_write":
+        case "decision_recorded":
+        case "lesson_recorded":
+          perms.add("memory.write:decision");
           break;
         default:
-          perms.add('scope.read');
+          perms.add("scope.read");
       }
     }
     return Array.from(perms);
@@ -187,7 +188,7 @@ export class SkillGenesis {
       this.db
         .prepare(
           `INSERT INTO local_plugins (name, csf_json, updated_at) VALUES (?, ?, ?)
-           ON CONFLICT(name) DO UPDATE SET csf_json = excluded.csf_json, updated_at = excluded.updated_at`
+           ON CONFLICT(name) DO UPDATE SET csf_json = excluded.csf_json, updated_at = excluded.updated_at`,
         )
         .run(csf.name, JSON.stringify(csf), new Date().toISOString());
     } catch {

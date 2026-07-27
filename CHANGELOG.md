@@ -45,13 +45,16 @@ See [MIGRATION-v1.0.0.md](./MIGRATION-v1.0.0.md) for step-by-step upgrade instru
 ## v0.6.1 - 2026-06-11 (clean semver republish)
 
 ### Changed
+
 - All 7 Phase 6 packages republished with clean semver (no -phase-6 suffix)
 - Inter-deps use ^0.6.0 caret semver enabling Phase 7+ forward-compat
-- workspace:* protocol bug in v0.6.0 fixed by v0.6.1 republish
+- workspace:\* protocol bug in v0.6.0 fixed by v0.6.1 republish
 
 ### Deprecated
-- All @orqenix/*@0.6.0-phase-6 (use ^0.6.1)
-- All @orqenix/*@0.6.0 with workspace:* bug (use ^0.6.1)
+
+- All @orqenix/\*@0.6.0-phase-6 (use ^0.6.1)
+- All @orqenix/_@0.6.0 with workspace:\_ bug (use ^0.6.1)
+
 # Changelog
 
 All notable changes to the Orqenix main repo. Format based on Keep a Changelog 1.1.
@@ -66,7 +69,8 @@ mDNS-based discovery, cross-transport routing, and observability hooks.
 
 ### npm Packages Published
 
-All 7 OSS @orqenix/* Phase 6 packages are live on npm:
+All 7 OSS @orqenix/\* Phase 6 packages are live on npm:
+
 - @orqenix/mesh-transport-core@0.6.0-phase-6
 - @orqenix/mesh-transport-http@0.6.0-phase-6
 - @orqenix/mesh-transport-libp2p@0.6.0-phase-6

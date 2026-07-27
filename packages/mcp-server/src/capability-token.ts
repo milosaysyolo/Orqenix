@@ -4,8 +4,8 @@
 // Extends Phase 6 capability tokens to MCP clients. Each client connection
 // presents a token scoped to a project + permissions. Per CR v8.0 Section 9.2.5.
 
-import { blake3 } from '@noble/hashes/blake3';
-import { z } from 'zod';
+import { blake3 } from "@noble/hashes/blake3";
+import { z } from "zod";
 
 export const McpCapabilityTokenSchema = z.object({
   /** Project scope this token grants access to */
@@ -38,29 +38,24 @@ export interface TokenVerifyResult {
  * caller-provided verifier to keep this package dependency-light.
  */
 export class CapabilityTokenVerifier {
-  constructor(
-    private readonly verifySignature: (
-      body: string,
-      signature: string
-    ) => boolean
-  ) {}
+  constructor(private readonly verifySignature: (body: string, signature: string) => boolean) {}
 
   verify(rawToken: unknown): TokenVerifyResult {
     const parsed = McpCapabilityTokenSchema.safeParse(rawToken);
     if (!parsed.success) {
-      return { valid: false, reason: 'TOKEN_MALFORMED' };
+      return { valid: false, reason: "TOKEN_MALFORMED" };
     }
     const token = parsed.data;
 
     // Expiry check
     if (token.expires_at < new Date().toISOString()) {
-      return { valid: false, reason: 'TOKEN_EXPIRED', token };
+      return { valid: false, reason: "TOKEN_EXPIRED", token };
     }
 
     // Signature check (over canonical body without signature field)
     const body = this.canonicalBody(token);
     if (!this.verifySignature(body, token.signature)) {
-      return { valid: false, reason: 'SIGNATURE_INVALID', token };
+      return { valid: false, reason: "SIGNATURE_INVALID", token };
     }
 
     return { valid: true, token };
@@ -76,7 +71,7 @@ export class CapabilityTokenVerifier {
       const [gRes, gScope] = this.split(granted);
       if (gRes !== reqRes) continue;
       if (gScope === undefined) return true;
-      if (reqScope === gScope || reqScope.startsWith(gScope + '/')) return true;
+      if (reqScope === gScope || reqScope.startsWith(gScope + "/")) return true;
     }
     return false;
   }
@@ -92,7 +87,7 @@ export class CapabilityTokenVerifier {
   }
 
   private split(p: string): [string, string | undefined] {
-    const idx = p.indexOf(':');
+    const idx = p.indexOf(":");
     if (idx === -1) return [p, undefined];
     return [p.slice(0, idx), p.slice(idx + 1)];
   }
@@ -102,5 +97,8 @@ export class CapabilityTokenVerifier {
 export function tokenFingerprint(token: McpCapabilityToken): string {
   const body = JSON.stringify({ scope: token.scope_id, client: token.client_id });
   const h = blake3(new TextEncoder().encode(body));
-  return Array.from(h).slice(0, 4).map((b) => b.toString(16).padStart(2, '0')).join('');
+  return Array.from(h)
+    .slice(0, 4)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }

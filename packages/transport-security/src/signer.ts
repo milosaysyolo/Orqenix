@@ -1,5 +1,5 @@
-import type { ScopeId } from '@orqenix/mesh-transport-core';
-import { b64urlEncode, ed25519Sign } from './ed25519.js';
+import type { ScopeId } from "@orqenix/mesh-transport-core";
+import { b64urlEncode, ed25519Sign } from "./ed25519.js";
 
 export interface Ed25519SignerOptions {
   fromScope: ScopeId;

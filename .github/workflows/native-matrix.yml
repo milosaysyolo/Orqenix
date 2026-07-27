@@ -8,11 +8,11 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'packages/**'
-      - 'scripts/ci/native-matrix/**'
-      - '.github/workflows/native-matrix.yml'
-      - 'pnpm-lock.yaml'
-      - 'package.json'
+      - "packages/**"
+      - "scripts/ci/native-matrix/**"
+      - ".github/workflows/native-matrix.yml"
+      - "pnpm-lock.yaml"
+      - "package.json"
   push:
     branches: [main]
   workflow_dispatch:

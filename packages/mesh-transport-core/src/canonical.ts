@@ -5,7 +5,7 @@ export function canonicalize<T>(value: T): T {
   if (Array.isArray(value)) {
     return value.map((v) => canonicalize(v)) as unknown as T;
   }
-  if (typeof value === 'object') {
+  if (typeof value === "object") {
     const obj = value as Record<string, unknown>;
     const sortedKeys = Object.keys(obj).sort();
     const out: Record<string, unknown> = {};

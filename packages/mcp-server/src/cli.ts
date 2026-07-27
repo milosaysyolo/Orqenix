@@ -4,23 +4,44 @@
 // Boots the Orqenix MCP Server with the requested transport. Used by agent
 // platform bindings (e.g., Claude Code .mcp.json points here)
 
-import { join } from 'node:path';
-import { MemoryEngine } from '@orqenix/memory-engine';
-import { SkillRuntime } from '@orqenix/skill-runtime';
-import { OrqenixMcpServer, type McpTransport } from './server';
-import { StdioTransport } from './transports/stdio';
-import { HttpTransport } from './transports/http';
-import { WebSocketTransport } from './transports/websocket';
-interface CliArgs {  project: string;  transport: McpTransport;  port?: number;  clientId?: string;}
-function parseArgs(argv: string[]): CliArgs {  const args: Partial<CliArgs> = { transport: 'stdio' };  for (let i = 0; i < argv.length; i++) {    const a = argv[i];    if (a === '--project') args.project = argv[++i] ?? '';    else if (a === '--transport') args.transport = argv[++i] as McpTransport;    else if (a === '--port') args.port = Number(argv[++i]);    else if (a === '--client-id') { const v = argv[++i]; if (v) args.clientId = v; }  }  if (!args.project) {    args.project = process.cwd();  }  return args as CliArgs;}
+import { join } from "node:path";
+import { MemoryEngine } from "@orqenix/memory-engine";
+import { SkillRuntime } from "@orqenix/skill-runtime";
+import { OrqenixMcpServer, type McpTransport } from "./server";
+import { StdioTransport } from "./transports/stdio";
+import { HttpTransport } from "./transports/http";
+import { WebSocketTransport } from "./transports/websocket";
+interface CliArgs {
+  project: string;
+  transport: McpTransport;
+  port?: number;
+  clientId?: string;
+}
+function parseArgs(argv: string[]): CliArgs {
+  const args: Partial<CliArgs> = { transport: "stdio" };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--project") args.project = argv[++i] ?? "";
+    else if (a === "--transport") args.transport = argv[++i] as McpTransport;
+    else if (a === "--port") args.port = Number(argv[++i]);
+    else if (a === "--client-id") {
+      const v = argv[++i];
+      if (v) args.clientId = v;
+    }
+  }
+  if (!args.project) {
+    args.project = process.cwd();
+  }
+  return args as CliArgs;
+}
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   // Read project_id from .orqenix/project.yaml (or scope.yaml fallback)
   const projectId = await readProjectId(args.project);
-const dbPath = join(args.project, '.orqenix', 'memory.db');
-const engine = await MemoryEngine.open(dbPath, { projectId });
-const skillRuntime = new SkillRuntime({ engine });
-const server = new OrqenixMcpServer({
+  const dbPath = join(args.project, ".orqenix", "memory.db");
+  const engine = await MemoryEngine.open(dbPath, { projectId });
+  const skillRuntime = new SkillRuntime({ engine });
+  const server = new OrqenixMcpServer({
     engine,
     skillRuntime,
     transport: args.transport,
@@ -30,18 +51,18 @@ const server = new OrqenixMcpServer({
   // stdio logs go to stderr so they don't corrupt the JSON-RPC stdout stream
   const log = (msg: string) => process.stderr.write(`[orqenix-mcp] ${msg}\n`);
   switch (args.transport) {
-    case 'stdio': {
-      log('Starting MCP server on stdio');
+    case "stdio": {
+      log("Starting MCP server on stdio");
       new StdioTransport(server).start();
       break;
     }
-    case 'http': {
+    case "http": {
       const transport = new HttpTransport(server, args.port ? { port: args.port } : {});
       await transport.start();
       log(`MCP server on http://127.0.0.1:${args.port ?? 27420}/rpc`);
       break;
     }
-    case 'websocket': {
+    case "websocket": {
       const transport = new WebSocketTransport(server, args.port ? { port: args.port } : {});
       await transport.start();
       log(`MCP server on ws://127.0.0.1:${args.port ?? 27421}`);
@@ -53,18 +74,18 @@ const server = new OrqenixMcpServer({
   }
 }
 async function readProjectId(projectPath: string): Promise<string> {
-  const { readFile } = await import('node:fs/promises');
-  const { existsSync } = await import('node:fs');
-  for (const file of ['project.yaml', 'scope.yaml']) {
-    const p = join(projectPath, '.orqenix', file);
+  const { readFile } = await import("node:fs/promises");
+  const { existsSync } = await import("node:fs");
+  for (const file of ["project.yaml", "scope.yaml"]) {
+    const p = join(projectPath, ".orqenix", file);
     if (existsSync(p)) {
-      const content = await readFile(p, 'utf-8');
+      const content = await readFile(p, "utf-8");
       const m = /(?:project_id|scope_id):\s*(\S+)/.exec(content);
       if (m) return m[1] as string;
     }
   }
   throw new Error(
-    `No .orqenix/project.yaml found at ${projectPath}. Run 'orqenix scope init' first.`
+    `No .orqenix/project.yaml found at ${projectPath}. Run 'orqenix scope init' first.`,
   );
 }
 void main().catch((e) => {

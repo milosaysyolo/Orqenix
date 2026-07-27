@@ -19,10 +19,7 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true
   },
-  "references": [
-    { "path": "../mesh-transport-core" },
-    { "path": "../mesh-transport-libp2p" }
-  ],
+  "references": [{ "path": "../mesh-transport-core" }, { "path": "../mesh-transport-libp2p" }],
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules", "test"]
 }

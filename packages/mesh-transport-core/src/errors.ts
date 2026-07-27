@@ -3,24 +3,24 @@
  * Typed error taxonomy and error-to-MeshResponse mapping.
  * Agent note: messages must be sanitized; no stack frames or filesystem paths.
  */
-import type { MeshResponse, MeshStatus } from './types.js';
+import type { MeshResponse, MeshStatus } from "./types.js";
 
 export const ErrorCode = {
-  TRANSPORT: 'E_TRANSPORT',
-  TIMEOUT: 'E_TIMEOUT',
-  HANDLER: 'E_HANDLER',
-  UNKNOWN: 'E_UNKNOWN',
-  CAP_MISSING: 'E_CAP_MISSING',
-  CAP_MALFORMED: 'E_CAP_MALFORMED',
-  CAP_INVALID: 'E_CAP_INVALID',
-  CAP_SIG_INVALID: 'E_CAP_SIG_INVALID',
-  CAP_EXPIRED: 'E_CAP_EXPIRED',
-  CAP_SUBJECT_MISMATCH: 'E_CAP_SUBJECT_MISMATCH',
-  CAP_ISSUER_MISMATCH: 'E_CAP_ISSUER_MISMATCH',
-  CAP_METHOD_NOT_ALLOWED: 'E_CAP_METHOD_NOT_ALLOWED',
-  IDENTITY_SIG_INVALID: 'E_IDENTITY_SIG_INVALID',
-  ENVELOPE_MISMATCH: 'E_ENVELOPE_MISMATCH',
-  ILLEGAL_STATE: 'E_ILLEGAL_STATE',
+  TRANSPORT: "E_TRANSPORT",
+  TIMEOUT: "E_TIMEOUT",
+  HANDLER: "E_HANDLER",
+  UNKNOWN: "E_UNKNOWN",
+  CAP_MISSING: "E_CAP_MISSING",
+  CAP_MALFORMED: "E_CAP_MALFORMED",
+  CAP_INVALID: "E_CAP_INVALID",
+  CAP_SIG_INVALID: "E_CAP_SIG_INVALID",
+  CAP_EXPIRED: "E_CAP_EXPIRED",
+  CAP_SUBJECT_MISMATCH: "E_CAP_SUBJECT_MISMATCH",
+  CAP_ISSUER_MISMATCH: "E_CAP_ISSUER_MISMATCH",
+  CAP_METHOD_NOT_ALLOWED: "E_CAP_METHOD_NOT_ALLOWED",
+  IDENTITY_SIG_INVALID: "E_IDENTITY_SIG_INVALID",
+  ENVELOPE_MISMATCH: "E_ENVELOPE_MISMATCH",
+  ILLEGAL_STATE: "E_ILLEGAL_STATE",
 } as const;
 
 export type ErrorCodeValue = (typeof ErrorCode)[keyof typeof ErrorCode];
@@ -29,7 +29,7 @@ export class TransportError extends Error {
   readonly code: ErrorCodeValue;
   constructor(message: string, code: ErrorCodeValue = ErrorCode.TRANSPORT) {
     super(message);
-    this.name = 'TransportError';
+    this.name = "TransportError";
     this.code = code;
   }
 }
@@ -38,16 +38,16 @@ export class CapabilityError extends Error {
   readonly code: ErrorCodeValue;
   constructor(message: string, code: ErrorCodeValue = ErrorCode.CAP_INVALID) {
     super(message);
-    this.name = 'CapabilityError';
+    this.name = "CapabilityError";
     this.code = code;
   }
 }
 
 export class DeadlineExceeded extends Error {
   readonly code = ErrorCode.TIMEOUT;
-  constructor(message = 'deadline exceeded') {
+  constructor(message = "deadline exceeded") {
     super(message);
-    this.name = 'DeadlineExceeded';
+    this.name = "DeadlineExceeded";
   }
 }
 
@@ -55,7 +55,7 @@ export class HandlerError extends Error {
   readonly code = ErrorCode.HANDLER;
   constructor(message: string) {
     super(message);
-    this.name = 'HandlerError';
+    this.name = "HandlerError";
   }
 }
 
@@ -63,7 +63,7 @@ export class IllegalStateError extends Error {
   readonly code = ErrorCode.ILLEGAL_STATE;
   constructor(message: string) {
     super(message);
-    this.name = 'IllegalStateError';
+    this.name = "IllegalStateError";
   }
 }
 
@@ -77,28 +77,28 @@ function sanitize(msg: string): string {
 
 /** Map a thrown error into a MeshResponse with the correct status and a sanitized message. */
 export function toMeshResponse(id: string, err: unknown): MeshResponse {
-  let status: MeshStatus = 'error';
+  let status: MeshStatus = "error";
   let code: ErrorCodeValue = ErrorCode.UNKNOWN;
-  let raw = 'unknown error';
+  let raw = "unknown error";
 
   if (err instanceof CapabilityError) {
-    status = 'denied';
+    status = "denied";
     code = err.code;
     raw = err.message;
   } else if (err instanceof DeadlineExceeded) {
-    status = 'timeout';
+    status = "timeout";
     code = err.code;
     raw = err.message;
   } else if (err instanceof HandlerError) {
-    status = 'error';
+    status = "error";
     code = err.code;
     raw = err.message;
   } else if (err instanceof TransportError) {
-    status = 'error';
+    status = "error";
     code = err.code;
     raw = err.message;
   } else if (err instanceof IllegalStateError) {
-    status = 'error';
+    status = "error";
     code = err.code;
     raw = err.message;
   } else if (err instanceof Error) {

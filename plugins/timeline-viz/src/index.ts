@@ -22,10 +22,12 @@ export async function invoke(input: TimelineInput): Promise<TimelineOutput> {
   const dots = sorted
     .map((e, i) => {
       const y = 40 + i * 24;
-      return `<circle cx="40" cy="${y}" r="4" fill="oklch(0.56 0.20 154)" />` +
-        `<text x="56" y="${y + 4}" font-size="12" fill="currentColor">${escapeXml(e.label)}</text>`;
+      return (
+        `<circle cx="40" cy="${y}" r="4" fill="oklch(0.56 0.20 154)" />` +
+        `<text x="56" y="${y + 4}" font-size="12" fill="currentColor">${escapeXml(e.label)}</text>`
+      );
     })
-    .join('\n');
+    .join("\n");
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
 <line x1="40" y1="40" x2="40" y2="${height - 20}" stroke="currentColor" stroke-opacity="0.2" />
@@ -36,7 +38,8 @@ ${dots}
 }
 
 function escapeXml(s: string): string {
-  return s.replace(/[<>&'\""]/g, (c) =>
-    ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c] ?? c
+  return s.replace(
+    /[<>&'\""]/g,
+    (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" })[c] ?? c,
   );
 }

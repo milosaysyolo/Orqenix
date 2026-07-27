@@ -1,5 +1,5 @@
-import { pipe } from 'it-pipe';
-import * as lp from 'it-length-prefixed';
+import { pipe } from "it-pipe";
+import * as lp from "it-length-prefixed";
 import {
   decodeResponse,
   encodeRequest,
@@ -7,27 +7,24 @@ import {
   decodeRequest,
   type MeshRequest,
   type MeshResponse,
-} from '@orqenix/mesh-transport-core';
-import type { Stream } from '@libp2p/interface';
+} from "@orqenix/mesh-transport-core";
+import type { Stream } from "@libp2p/interface";
 
-export async function sendRequestOverStream(stream: Stream, req: MeshRequest): Promise<MeshResponse> {
+export async function sendRequestOverStream(
+  stream: Stream,
+  req: MeshRequest,
+): Promise<MeshResponse> {
   const body = encodeRequest(req);
   let resp: MeshResponse | undefined;
 
-  await pipe(
-    [body],
-    lp.encode,
-    stream,
-    lp.decode,
-    async function consume(source: any) {
-      for await (const chunk of source) {
-        resp = decodeResponse(chunk.subarray());
-        break;
-      }
-    },
-  );
+  await pipe([body], lp.encode, stream, lp.decode, async function consume(source: any) {
+    for await (const chunk of source) {
+      resp = decodeResponse(chunk.subarray());
+      break;
+    }
+  });
 
-  if (!resp) throw new Error('stream: no response from peer');
+  if (!resp) throw new Error("stream: no response from peer");
   return resp;
 }
 
@@ -37,16 +34,12 @@ export async function handleRequestStream(
 ): Promise<void> {
   let req: MeshRequest | undefined;
 
-  await pipe(
-    stream,
-    lp.decode,
-    async function consume(source: any) {
-      for await (const chunk of source) {
-        req = decodeRequest(chunk.subarray());
-        break;
-      }
-    },
-  );
+  await pipe(stream, lp.decode, async function consume(source: any) {
+    for await (const chunk of source) {
+      req = decodeRequest(chunk.subarray());
+      break;
+    }
+  });
 
   if (!req) return;
 

@@ -6,7 +6,7 @@
 //
 // Per CR v8.0 Section 7.5 + Anti-pattern 40.
 
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Permission strings follow `resource.action[:scope]` convention.
@@ -28,7 +28,7 @@ export const PermissionSchema = z
   .string()
   .regex(
     /^[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*(:[\w/\-.*]+)?$/,
-    'Permission must match `resource.action[:scope]` format'
+    "Permission must match `resource.action[:scope]` format",
   );
 
 /**
@@ -37,37 +37,37 @@ export const PermissionSchema = z
  */
 export const STANDARD_PERMISSIONS = {
   // Scope identity
-  SCOPE_READ: 'scope.read',
-  SCOPE_WRITE: 'scope.write',
+  SCOPE_READ: "scope.read",
+  SCOPE_WRITE: "scope.write",
 
   // Memory access
-  MEMORY_READ_CHAT: 'memory.read:chat',
-  MEMORY_READ_CODE: 'memory.read:code',
-  MEMORY_READ_DECISION: 'memory.read:decision',
-  MEMORY_READ_LESSON: 'memory.read:lesson',
-  MEMORY_WRITE_CHAT: 'memory.write:chat',
-  MEMORY_WRITE_CODE: 'memory.write:code',
-  MEMORY_WRITE_DECISION: 'memory.write:decision',
-  MEMORY_WRITE_LESSON: 'memory.write:lesson',
+  MEMORY_READ_CHAT: "memory.read:chat",
+  MEMORY_READ_CODE: "memory.read:code",
+  MEMORY_READ_DECISION: "memory.read:decision",
+  MEMORY_READ_LESSON: "memory.read:lesson",
+  MEMORY_WRITE_CHAT: "memory.write:chat",
+  MEMORY_WRITE_CODE: "memory.write:code",
+  MEMORY_WRITE_DECISION: "memory.write:decision",
+  MEMORY_WRITE_LESSON: "memory.write:lesson",
 
   // Git
-  GIT_READ: 'git.read',
-  GIT_WRITE: 'git.write',
+  GIT_READ: "git.read",
+  GIT_WRITE: "git.write",
 
   // Commands (executable processes)
-  COMMAND_EXECUTE_LIMITED: 'command.execute:limited',
-  COMMAND_EXECUTE_FULL: 'command.execute:full',
+  COMMAND_EXECUTE_LIMITED: "command.execute:limited",
+  COMMAND_EXECUTE_FULL: "command.execute:full",
 
   // Filesystem
-  FS_READ: 'fs.read',
-  FS_WRITE: 'fs.write',
+  FS_READ: "fs.read",
+  FS_WRITE: "fs.write",
 
   // Network
-  NETWORK_FETCH: 'network.fetch',
+  NETWORK_FETCH: "network.fetch",
 
   // Audit chain
-  AUDIT_READ: 'audit.read',
-  AUDIT_WRITE: 'audit.write',
+  AUDIT_READ: "audit.read",
+  AUDIT_WRITE: "audit.write",
 } as const;
 
 /**
@@ -128,10 +128,7 @@ export class PermissionChecker {
         return true;
       }
       // Scope prefix match (granted "fs.read:/home/milo" covers "/home/milo/x")
-      if (
-        reqScope === grantedScope ||
-        reqScope.startsWith(grantedScope + '/')
-      ) {
+      if (reqScope === grantedScope || reqScope.startsWith(grantedScope + "/")) {
         return true;
       }
     }
@@ -143,10 +140,7 @@ export class PermissionChecker {
    */
   assert(requestedPermission: Permission): void {
     if (!this.has(requestedPermission)) {
-      throw new PermissionDeniedError(
-        requestedPermission,
-        Array.from(this.granted)
-      );
+      throw new PermissionDeniedError(requestedPermission, Array.from(this.granted));
     }
   }
 
@@ -157,7 +151,7 @@ export class PermissionChecker {
 }
 
 function splitPermission(p: Permission): [string, string | undefined] {
-  const idx = p.indexOf(':');
+  const idx = p.indexOf(":");
   if (idx === -1) {
     return [p, undefined];
   }
@@ -167,12 +161,10 @@ function splitPermission(p: Permission): [string, string | undefined] {
 export class PermissionDeniedError extends Error {
   constructor(
     public readonly requested: Permission,
-    public readonly granted: Permission[]
+    public readonly granted: Permission[],
   ) {
-    super(
-      `Plugin requested permission '${requested}' not in granted set: [${granted.join(', ')}]`
-    );
-    this.name = 'PermissionDeniedError';
+    super(`Plugin requested permission '${requested}' not in granted set: [${granted.join(", ")}]`);
+    this.name = "PermissionDeniedError";
     Object.setPrototypeOf(this, PermissionDeniedError.prototype);
   }
 }

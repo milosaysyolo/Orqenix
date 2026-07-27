@@ -4,11 +4,8 @@
 // Helper to construct well-formed CSF from adapter-parsed fields, with
 // provenance + content hash. Used by all input adapters.
 
-import { blake3 } from '@noble/hashes/blake3';
-import type {
-  CanonicalSkillFormat,
-  PluginKind,
-} from '@orqenix/plugin-core';
+import { blake3 } from "@noble/hashes/blake3";
+import type { CanonicalSkillFormat, PluginKind } from "@orqenix/plugin-core";
 
 export interface CsfBuilderInput {
   name: string;
@@ -23,7 +20,7 @@ export interface CsfBuilderInput {
   homepage?: string;
   repository?: string;
   /** Implementation fields */
-  language?: 'typescript' | 'javascript' | 'python' | 'shell' | 'wasm' | 'declarative';
+  language?: "typescript" | "javascript" | "python" | "shell" | "wasm" | "declarative";
   entry?: string;
   source?: string;
   examples?: Array<{ name: string; input: unknown; expectedOutput: unknown }>;
@@ -46,23 +43,23 @@ export function buildCsf(input: CsfBuilderInput): CanonicalSkillFormat {
     name: input.name,
     version: input.version,
     kind: input.kind,
-    manifestVersion: '1.0',
+    manifestVersion: "1.0",
     manifest: {
       ...(input.tool ? { tool: input.tool as never } : {}),
       permissions: input.permissions ?? [],
       external_agent_compat: input.external_agent_compat ?? [],
-      license: input.license ?? 'Apache-2.0',
+      license: input.license ?? "Apache-2.0",
       ...(input.homepage ? { homepage: input.homepage } : {}),
       ...(input.repository ? { repository: input.repository } : {}),
       keywords: input.keywords ?? [],
-      compatibility: { orqenix: '>=0.8.0' },
+      compatibility: { orqenix: ">=0.8.0" },
       settingsHotReloadable: false,
-      settingsHierarchyOverride: 'project',
-      sandboxMode: 'separate_process',
+      settingsHierarchyOverride: "project",
+      sandboxMode: "separate_process",
     },
     implementation: {
-      language: input.language ?? 'declarative',
-      entry: input.entry ?? './index.js',
+      language: input.language ?? "declarative",
+      entry: input.entry ?? "./index.js",
       ...(input.source ? { source: input.source } : {}),
       ...(input.examples ? { examples: input.examples } : {}),
     },
@@ -75,8 +72,8 @@ export function buildCsf(input: CsfBuilderInput): CanonicalSkillFormat {
         normalizer_version: input.normalizerVersion,
       },
       original_format_preserved: input.originalFormatPreserved,
-      verification_status: 'unverified',
-      contentHash: '0'.repeat(32), // computed below
+      verification_status: "unverified",
+      contentHash: "0".repeat(32), // computed below
     },
   };
 
@@ -98,7 +95,10 @@ export function computeContentHash(csf: CanonicalSkillFormat): string {
     },
   });
   const h = blake3(new TextEncoder().encode(canonical));
-  return Array.from(h).slice(0, 16).map((b) => b.toString(16).padStart(2, '0')).join('');
+  return Array.from(h)
+    .slice(0, 16)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 /** Retrieves the original format payload from CSF provenance (for round-trip) */

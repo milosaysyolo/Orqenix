@@ -6,10 +6,10 @@ export class FederationError extends Error {
   constructor(
     public readonly code: string,
     message: string,
-    public override readonly cause?: unknown
+    public override readonly cause?: unknown,
   ) {
     super(message);
-    this.name = 'FederationError';
+    this.name = "FederationError";
     Object.setPrototypeOf(this, FederationError.prototype);
   }
 }
@@ -18,8 +18,8 @@ export class FederationError extends Error {
 export class FederationDisabledError extends FederationError {
   constructor(projectId: string) {
     super(
-      'FEDERATION_DISABLED',
-      `Cross-project federation is disabled for project ${projectId}. Enable via Workbench Settings → Mesh → Cross-project sharing.`
+      "FEDERATION_DISABLED",
+      `Cross-project federation is disabled for project ${projectId}. Enable via Workbench Settings → Mesh → Cross-project sharing.`,
     );
     Object.setPrototypeOf(this, FederationDisabledError.prototype);
   }
@@ -29,8 +29,8 @@ export class FederationDisabledError extends FederationError {
 export class NoApprovalError extends FederationError {
   constructor(sourceProjectId: string, targetProjectId: string) {
     super(
-      'NO_APPROVAL',
-      `No approval exists for federation between source=${sourceProjectId} and target=${targetProjectId}. User must approve in Workbench before sharing.`
+      "NO_APPROVAL",
+      `No approval exists for federation between source=${sourceProjectId} and target=${targetProjectId}. User must approve in Workbench before sharing.`,
     );
     Object.setPrototypeOf(this, NoApprovalError.prototype);
   }
@@ -40,8 +40,8 @@ export class NoApprovalError extends FederationError {
 export class ExpiredApprovalError extends FederationError {
   constructor(approvalExpiresAt: string) {
     super(
-      'APPROVAL_EXPIRED',
-      `Federation approval expired at ${approvalExpiresAt}. User must re-approve.`
+      "APPROVAL_EXPIRED",
+      `Federation approval expired at ${approvalExpiresAt}. User must re-approve.`,
     );
     Object.setPrototypeOf(this, ExpiredApprovalError.prototype);
   }
@@ -51,8 +51,8 @@ export class ExpiredApprovalError extends FederationError {
 export class ProjectNotFoundError extends FederationError {
   constructor(projectId: string) {
     super(
-      'PROJECT_NOT_FOUND',
-      `Project ${projectId} not found in ~/.orqenix/projects.yaml. Register the project first.`
+      "PROJECT_NOT_FOUND",
+      `Project ${projectId} not found in ~/.orqenix/projects.yaml. Register the project first.`,
     );
     Object.setPrototypeOf(this, ProjectNotFoundError.prototype);
   }
@@ -61,7 +61,7 @@ export class ProjectNotFoundError extends FederationError {
 /** Registry file invalid or unreadable */
 export class RegistryError extends FederationError {
   constructor(message: string, cause?: unknown) {
-    super('REGISTRY_ERROR', message, cause);
+    super("REGISTRY_ERROR", message, cause);
     Object.setPrototypeOf(this, RegistryError.prototype);
   }
 }
@@ -70,8 +70,8 @@ export class RegistryError extends FederationError {
 export class CandidateNotFoundError extends FederationError {
   constructor(candidateId: string) {
     super(
-      'CANDIDATE_NOT_FOUND',
-      `Candidate ${candidateId} not found. It may have been cleared from cache or never existed.`
+      "CANDIDATE_NOT_FOUND",
+      `Candidate ${candidateId} not found. It may have been cleared from cache or never existed.`,
     );
     Object.setPrototypeOf(this, CandidateNotFoundError.prototype);
   }
@@ -80,7 +80,7 @@ export class CandidateNotFoundError extends FederationError {
 /** Permission check failure */
 export class PermissionError extends FederationError {
   constructor(message: string) {
-    super('PERMISSION_DENIED', message);
+    super("PERMISSION_DENIED", message);
     Object.setPrototypeOf(this, PermissionError.prototype);
   }
 }

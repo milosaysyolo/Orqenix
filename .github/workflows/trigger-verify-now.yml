@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to verify'
+        description: "Branch to verify"
         required: true
-        default: 'phase-8/verify-kit'
+        default: "phase-8/verify-kit"
 
 jobs:
   call:
@@ -27,8 +27,8 @@ jobs:
           version: 9.14.4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.10.0'
-          cache: 'pnpm'
+          node-version: "20.10.0"
+          cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - name: Capture memory-engine test output
         run: node scripts/verify/capture-test-failures.mjs @orqenix/memory-engine

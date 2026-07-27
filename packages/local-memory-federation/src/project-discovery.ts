@@ -4,19 +4,14 @@
 // Reads ~/.orqenix/projects.yaml to find projects user has registered for
 // federation. Pure read-only operation; never modifies the registry directly.
 
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { homedir } from 'node:os';
-import { dirname, join } from 'node:path';
-import { existsSync } from 'node:fs';
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { homedir } from "node:os";
+import { dirname, join } from "node:path";
+import { existsSync } from "node:fs";
+import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 
-import {
-  ProjectId,
-  ProjectRegistration,
-  ProjectsYaml,
-  ProjectsYamlSchema,
-} from './types';
-import { ProjectNotFoundError, RegistryError } from './errors';
+import { ProjectId, ProjectRegistration, ProjectsYaml, ProjectsYamlSchema } from "./types";
+import { ProjectNotFoundError, RegistryError } from "./errors";
 
 /**
  * Discovers projects from the local registry.
@@ -35,8 +30,7 @@ export class ProjectDiscovery {
   private readonly registryPath: string;
 
   constructor(registryPath?: string) {
-    this.registryPath =
-      registryPath ?? join(homedir(), '.orqenix', 'projects.yaml');
+    this.registryPath = registryPath ?? join(homedir(), ".orqenix", "projects.yaml");
   }
 
   /** Returns all registered projects, or empty array if registry doesn't exist */
@@ -47,29 +41,23 @@ export class ProjectDiscovery {
 
     let content: string;
     try {
-      content = await readFile(this.registryPath, 'utf-8');
+      content = await readFile(this.registryPath, "utf-8");
     } catch (err) {
-      throw new RegistryError(
-        `Failed to read project registry at ${this.registryPath}`,
-        err
-      );
+      throw new RegistryError(`Failed to read project registry at ${this.registryPath}`, err);
     }
 
     let parsed: unknown;
     try {
       parsed = parseYaml(content);
     } catch (err) {
-      throw new RegistryError(
-        `Failed to parse YAML in ${this.registryPath}`,
-        err
-      );
+      throw new RegistryError(`Failed to parse YAML in ${this.registryPath}`, err);
     }
 
     const validated = ProjectsYamlSchema.safeParse(parsed);
     if (!validated.success) {
       throw new RegistryError(
         `Invalid schema in ${this.registryPath}: ${validated.error.message}`,
-        validated.error
+        validated.error,
       );
     }
 
@@ -99,32 +87,20 @@ export class ProjectDiscovery {
       await mkdir(dir, { recursive: true });
     }
 
-    const existing = (await this.listProjects()).filter(
-      (p) => p.id !== registration.id
-    );
+    const existing = (await this.listProjects()).filter((p) => p.id !== registration.id);
     const yaml: ProjectsYaml = {
       projects: [...existing, registration],
     };
 
     try {
-      await writeFile(
-        this.registryPath,
-        stringifyYaml(yaml, { indent: 2 }),
-        'utf-8'
-      );
+      await writeFile(this.registryPath, stringifyYaml(yaml, { indent: 2 }), "utf-8");
     } catch (err) {
-      throw new RegistryError(
-        `Failed to write project registry at ${this.registryPath}`,
-        err
-      );
+      throw new RegistryError(`Failed to write project registry at ${this.registryPath}`, err);
     }
   }
 
   /** Toggles federation enablement for a project */
-  async setFederationEnabled(
-    projectId: ProjectId,
-    enabled: boolean
-  ): Promise<void> {
+  async setFederationEnabled(projectId: ProjectId, enabled: boolean): Promise<void> {
     const all = await this.listProjects();
     const target = all.find((p) => p.id === projectId);
     if (!target) {
@@ -133,16 +109,9 @@ export class ProjectDiscovery {
     target.cross_project_sharing_enabled = enabled;
 
     try {
-      await writeFile(
-        this.registryPath,
-        stringifyYaml({ projects: all }, { indent: 2 }),
-        'utf-8'
-      );
+      await writeFile(this.registryPath, stringifyYaml({ projects: all }, { indent: 2 }), "utf-8");
     } catch (err) {
-      throw new RegistryError(
-        `Failed to write project registry at ${this.registryPath}`,
-        err
-      );
+      throw new RegistryError(`Failed to write project registry at ${this.registryPath}`, err);
     }
   }
 }

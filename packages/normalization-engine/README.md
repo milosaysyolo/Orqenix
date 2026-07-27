@@ -28,6 +28,7 @@ claude-code, cursor, codex, opencode, mcp, continue, aider, npm
 ## Round-trip fidelity (INV-15)
 
 For every adapter pair (input + output):
+
 ```
 original → import → CSF → export → output
 assert: normalizeWhitespace(original) === normalizeWhitespace(output)

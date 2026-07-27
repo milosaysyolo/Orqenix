@@ -11,49 +11,49 @@
 //
 // SAFE: only changes within same major. Reports cross-major drifts for manual review.
 
-import { readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const ROOT = process.cwd();
 
 // Phase 8 canonical ranges (locked in CR v8.0)
 const CANONICAL = {
-  zod: { min: '3.25.0', range: '^3.25.0', reason: 'MCP SDK peer floor + em fix-2' },
-  vitest: { min: '2.1.5', range: '^2.1.5', reason: 'must match @vitest/ui major' },
-  '@vitest/ui': { min: '2.1.5', range: '^2.1.5', reason: 'must match vitest major' },
-  typescript: { min: '5.6.3', range: '^5.6.3', reason: 'Phase 8 baseline' },
-  'better-sqlite3': { min: '11.5.0', range: '^11.5.0', reason: 'Migration 540/550 binding compat' },
+  zod: { min: "3.25.0", range: "^3.25.0", reason: "MCP SDK peer floor + em fix-2" },
+  vitest: { min: "2.1.5", range: "^2.1.5", reason: "must match @vitest/ui major" },
+  "@vitest/ui": { min: "2.1.5", range: "^2.1.5", reason: "must match vitest major" },
+  typescript: { min: "5.6.3", range: "^5.6.3", reason: "Phase 8 baseline" },
+  "better-sqlite3": { min: "11.5.0", range: "^11.5.0", reason: "Migration 540/550 binding compat" },
 };
 
 // Only target Phase 8 packages (don't touch legacy Phase 5/6/7)
 const PHASE_8_PATHS = [
-  'apps/workbench',
-  'packages/ui-primitives',
-  'packages/plugin-core',
-  'packages/memory-engine',
-  'packages/settings-registry',
-  'packages/local-memory-federation',
-  'packages/skill-runtime',
-  'packages/binding-core',
-  'packages/mcp-server',
-  'packages/normalization-engine',
-  'packages/input-adapters',
-  'packages/output-adapters',
-  'packages/marketplace-core',
-  'packages/marketplace-ui',
-  'packages/migration-phase-7-to-8',
-  'packages/self-learning-observer',
-  'packages/self-learning-detection',
-  'packages/skill-genesis',
-  'packages/instinct-promoter',
-  'packages/verification-loop',
-  'packages/binding-claude-code',
-  'packages/binding-cursor',
-  'packages/binding-codex',
-  'packages/binding-opencode',
-  'packages/binding-cline',
-  'packages/binding-aider',
-  'packages/binding-continue',
+  "apps/workbench",
+  "packages/ui-primitives",
+  "packages/plugin-core",
+  "packages/memory-engine",
+  "packages/settings-registry",
+  "packages/local-memory-federation",
+  "packages/skill-runtime",
+  "packages/binding-core",
+  "packages/mcp-server",
+  "packages/normalization-engine",
+  "packages/input-adapters",
+  "packages/output-adapters",
+  "packages/marketplace-core",
+  "packages/marketplace-ui",
+  "packages/migration-phase-7-to-8",
+  "packages/self-learning-observer",
+  "packages/self-learning-detection",
+  "packages/skill-genesis",
+  "packages/instinct-promoter",
+  "packages/verification-loop",
+  "packages/binding-claude-code",
+  "packages/binding-cursor",
+  "packages/binding-codex",
+  "packages/binding-opencode",
+  "packages/binding-cline",
+  "packages/binding-aider",
+  "packages/binding-continue",
 ];
 
 function majorOf(range) {
@@ -65,17 +65,17 @@ let changes = 0;
 let crossMajorIssues = [];
 
 for (const rel of PHASE_8_PATHS) {
-  const pkgPath = join(ROOT, rel, 'package.json');
+  const pkgPath = join(ROOT, rel, "package.json");
   try {
-    const pkg = JSON.parse(await readFile(pkgPath, 'utf-8'));
+    const pkg = JSON.parse(await readFile(pkgPath, "utf-8"));
     let fileChanged = false;
 
-    for (const block of ['dependencies', 'devDependencies', 'peerDependencies']) {
+    for (const block of ["dependencies", "devDependencies", "peerDependencies"]) {
       const deps = pkg[block];
       if (!deps) continue;
       for (const [name, canonical] of Object.entries(CANONICAL)) {
         const current = deps[name];
-        if (!current || typeof current !== 'string' || current.startsWith('workspace:')) continue;
+        if (!current || typeof current !== "string" || current.startsWith("workspace:")) continue;
 
         const currentMajor = majorOf(current);
         const targetMajor = majorOf(canonical.range);
@@ -102,7 +102,7 @@ for (const rel of PHASE_8_PATHS) {
     }
 
     if (fileChanged) {
-      await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+      await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
     }
   } catch (err) {
     console.warn(`[skip] ${rel}: ${err.message}`);
@@ -114,7 +114,9 @@ console.log(`\n${changes} alignment(s) applied across Phase 8 packages.`);
 if (crossMajorIssues.length > 0) {
   console.error(`\n⚠ ${crossMajorIssues.length} cross-major issue(s) need manual review:`);
   for (const issue of crossMajorIssues) {
-    console.error(`  ${issue.file}: ${issue.block}.${issue.dep} ${issue.current} (target ${issue.target}, ${issue.reason})`);
+    console.error(
+      `  ${issue.file}: ${issue.block}.${issue.dep} ${issue.current} (target ${issue.target}, ${issue.reason})`,
+    );
   }
   console.error(`\n  Cross-major upgrades may have breaking changes. Review each before changing.`);
 }

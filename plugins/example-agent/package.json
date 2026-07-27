@@ -1,1 +1,81 @@
-{  "name": "@orqenix/plugin-example-agent",  "version": "0.8.0-alpha.1",  "description": "Reference agent plugin: an autonomous orchestrator coordinating skills.",  "license": "Apache-2.0",  "type": "module",  "main": "./dist/plugin.js",  "files": [    "dist",    "LICENSE",    "README.md"  ],  "scripts": {    "build": "npx tsup src/index.ts --format esm --dts --clean",    "test": "vitest run"  },  "publishConfig": {    "access": "public",    "provenance": true  },  "keywords": [    "orqenix",    "orqenix-plugin",    "agent"  ],  "engines": {    "node": ">=20.10.0"  },  "orqenixPlugin": {    "manifestVersion": "1.0",    "kind": "agent",    "compatibility": {      "orqenix": ">=0.8.0"    },    "permissions": [      "scope.read",      "memory.read:decision",      "memory.read:lesson",      "command.execute:limited"    ],    "external_agent_compat": [      "claude-code",      "opencode"    ],    "keywords": [      "subagent-orchestrator"    ],    "sandboxMode": "separate_process",    "tool": {      "name": "review_and_fix",      "description": "Orchestrator: recalls context, runs review-then-fix workflow",      "inputSchema": {        "type": "object",        "properties": {          "task": {            "type": "string"          }        },        "required": [          "task"        ]      },      "outputSchema": {        "type": "object",        "properties": {          "completed": {            "type": "boolean"          },          "steps": {            "type": "array"          }        }      }    }  },  "devDependencies": {    "tsup": "catalog:",    "vitest": "catalog:",    "typescript": "catalog:"  }}
+{
+  "name": "@orqenix/plugin-example-agent",
+  "version": "0.8.0-alpha.1",
+  "description": "Reference agent plugin: an autonomous orchestrator coordinating skills.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/plugin.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npx tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "orqenix",
+    "orqenix-plugin",
+    "agent"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "orqenixPlugin": {
+    "manifestVersion": "1.0",
+    "kind": "agent",
+    "compatibility": {
+      "orqenix": ">=0.8.0"
+    },
+    "permissions": [
+      "scope.read",
+      "memory.read:decision",
+      "memory.read:lesson",
+      "command.execute:limited"
+    ],
+    "external_agent_compat": [
+      "claude-code",
+      "opencode"
+    ],
+    "keywords": [
+      "subagent-orchestrator"
+    ],
+    "sandboxMode": "separate_process",
+    "tool": {
+      "name": "review_and_fix",
+      "description": "Orchestrator: recalls context, runs review-then-fix workflow",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "completed": {
+            "type": "boolean"
+          },
+          "steps": {
+            "type": "array"
+          }
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "tsup": "catalog:",
+    "vitest": "catalog:",
+    "typescript": "catalog:"
+  }
+}

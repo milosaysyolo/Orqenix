@@ -16,7 +16,7 @@ import type {
   MemoryAuditKind,
 } from './types';
 
-const ZERO_HASH = '0'.repeat(64);
+const ZERO_HASH = "0".repeat(64);
 
 /**
  * Writes + verifies the single per-project BLAKE3 audit chain.
@@ -34,9 +34,7 @@ export class AuditChainWriter {
 
     // Get prev_hash (last this_hash for this project, or ZERO if first)
     const last = this.db
-      .prepare(
-        'SELECT this_hash FROM audit_entries WHERE project_id = ? ORDER BY seq DESC LIMIT 1'
-      )
+      .prepare("SELECT this_hash FROM audit_entries WHERE project_id = ? ORDER BY seq DESC LIMIT 1")
       .get(input.project_id) as { this_hash: string } | undefined;
     const prevHash = last?.this_hash ?? ZERO_HASH;
 
@@ -66,7 +64,7 @@ export class AuditChainWriter {
         ) VALUES (
           @id, @ts, @projectId, @branchId, @sessionId, @parentSessionId,
           @kind, @actor, @target, @payload, @prevHash, @thisHash, NULL
-        )`
+        )`,
       )
       .run({
         id,
@@ -112,7 +110,7 @@ export class AuditChainWriter {
       .prepare(
         `SELECT seq, id, ts, project_id, branch_id, session_id, parent_session_id,
                 kind, actor, target, payload, prev_hash, this_hash
-         FROM audit_entries WHERE project_id = ? ORDER BY seq ASC`
+         FROM audit_entries WHERE project_id = ? ORDER BY seq ASC`,
       )
       .all(projectId) as Array<Record<string, unknown>>;
 
@@ -175,7 +173,7 @@ export class AuditChainWriter {
       .prepare(
         `SELECT * FROM audit_entries
          WHERE project_id = ? AND seq > ?
-         ORDER BY seq ASC LIMIT ?`
+         ORDER BY seq ASC LIMIT ?`,
       )
       .all(projectId, sinceSeq, limit) as Array<Record<string, unknown>>;
     return rows.map((r) => this.rowToEntry(r));
@@ -184,14 +182,14 @@ export class AuditChainWriter {
   /** Returns the latest seq for a project (0 if no entries) */
   latestSeq(projectId: string): number {
     const row = this.db
-      .prepare('SELECT MAX(seq) AS maxSeq FROM audit_entries WHERE project_id = ?')
+      .prepare("SELECT MAX(seq) AS maxSeq FROM audit_entries WHERE project_id = ?")
       .get(projectId) as { maxSeq: number | null } | undefined;
     return row?.maxSeq ?? 0;
   }
 
   // ─── Private ────────────────────────────────────────────────────────
 
-  private canonicalize(entry: Omit<AuditEntry, 'seq' | 'this_hash' | 'cloud_sig'>): string {
+  private canonicalize(entry: Omit<AuditEntry, "seq" | "this_hash" | "cloud_sig">): string {
     // Stable key order; this is the canonical form hashed (matches D7.13)
     return JSON.stringify({
       id: entry.id,

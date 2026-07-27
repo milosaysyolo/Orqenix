@@ -33,15 +33,15 @@ Checkpoint to long-term memory after each block.
 
 ## Execution order (fail-fast, checkpoint after each)
 
-| Block | Name                          | Gate                                    | Where    |
-|-------|-------------------------------|-----------------------------------------|----------|
-| 1     | Fix code drift                | bench files real + D7.4 clean           | local    |
-| 2     | Fix Pro deps + BOM            | no workspace:*/file:, no BOM, build OK  | local    |
-| 6sec  | Security pre-flight           | 7 security checks PASS                   | local/CI |
-| 3     | Release ceremony              | publish + sign + tag (3 repos)          | CI only  |
-| 4     | v2 validation                 | verdict GO on Linux                     | CI only  |
-| 5     | Defer limitations             | issues created, milestone v0.7.1        | local    |
-| 7     | Docs + announce               | release notes measured, memory written  | local    |
+| Block | Name                | Gate                                    | Where    |
+| ----- | ------------------- | --------------------------------------- | -------- |
+| 1     | Fix code drift      | bench files real + D7.4 clean           | local    |
+| 2     | Fix Pro deps + BOM  | no workspace:\*/file:, no BOM, build OK | local    |
+| 6sec  | Security pre-flight | 7 security checks PASS                  | local/CI |
+| 3     | Release ceremony    | publish + sign + tag (3 repos)          | CI only  |
+| 4     | v2 validation       | verdict GO on Linux                     | CI only  |
+| 5     | Defer limitations   | issues created, milestone v0.7.1        | local    |
+| 7     | Docs + announce     | release notes measured, memory written  | local    |
 
 Security pre-flight (6sec) runs BEFORE ceremony so we never publish unsafe code.
 

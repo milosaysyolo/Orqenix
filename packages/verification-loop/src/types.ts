@@ -1,17 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/verification-loop , Type definitions
 
-import { z } from 'zod';
+import { z } from "zod";
 
 /** Verification status progression (CR v8.0 Section 9.4.5) */
-export type VerificationStatus =
-  | 'unverified'
-  | 'replay_tested'
-  | 'verified'
-  | 'marketplace-ready';
+export type VerificationStatus = "unverified" | "replay_tested" | "verified" | "marketplace-ready";
 
 /** Verification kind */
-export type VerificationKind = 'replay' | 'a_b' | 'cross_validation';
+export type VerificationKind = "replay" | "a_b" | "cross_validation";
 
 /** Verification thresholds (configurable) */
 export interface VerificationThresholds {
@@ -31,7 +27,7 @@ export const VerificationRunSchema = z.object({
   id: z.string(),
   skill_id: z.string(),
   skill_version: z.string(),
-  verification_kind: z.enum(['replay', 'a_b', 'cross_validation']),
+  verification_kind: z.enum(["replay", "a_b", "cross_validation"]),
   run_at: z.string().datetime(),
   observations_used: z.number().int(),
   success_count: z.number().int(),
@@ -75,20 +71,24 @@ export interface SkillExecutor {
   replay(input: {
     skillName: string;
     input: unknown;
-    expectedOutcome: 'success' | 'error';
-  }): Promise<{ matched: boolean; actualOutcome: 'success' | 'error' | 'partial' }>;
+    expectedOutcome: "success" | "error";
+  }): Promise<{ matched: boolean; actualOutcome: "success" | "error" | "partial" }>;
 }
 
 /** Mock executor for standalone testing */
 export class MockSkillExecutor implements SkillExecutor {
   constructor(private readonly successRate = 1.0) {}
   async replay(input: {
-    expectedOutcome: 'success' | 'error';
-  }): Promise<{ matched: boolean; actualOutcome: 'success' | 'error' | 'partial' }> {
+    expectedOutcome: "success" | "error";
+  }): Promise<{ matched: boolean; actualOutcome: "success" | "error" | "partial" }> {
     const matched = Math.random() < this.successRate;
     return {
       matched,
-      actualOutcome: matched ? input.expectedOutcome : input.expectedOutcome === 'success' ? 'error' : 'success',
+      actualOutcome: matched
+        ? input.expectedOutcome
+        : input.expectedOutcome === "success"
+          ? "error"
+          : "success",
     };
   }
 }

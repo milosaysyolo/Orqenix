@@ -17,6 +17,7 @@ CSF skill from the observed pattern. Per CR v8.0 Section 9.4.4:
 ## Output
 
 A `CanonicalSkillFormat` with:
+
 - `kind: 'skill'`
 - `provenance.derived_from_observations: [event_id, ...]`
 - `provenance.verification_status: 'unverified'` (Anti-38: must verify first)
@@ -24,11 +25,11 @@ A `CanonicalSkillFormat` with:
 
 ## Language synthesis
 
-| Language | When chosen |
-|---|---|
-| `shell` | Pattern dominated by shell_command actions |
-| `python` | Pattern includes Python-specific actions |
-| `typescript` | Default for general workflows |
+| Language     | When chosen                                |
+| ------------ | ------------------------------------------ |
+| `shell`      | Pattern dominated by shell_command actions |
+| `python`     | Pattern includes Python-specific actions   |
+| `typescript` | Default for general workflows              |
 
 ## License
 

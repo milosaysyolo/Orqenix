@@ -4,7 +4,7 @@
 // Fuzzy filter over navigation + quick actions. Dependency-free (no cmdk).
 // ============================================================================
 
-'use client';
+"use client";
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';

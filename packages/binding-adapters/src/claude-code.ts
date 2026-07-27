@@ -4,9 +4,9 @@
 // Bridges Orqenix to Claude Code by writing .mcp.json pointing to orqenix-mcp.
 // Per CR v8.0 Section 9.3.1.
 
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { join, dirname } from "node:path";
 import {
   type AgentBinding,
   type BindingConfig,
@@ -15,23 +15,23 @@ import {
   type ConnectionTestResult,
   type ExportResult,
   buildMcpCommand,
-} from '@orqenix/binding-core';
+} from "@orqenix/binding-core";
 
 /**
  * Claude Code binding. Writes a `.mcp.json` file at the project root that tells
  * Claude Code to launch the Orqenix MCP server over stdio.
  */
 export class ClaudeCodeBinding implements AgentBinding {
-  readonly platformName = 'claude-code';
+  readonly platformName = "claude-code";
 
   async install(config: BindingConfig): Promise<InstallResult> {
-    const mcpJsonPath = join(config.projectPath, '.mcp.json');
+    const mcpJsonPath = join(config.projectPath, ".mcp.json");
     const { command, args } = buildMcpCommand(config);
 
     let mcpConfig: { mcpServers?: Record<string, unknown> } = {};
     if (existsSync(mcpJsonPath)) {
       try {
-        mcpConfig = JSON.parse(await readFile(mcpJsonPath, 'utf-8'));
+        mcpConfig = JSON.parse(await readFile(mcpJsonPath, "utf-8"));
       } catch {
         mcpConfig = {};
       }
@@ -40,7 +40,7 @@ export class ClaudeCodeBinding implements AgentBinding {
     mcpConfig.mcpServers = mcpConfig.mcpServers ?? {};
     mcpConfig.mcpServers.orqenix = {
       command,
-      args: [...args, '--client-id', 'claude-code'],
+      args: [...args, "--client-id", "claude-code"],
       env: {},
     };
 
@@ -55,10 +55,10 @@ export class ClaudeCodeBinding implements AgentBinding {
   }
 
   async uninstall(config: BindingConfig): Promise<void> {
-    const mcpJsonPath = join(config.projectPath, '.mcp.json');
+    const mcpJsonPath = join(config.projectPath, ".mcp.json");
     if (!existsSync(mcpJsonPath)) return;
     try {
-      const mcpConfig = JSON.parse(await readFile(mcpJsonPath, 'utf-8')) as {
+      const mcpConfig = JSON.parse(await readFile(mcpJsonPath, "utf-8")) as {
         mcpServers?: Record<string, unknown>;
       };
       if (mcpConfig.mcpServers) {
@@ -71,29 +71,29 @@ export class ClaudeCodeBinding implements AgentBinding {
   }
 
   async status(config: BindingConfig): Promise<BindingStatus> {
-    const mcpJsonPath = join(config.projectPath, '.mcp.json');
+    const mcpJsonPath = join(config.projectPath, ".mcp.json");
     if (!existsSync(mcpJsonPath)) {
       return {
         platformName: this.platformName,
-        state: 'not_installed',
+        state: "not_installed",
         configPresent: false,
       };
     }
     try {
-      const mcpConfig = JSON.parse(await readFile(mcpJsonPath, 'utf-8')) as {
+      const mcpConfig = JSON.parse(await readFile(mcpJsonPath, "utf-8")) as {
         mcpServers?: Record<string, unknown>;
       };
       const installed = mcpConfig.mcpServers?.orqenix !== undefined;
       return {
         platformName: this.platformName,
-        state: installed ? 'active' : 'inactive',
+        state: installed ? "active" : "inactive",
         configPresent: true,
         ...(config.endpoint ? { mcpEndpoint: config.endpoint } : {}),
       };
     } catch (err) {
       return {
         platformName: this.platformName,
-        state: 'error',
+        state: "error",
         configPresent: true,
         error: (err as Error).message,
       };
@@ -107,10 +107,9 @@ export class ClaudeCodeBinding implements AgentBinding {
     if (config.endpoint) {
       const start = Date.now();
       try {
-        const res = await fetch(
-          config.endpoint.replace(/\/rpc$/, '') + '/health',
-          { signal: AbortSignal.timeout(3000) }
-        );
+        const res = await fetch(config.endpoint.replace(/\/rpc$/, "") + "/health", {
+          signal: AbortSignal.timeout(3000),
+        });
         return {
           ok: res.ok,
           latencyMs: Date.now() - start,
@@ -120,7 +119,7 @@ export class ClaudeCodeBinding implements AgentBinding {
         return { ok: false, error: (err as Error).message };
       }
     }
-    return { ok: false, error: 'No endpoint configured' };
+    return { ok: false, error: "No endpoint configured" };
   }
 
   async exportSkillsToPlatform(_config: BindingConfig): Promise<ExportResult> {

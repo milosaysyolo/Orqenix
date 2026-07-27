@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/marketplace-ui , SkillBrowser , browse + invoke skills from UI
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Play, Zap } from 'lucide-react';
-import { Card, CardContent, Badge, Button } from '@orqenix/ui-primitives';
+import * as React from "react";
+import { Play, Zap } from "lucide-react";
+import { Card, CardContent, Badge, Button } from "@orqenix/ui-primitives";
 
 export interface SkillBrowserData {
   name: string;
@@ -36,11 +36,20 @@ export function SkillBrowser({ skills, onInvoke }: SkillBrowserProps): React.Rea
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="font-medium text-sm">{skill.name}</span>
-                <Badge variant="secondary" className="text-xs">v{skill.version}</Badge>
+                <Badge variant="secondary" className="text-xs">
+                  v{skill.version}
+                </Badge>
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{skill.description}</p>
+              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                {skill.description}
+              </p>
             </div>
-            <Button variant="ghost" size="sm" onClick={() => onInvoke?.(skill.name)} className="gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onInvoke?.(skill.name)}
+              className="gap-1"
+            >
               <Play className="w-3.5 h-3.5" aria-hidden /> Invoke
             </Button>
           </CardContent>

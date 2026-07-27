@@ -1,4 +1,4 @@
-import type { Connection, Libp2p } from '@libp2p/interface';
+import type { Connection, Libp2p } from "@libp2p/interface";
 
 export interface ConnectionManagerOptions {
   idleTimeoutMs?: number;
@@ -46,12 +46,18 @@ export class ConnectionManager {
       this.connSet.delete(conn);
       this.connStates.delete(conn);
     };
-    node.addEventListener('connection:open', this.boundOnConnect as (evt: CustomEvent<Connection>) => void);
-    node.addEventListener('connection:close', this.boundOnDisconnect as (evt: CustomEvent<Connection>) => void);
+    node.addEventListener(
+      "connection:open",
+      this.boundOnConnect as (evt: CustomEvent<Connection>) => void,
+    );
+    node.addEventListener(
+      "connection:close",
+      this.boundOnDisconnect as (evt: CustomEvent<Connection>) => void,
+    );
     this.listenersInstalled = true;
 
     this.timer = setInterval(() => void this.sweep(), this.tickIntervalMs);
-    if (typeof (this.timer as { unref?: () => void }).unref === 'function') {
+    if (typeof (this.timer as { unref?: () => void }).unref === "function") {
       (this.timer as unknown as { unref: () => void }).unref();
     }
   }
@@ -74,7 +80,11 @@ export class ConnectionManager {
       if (state && state.lastActivityAt < cutoff) victims.push(conn);
     }
     for (const conn of victims) {
-      try { await conn.close(); } catch { /* ignore */ }
+      try {
+        await conn.close();
+      } catch {
+        /* ignore */
+      }
       this.connSet.delete(conn);
       this.connStates.delete(conn);
     }
@@ -92,13 +102,23 @@ export class ConnectionManager {
       await new Promise((res) => setTimeout(res, 25));
     }
     for (const conn of [...this.connSet]) {
-      try { await conn.close(); } catch { /* ignore */ }
+      try {
+        await conn.close();
+      } catch {
+        /* ignore */
+      }
     }
     this.connSet.clear();
 
     if (this.listenersInstalled && this.node && this.boundOnConnect && this.boundOnDisconnect) {
-      this.node.removeEventListener('connection:open', this.boundOnConnect as (evt: CustomEvent<Connection>) => void);
-      this.node.removeEventListener('connection:close', this.boundOnDisconnect as (evt: CustomEvent<Connection>) => void);
+      this.node.removeEventListener(
+        "connection:open",
+        this.boundOnConnect as (evt: CustomEvent<Connection>) => void,
+      );
+      this.node.removeEventListener(
+        "connection:close",
+        this.boundOnDisconnect as (evt: CustomEvent<Connection>) => void,
+      );
       this.listenersInstalled = false;
     }
     this.node = undefined;

@@ -1,14 +1,20 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/marketplace-ui , PluginInstaller dialog with permission review
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { ShieldCheck, ShieldAlert, AlertTriangle } from 'lucide-react';
+import * as React from "react";
+import { ShieldCheck, ShieldAlert, AlertTriangle } from "lucide-react";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
-  DialogFooter, Button, Badge,
-} from '@orqenix/ui-primitives';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  Button,
+  Badge,
+} from "@orqenix/ui-primitives";
 
 export interface PluginInstallerProps {
   open: boolean;
@@ -25,9 +31,14 @@ export interface PluginInstallerProps {
   onConfirm: (name: string) => Promise<void>;
 }
 
-const DANGEROUS = new Set(['command.execute:full', 'scope.write']);
+const DANGEROUS = new Set(["command.execute:full", "scope.write"]);
 
-export function PluginInstaller({ open, plugin, onClose, onConfirm }: PluginInstallerProps): React.ReactElement | null {
+export function PluginInstaller({
+  open,
+  plugin,
+  onClose,
+  onConfirm,
+}: PluginInstallerProps): React.ReactElement | null {
   const [installing, setInstalling] = React.useState(false);
   if (!plugin) return null;
 
@@ -39,7 +50,9 @@ export function PluginInstaller({ open, plugin, onClose, onConfirm }: PluginInst
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             Install {plugin.name}
-            <Badge variant="secondary" className="text-xs">v{plugin.version}</Badge>
+            <Badge variant="secondary" className="text-xs">
+              v{plugin.version}
+            </Badge>
           </DialogTitle>
           <DialogDescription>Review permissions before installing.</DialogDescription>
         </DialogHeader>
@@ -63,17 +76,30 @@ export function PluginInstaller({ open, plugin, onClose, onConfirm }: PluginInst
           )}
 
           <div className="grid grid-cols-2 gap-2 text-sm">
-            <div><span className="text-muted-foreground">Kind:</span> {plugin.kind}</div>
-            <div><span className="text-muted-foreground">License:</span> {plugin.license}</div>
-            <div><span className="text-muted-foreground">Sandbox:</span> {plugin.sandboxMode}</div>
+            <div>
+              <span className="text-muted-foreground">Kind:</span> {plugin.kind}
+            </div>
+            <div>
+              <span className="text-muted-foreground">License:</span> {plugin.license}
+            </div>
+            <div>
+              <span className="text-muted-foreground">Sandbox:</span> {plugin.sandboxMode}
+            </div>
           </div>
 
           <div>
-            <div className="text-sm font-medium mb-2">Requested permissions ({plugin.permissions.length})</div>
+            <div className="text-sm font-medium mb-2">
+              Requested permissions ({plugin.permissions.length})
+            </div>
             <div className="space-y-1">
               {plugin.permissions.map((perm) => (
                 <div key={perm} className="flex items-center gap-2 text-xs py-1">
-                  {DANGEROUS.has(perm) && <AlertTriangle className="w-3.5 h-3.5 text-status-warning shrink-0" aria-hidden />}
+                  {DANGEROUS.has(perm) && (
+                    <AlertTriangle
+                      className="w-3.5 h-3.5 text-status-warning shrink-0"
+                      aria-hidden
+                    />
+                  )}
                   <code className="font-mono">{perm}</code>
                 </div>
               ))}
@@ -89,16 +115,22 @@ export function PluginInstaller({ open, plugin, onClose, onConfirm }: PluginInst
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={installing}>Cancel</Button>
+          <Button variant="outline" onClick={onClose} disabled={installing}>
+            Cancel
+          </Button>
           <Button
             onClick={async () => {
               setInstalling(true);
-              try { await onConfirm(plugin.name); onClose(); }
-              finally { setInstalling(false); }
+              try {
+                await onConfirm(plugin.name);
+                onClose();
+              } finally {
+                setInstalling(false);
+              }
             }}
             disabled={installing}
           >
-            {installing ? 'Installing...' : 'Install'}
+            {installing ? "Installing..." : "Install"}
           </Button>
         </DialogFooter>
       </DialogContent>

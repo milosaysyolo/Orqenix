@@ -21,12 +21,12 @@ export class MeshLogger {
 
   constructor(opts: MeshLoggerOptions = {}) {
     this.sink = opts.sink ?? defaultSink;
-    this.level = opts.level ?? 'info';
+    this.level = opts.level ?? "info";
     this.now = opts.now ?? (() => new Date());
     this.strict = opts.strict ?? false;
   }
 
-  emit(partial: Omit<MeshLogEvent, 'ts'> & { ts?: string }): void {
+  emit(partial: Omit<MeshLogEvent, "ts"> & { ts?: string }): void {
     if (LEVEL_RANK[partial.level] < LEVEL_RANK[this.level]) return;
     const event: MeshLogEvent = {
       ...partial,
@@ -35,7 +35,7 @@ export class MeshLogger {
 
     const errs = validateLogEvent(event);
     if (errs) {
-      if (this.strict) throw new Error(`MeshLogger schema violation: ${errs.join('; ')}`);
+      if (this.strict) throw new Error(`MeshLogger schema violation: ${errs.join("; ")}`);
       return;
     }
 
@@ -50,30 +50,47 @@ export class MeshLogger {
         this.sink(
           {
             ts: this.now().toISOString(),
-            level: 'warn',
-            event: 'rpc.denied' as MeshEventName,
+            level: "warn",
+            event: "rpc.denied" as MeshEventName,
             scopeId: event.scopeId,
             transport: event.transport,
-            errorCode: 'E_LOG_REDACTION',
+            errorCode: "E_LOG_REDACTION",
           },
           '{"event":"rpc.denied","errorCode":"E_LOG_REDACTION"}',
         );
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
       return;
     }
     try {
       this.sink(event, serialized);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }
 
   rpcIn(args: { scopeId: ScopeId; transport: string; requestId: string; method: string }): void {
-    this.emit({ level: 'info', event: 'rpc.in', ...args });
+    this.emit({ level: "info", event: "rpc.in", ...args });
   }
-  rpcOut(args: { scopeId: ScopeId; transport: string; requestId: string; method: string; durationMs: number; status: MeshStatus }): void {
-    this.emit({ level: 'info', event: 'rpc.out', ...args });
+  rpcOut(args: {
+    scopeId: ScopeId;
+    transport: string;
+    requestId: string;
+    method: string;
+    durationMs: number;
+    status: MeshStatus;
+  }): void {
+    this.emit({ level: "info", event: "rpc.out", ...args });
   }
-  rpcDenied(args: { scopeId: ScopeId; transport: string; requestId: string; method?: string; errorCode: string }): void {
-    this.emit({ level: 'warn', event: 'rpc.denied', status: 'denied', ...args });
+  rpcDenied(args: {
+    scopeId: ScopeId;
+    transport: string;
+    requestId: string;
+    method?: string;
+    errorCode: string;
+  }): void {
+    this.emit({ level: "warn", event: "rpc.denied", status: "denied", ...args });
   }
 }
 
@@ -85,7 +102,11 @@ export function bufferSink(): { events: MeshLogEvent[]; lines: string[]; sink: L
   const events: MeshLogEvent[] = [];
   const lines: string[] = [];
   return {
-    events, lines,
-    sink: (e, s) => { events.push(e); lines.push(s); },
+    events,
+    lines,
+    sink: (e, s) => {
+      events.push(e);
+      lines.push(s);
+    },
   };
 }

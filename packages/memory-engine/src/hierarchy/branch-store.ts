@@ -5,33 +5,30 @@
 // shared via BLAKE3 content addressing + ref-count increment. This preserves
 // isolation correctness during parallel development per ADR-E-003 + INV-11.
 
-import type { Database } from 'better-sqlite3';
-import { blake3 } from '@noble/hashes/blake3';
-import { BlobStore } from '../store/blob-store';
-import { ulid } from '../store/ulid';
-import type { KbKind, Tier } from '../store/types';
-import {
-  type CreateBranchInput,
-  type CreateBranchResult,
-} from './types';
+import type { Database } from "better-sqlite3";
+import { blake3 } from "@noble/hashes/blake3";
+import { BlobStore } from "../store/blob-store";
+import { ulid } from "../store/ulid";
+import type { KbKind, Tier } from "../store/types";
+import { type CreateBranchInput, type CreateBranchResult } from "./types";
 
 const KB_TABLES: Array<{ kb: KbKind; table: string }> = [
-  { kb: 'chat', table: 'chat_entries' },
-  { kb: 'code', table: 'code_entries' },
-  { kb: 'decision', table: 'decision_entries' },
-  { kb: 'lesson', table: 'lesson_entries' },
+  { kb: "chat", table: "chat_entries" },
+  { kb: "code", table: "code_entries" },
+  { kb: "decision", table: "decision_entries" },
+  { kb: "lesson", table: "lesson_entries" },
 ];
 
-const TIER_FILTER: Record<NonNullable<CreateBranchInput['cloneTiers']>, Tier[]> = {
-  all: ['T1', 'T2', 'T3', 'T4'],
-  t1_t2_only: ['T1', 'T2'],
-  t1_only: ['T1'],
+const TIER_FILTER: Record<NonNullable<CreateBranchInput["cloneTiers"]>, Tier[]> = {
+  all: ["T1", "T2", "T3", "T4"],
+  t1_t2_only: ["T1", "T2"],
+  t1_only: ["T1"],
 };
 
 export class BranchStore {
   constructor(
     private readonly db: Database,
-    private readonly blobs: BlobStore
+    private readonly blobs: BlobStore,
   ) {}
 
   /**
@@ -42,9 +39,9 @@ export class BranchStore {
     const input = `${projectId}:${branchName}`;
     const bytes = new TextEncoder().encode(input);
     const h = blake3(bytes);
-    let s = 'blake3:';
+    let s = "blake3:";
     for (let i = 0; i < 8; i++) {
-      s += (h[i] as number).toString(16).padStart(2, '0');
+      s += (h[i] as number).toString(16).padStart(2, "0");
     }
     return s;
   }
@@ -61,13 +58,10 @@ export class BranchStore {
    */
   createBranch(input: CreateBranchInput): CreateBranchResult {
     const startMs = Date.now();
-    const newBranchId = BranchStore.computeBranchId(
-      input.projectId,
-      input.newBranchName
-    );
+    const newBranchId = BranchStore.computeBranchId(input.projectId, input.newBranchName);
     const now = new Date().toISOString();
-    const tiers = TIER_FILTER[input.cloneTiers ?? 'all'];
-    const tierList = tiers.map((t) => `'${t}'`).join(',');
+    const tiers = TIER_FILTER[input.cloneTiers ?? "all"];
+    const tierList = tiers.map((t) => `'${t}'`).join(",");
 
     const cellSnapshot: Record<string, Record<string, number>> = {
       T1: {},
@@ -88,7 +82,7 @@ export class BranchStore {
              WHERE project_id = @projectId
                AND branch_id = @parentBranchId
                AND memory_level IN ('branch','project')
-               AND tier IN (${tierList})`
+               AND tier IN (${tierList})`,
           )
           .all({
             projectId: input.projectId,
@@ -112,7 +106,7 @@ export class BranchStore {
                 @protectionFlags, @parentBranchId,
                 NULL, NULL,
                 @createdAt, @updatedAt
-              )`
+              )`,
             )
             .run({
               id: newId,
@@ -130,7 +124,7 @@ export class BranchStore {
             });
 
           // Increment blob ref count (content shared, not duplicated)
-          if (row.content === null && typeof row.hash === 'string') {
+          if (row.content === null && typeof row.hash === "string") {
             this.blobs.addRef(row.hash);
             blobReferencesReused += 1;
           }
@@ -150,7 +144,7 @@ export class BranchStore {
           `INSERT INTO branches (
             branch_id, project_id, branch_name, created_at,
             cloned_from_branch_id, cell_snapshot
-          ) VALUES (?, ?, ?, ?, ?, ?)`
+          ) VALUES (?, ?, ?, ?, ?, ?)`,
         )
         .run(
           newBranchId,
@@ -158,7 +152,7 @@ export class BranchStore {
           input.newBranchName,
           now,
           input.parentBranchId,
-          JSON.stringify(cellSnapshot)
+          JSON.stringify(cellSnapshot),
         );
     });
 
@@ -167,7 +161,7 @@ export class BranchStore {
     return {
       branchId: newBranchId,
       branchName: input.newBranchName,
-      cellSnapshot: cellSnapshot as CreateBranchResult['cellSnapshot'],
+      cellSnapshot: cellSnapshot as CreateBranchResult["cellSnapshot"],
       indexRowsCloned,
       blobReferencesReused,
       durationMs: Date.now() - startMs,
@@ -176,9 +170,7 @@ export class BranchStore {
 
   /** Returns whether a branch exists */
   branchExists(branchId: string): boolean {
-    const row = this.db
-      .prepare('SELECT 1 FROM branches WHERE branch_id = ?')
-      .get(branchId);
+    const row = this.db.prepare("SELECT 1 FROM branches WHERE branch_id = ?").get(branchId);
     return row !== undefined;
   }
 
@@ -191,7 +183,7 @@ export class BranchStore {
   }> {
     const rows = this.db
       .prepare(
-        'SELECT branch_id, branch_name, created_at, cloned_from_branch_id FROM branches WHERE project_id = ? ORDER BY created_at ASC'
+        "SELECT branch_id, branch_name, created_at, cloned_from_branch_id FROM branches WHERE project_id = ? ORDER BY created_at ASC",
       )
       .all(projectId) as Array<Record<string, unknown>>;
     return rows.map((r) => ({

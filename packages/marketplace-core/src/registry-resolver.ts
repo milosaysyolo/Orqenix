@@ -4,7 +4,7 @@
 // Registry sources are interchangeable via the RegistryResolver interface.
 // Per CR v8.0 Section 6.3.1 + Anti-pattern 39 (no hardcoded URLs in core).
 
-import type { PluginListing, SearchFilters, RegistrySource } from './types';
+import type { PluginListing, SearchFilters, RegistrySource } from "./types";
 
 /** Plugin metadata (fetched before install) */
 export interface PluginMetadata {
@@ -32,7 +32,7 @@ export interface PluginTarball {
 
 /** Optional analytics event reported to registry */
 export interface RegistryEvent {
-  kind: 'install' | 'uninstall' | 'view';
+  kind: "install" | "uninstall" | "view";
   pluginName: string;
 }
 
@@ -85,7 +85,7 @@ export class RegistryResolverRegistry {
     const r = this.resolvers.get(source);
     if (!r) {
       throw new Error(
-        `No resolver registered for source '${source}'. Register one via RegistryResolverRegistry.register().`
+        `No resolver registered for source '${source}'. Register one via RegistryResolverRegistry.register().`,
       );
     }
     return r;

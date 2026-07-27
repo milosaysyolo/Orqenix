@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/plugin-core , Type definitions
 
-import type { CanonicalSkillFormat, PluginKind } from './csf-schema';
+import type { CanonicalSkillFormat, PluginKind } from "./csf-schema";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Plugin lifecycle state (per CR v8.0 Section 7.3)
 // ─────────────────────────────────────────────────────────────────────────
 
 export type PluginLifecycleState =
-  | 'unregistered'
-  | 'installed' // package present, not yet configured
-  | 'configured' // settings reviewed by user
-  | 'active' // sandbox spawned, ready to invoke
-  | 'inactive' // explicitly deactivated, state preserved
-  | 'crashed' // sandbox crashed, awaiting restart or removal
-  | 'updating' // mid-update from old → new version
-  | 'uninstalling'; // being removed
+  | "unregistered"
+  | "installed" // package present, not yet configured
+  | "configured" // settings reviewed by user
+  | "active" // sandbox spawned, ready to invoke
+  | "inactive" // explicitly deactivated, state preserved
+  | "crashed" // sandbox crashed, awaiting restart or removal
+  | "updating" // mid-update from old → new version
+  | "uninstalling"; // being removed
 
 // ─────────────────────────────────────────────────────────────────────────
 // Registered plugin entry (in PluginRegistry)

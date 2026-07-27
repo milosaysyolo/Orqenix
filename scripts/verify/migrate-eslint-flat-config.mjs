@@ -3,26 +3,26 @@
 // Idempotent. Adds missing dev dependencies. Per memory rule: never require
 // versions higher than published; pins to known-good ranges.
 
-import { readFile, writeFile, unlink } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { execSync } from 'node:child_process';
+import { readFile, writeFile, unlink } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { execSync } from "node:child_process";
 
 const ROOT = process.cwd();
 
 // Packages that ship .eslintrc.cjs but need flat config for ESLint 9
 const TARGETS = [
-  'packages/ui-primitives',
-  'packages/plugin-core',
-  'packages/memory-engine',
-  'packages/settings-registry',
-  'packages/local-memory-federation',
+  "packages/ui-primitives",
+  "packages/plugin-core",
+  "packages/memory-engine",
+  "packages/settings-registry",
+  "packages/local-memory-federation",
 ];
 
 // Latest published as of 2026-06: typescript-eslint 8.x. Pin floor.
 const REQUIRED_DEVDEPS = {
-  '@typescript-eslint/parser': '^8.0.0',
-  '@typescript-eslint/eslint-plugin': '^8.0.0',
+  "@typescript-eslint/parser": "^8.0.0",
+  "@typescript-eslint/eslint-plugin": "^8.0.0",
 };
 
 const FLAT_CONFIG = `// SPDX-License-Identifier: Apache-2.0
@@ -54,9 +54,9 @@ let depsAdded = 0;
 
 for (const rel of TARGETS) {
   const pkgDir = join(ROOT, rel);
-  const legacyPath = join(pkgDir, '.eslintrc.cjs');
-  const flatPath = join(pkgDir, 'eslint.config.js');
-  const pkgJsonPath = join(pkgDir, 'package.json');
+  const legacyPath = join(pkgDir, ".eslintrc.cjs");
+  const flatPath = join(pkgDir, "eslint.config.js");
+  const pkgJsonPath = join(pkgDir, "package.json");
 
   if (!existsSync(pkgJsonPath)) {
     console.warn(`[skip] ${rel}: package.json missing`);
@@ -77,7 +77,7 @@ for (const rel of TARGETS) {
   }
 
   // 3. Ensure devDeps
-  const pkg = JSON.parse(await readFile(pkgJsonPath, 'utf-8'));
+  const pkg = JSON.parse(await readFile(pkgJsonPath, "utf-8"));
   pkg.devDependencies = pkg.devDependencies ?? {};
   let pkgChanged = false;
   for (const [name, range] of Object.entries(REQUIRED_DEVDEPS)) {
@@ -89,9 +89,11 @@ for (const rel of TARGETS) {
     }
   }
   if (pkgChanged) {
-    await writeFile(pkgJsonPath, JSON.stringify(pkg, null, 2) + '\n');
+    await writeFile(pkgJsonPath, JSON.stringify(pkg, null, 2) + "\n");
   }
 }
 
-console.log(`\n[migrate-eslint-flat-config] ${migrated} config(s) migrated, ${depsAdded} dep(s) added.`);
+console.log(
+  `\n[migrate-eslint-flat-config] ${migrated} config(s) migrated, ${depsAdded} dep(s) added.`,
+);
 console.log(`Next: run \`pnpm install\` then \`pnpm -r run lint\` to verify.`);

@@ -8,12 +8,12 @@
 Surfaces detected instinct candidates for human review. Per CR v8.0 Section 9.4.3,
 the user reviews each candidate ranked by impact score and chooses:
 
-| Action | Effect |
-|---|---|
-| **Promote** | Generate a skill from the candidate (via skill-genesis) |
-| **Promote (Customize First)** | Open skill builder pre-filled, user edits before save |
-| **Reject** | Mark rejected; never re-surface this pattern hash |
-| **Defer** | Hide for now; re-surface if more observations accumulate |
+| Action                        | Effect                                                   |
+| ----------------------------- | -------------------------------------------------------- |
+| **Promote**                   | Generate a skill from the candidate (via skill-genesis)  |
+| **Promote (Customize First)** | Open skill builder pre-filled, user edits before save    |
+| **Reject**                    | Mark rejected; never re-surface this pattern hash        |
+| **Defer**                     | Hide for now; re-surface if more observations accumulate |
 
 ## Privacy: redacted observation samples
 

@@ -9,7 +9,7 @@ import {
   ConformanceSuite,
   type CanonicalSkillFormat,
   type PluginKind,
-} from '@orqenix/plugin-core';
+} from "@orqenix/plugin-core";
 import {
   type CreatePluginInput,
   type UpdatePluginInput,
@@ -40,9 +40,12 @@ export interface MarketplaceAuditWriter {
 }
 
 export class CrudOperationError extends Error {
-  constructor(public readonly code: string, message: string) {
+  constructor(
+    public readonly code: string,
+    message: string,
+  ) {
     super(message);
-    this.name = 'CrudOperationError';
+    this.name = "CrudOperationError";
     Object.setPrototypeOf(this, CrudOperationError.prototype);
   }
 }
@@ -64,8 +67,8 @@ export class MarketplaceCrud {
     const existing = await this.store.get(input.name);
     if (existing) {
       throw new CrudOperationError(
-        'PLUGIN_EXISTS',
-        `Plugin ${input.name} already exists. Use update or fork.`
+        "PLUGIN_EXISTS",
+        `Plugin ${input.name} already exists. Use update or fork.`,
       );
     }
 
@@ -76,7 +79,7 @@ export class MarketplaceCrud {
     assertValidManifest(this.csfToPackageJson(csf));
 
     await this.store.set(csf);
-    await this.auditEvent('marketplace.crud_create', {
+    await this.auditEvent("marketplace.crud_create", {
       name: csf.name,
       version: csf.version,
       kind: csf.kind,
@@ -89,10 +92,7 @@ export class MarketplaceCrud {
   async update(input: UpdatePluginInput): Promise<CrudResult> {
     const existing = await this.store.get(input.name);
     if (!existing) {
-      throw new CrudOperationError(
-        'PLUGIN_NOT_FOUND',
-        `Plugin ${input.name} not found`
-      );
+      throw new CrudOperationError("PLUGIN_NOT_FOUND", `Plugin ${input.name} not found`);
     }
 
     const oldVersion = existing.version;
@@ -102,7 +102,7 @@ export class MarketplaceCrud {
     const updated: CanonicalSkillFormat = {
       ...existing,
       version: newVersion,
-      manifest: { ...existing.manifest, ...(input.changes.manifest as object ?? {}) },
+      manifest: { ...existing.manifest, ...((input.changes.manifest as object) ?? {}) },
     };
     updated.provenance.contentHash = computeContentHash(updated);
 
@@ -111,11 +111,11 @@ export class MarketplaceCrud {
     this.conformance.assert(updated);
 
     await this.store.set(updated);
-    await this.auditEvent('marketplace.crud_update', {
+    await this.auditEvent("marketplace.crud_update", {
       name: input.name,
       oldVersion,
       newVersion,
-      changesSummary: input.changesSummary ?? '',
+      changesSummary: input.changesSummary ?? "",
     });
 
     return { ok: true, pluginName: input.name, version: newVersion };
@@ -126,21 +126,18 @@ export class MarketplaceCrud {
     const expected = `DELETE ${input.name}`;
     if (input.confirmation !== expected) {
       throw new CrudOperationError(
-        'CONFIRMATION_MISMATCH',
-        `Confirmation must be exactly "${expected}"`
+        "CONFIRMATION_MISMATCH",
+        `Confirmation must be exactly "${expected}"`,
       );
     }
 
     const existing = await this.store.get(input.name);
     if (!existing) {
-      throw new CrudOperationError(
-        'PLUGIN_NOT_FOUND',
-        `Plugin ${input.name} not found`
-      );
+      throw new CrudOperationError("PLUGIN_NOT_FOUND", `Plugin ${input.name} not found`);
     }
 
     await this.store.delete(input.name);
-    await this.auditEvent('marketplace.crud_delete', {
+    await this.auditEvent("marketplace.crud_delete", {
       name: input.name,
       version: existing.version,
     });
@@ -153,34 +150,31 @@ export class MarketplaceCrud {
     const source = await this.store.get(input.sourceName);
     if (!source) {
       throw new CrudOperationError(
-        'PLUGIN_NOT_FOUND',
-        `Source plugin ${input.sourceName} not found`
+        "PLUGIN_NOT_FOUND",
+        `Source plugin ${input.sourceName} not found`,
       );
     }
 
     const existing = await this.store.get(input.newName);
     if (existing) {
-      throw new CrudOperationError(
-        'PLUGIN_EXISTS',
-        `Target ${input.newName} already exists`
-      );
+      throw new CrudOperationError("PLUGIN_EXISTS", `Target ${input.newName} already exists`);
     }
 
     // Clone + rename + reset version to 0.1.0
     const forked: CanonicalSkillFormat = {
       ...structuredClone(source),
       name: input.newName,
-      version: '0.1.0',
+      version: "0.1.0",
     };
     forked.provenance.contentHash = computeContentHash(forked);
 
     await this.store.set(forked);
-    await this.auditEvent('marketplace.fork_created', {
+    await this.auditEvent("marketplace.fork_created", {
       sourceName: input.sourceName,
       forkedTo: input.newName,
     });
 
-    return { ok: true, pluginName: input.newName, version: '0.1.0' };
+    return { ok: true, pluginName: input.newName, version: "0.1.0" };
   }
 
   // ─── Private helpers ──────────────────────────────────────────────────
@@ -188,27 +182,27 @@ export class MarketplaceCrud {
   private buildCsfFromCreate(input: CreatePluginInput): CanonicalSkillFormat {
     return {
       name: input.name,
-      version: '0.1.0',
+      version: "0.1.0",
       kind: input.kind as PluginKind,
-      manifestVersion: '1.0',
+      manifestVersion: "1.0",
       manifest: {
         ...(input.tool ? { tool: input.tool as never } : {}),
         permissions: input.permissions,
         external_agent_compat: input.external_agent_compat,
-        license: 'Apache-2.0',
+        license: "Apache-2.0",
         keywords: [],
         compatibility: { orqenix: '^0.8.0' },
         settingsHotReloadable: false,
-        settingsHierarchyOverride: 'project',
-        sandboxMode: 'separate_process',
+        settingsHierarchyOverride: "project",
+        sandboxMode: "separate_process",
       },
       implementation: {
-        language: 'typescript',
-        entry: './dist/plugin.js',
+        language: "typescript",
+        entry: "./dist/plugin.js",
       },
       provenance: {
-        verification_status: 'unverified',
-        contentHash: '0'.repeat(32),
+        verification_status: "unverified",
+        contentHash: "0".repeat(32),
       },
     };
   }
@@ -232,15 +226,15 @@ export class MarketplaceCrud {
     };
   }
 
-  private bumpVersion(version: string, bump: 'patch' | 'minor' | 'major'): string {
+  private bumpVersion(version: string, bump: "patch" | "minor" | "major"): string {
     const m = /^(\d+)\.(\d+)\.(\d+)/.exec(version);
-    if (!m) return '0.1.0';
+    if (!m) return "0.1.0";
     let [major, minor, patch] = [Number(m[1]), Number(m[2]), Number(m[3])];
-    if (bump === 'major') {
+    if (bump === "major") {
       major += 1;
       minor = 0;
       patch = 0;
-    } else if (bump === 'minor') {
+    } else if (bump === "minor") {
       minor += 1;
       patch = 0;
     } else {
@@ -251,7 +245,7 @@ export class MarketplaceCrud {
 
   private async auditEvent(
     kind: MarketplaceAuditKind,
-    payload: Record<string, unknown>
+    payload: Record<string, unknown>,
   ): Promise<void> {
     await this.audit.append({
       kind,

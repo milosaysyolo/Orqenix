@@ -5,12 +5,8 @@
 // results with weighted ranking. Per CR v8.0 INV-12 + Section 4.4 (parallel
 // query, no short-circuit).
 
-import type {
-  CandidatePreview,
-  CrossProjectQuery,
-  ProjectId,
-} from './types';
-import type { IProjectIndex } from './project-index';
+import type { CandidatePreview, CrossProjectQuery, ProjectId } from "./types";
+import type { IProjectIndex } from "./project-index";
 
 export interface QueryAggregatorInput {
   query: CrossProjectQuery;
@@ -62,19 +58,17 @@ export class QueryAggregator {
             error: err,
           };
         }
-      })
+      }),
     );
 
     // Collect successful results
-    const projectsQueried: ProjectId[] = input.indexes.map((idx) =>
-      idx.getProjectId()
-    );
+    const projectsQueried: ProjectId[] = input.indexes.map((idx) => idx.getProjectId());
     const projectsWithResults: ProjectId[] = [];
     const perProjectDurations = new Map<ProjectId, number>();
     const merged: CandidatePreview[] = [];
 
     for (const res of perProjectResults) {
-      if (res.status === 'fulfilled') {
+      if (res.status === "fulfilled") {
         perProjectDurations.set(res.value.projectId, res.value.duration);
         if (res.value.candidates.length > 0) {
           projectsWithResults.push(res.value.projectId);

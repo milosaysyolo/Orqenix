@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/local-memory-federation , Type definitions
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Memory KB kinds (matches CR v8.0 Section 4.2)
 // ─────────────────────────────────────────────────────────────────────────
 
-export type KbKind = 'chat' | 'code' | 'decision' | 'lesson';
+export type KbKind = "chat" | "code" | "decision" | "lesson";
 
-export const KbKindSchema = z.enum(['chat', 'code', 'decision', 'lesson']);
+export const KbKindSchema = z.enum(["chat", "code", "decision", "lesson"]);
 
 // ─────────────────────────────────────────────────────────────────────────
 // Project identification
@@ -20,7 +20,7 @@ export type ProjectId = string & { readonly __projectId: unique symbol };
 
 export const ProjectIdSchema = z
   .string()
-  .regex(/^blake3:[0-9a-f]{8,64}$/, 'Invalid project_id format (expected blake3:<hex>)')
+  .regex(/^blake3:[0-9a-f]{8,64}$/, "Invalid project_id format (expected blake3:<hex>)")
   .transform((s) => s as ProjectId);
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -156,9 +156,9 @@ export type ApproveCandidateRequest = z.infer<typeof ApproveCandidateRequestSche
 // ─────────────────────────────────────────────────────────────────────────
 
 export type FederationAuditKind =
-  | 'memory.cross_project_query'
-  | 'memory.cross_project_approval'
-  | 'memory.cross_project_share';
+  | "memory.cross_project_query"
+  | "memory.cross_project_approval"
+  | "memory.cross_project_share";
 
 export interface FederationAuditEvent {
   kind: FederationAuditKind;

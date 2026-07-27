@@ -29,12 +29,9 @@ import type {
   CreateBranchInput,
   CreateBranchResult,
   PromoteInput,
-} from './hierarchy/types';
-import type {
-  InvokeSubagentInput,
-  AbsorbResult,
-} from './subagent/types';
-import type { AuditEntry, ChainVerifyResult } from './audit/types';
+} from "./hierarchy/types";
+import type { InvokeSubagentInput, AbsorbResult } from "./subagent/types";
+import type { AuditEntry, ChainVerifyResult } from "./audit/types";
 
 export interface MemoryEngineOptions {
   projectId: string;
@@ -83,10 +80,7 @@ export class MemoryEngine {
   /**
    * Opens a memory engine, running migrations.
    */
-  static async open(
-    dbPath: string,
-    options: MemoryEngineOptions
-  ): Promise<MemoryEngine> {
+  static async open(dbPath: string, options: MemoryEngineOptions): Promise<MemoryEngine> {
     const store = new SqliteStore(dbPath);
 
     // Bootstrap base KB tables if requested (Phase 3 normally provides them)
@@ -104,7 +98,7 @@ export class MemoryEngine {
   // ─── Write ──────────────────────────────────────────────────────────
 
   /** Writes a memory entry + audits it */
-  async write(input: Omit<WriteEntryInput, 'project_id'>): Promise<MemoryEntry> {
+  async write(input: Omit<WriteEntryInput, "project_id">): Promise<MemoryEntry> {
     const entry = this.store.write({
       ...input,
       project_id: this.projectId,
@@ -114,8 +108,8 @@ export class MemoryEngine {
       project_id: this.projectId,
       branch_id: input.branch_id,
       session_id: input.session_id ?? null,
-      kind: 'memory.write',
-      actor: { kind: 'agent', id: input.session_id ?? 'unknown' },
+      kind: "memory.write",
+      actor: { kind: "agent", id: input.session_id ?? "unknown" },
       payload: {
         kb: input.kb,
         tier: entry.tier,
@@ -132,9 +126,7 @@ export class MemoryEngine {
   // ─── Query (parallel 3-step, INV-12) ─────────────────────────────────
 
   /** Resolves a query across the 3 hierarchy levels in parallel */
-  async query(
-    input: Omit<HierarchyQueryInput, 'projectId'>
-  ): Promise<HierarchyQueryResult> {
+  async query(input: Omit<HierarchyQueryInput, "projectId">): Promise<HierarchyQueryResult> {
     return this.hierarchyQuery.query({
       ...input,
       projectId: this.projectId,
@@ -144,9 +136,7 @@ export class MemoryEngine {
   // ─── Branch deep-copy (ADR-E-003) ────────────────────────────────────
 
   /** Creates a branch by deep-copying parent context */
-  async createBranch(
-    input: Omit<CreateBranchInput, 'projectId'>
-  ): Promise<CreateBranchResult> {
+  async createBranch(input: Omit<CreateBranchInput, "projectId">): Promise<CreateBranchResult> {
     const result = this.branchStore.createBranch({
       ...input,
       projectId: this.projectId,
@@ -155,8 +145,8 @@ export class MemoryEngine {
     this.audit.append({
       project_id: this.projectId,
       branch_id: result.branchId,
-      kind: 'branch.deep_cloned_from_parent',
-      actor: { kind: 'system', id: 'branch-store' },
+      kind: "branch.deep_cloned_from_parent",
+      actor: { kind: "system", id: "branch-store" },
       payload: {
         parent_branch_id: input.parentBranchId,
         new_branch_name: input.newBranchName,
@@ -164,7 +154,7 @@ export class MemoryEngine {
         index_rows_cloned: result.indexRowsCloned,
         blob_references_reused: result.blobReferencesReused,
         duration_ms: result.durationMs,
-        isolation_strategy: 'deep_copy_independent_indexes',
+        isolation_strategy: "deep_copy_independent_indexes",
       },
     });
 
@@ -174,23 +164,23 @@ export class MemoryEngine {
   // ─── Promotion (session→branch→project) ──────────────────────────────
 
   /** Promotes an entry up the hierarchy */
-  async promote(input: Omit<PromoteInput, 'projectId'>): Promise<void> {
+  async promote(input: Omit<PromoteInput, "projectId">): Promise<void> {
     const result = this.promotionEngine.promote({
       ...input,
       projectId: this.projectId,
     });
 
     const auditKind =
-      input.to === 'branch'
-        ? 'memory.promoted.session_to_branch'
-        : 'memory.promoted.branch_to_project';
+      input.to === "branch"
+        ? "memory.promoted.session_to_branch"
+        : "memory.promoted.branch_to_project";
 
     this.audit.append({
       project_id: this.projectId,
       branch_id: input.toBranchId ?? input.fromBranchId,
       ...(input.fromSessionId ? { session_id: input.fromSessionId } : {}),
       kind: auditKind,
-      actor: { kind: 'user', id: input.fromSessionId ?? 'unknown' },
+      actor: { kind: "user", id: input.fromSessionId ?? "unknown" },
       payload: {
         source_entry_id: result.sourceEntryId,
         new_entry_id: result.newEntryId,
@@ -210,16 +200,14 @@ export class MemoryEngine {
    * The subagent has NO matrix. Its return is absorbed with strict protection
    * flags (never compress/move-tier) and surfaces at ×10 boost.
    */
-  async invokeSubagent(
-    input: Omit<InvokeSubagentInput, 'projectId'>
-  ): Promise<AbsorbResult> {
+  async invokeSubagent(input: Omit<InvokeSubagentInput, "projectId">): Promise<AbsorbResult> {
     // Audit the spawn
     const spawnEntry = this.audit.append({
       project_id: this.projectId,
       branch_id: input.branchId,
       session_id: input.parentSessionId,
-      kind: 'subagent.spawn',
-      actor: { kind: 'agent', id: input.parentSessionId },
+      kind: "subagent.spawn",
+      actor: { kind: "agent", id: input.parentSessionId },
       payload: {
         subagent_kind: input.harness.subagentKind,
         goal: input.harness.goal,
@@ -250,8 +238,8 @@ export class MemoryEngine {
       branch_id: input.branchId,
       session_id: input.parentSessionId,
       parent_session_id: input.parentSessionId,
-      kind: 'subagent.return_absorbed',
-      actor: { kind: 'system', id: 'return-absorber' },
+      kind: "subagent.return_absorbed",
+      actor: { kind: "system", id: "return-absorber" },
       payload: {
         subagent_session_id: invocation.subagentSessionId,
         spawn_audit_id: spawnEntry.id,

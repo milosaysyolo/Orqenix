@@ -8,11 +8,11 @@
 Before a generated skill becomes default-enabled, it MUST pass verification
 (Anti-38). Per CR v8.0 Section 9.4.5:
 
-| Check | Description |
-|---|---|
-| Replay test | Re-run skill against historical observation samples; compare outcome |
-| Cross-validation | Test on observations NOT used to generate the skill (20% holdout) |
-| A/B comparison | (Pro) compare skill output vs manual outcomes |
+| Check            | Description                                                          |
+| ---------------- | -------------------------------------------------------------------- |
+| Replay test      | Re-run skill against historical observation samples; compare outcome |
+| Cross-validation | Test on observations NOT used to generate the skill (20% holdout)    |
+| A/B comparison   | (Pro) compare skill output vs manual outcomes                        |
 
 ## Status progression
 

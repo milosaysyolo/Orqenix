@@ -6,10 +6,10 @@ import {
   type MeshResponse,
   type ScopeId,
   type TransportCtx,
-} from '@orqenix/mesh-transport-core';
-import type { ObservabilityHooks } from '@orqenix/mesh-observability';
-import { onRpcDenied, onRpcIn, onRpcOut } from '@orqenix/mesh-observability';
-import { CrossTransportDedup } from './dedup.js';
+} from "@orqenix/mesh-transport-core";
+import type { ObservabilityHooks } from "@orqenix/mesh-observability";
+import { onRpcDenied, onRpcIn, onRpcOut } from "@orqenix/mesh-observability";
+import { CrossTransportDedup } from "./dedup.js";
 
 export interface StructuralCapabilityVerifier {
   verify(input: {
@@ -17,10 +17,7 @@ export interface StructuralCapabilityVerifier {
     fromScope: ScopeId;
     toScope: ScopeId;
     method: string;
-  }): Promise<
-    | { ok: true; token: unknown }
-    | { ok: false; code: string; message: string }
-  >;
+  }): Promise<{ ok: true; token: unknown } | { ok: false; code: string; message: string }>;
 }
 
 export type AppHandler = (req: MeshRequest, ctx: TransportCtx) => Promise<MeshResponse>;
@@ -37,7 +34,7 @@ export function makeInboundDispatch(opts: InboundDispatchOptions) {
   const { localScopeId, verifier, hooks, dedup, handler } = opts;
 
   return async function dispatch(req: MeshRequest, ctx: TransportCtx): Promise<MeshResponse> {
-    const transportLabel = ctx.peerId ? guessTransport(ctx) : 'unknown';
+    const transportLabel = ctx.peerId ? guessTransport(ctx) : "unknown";
     const commonCtx = { scopeId: localScopeId, transport: transportLabel, peerId: ctx.peerId };
 
     if (hooks) onRpcIn(hooks, commonCtx, req);
@@ -48,7 +45,7 @@ export function makeInboundDispatch(opts: InboundDispatchOptions) {
       return cached;
     }
 
-    let verifyResult: Awaited<ReturnType<StructuralCapabilityVerifier['verify']>>;
+    let verifyResult: Awaited<ReturnType<StructuralCapabilityVerifier["verify"]>>;
     try {
       verifyResult = await verifier.verify({
         capability: String(req.capability),
@@ -59,19 +56,26 @@ export function makeInboundDispatch(opts: InboundDispatchOptions) {
     } catch (e) {
       const denied = toMeshResponse(
         req.id,
-        new CapabilityError('verify threw', 'E_CAP_INVALID' as ErrorCodeValue),
+        new CapabilityError("verify threw", "E_CAP_INVALID" as ErrorCodeValue),
       );
-      if (hooks) onRpcDenied(hooks, commonCtx, { id: req.id, method: req.method }, denied.error?.code ?? 'E_CAP_INVALID');
+      if (hooks)
+        onRpcDenied(
+          hooks,
+          commonCtx,
+          { id: req.id, method: req.method },
+          denied.error?.code ?? "E_CAP_INVALID",
+        );
       return denied;
     }
 
     if (!verifyResult.ok) {
       const denied: MeshResponse = {
         id: req.id,
-        status: 'denied',
+        status: "denied",
         error: { code: verifyResult.code, message: verifyResult.message },
       };
-      if (hooks) onRpcDenied(hooks, commonCtx, { id: req.id, method: req.method }, verifyResult.code);
+      if (hooks)
+        onRpcDenied(hooks, commonCtx, { id: req.id, method: req.method }, verifyResult.code);
       dedup.set(req.id, denied, Math.max(0, req.deadlineMs - Date.now()));
       return denied;
     }
@@ -94,7 +98,7 @@ export function makeInboundDispatch(opts: InboundDispatchOptions) {
 }
 
 function guessTransport(ctx: TransportCtx): string {
-  if (ctx.remoteAddr && ctx.remoteAddr.startsWith('inproc')) return 'loopback';
-  if (ctx.peerId && ctx.peerId.startsWith('12D3KooW')) return 'libp2p';
-  return 'http';
+  if (ctx.remoteAddr && ctx.remoteAddr.startsWith("inproc")) return "loopback";
+  if (ctx.peerId && ctx.peerId.startsWith("12D3KooW")) return "libp2p";
+  return "http";
 }

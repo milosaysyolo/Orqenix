@@ -1,39 +1,73 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/marketplace-ui , ImportExportWizard
 
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Upload, Download, AlertTriangle } from 'lucide-react';
+import * as React from "react";
+import { Upload, Download, AlertTriangle } from "lucide-react";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
-  Button, Input, Label, Badge,
-} from '@orqenix/ui-primitives';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  Button,
+  Input,
+  Label,
+  Badge,
+} from "@orqenix/ui-primitives";
 
 const INPUT_SOURCES = [
-  'auto-detect', 'claude-code', 'cursor', 'codex', 'opencode', 'mcp',
-  'continue', 'aider', 'cline', 'npm', 'github', 'url', 'private-git', 'user-custom',
+  "auto-detect",
+  "claude-code",
+  "cursor",
+  "codex",
+  "opencode",
+  "mcp",
+  "continue",
+  "aider",
+  "cline",
+  "npm",
+  "github",
+  "url",
+  "private-git",
+  "user-custom",
 ];
 
 const OUTPUT_TARGETS = [
-  'claude-code', 'cursor', 'codex', 'opencode', 'mcp', 'continue', 'aider', 'npm',
+  "claude-code",
+  "cursor",
+  "codex",
+  "opencode",
+  "mcp",
+  "continue",
+  "aider",
+  "npm",
 ];
 
 export interface ImportExportWizardProps {
-  mode: 'import' | 'export';
+  mode: "import" | "export";
   open: boolean;
   /** For export: the plugin being exported */
   pluginName?: string;
   onClose: () => void;
-  onImport?: (input: { sourceKind?: string; url?: string; content?: string }) => Promise<{ ok: boolean; warnings: string[] }>;
-  onExport?: (input: { targetKind: string; acceptLossy: boolean }) => Promise<{ ok: boolean; lossyFields: string[] }>;
+  onImport?: (input: {
+    sourceKind?: string;
+    url?: string;
+    content?: string;
+  }) => Promise<{ ok: boolean; warnings: string[] }>;
+  onExport?: (input: {
+    targetKind: string;
+    acceptLossy: boolean;
+  }) => Promise<{ ok: boolean; lossyFields: string[] }>;
 }
 
 export function ImportExportWizard(props: ImportExportWizardProps): React.ReactElement {
-  const [sourceKind, setSourceKind] = React.useState('auto-detect');
-  const [targetKind, setTargetKind] = React.useState('npm');
-  const [url, setUrl] = React.useState('');
-  const [content, setContent] = React.useState('');
+  const [sourceKind, setSourceKind] = React.useState("auto-detect");
+  const [targetKind, setTargetKind] = React.useState("npm");
+  const [url, setUrl] = React.useState("");
+  const [content, setContent] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [lossyFields, setLossyFields] = React.useState<string[]>([]);
   const [warnings, setWarnings] = React.useState<string[]>([]);
@@ -43,7 +77,7 @@ export function ImportExportWizard(props: ImportExportWizardProps): React.ReactE
     setBusy(true);
     try {
       const result = await props.onImport({
-        ...(sourceKind !== 'auto-detect' ? { sourceKind } : {}),
+        ...(sourceKind !== "auto-detect" ? { sourceKind } : {}),
         ...(url ? { url } : {}),
         ...(content ? { content } : {}),
       });
@@ -74,17 +108,21 @@ export function ImportExportWizard(props: ImportExportWizardProps): React.ReactE
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {props.mode === 'import' ? <Upload className="w-5 h-5" aria-hidden /> : <Download className="w-5 h-5" aria-hidden />}
-            {props.mode === 'import' ? 'Import Plugin' : `Export ${props.pluginName}`}
+            {props.mode === "import" ? (
+              <Upload className="w-5 h-5" aria-hidden />
+            ) : (
+              <Download className="w-5 h-5" aria-hidden />
+            )}
+            {props.mode === "import" ? "Import Plugin" : `Export ${props.pluginName}`}
           </DialogTitle>
           <DialogDescription>
-            {props.mode === 'import'
-              ? 'Import a plugin from an external format. It will be normalized to CSF.'
-              : 'Export this plugin to a target platform format.'}
+            {props.mode === "import"
+              ? "Import a plugin from an external format. It will be normalized to CSF."
+              : "Export this plugin to a target platform format."}
           </DialogDescription>
         </DialogHeader>
 
-        {props.mode === 'import' ? (
+        {props.mode === "import" ? (
           <div className="space-y-4 py-2">
             <div className="space-y-2">
               <Label>Source format</Label>
@@ -93,12 +131,21 @@ export function ImportExportWizard(props: ImportExportWizardProps): React.ReactE
                 value={sourceKind}
                 onChange={(e) => setSourceKind(e.target.value)}
               >
-                {INPUT_SOURCES.map((s) => <option key={s} value={s}>{s}</option>)}
+                {INPUT_SOURCES.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="import-url">URL (npm/github/direct)</Label>
-              <Input id="import-url" placeholder="https://..." value={url} onChange={(e) => setUrl(e.target.value)} />
+              <Input
+                id="import-url"
+                placeholder="https://..."
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="import-content">Or paste content</Label>
@@ -112,7 +159,9 @@ export function ImportExportWizard(props: ImportExportWizardProps): React.ReactE
             </div>
             {warnings.length > 0 && (
               <div className="rounded-md border border-orqenix-amber/30 bg-orqenix-amber/5 p-3 text-xs">
-                {warnings.map((w, i) => <div key={i}>{w}</div>)}
+                {warnings.map((w, i) => (
+                  <div key={i}>{w}</div>
+                ))}
               </div>
             )}
           </div>
@@ -123,9 +172,16 @@ export function ImportExportWizard(props: ImportExportWizardProps): React.ReactE
               <select
                 className="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm"
                 value={targetKind}
-                onChange={(e) => { setTargetKind(e.target.value); setLossyFields([]); }}
+                onChange={(e) => {
+                  setTargetKind(e.target.value);
+                  setLossyFields([]);
+                }}
               >
-                {OUTPUT_TARGETS.map((t) => <option key={t} value={t}>{t}</option>)}
+                {OUTPUT_TARGETS.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
               </select>
             </div>
             {lossyFields.length > 0 && (
@@ -137,7 +193,11 @@ export function ImportExportWizard(props: ImportExportWizardProps): React.ReactE
                   These fields cannot be represented in {targetKind} and will be lost:
                 </p>
                 <div className="flex flex-wrap gap-1">
-                  {lossyFields.map((f) => <Badge key={f} variant="secondary" className="text-xs">{f}</Badge>)}
+                  {lossyFields.map((f) => (
+                    <Badge key={f} variant="secondary" className="text-xs">
+                      {f}
+                    </Badge>
+                  ))}
                 </div>
               </div>
             )}
@@ -145,10 +205,12 @@ export function ImportExportWizard(props: ImportExportWizardProps): React.ReactE
         )}
 
         <DialogFooter>
-          <Button variant="outline" onClick={props.onClose} disabled={busy}>Cancel</Button>
-          {props.mode === 'import' ? (
+          <Button variant="outline" onClick={props.onClose} disabled={busy}>
+            Cancel
+          </Button>
+          {props.mode === "import" ? (
             <Button onClick={() => void handleImport()} disabled={busy}>
-              {busy ? 'Importing...' : 'Import'}
+              {busy ? "Importing..." : "Import"}
             </Button>
           ) : lossyFields.length > 0 ? (
             <Button variant="destructive" onClick={() => void handleExport(true)} disabled={busy}>
@@ -156,7 +218,7 @@ export function ImportExportWizard(props: ImportExportWizardProps): React.ReactE
             </Button>
           ) : (
             <Button onClick={() => void handleExport(false)} disabled={busy}>
-              {busy ? 'Exporting...' : 'Export'}
+              {busy ? "Exporting..." : "Export"}
             </Button>
           )}
         </DialogFooter>

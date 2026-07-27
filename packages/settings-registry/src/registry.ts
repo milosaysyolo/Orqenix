@@ -42,7 +42,7 @@ export class SettingsRegistry {
   constructor(options: SettingsRegistryOptions = {}) {
     this.persistence = options.persistence ?? new InMemorySettingsPersistence();
     this.audit = options.auditWriter ?? new NoopSettingsAuditWriter();
-    this.defaultActor = options.defaultActor ?? 'system';
+    this.defaultActor = options.defaultActor ?? "system";
     this.resolver = new SettingsResolver(this.persistence);
   }
 
@@ -54,7 +54,7 @@ export class SettingsRegistry {
   async register(contract: ModuleSettingsContract): Promise<void> {
     this.contracts.set(contract.moduleId, contract);
     await this.audit.append({
-      kind: 'settings.module_registered',
+      kind: "settings.module_registered",
       ts: new Date().toISOString(),
       actor: { user: this.defaultActor },
       payload: {
@@ -79,7 +79,7 @@ export class SettingsRegistry {
     if (!contract) {
       throw new Error(
         `Module '${moduleId}' is not registered with Settings Registry. ` +
-          `Modules MUST register via register() per Anti-pattern 37.`
+          `Modules MUST register via register() per Anti-pattern 37.`,
       );
     }
     return contract;
@@ -103,7 +103,7 @@ export class SettingsRegistry {
   async resolve(
     moduleId: string,
     settingPath: string,
-    context: SettingsContext = {}
+    context: SettingsContext = {},
   ): Promise<ResolvedSetting> {
     const contract = this.getContract(moduleId);
     return this.resolver.resolve(contract, settingPath, context);
@@ -113,7 +113,7 @@ export class SettingsRegistry {
   async resolveValue(
     moduleId: string,
     settingPath: string,
-    context: SettingsContext = {}
+    context: SettingsContext = {},
   ): Promise<unknown> {
     return (await this.resolve(moduleId, settingPath, context)).value;
   }
@@ -130,7 +130,7 @@ export class SettingsRegistry {
     moduleId: string,
     settingPath: string,
     newValue: unknown,
-    input: UpdateSettingInput
+    input: UpdateSettingInput,
   ): Promise<void> {
     const contract = this.getContract(moduleId);
 
@@ -140,19 +140,14 @@ export class SettingsRegistry {
       const result = contract.validate(newValue);
       if (!result.valid) {
         throw new Error(
-          `Setting validation failed for ${moduleId}.${settingPath}: ${result.errors.join('; ')}`
+          `Setting validation failed for ${moduleId}.${settingPath}: ${result.errors.join("; ")}`,
         );
       }
     }
 
     // Validate override level is permitted
     const hierarchyId = this.resolveHierarchyId(input);
-    const oldOverride = await this.persistence.get(
-      moduleId,
-      settingPath,
-      input.level,
-      hierarchyId
-    );
+    const oldOverride = await this.persistence.get(moduleId, settingPath, input.level, hierarchyId);
     const oldValue = oldOverride?.value ?? getByPath(contract.defaults, settingPath);
 
     // Persist
@@ -169,7 +164,7 @@ export class SettingsRegistry {
 
     // Audit
     await this.audit.append({
-      kind: 'settings.changed',
+      kind: "settings.changed",
       ts: new Date().toISOString(),
       actor: { user: input.setBy ?? this.defaultActor },
       payload: {
@@ -191,15 +186,10 @@ export class SettingsRegistry {
         if (oldOverride) {
           await this.persistence.set(oldOverride);
         } else {
-          await this.persistence.delete(
-            moduleId,
-            settingPath,
-            input.level,
-            hierarchyId
-          );
+          await this.persistence.delete(moduleId, settingPath, input.level, hierarchyId);
         }
         await this.audit.append({
-          kind: 'settings.hot_reload_failed',
+          kind: "settings.hot_reload_failed",
           ts: new Date().toISOString(),
           actor: { user: input.setBy ?? this.defaultActor },
           payload: {
@@ -218,15 +208,11 @@ export class SettingsRegistry {
   }
 
   /** Removes an override (reverts to fallback) */
-  async revert(
-    moduleId: string,
-    settingPath: string,
-    input: UpdateSettingInput
-  ): Promise<void> {
+  async revert(moduleId: string, settingPath: string, input: UpdateSettingInput): Promise<void> {
     const hierarchyId = this.resolveHierarchyId(input);
     await this.persistence.delete(moduleId, settingPath, input.level, hierarchyId);
     await this.audit.append({
-      kind: 'settings.changed',
+      kind: "settings.changed",
       ts: new Date().toISOString(),
       actor: { user: input.setBy ?? this.defaultActor },
       payload: {
@@ -244,19 +230,13 @@ export class SettingsRegistry {
   // ─────────────────────────────────────────────────────────────────────
 
   /** Subscribes to changes on a setting. Returns an unsubscribe function. */
-  watch(
-    moduleId: string,
-    settingPath: string,
-    callback: WatchCallback
-  ): () => void {
+  watch(moduleId: string, settingPath: string, callback: WatchCallback): () => void {
     const key = `${moduleId}::${settingPath}`;
     const callbacks = this.watchers.get(key) ?? [];
     callbacks.push(callback);
     this.watchers.set(key, callbacks);
     return () => {
-      const remaining = (this.watchers.get(key) ?? []).filter(
-        (c) => c !== callback
-      );
+      const remaining = (this.watchers.get(key) ?? []).filter((c) => c !== callback);
       this.watchers.set(key, remaining);
     };
   }
@@ -279,15 +259,13 @@ export class SettingsRegistry {
 
   private resolveHierarchyId(input: UpdateSettingInput): string | null {
     if (
-      input.level === 'session' ||
-      input.level === 'branch' ||
-      input.level === 'project' ||
-      input.level === 'user'
+      input.level === "session" ||
+      input.level === "branch" ||
+      input.level === "project" ||
+      input.level === "user"
     ) {
       if (!input.hierarchyId) {
-        throw new Error(
-          `Setting override at level '${input.level}' requires hierarchyId`
-        );
+        throw new Error(`Setting override at level '${input.level}' requires hierarchyId`);
       }
       return input.hierarchyId;
     }
@@ -298,7 +276,7 @@ export class SettingsRegistry {
     moduleId: string,
     settingPath: string,
     newValue: unknown,
-    oldValue: unknown
+    oldValue: unknown,
   ): void {
     const key = `${moduleId}::${settingPath}`;
     const callbacks = this.watchers.get(key) ?? [];

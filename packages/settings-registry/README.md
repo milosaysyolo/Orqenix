@@ -42,62 +42,62 @@ Built-in default            (from ModuleSettingsContract.defaults)
 ### Register a module's settings
 
 ```ts
-import { SettingsRegistry } from '@orqenix/settings-registry';
+import { SettingsRegistry } from "@orqenix/settings-registry";
 
 const registry = new SettingsRegistry();
 
 registry.register({
-  moduleId: '@orqenix/memory-engine',
-  version: '0.8.0',
-  settingsSchema: { /* JSON Schema */ },
+  moduleId: "@orqenix/memory-engine",
+  version: "0.8.0",
+  settingsSchema: {
+    /* JSON Schema */
+  },
   defaults: {
-    'hierarchy.level_boost.session': 1.5,
-    'hierarchy.level_boost.branch': 1.2,
-    'hierarchy.level_boost.project': 1.0,
+    "hierarchy.level_boost.session": 1.5,
+    "hierarchy.level_boost.branch": 1.2,
+    "hierarchy.level_boost.project": 1.0,
   },
   provenance: {
     phase: 8,
-    crVersion: 'v8.0',
-    rationale: 'Default level boost values from Phase 8 architecture',
+    crVersion: "v8.0",
+    rationale: "Default level boost values from Phase 8 architecture",
   },
   hotReloadable: true,
-  hierarchyOverride: 'all',
+  hierarchyOverride: "all",
 });
 ```
 
 ### Resolve a setting
 
 ```ts
-const resolved = await registry.resolve(
-  '@orqenix/memory-engine',
-  'hierarchy.level_boost.session',
-  { sessionId: '...', branchId: '...', projectId: '...' }
-);
+const resolved = await registry.resolve("@orqenix/memory-engine", "hierarchy.level_boost.session", {
+  sessionId: "...",
+  branchId: "...",
+  projectId: "...",
+});
 
-console.log(resolved.value);  // 1.5 (or overridden value)
+console.log(resolved.value); // 1.5 (or overridden value)
 console.log(resolved.source); // 'built-in-default' | 'session' | 'branch' | ...
 ```
 
 ### Update a setting (with hot reload)
 
 ```ts
-await registry.update(
-  '@orqenix/memory-engine',
-  'hierarchy.level_boost.session',
-  2.0,
-  { level: 'project', hierarchyId: 'blake3:...' }
-);
+await registry.update("@orqenix/memory-engine", "hierarchy.level_boost.session", 2.0, {
+  level: "project",
+  hierarchyId: "blake3:...",
+});
 // hotReloadHandler fires within 100ms if declared
 ```
 
 ### Export / Import
 
 ```ts
-import { exportSettings, importSettings } from '@orqenix/settings-registry';
+import { exportSettings, importSettings } from "@orqenix/settings-registry";
 
-const yaml = await exportSettings(registry, { level: 'all', format: 'yaml' });
+const yaml = await exportSettings(registry, { level: "all", format: "yaml" });
 // ... transfer to another machine ...
-await importSettings(registry, yaml, { mode: 'merge' });
+await importSettings(registry, yaml, { mode: "merge" });
 ```
 
 ## Phase lock badges

@@ -3,12 +3,8 @@
 //
 // Discovers Orqenix plugins via GitHub repository topic search (orqenix-plugin).
 
-import type {
-  RegistryResolver,
-  PluginMetadata,
-  PluginTarball,
-} from '../registry-resolver';
-import type { PluginListing, SearchFilters, RegistrySource } from '../types';
+import type { RegistryResolver, PluginMetadata, PluginTarball } from "../registry-resolver";
+import type { PluginListing, SearchFilters, RegistrySource } from "../types";
 
 export interface GithubResolverOptions {
   apiUrl?: string;
@@ -18,8 +14,8 @@ export interface GithubResolverOptions {
 }
 
 export class GithubResolver implements RegistryResolver {
-  readonly id: RegistrySource = 'github';
-  readonly name = 'GitHub';
+  readonly id: RegistrySource = "github";
+  readonly name = "GitHub";
   enabled: boolean;
 
   private readonly apiUrl: string;
@@ -27,21 +23,21 @@ export class GithubResolver implements RegistryResolver {
   private readonly fetchImpl: typeof globalThis.fetch;
 
   constructor(options: GithubResolverOptions = {}) {
-    this.apiUrl = (options.apiUrl ?? 'https://api.github.com').replace(/\/$/, '');
+    this.apiUrl = (options.apiUrl ?? "https://api.github.com").replace(/\/$/, "");
     this.token = options.token;
     this.enabled = options.enabled ?? false; // disabled by default (rate limits)
     this.fetchImpl = options.fetchImpl ?? globalThis.fetch.bind(globalThis);
   }
 
   async search(query: string, _filters?: SearchFilters): Promise<PluginListing[]> {
-    const url = new URL(this.apiUrl + '/search/repositories');
-    url.searchParams.set('q', `${query} topic:orqenix-plugin`);
-    url.searchParams.set('per_page', '30');
+    const url = new URL(this.apiUrl + "/search/repositories");
+    url.searchParams.set("q", `${query} topic:orqenix-plugin`);
+    url.searchParams.set("per_page", "30");
 
     try {
       const headers: Record<string, string> = {
-        accept: 'application/vnd.github+json',
-        'user-agent': '@orqenix/marketplace-core',
+        accept: "application/vnd.github+json",
+        "user-agent": "@orqenix/marketplace-core",
       };
       if (this.token) headers.authorization = `Bearer ${this.token}`;
 
@@ -60,10 +56,10 @@ export class GithubResolver implements RegistryResolver {
       };
       return (data.items ?? []).map((repo) => ({
         name: repo.full_name,
-        version: 'latest',
-        description: repo.description ?? '',
-        kind: 'skill' as const,
-        license: 'unknown',
+        version: "latest",
+        description: repo.description ?? "",
+        kind: "skill" as const,
+        license: "unknown",
         external_agent_compat: [],
         verified: false,
         publisher: repo.owner.login,
@@ -80,8 +76,8 @@ export class GithubResolver implements RegistryResolver {
     // packageRef is owner/repo; fetch package.json from default branch
     const url = `${this.apiUrl}/repos/${packageRef}/contents/package.json`;
     const headers: Record<string, string> = {
-      accept: 'application/vnd.github.raw+json',
-      'user-agent': '@orqenix/marketplace-core',
+      accept: "application/vnd.github.raw+json",
+      "user-agent": "@orqenix/marketplace-core",
     };
     if (this.token) headers.authorization = `Bearer ${this.token}`;
 
@@ -93,10 +89,10 @@ export class GithubResolver implements RegistryResolver {
     const op = (pkg.orqenixPlugin ?? {}) as Record<string, unknown>;
     return {
       name: pkg.name as string,
-      version: (pkg.version as string) ?? 'latest',
-      kind: (op.kind as string) ?? 'skill',
-      license: (pkg.license as string) ?? 'unknown',
-      description: (pkg.description as string) ?? '',
+      version: (pkg.version as string) ?? "latest",
+      kind: (op.kind as string) ?? "skill",
+      license: (pkg.license as string) ?? "unknown",
+      description: (pkg.description as string) ?? "",
       permissions: (op.permissions as string[]) ?? [],
       external_agent_compat: (op.external_agent_compat as string[]) ?? [],
       verified: false,
@@ -107,6 +103,6 @@ export class GithubResolver implements RegistryResolver {
 
   async download(packageRef: string): Promise<PluginTarball> {
     // git clone delegated to install flow; return repo URL
-    return { extractedPath: `https://github.com/${packageRef}`, hash: '' };
+    return { extractedPath: `https://github.com/${packageRef}`, hash: "" };
   }
 }

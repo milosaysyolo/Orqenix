@@ -6,8 +6,8 @@
 //
 // Cache key = BLAKE3(query JSON canonical form)
 
-import { blake3 } from '@noble/hashes/blake3';
-import type { CrossProjectQuery, FederationResult, ProjectId } from './types';
+import { blake3 } from "@noble/hashes/blake3";
+import type { CrossProjectQuery, FederationResult, ProjectId } from "./types";
 
 export interface CacheLayerOptions {
   /** Cache TTL in milliseconds (default 5 min) */
@@ -41,10 +41,7 @@ export class CacheLayer {
   }
 
   /** Fetches a cached result; returns null if missing or expired */
-  get(
-    currentProjectId: ProjectId,
-    query: CrossProjectQuery
-  ): FederationResult | null {
+  get(currentProjectId: ProjectId, query: CrossProjectQuery): FederationResult | null {
     const key = this.computeKey(currentProjectId, query);
     const entry = this.cache.get(key);
 
@@ -67,11 +64,7 @@ export class CacheLayer {
   }
 
   /** Stores a result. Evicts oldest if maxSize exceeded. */
-  set(
-    currentProjectId: ProjectId,
-    query: CrossProjectQuery,
-    result: FederationResult
-  ): void {
+  set(currentProjectId: ProjectId, query: CrossProjectQuery, result: FederationResult): void {
     const key = this.computeKey(currentProjectId, query);
 
     // Evict expired entries
@@ -110,10 +103,7 @@ export class CacheLayer {
     }
   }
 
-  private computeKey(
-    currentProjectId: ProjectId,
-    query: CrossProjectQuery
-  ): string {
+  private computeKey(currentProjectId: ProjectId, query: CrossProjectQuery): string {
     // Canonical query JSON (deterministic across runs)
     const canonical = JSON.stringify({
       currentProjectId,
@@ -126,7 +116,7 @@ export class CacheLayer {
     const hash = blake3(bytes);
     return Array.from(hash)
       .slice(0, 16)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 }

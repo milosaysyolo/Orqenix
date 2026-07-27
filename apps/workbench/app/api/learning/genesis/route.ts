@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // Phase 4: wired to @orqenix/skill-genesis (demo-store fallback)
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 import { generateSkillFromCandidate } from '@/lib/engine-init';
 

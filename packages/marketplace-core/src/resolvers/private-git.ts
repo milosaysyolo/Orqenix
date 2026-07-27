@@ -4,12 +4,8 @@
 // Resolves plugins from a private Git server via SSH. For enterprise teams
 // with internal plugin repos.
 
-import type {
-  RegistryResolver,
-  PluginMetadata,
-  PluginTarball,
-} from '../registry-resolver';
-import type { PluginListing, SearchFilters, RegistrySource } from '../types';
+import type { RegistryResolver, PluginMetadata, PluginTarball } from "../registry-resolver";
+import type { PluginListing, SearchFilters, RegistrySource } from "../types";
 
 export interface PrivateGitResolverOptions {
   /** Base Git URL, e.g., git@gitlab.acme.internal:plugins */
@@ -23,8 +19,8 @@ export interface PrivateGitResolverOptions {
 }
 
 export class PrivateGitResolver implements RegistryResolver {
-  readonly id: RegistrySource = 'private-git';
-  readonly name = 'Private Git';
+  readonly id: RegistrySource = "private-git";
+  readonly name = "Private Git";
   enabled: boolean;
 
   private readonly baseGitUrl: string | undefined;
@@ -43,10 +39,10 @@ export class PrivateGitResolver implements RegistryResolver {
     if (!this.catalogUrl) return [];
     try {
       const url = new URL(this.catalogUrl);
-      url.searchParams.set('q', query);
+      url.searchParams.set("q", query);
       const resp = await this.fetchImpl(url.toString(), {
         signal: AbortSignal.timeout(10000),
-        headers: { accept: 'application/json' },
+        headers: { accept: "application/json" },
       });
       if (!resp.ok) return [];
       const data = (await resp.json()) as { plugins?: PluginListing[] };
@@ -62,7 +58,7 @@ export class PrivateGitResolver implements RegistryResolver {
 
   async fetch(packageRef: string): Promise<PluginMetadata> {
     if (!this.catalogUrl) {
-      throw new Error('private-git: catalogUrl not configured');
+      throw new Error("private-git: catalogUrl not configured");
     }
     const url = `${this.catalogUrl}/plugins/${encodeURIComponent(packageRef)}`;
     const resp = await this.fetchImpl(url, { signal: AbortSignal.timeout(10000) });
@@ -75,9 +71,7 @@ export class PrivateGitResolver implements RegistryResolver {
   async download(packageRef: string): Promise<PluginTarball> {
     // Returns the git SSH clone URL; actual clone happens in install flow
     // with the configured SSH key.
-    const gitUrl = this.baseGitUrl
-      ? `${this.baseGitUrl}/${packageRef}.git`
-      : packageRef;
-    return { extractedPath: gitUrl, hash: '' };
+    const gitUrl = this.baseGitUrl ? `${this.baseGitUrl}/${packageRef}.git` : packageRef;
+    return { extractedPath: gitUrl, hash: "" };
   }
 }

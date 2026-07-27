@@ -1,17 +1,17 @@
-export type MetricKind = 'counter' | 'gauge' | 'histogram';
+export type MetricKind = "counter" | "gauge" | "histogram";
 
 interface Counter {
-  kind: 'counter';
+  kind: "counter";
   name: string;
   values: Map<string, number>;
 }
 interface Gauge {
-  kind: 'gauge';
+  kind: "gauge";
   name: string;
   values: Map<string, number>;
 }
 interface Histogram {
-  kind: 'histogram';
+  kind: "histogram";
   name: string;
   ring: Map<string, number[]>;
   capacity: number;
@@ -20,18 +20,18 @@ interface Histogram {
 type Metric = Counter | Gauge | Histogram;
 
 function labelKey(labels?: Record<string, string>): string {
-  if (!labels) return '';
+  if (!labels) return "";
   const keys = Object.keys(labels).sort();
-  return keys.map((k) => `${k}=${labels[k]}`).join(',');
+  return keys.map((k) => `${k}=${labels[k]}`).join(",");
 }
 
 export const METRIC_NAMES = {
-  RPC_TOTAL: 'orqenix_mesh_rpc_total',
-  RPC_DURATION_MS: 'orqenix_mesh_rpc_duration_ms',
-  PEERS: 'orqenix_mesh_peers',
-  CAPABILITY_VERIFY_MS: 'orqenix_mesh_capability_verify_ms',
-  FAILOVER_TOTAL: 'orqenix_mesh_failover_total',
-  CIRCUIT_STATE: 'orqenix_mesh_circuit_state',
+  RPC_TOTAL: "orqenix_mesh_rpc_total",
+  RPC_DURATION_MS: "orqenix_mesh_rpc_duration_ms",
+  PEERS: "orqenix_mesh_peers",
+  CAPABILITY_VERIFY_MS: "orqenix_mesh_capability_verify_ms",
+  FAILOVER_TOTAL: "orqenix_mesh_failover_total",
+  CIRCUIT_STATE: "orqenix_mesh_circuit_state",
 } as const;
 
 export interface HistogramSummary {
@@ -90,17 +90,18 @@ export class MeshMetrics {
   }
 
   snapshot(): MetricSnapshot {
-    const counters: MetricSnapshot['counters'] = [];
-    const gauges: MetricSnapshot['gauges'] = [];
-    const histograms: MetricSnapshot['histograms'] = [];
+    const counters: MetricSnapshot["counters"] = [];
+    const gauges: MetricSnapshot["gauges"] = [];
+    const histograms: MetricSnapshot["histograms"] = [];
 
     for (const m of this.metrics.values()) {
-      if (m.kind === 'counter') {
+      if (m.kind === "counter") {
         for (const [labels, value] of m.values) counters.push({ name: m.name, labels, value });
-      } else if (m.kind === 'gauge') {
+      } else if (m.kind === "gauge") {
         for (const [labels, value] of m.values) gauges.push({ name: m.name, labels, value });
       } else {
-        for (const [labels, buf] of m.ring) histograms.push({ name: m.name, labels, summary: summarize(buf) });
+        for (const [labels, buf] of m.ring)
+          histograms.push({ name: m.name, labels, summary: summarize(buf) });
       }
     }
     return { counters, gauges, histograms };
@@ -113,28 +114,31 @@ export class MeshMetrics {
   private ensureCounter(name: string): Counter {
     let m = this.metrics.get(name);
     if (!m) {
-      m = { kind: 'counter', name, values: new Map() };
+      m = { kind: "counter", name, values: new Map() };
       this.metrics.set(name, m);
     }
-    if (m.kind !== 'counter') throw new Error(`metric ${name} already registered with kind ${m.kind}`);
+    if (m.kind !== "counter")
+      throw new Error(`metric ${name} already registered with kind ${m.kind}`);
     return m;
   }
   private ensureGauge(name: string): Gauge {
     let m = this.metrics.get(name);
     if (!m) {
-      m = { kind: 'gauge', name, values: new Map() };
+      m = { kind: "gauge", name, values: new Map() };
       this.metrics.set(name, m);
     }
-    if (m.kind !== 'gauge') throw new Error(`metric ${name} already registered with kind ${m.kind}`);
+    if (m.kind !== "gauge")
+      throw new Error(`metric ${name} already registered with kind ${m.kind}`);
     return m;
   }
   private ensureHistogram(name: string): Histogram {
     let m = this.metrics.get(name);
     if (!m) {
-      m = { kind: 'histogram', name, ring: new Map(), capacity: this.histogramCapacity };
+      m = { kind: "histogram", name, ring: new Map(), capacity: this.histogramCapacity };
       this.metrics.set(name, m);
     }
-    if (m.kind !== 'histogram') throw new Error(`metric ${name} already registered with kind ${m.kind}`);
+    if (m.kind !== "histogram")
+      throw new Error(`metric ${name} already registered with kind ${m.kind}`);
     return m;
   }
 }

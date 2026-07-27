@@ -4,12 +4,12 @@
 // Verifies a project is in a valid Phase 7 state ready for migration.
 // Per CR v8.0 Section 11.3 Step 2.
 
-import { readFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-import Database from 'better-sqlite3';
-import { AuditChainWriter } from '@orqenix/memory-engine';
-import type { MigrationCheckResult } from './types';
+import { readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import Database from "better-sqlite3";
+import { AuditChainWriter } from "@orqenix/memory-engine";
+import type { MigrationCheckResult } from "./types";
 
 export class MigrationChecker {
   /**
@@ -18,30 +18,35 @@ export class MigrationChecker {
   async check(projectPath: string): Promise<MigrationCheckResult> {
     const blockers: string[] = [];
     const warnings: string[] = [];
-    const orqenixDir = join(projectPath, '.orqenix');
+    const orqenixDir = join(projectPath, ".orqenix");
 
     // Detect phase
-    const hasScopeYaml = existsSync(join(orqenixDir, 'scope.yaml'));
-    const hasProjectYaml = existsSync(join(orqenixDir, 'project.yaml'));
-    let detectedPhase: 7 | 8 | 'unknown' = 'unknown';
+    const hasScopeYaml = existsSync(join(orqenixDir, "scope.yaml"));
+    const hasProjectYaml = existsSync(join(orqenixDir, "project.yaml"));
+    let detectedPhase: 7 | 8 | "unknown" = "unknown";
 
     if (hasProjectYaml) {
       detectedPhase = 8;
-      warnings.push('project.yaml already exists; project may already be migrated to Phase 8');
+      warnings.push("project.yaml already exists; project may already be migrated to Phase 8");
     } else if (hasScopeYaml) {
       detectedPhase = 7;
     } else {
-      blockers.push('No scope.yaml or project.yaml found; not an Orqenix project');
+      blockers.push("No scope.yaml or project.yaml found; not an Orqenix project");
     }
 
     // Verify memory.db + audit chain
     let estimatedEntries = 0;
-    const dbPath = join(orqenixDir, 'memory.db');
+    const dbPath = join(orqenixDir, "memory.db");
     if (existsSync(dbPath)) {
       try {
         const db = new Database(dbPath, { readonly: true });
         // Count entries across 4 KBs
-        for (const table of ['chat_entries', 'code_entries', 'decision_entries', 'lesson_entries']) {
+        for (const table of [
+          "chat_entries",
+          "code_entries",
+          "decision_entries",
+          "lesson_entries",
+        ]) {
           try {
             const row = db.prepare(`SELECT COUNT(*) AS c FROM ${table}`).get() as { c: number };
             estimatedEntries += row.c;
@@ -61,7 +66,7 @@ export class MigrationChecker {
                 blockers.push(`Audit chain corrupted at seq ${verification.firstMismatchSeq}`);
               }
             } catch {
-              warnings.push('Could not verify audit chain (may be pre-Phase-7 format)');
+              warnings.push("Could not verify audit chain (may be pre-Phase-7 format)");
             }
           }
         }
@@ -70,7 +75,7 @@ export class MigrationChecker {
         blockers.push(`Could not open memory.db: ${(err as Error).message}`);
       }
     } else {
-      warnings.push('No memory.db found; migration will create one');
+      warnings.push("No memory.db found; migration will create one");
     }
 
     return {
@@ -83,9 +88,9 @@ export class MigrationChecker {
   }
 
   private async readScopeId(orqenixDir: string): Promise<string | null> {
-    const scopePath = join(orqenixDir, 'scope.yaml');
+    const scopePath = join(orqenixDir, "scope.yaml");
     if (!existsSync(scopePath)) return null;
-    const content = await readFile(scopePath, 'utf-8');
+    const content = await readFile(scopePath, "utf-8");
     const m = /scope_id:\s*(\S+)/.exec(content);
     return m ? (m[1] as string) : null;
   }

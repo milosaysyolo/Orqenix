@@ -4,37 +4,37 @@
 /** Phase 8 audit kinds (CR v8.0 Section 4.9) */
 export type MemoryAuditKind =
   // Project-level
-  | 'project.migrated_from_phase_7'
-  | 'project.config_updated'
+  | "project.migrated_from_phase_7"
+  | "project.config_updated"
   // Branch-level
-  | 'branch.deep_cloned_from_parent'
-  | 'branch.first_activity'
-  | 'branch.config_updated'
+  | "branch.deep_cloned_from_parent"
+  | "branch.first_activity"
+  | "branch.config_updated"
   // Session-level
-  | 'session.started'
-  | 'session.paused'
-  | 'session.resumed'
-  | 'session.deleted'
-  | 'session.subagent_spawned'
-  | 'session.team_session_joined'
-  | 'session.team_session_left'
+  | "session.started"
+  | "session.paused"
+  | "session.resumed"
+  | "session.deleted"
+  | "session.subagent_spawned"
+  | "session.team_session_joined"
+  | "session.team_session_left"
   // Subagent
-  | 'subagent.spawn'
-  | 'subagent.return_absorbed'
+  | "subagent.spawn"
+  | "subagent.return_absorbed"
   // Memory promotion
-  | 'memory.promoted.session_to_branch'
-  | 'memory.promoted.branch_to_project'
-  | 'memory.promoted.project_to_cross_project'
+  | "memory.promoted.session_to_branch"
+  | "memory.promoted.branch_to_project"
+  | "memory.promoted.project_to_cross_project"
   // Link state
-  | 'link.created'
-  | 'link.activated'
-  | 'link.deactivated'
-  | 'link.severed'
+  | "link.created"
+  | "link.activated"
+  | "link.deactivated"
+  | "link.severed"
   // Memory write
-  | 'memory.write';
+  | "memory.write";
 
 export interface ActorRef {
-  kind: 'user' | 'agent' | 'subagent' | 'system';
+  kind: "user" | "agent" | "subagent" | "system";
   id: string;
 }
 
@@ -45,7 +45,7 @@ export interface TargetRef {
 }
 
 export interface ProvenanceInfo {
-  origin: 'local' | 'cloud' | 'scope';
+  origin: "local" | "cloud" | "scope";
   component?: string;
 }
 

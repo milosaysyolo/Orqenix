@@ -4,16 +4,16 @@
 // Discovers a plugin on the filesystem, parses its package.json, validates
 // the manifest, and computes the CSF content hash for provenance.
 
-import { readFile } from 'node:fs/promises';
-import { join, resolve, isAbsolute } from 'node:path';
-import { existsSync } from 'node:fs';
-import { blake3 } from '@noble/hashes/blake3';
+import { readFile } from "node:fs/promises";
+import { join, resolve, isAbsolute } from "node:path";
+import { existsSync } from "node:fs";
+import { blake3 } from "@noble/hashes/blake3";
 
-import { validateManifest } from './manifest-validator';
-import { PluginKindRegistry } from './kinds/registry';
-import type { CanonicalSkillFormat } from './csf-schema';
-import type { PluginDiscoveryResult } from './types';
-import { PluginNotFoundError, ManifestInvalidError } from './errors';
+import { validateManifest } from "./manifest-validator";
+import { PluginKindRegistry } from "./kinds/registry";
+import type { CanonicalSkillFormat } from "./csf-schema";
+import type { PluginDiscoveryResult } from "./types";
+import { PluginNotFoundError, ManifestInvalidError } from "./errors";
 
 export interface PluginLoaderOptions {
   /** Optional kind registry override */
@@ -39,18 +39,16 @@ export class PluginLoader {
    * @returns Discovery result with parsed CSF + entry path
    */
   async load(packagePath: string): Promise<PluginDiscoveryResult> {
-    const absPath = isAbsolute(packagePath)
-      ? packagePath
-      : resolve(process.cwd(), packagePath);
+    const absPath = isAbsolute(packagePath) ? packagePath : resolve(process.cwd(), packagePath);
 
-    const packageJsonPath = join(absPath, 'package.json');
+    const packageJsonPath = join(absPath, "package.json");
     if (!existsSync(packageJsonPath)) {
       throw new PluginNotFoundError(packageJsonPath);
     }
 
     let raw: string;
     try {
-      raw = await readFile(packageJsonPath, 'utf-8');
+      raw = await readFile(packageJsonPath, "utf-8");
     } catch (err) {
       throw new PluginNotFoundError(packageJsonPath);
     }
@@ -59,10 +57,7 @@ export class PluginLoader {
     try {
       pkg = JSON.parse(raw);
     } catch (err) {
-      throw new ManifestInvalidError(
-        `Failed to parse package.json at ${packageJsonPath}`,
-        err
-      );
+      throw new ManifestInvalidError(`Failed to parse package.json at ${packageJsonPath}`, err);
     }
 
     // Validate manifest
@@ -71,7 +66,7 @@ export class PluginLoader {
       return {
         csf: {} as CanonicalSkillFormat,
         packagePath: absPath,
-        entryPath: '',
+        entryPath: "",
         isValidPlugin: false,
         issues: result.errors,
       };
@@ -102,15 +97,13 @@ export class PluginLoader {
    * Skips non-plugin packages silently.
    */
   async loadAll(directory: string): Promise<PluginDiscoveryResult[]> {
-    const absDir = isAbsolute(directory)
-      ? directory
-      : resolve(process.cwd(), directory);
+    const absDir = isAbsolute(directory) ? directory : resolve(process.cwd(), directory);
 
     if (!existsSync(absDir)) {
       return [];
     }
 
-    const { readdir } = await import('node:fs/promises');
+    const { readdir } = await import("node:fs/promises");
     const entries = await readdir(absDir, { withFileTypes: true });
     const results: PluginDiscoveryResult[] = [];
 
@@ -119,12 +112,12 @@ export class PluginLoader {
       const subPath = join(absDir, entry.name);
 
       // Handle scoped packages (@scope/pkg)
-      if (entry.name.startsWith('@')) {
+      if (entry.name.startsWith("@")) {
         const scopedEntries = await readdir(subPath, { withFileTypes: true });
         for (const scoped of scopedEntries) {
           if (!scoped.isDirectory()) continue;
           const scopedPath = join(subPath, scoped.name);
-          if (existsSync(join(scopedPath, 'package.json'))) {
+          if (existsSync(join(scopedPath, "package.json"))) {
             try {
               const r = await this.load(scopedPath);
               if (r.isValidPlugin) results.push(r);
@@ -133,7 +126,7 @@ export class PluginLoader {
             }
           }
         }
-      } else if (existsSync(join(subPath, 'package.json'))) {
+      } else if (existsSync(join(subPath, "package.json"))) {
         try {
           const r = await this.load(subPath);
           if (r.isValidPlugin) results.push(r);
@@ -165,7 +158,7 @@ export class PluginLoader {
     const hash = blake3(bytes);
     return Array.from(hash)
       .slice(0, 16)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 }

@@ -30,7 +30,7 @@ interface RunTestsOutput {
 export async function invoke(input: RunTestsInput): Promise<RunTestsOutput> {
   // Reference returns a canned result; production runs the actual test command
   // within the sandbox's command.execute:limited allowlist.
-  const path = input.testPath ?? '.';
+  const path = input.testPath ?? ".";
   void path;
 
   // Production: spawn `npm test` / `pytest` and parse output.

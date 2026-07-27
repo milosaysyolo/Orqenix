@@ -3,13 +3,13 @@
 //
 // Alternative context injection strategy (extends Phase 2 strategies A-E, default B).
 
-import type { CanonicalSkillFormat } from '../csf-schema';
-import type { PluginKindHandler, ValidationResult } from '../types';
+import type { CanonicalSkillFormat } from "../csf-schema";
+import type { PluginKindHandler, ValidationResult } from "../types";
 
-export const memoryInjectionStrategyHandler: PluginKindHandler<'memory-injection-strategy'> = {
-  kind: 'memory-injection-strategy',
+export const memoryInjectionStrategyHandler: PluginKindHandler<"memory-injection-strategy"> = {
+  kind: "memory-injection-strategy",
   description:
-    'Alternative context injection strategy (extends Phase 2 strategies A-E, default B).',
+    "Alternative context injection strategy (extends Phase 2 strategies A-E, default B).",
 
   validateManifest(csf: CanonicalSkillFormat): ValidationResult {
     const errors: string[] = [];
@@ -17,18 +17,18 @@ export const memoryInjectionStrategyHandler: PluginKindHandler<'memory-injection
 
     if (!csf.manifest.tool) {
       errors.push(
-        'memory-injection-strategy plugins MUST declare manifest.tool with inject(query, memory) signature'
+        "memory-injection-strategy plugins MUST declare manifest.tool with inject(query, memory) signature",
       );
     }
 
-    if (!csf.manifest.permissions.some((p) => p.startsWith('memory.read'))) {
+    if (!csf.manifest.permissions.some((p) => p.startsWith("memory.read"))) {
       warnings.push(
-        "memory-injection-strategy plugins need 'memory.read:<kb>' to select context for injection"
+        "memory-injection-strategy plugins need 'memory.read:<kb>' to select context for injection",
       );
     }
 
     warnings.push(
-      'REMINDER: injection-strategy MUST respect hierarchy fan-out (session→branch→project) and token budget per CR v8.0 Section 4.4'
+      "REMINDER: injection-strategy MUST respect hierarchy fan-out (session→branch→project) and token budget per CR v8.0 Section 4.4",
     );
 
     return { valid: errors.length === 0, errors, warnings };

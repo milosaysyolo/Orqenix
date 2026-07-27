@@ -5,19 +5,19 @@
 // project's audit chain. Adding new kinds requires CR amendment.
 
 export type PluginAuditKind =
-  | 'plugin.manifest_validated'
-  | 'plugin.installed'
-  | 'plugin.install_failed'
-  | 'plugin.configured'
-  | 'plugin.activated'
-  | 'plugin.activate_failed'
-  | 'plugin.deactivated'
-  | 'plugin.uninstalled'
-  | 'plugin.updated'
-  | 'plugin.crashed'
-  | 'plugin.permission_check'
-  | 'plugin.invocation'
-  | 'plugin.invocation_failed';
+  | "plugin.manifest_validated"
+  | "plugin.installed"
+  | "plugin.install_failed"
+  | "plugin.configured"
+  | "plugin.activated"
+  | "plugin.activate_failed"
+  | "plugin.deactivated"
+  | "plugin.uninstalled"
+  | "plugin.updated"
+  | "plugin.crashed"
+  | "plugin.permission_check"
+  | "plugin.invocation"
+  | "plugin.invocation_failed";
 
 /**
  * Type guard for plugin audit kinds
@@ -27,19 +27,19 @@ export function isPluginAuditKind(s: string): s is PluginAuditKind {
 }
 
 const PLUGIN_AUDIT_KINDS: ReadonlySet<string> = new Set([
-  'plugin.manifest_validated',
-  'plugin.installed',
-  'plugin.install_failed',
-  'plugin.configured',
-  'plugin.activated',
-  'plugin.activate_failed',
-  'plugin.deactivated',
-  'plugin.uninstalled',
-  'plugin.updated',
-  'plugin.crashed',
-  'plugin.permission_check',
-  'plugin.invocation',
-  'plugin.invocation_failed',
+  "plugin.manifest_validated",
+  "plugin.installed",
+  "plugin.install_failed",
+  "plugin.configured",
+  "plugin.activated",
+  "plugin.activate_failed",
+  "plugin.deactivated",
+  "plugin.uninstalled",
+  "plugin.updated",
+  "plugin.crashed",
+  "plugin.permission_check",
+  "plugin.invocation",
+  "plugin.invocation_failed",
 ]);
 
 /**
@@ -68,13 +68,13 @@ export class NoopPluginAuditWriter implements PluginAuditWriter {
  * In-memory writer for tests (records events for later verification).
  */
 export class InMemoryPluginAuditWriter implements PluginAuditWriter {
-  private readonly events: Array<Parameters<PluginAuditWriter['append']>[0]> = [];
+  private readonly events: Array<Parameters<PluginAuditWriter["append"]>[0]> = [];
 
-  async append(event: Parameters<PluginAuditWriter['append']>[0]): Promise<void> {
+  async append(event: Parameters<PluginAuditWriter["append"]>[0]): Promise<void> {
     this.events.push(event);
   }
 
-  getEvents(): readonly Parameters<PluginAuditWriter['append']>[0][] {
+  getEvents(): readonly Parameters<PluginAuditWriter["append"]>[0][] {
     return [...this.events];
   }
 

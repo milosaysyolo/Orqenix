@@ -4,20 +4,20 @@
 // Applies migrations with BLAKE3 checksum tracking + drift detection.
 // Extends the Phase 5 pattern (storage-sqlite migration runner).
 
-import type { Database } from 'better-sqlite3';
-import type { Migration } from './500-hierarchy';
+import type { Database } from "better-sqlite3";
+import type { Migration } from "./500-hierarchy";
 
 export class MigrationDriftError extends Error {
   constructor(
     public readonly migrationId: number,
     public readonly storedChecksum: string,
-    public readonly incomingChecksum: string
+    public readonly incomingChecksum: string,
   ) {
     super(
       `Migration ${migrationId} drift: stored checksum ${storedChecksum} != incoming ${incomingChecksum}. ` +
-        `The migration file was modified after it was applied. Investigate before proceeding.`
+        `The migration file was modified after it was applied. Investigate before proceeding.`,
     );
-    this.name = 'MigrationDriftError';
+    this.name = "MigrationDriftError";
     Object.setPrototypeOf(this, MigrationDriftError.prototype);
   }
 }
@@ -50,31 +50,23 @@ export class MigrationRunner {
       ) STRICT;
     `);
 
-    const getStmt = this.db.prepare(
-      'SELECT checksum FROM _orqenix_migrations WHERE id = ?'
-    );
+    const getStmt = this.db.prepare("SELECT checksum FROM _orqenix_migrations WHERE id = ?");
     const insertStmt = this.db.prepare(
-      'INSERT INTO _orqenix_migrations (id, name, checksum, applied_at) VALUES (?, ?, ?, ?)'
+      "INSERT INTO _orqenix_migrations (id, name, checksum, applied_at) VALUES (?, ?, ?, ?)",
     );
 
     for (const migration of migrations) {
-      const existing = getStmt.get(migration.id) as
-        | { checksum: string }
-        | undefined;
+      const existing = getStmt.get(migration.id) as { checksum: string } | undefined;
 
       if (existing) {
         // Already applied; check drift
         if (existing.checksum !== migration.checksum) {
           if (failOnDrift) {
-            throw new MigrationDriftError(
-              migration.id,
-              existing.checksum,
-              migration.checksum
-            );
+            throw new MigrationDriftError(migration.id, existing.checksum, migration.checksum);
           }
           // eslint-disable-next-line no-console
           console.warn(
-            `[memory-engine] Migration ${migration.id} drift detected but failOnDrift=false; continuing`
+            `[memory-engine] Migration ${migration.id} drift detected but failOnDrift=false; continuing`,
           );
         }
         skipped.push(migration.id);
@@ -84,12 +76,7 @@ export class MigrationRunner {
       // Apply in a transaction
       const txn = this.db.transaction(() => {
         this.db.exec(migration.up);
-        insertStmt.run(
-          migration.id,
-          migration.name,
-          migration.checksum,
-          new Date().toISOString()
-        );
+        insertStmt.run(migration.id, migration.name, migration.checksum, new Date().toISOString());
       });
       txn();
       applied.push(migration.id);
@@ -102,9 +89,7 @@ export class MigrationRunner {
   rollback(migration: Migration): void {
     const txn = this.db.transaction(() => {
       this.db.exec(migration.down);
-      this.db
-        .prepare('DELETE FROM _orqenix_migrations WHERE id = ?')
-        .run(migration.id);
+      this.db.prepare("DELETE FROM _orqenix_migrations WHERE id = ?").run(migration.id);
     });
     txn();
   }
@@ -112,7 +97,7 @@ export class MigrationRunner {
   /** Lists applied migration IDs */
   listApplied(): number[] {
     const rows = this.db
-      .prepare('SELECT id FROM _orqenix_migrations ORDER BY id ASC')
+      .prepare("SELECT id FROM _orqenix_migrations ORDER BY id ASC")
       .all() as Array<{ id: number }>;
     return rows.map((r) => r.id);
   }

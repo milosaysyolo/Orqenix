@@ -27,7 +27,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
             key: 'Content-Security-Policy-Report-Only',

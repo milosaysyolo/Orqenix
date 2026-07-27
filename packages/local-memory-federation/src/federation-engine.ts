@@ -4,14 +4,14 @@
 // Orchestrates cross-project memory federation per CR v8.0 ADR-E-011 + INV-18.
 // Pull-on-demand only; no background sync.
 
-import { blake3 } from '@noble/hashes/blake3';
+import { blake3 } from "@noble/hashes/blake3";
 
-import { AuditLogger, AuditChainWriter, InMemoryAuditChainWriter } from './audit-logger';
-import { CacheLayer } from './cache-layer';
-import { PermissionChecker } from './permission-checker';
-import { ProjectDiscovery } from './project-discovery';
-import { ProjectIndex, IProjectIndex } from './project-index';
-import { QueryAggregator } from './query-aggregator';
+import { AuditLogger, AuditChainWriter, InMemoryAuditChainWriter } from "./audit-logger";
+import { CacheLayer } from "./cache-layer";
+import { PermissionChecker } from "./permission-checker";
+import { ProjectDiscovery } from "./project-discovery";
+import { ProjectIndex, IProjectIndex } from "./project-index";
+import { QueryAggregator } from "./query-aggregator";
 
 import {
   ApproveCandidateRequestSchema,
@@ -65,13 +65,11 @@ export class FederationEngine {
       cache?: CacheLayer;
       aggregator?: QueryAggregator;
       auditWriter?: AuditChainWriter;
-    }
+    },
   ) {
     this.config = config;
-    this.discovery =
-      options?.discovery ?? new ProjectDiscovery(config.projectsYamlPath);
-    this.permissions =
-      options?.permissions ?? new PermissionChecker(config.approvalsYamlPath);
+    this.discovery = options?.discovery ?? new ProjectDiscovery(config.projectsYamlPath);
+    this.permissions = options?.permissions ?? new PermissionChecker(config.approvalsYamlPath);
     this.cache =
       options?.cache ??
       new CacheLayer({
@@ -117,9 +115,7 @@ export class FederationEngine {
 
     // 3. Discover all federation-enabled projects
     const allProjects = await this.discovery.listFederationEnabledProjects();
-    const otherProjects = allProjects.filter(
-      (p) => p.id !== this.config.currentProjectId
-    );
+    const otherProjects = allProjects.filter((p) => p.id !== this.config.currentProjectId);
 
     if (otherProjects.length === 0) {
       // No other projects opted in, return empty result (not an error)
@@ -129,12 +125,7 @@ export class FederationEngine {
     }
 
     // 4. Filter by per-pair approval for at least one KB kind
-    const kindsToCheck: KbKind[] = validated.kinds ?? [
-      'chat',
-      'code',
-      'decision',
-      'lesson',
-    ];
+    const kindsToCheck: KbKind[] = validated.kinds ?? ["chat", "code", "decision", "lesson"];
     const eligibleProjects: IProjectIndex[] = [];
 
     for (const project of otherProjects) {
@@ -157,7 +148,7 @@ export class FederationEngine {
             projectId: project.id,
             projectName: project.name,
             projectPath: project.path,
-          })
+          }),
         );
       }
     }
@@ -218,9 +209,7 @@ export class FederationEngine {
     }
 
     // Fetch full content from source project
-    const sourceProject = await this.discovery.findProject(
-      candidate.source_project_id
-    );
+    const sourceProject = await this.discovery.findProject(candidate.source_project_id);
     const sourceIndex = new ProjectIndex({
       projectId: sourceProject.id,
       projectName: sourceProject.name,
@@ -231,7 +220,7 @@ export class FederationEngine {
     if (fullContent === null) {
       // D8.α.6 will wire this; in D8.α.3 stub it returns null
       throw new CandidateNotFoundError(
-        `Full content for ${validated.candidateId} unavailable (D8.α.6 will wire fetch)`
+        `Full content for ${validated.candidateId} unavailable (D8.α.6 will wire fetch)`,
       );
     }
 
@@ -239,8 +228,8 @@ export class FederationEngine {
     const bytes = new TextEncoder().encode(fullContent);
     const contentHash = Array.from(blake3(bytes))
       .slice(0, 16)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
 
     // Audit the share
     await this.audit.logShare({
@@ -278,7 +267,7 @@ export class FederationEngine {
   private makeEmptyResult(
     query: CrossProjectQuery,
     startTime: number,
-    cacheHit: boolean
+    cacheHit: boolean,
   ): FederationResult {
     return {
       query,
@@ -300,7 +289,7 @@ export class FederationEngine {
     const hash = blake3(bytes);
     return Array.from(hash)
       .slice(0, 16)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 }

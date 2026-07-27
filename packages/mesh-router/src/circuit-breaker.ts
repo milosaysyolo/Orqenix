@@ -1,8 +1,8 @@
-import type { ObservabilityHooks } from '@orqenix/mesh-observability';
-import { onCircuitClose, onCircuitHalfOpen, onCircuitOpen } from '@orqenix/mesh-observability';
-import type { ScopeId } from '@orqenix/mesh-transport-core';
+import type { ObservabilityHooks } from "@orqenix/mesh-observability";
+import { onCircuitClose, onCircuitHalfOpen, onCircuitOpen } from "@orqenix/mesh-observability";
+import type { ScopeId } from "@orqenix/mesh-transport-core";
 
-export type BreakerState = 'Closed' | 'Open' | 'HalfOpen';
+export type BreakerState = "Closed" | "Open" | "HalfOpen";
 
 export interface CircuitBreakerOptions {
   failureThreshold?: number;
@@ -31,16 +31,16 @@ export class CircuitBreaker {
     this.failureThreshold = opts.failureThreshold ?? 3;
     this.cooldownMs = opts.cooldownMs ?? 30_000;
     this.now = opts.now ?? Date.now;
-    this.scopeId = opts.scopeId ?? ('unknown' as ScopeId);
+    this.scopeId = opts.scopeId ?? ("unknown" as ScopeId);
     this.hooks = opts.hooks;
   }
 
   canAttempt(kind: string): boolean {
     const s = this.ensure(kind);
-    if (s.state === 'Closed') return true;
-    if (s.state === 'Open') {
+    if (s.state === "Closed") return true;
+    if (s.state === "Open") {
       if (this.now() - s.openedAt >= this.cooldownMs) {
-        this.transition(kind, 'HalfOpen');
+        this.transition(kind, "HalfOpen");
         s.inFlightProbes++;
         return true;
       }
@@ -55,24 +55,24 @@ export class CircuitBreaker {
 
   recordSuccess(kind: string): void {
     const s = this.ensure(kind);
-    if (s.state === 'HalfOpen') {
+    if (s.state === "HalfOpen") {
       s.inFlightProbes = Math.max(0, s.inFlightProbes - 1);
-      this.transition(kind, 'Closed');
+      this.transition(kind, "Closed");
     }
     s.consecutiveFailures = 0;
   }
 
   recordFailure(kind: string): void {
     const s = this.ensure(kind);
-    if (s.state === 'HalfOpen') {
+    if (s.state === "HalfOpen") {
       s.inFlightProbes = Math.max(0, s.inFlightProbes - 1);
-      this.transition(kind, 'Open');
+      this.transition(kind, "Open");
       return;
     }
-    if (s.state === 'Closed') {
+    if (s.state === "Closed") {
       s.consecutiveFailures++;
       if (s.consecutiveFailures >= this.failureThreshold) {
-        this.transition(kind, 'Open');
+        this.transition(kind, "Open");
       }
     }
   }
@@ -88,7 +88,7 @@ export class CircuitBreaker {
   private ensure(kind: string): PerTransport {
     let s = this.byKind.get(kind);
     if (!s) {
-      s = { state: 'Closed', consecutiveFailures: 0, openedAt: 0, inFlightProbes: 0 };
+      s = { state: "Closed", consecutiveFailures: 0, openedAt: 0, inFlightProbes: 0 };
       this.byKind.set(kind, s);
     }
     return s;
@@ -98,11 +98,11 @@ export class CircuitBreaker {
     const s = this.ensure(kind);
     if (s.state === next) return;
     s.state = next;
-    if (next === 'Open') {
+    if (next === "Open") {
       s.openedAt = this.now();
       s.consecutiveFailures = 0;
       if (this.hooks) onCircuitOpen(this.hooks, { scopeId: this.scopeId, transport: kind });
-    } else if (next === 'HalfOpen') {
+    } else if (next === "HalfOpen") {
       s.inFlightProbes = 0;
       if (this.hooks) onCircuitHalfOpen(this.hooks, { scopeId: this.scopeId, transport: kind });
     } else {

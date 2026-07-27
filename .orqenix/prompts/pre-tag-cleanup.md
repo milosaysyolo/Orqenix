@@ -35,13 +35,11 @@ drift, possibly orphan files. Clean up before tagging v0.8.0.
 
 2. Baseline scan (no changes):
 
-
 pnpm run scan:cruft pnpm run scan:lockfile pnpm run scan:workspace pnpm run test:cleanup
 
 Capture all findings.
 
 3. Dry-run the orchestrator:
-
 
 pnpm run cleanup:dry-run
 
@@ -49,17 +47,16 @@ Surface exactly what would change.
 
 4. Run safe cleanup (debug artifacts + line endings):
 
-
 pnpm run cleanup:auto
 
 This runs:
-- clean-debug-artifacts.mjs (removes *.tmp, test-failure-*.json,
+
+- clean-debug-artifacts.mjs (removes _.tmp, test-failure-_.json,
   verify-report.json at root, etc.)
 - normalize-line-endings.mjs (CRLF → LF on tracked source files)
 - cleanup.test.mjs (verifies nothing essential was removed)
 
 5. If lockfile audit reported drift, regenerate:
-
 
 pnpm run cleanup:full
 
@@ -68,14 +65,12 @@ This adds lockfile regeneration to the chain. Verify the diff is sensible
 
 6. Final verification — run the full verify pipeline:
 
-
 pnpm run verify
 
 This must still pass. If it doesn't, the cleanup broke something — revert
 and investigate.
 
 7. Commit cleanup changes:
-
 
 git add -A git commit -m "chore: pre-tag cleanup for v0.8.0
 
@@ -87,12 +82,13 @@ Pass cleanup test suite (workspace integrity, SPDX headers, etc.)"
 ## Deliverable
 
 Produce a report including:
+
 - `scan-cruft.mjs --json` output (BEFORE cleanup)
 - `cleanup.test.mjs` output (AFTER cleanup) — must be all-green
 - Diff stats: files changed, insertions, deletions
 - `pnpm run verify` final result (must pass)
 - List of any items that scan flagged but cleanup did NOT touch (low-priority
-follow-ups)
+  follow-ups)
 - Final statement: ready to tag v0.8.0? YES/NO
 
 ## What this cleanup will NOT do (out of scope, deferred)

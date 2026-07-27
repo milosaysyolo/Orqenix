@@ -16,7 +16,7 @@ export class Rollback {
    */
   async rollback(backupPath: string): Promise<MigrationRollbackResult> {
     if (!existsSync(backupPath)) {
-      throw new MigrationError('BACKUP_NOT_FOUND', `Backup not found at ${backupPath}`);
+      throw new MigrationError("BACKUP_NOT_FOUND", `Backup not found at ${backupPath}`);
     }
 
     // The .orqenix dir is the parent of the backup
@@ -25,14 +25,14 @@ export class Rollback {
     // Verify backup is within the 30-day window (by timestamp in name)
     const m = /_migration_backup_(.+)$/.exec(backupPath);
     if (m) {
-      const ts = m[1]!.replace(/-/g, (c, i) => (i === 13 || i === 16 ? ':' : i === 19 ? '.' : c));
+      const ts = m[1]!.replace(/-/g, (c, i) => (i === 13 || i === 16 ? ":" : i === 19 ? "." : c));
       const backupTime = new Date(ts).getTime();
       if (!Number.isNaN(backupTime)) {
         const ageMs = Date.now() - backupTime;
         if (ageMs > 30 * 24 * 3600 * 1000) {
           throw new MigrationError(
-            'ROLLBACK_EXPIRED',
-            `Backup is older than 30 days; rollback window expired`
+            "ROLLBACK_EXPIRED",
+            `Backup is older than 30 days; rollback window expired`,
           );
         }
       }

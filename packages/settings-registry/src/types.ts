@@ -1,27 +1,27 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/settings-registry , Type definitions
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Hierarchy levels (per ADR-E-009)
 // ─────────────────────────────────────────────────────────────────────────
 
 export type SettingsLevel =
-  | 'session'
-  | 'branch'
-  | 'project'
-  | 'user'
-  | 'system'
-  | 'built-in-default';
+  | "session"
+  | "branch"
+  | "project"
+  | "user"
+  | "system"
+  | "built-in-default";
 
 /** Override scope a module permits */
 export type HierarchyOverride =
-  | 'session' // can override at session level and below
-  | 'branch' // branch + project + user + system
-  | 'project' // project + user + system
-  | 'all' // every level
-  | 'none'; // only system can override
+  | "session" // can override at session level and below
+  | "branch" // branch + project + user + system
+  | "project" // project + user + system
+  | "all" // every level
+  | "none"; // only system can override
 
 // ─────────────────────────────────────────────────────────────────────────
 // Provenance (which phase locked a default, per G64-10)
@@ -43,15 +43,8 @@ export type SettingsProvenance = z.infer<typeof SettingsProvenanceSchema>;
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface SettingsUiHints {
-  category?:
-    | 'memory'
-    | 'storage'
-    | 'search'
-    | 'mesh'
-    | 'cloud-sync'
-    | 'self-learning'
-    | 'plugins';
-  section?: 'basic' | 'advanced';
+  category?: "memory" | "storage" | "search" | "mesh" | "cloud-sync" | "self-learning" | "plugins";
+  section?: "basic" | "advanced";
   displayName?: string;
   description?: string;
   helpUrl?: string;
@@ -64,7 +57,7 @@ export interface SettingsUiHints {
 export type HotReloadHandler = (
   newValue: unknown,
   oldValue: unknown,
-  settingPath: string
+  settingPath: string,
 ) => Promise<void> | void;
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -141,7 +134,7 @@ export interface ResolvedSetting {
 export const SettingsOverrideSchema = z.object({
   moduleId: z.string(),
   settingPath: z.string(),
-  level: z.enum(['session', 'branch', 'project', 'user', 'system']),
+  level: z.enum(["session", "branch", "project", "user", "system"]),
   /** session_id, branch_id, or project_id (null for user/system) */
   hierarchyId: z.string().nullable(),
   value: z.unknown(),
@@ -156,7 +149,7 @@ export type SettingsOverride = z.infer<typeof SettingsOverrideSchema>;
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface UpdateSettingInput {
-  level: 'session' | 'branch' | 'project' | 'user' | 'system';
+  level: "session" | "branch" | "project" | "user" | "system";
   /** Required for session/branch/project levels */
   hierarchyId?: string;
   /** Who is making the change (for audit) */
@@ -168,11 +161,11 @@ export interface UpdateSettingInput {
 // ─────────────────────────────────────────────────────────────────────────
 
 export type SettingsAuditKind =
-  | 'settings.changed'
-  | 'settings.hot_reload_failed'
-  | 'settings.imported'
-  | 'settings.exported'
-  | 'settings.module_registered';
+  | "settings.changed"
+  | "settings.hot_reload_failed"
+  | "settings.imported"
+  | "settings.exported"
+  | "settings.module_registered";
 
 export interface SettingsAuditEvent {
   kind: SettingsAuditKind;

@@ -1,12 +1,7 @@
 // packages/mesh-discovery/src/events.ts
-import type { ScopeId } from '@orqenix/mesh-transport-core';
+import type { ScopeId } from "@orqenix/mesh-transport-core";
 
-export type DiscoveryState =
-  | 'Discovered'
-  | 'Connecting'
-  | 'Connected'
-  | 'Stale'
-  | 'Lost';
+export type DiscoveryState = "Discovered" | "Connecting" | "Connected" | "Stale" | "Lost";
 
 export interface DiscoveryEvent {
   scopeId: ScopeId;
@@ -17,11 +12,11 @@ export interface DiscoveryEvent {
 }
 
 const ALLOWED: Record<DiscoveryState, ReadonlyArray<DiscoveryState>> = {
-  Discovered: ['Connecting', 'Lost'],
-  Connecting: ['Connected', 'Lost'],
-  Connected: ['Stale', 'Lost'],
-  Stale: ['Connected', 'Lost'],
-  Lost: ['Discovered'],
+  Discovered: ["Connecting", "Lost"],
+  Connecting: ["Connected", "Lost"],
+  Connected: ["Stale", "Lost"],
+  Stale: ["Connected", "Lost"],
+  Lost: ["Discovered"],
 };
 
 interface Entry {
@@ -45,20 +40,24 @@ export class DiscoveryStateMachine {
   discover(scopeId: ScopeId, multiaddrs: string[], peerId?: string): void {
     const existing = this.byScope.get(scopeId);
     if (!existing) {
-      const entry: Entry = { state: 'Discovered', peerId, multiaddrs, at: Date.now() };
+      const entry: Entry = { state: "Discovered", peerId, multiaddrs, at: Date.now() };
       this.byScope.set(scopeId, entry);
       this.emit(scopeId, entry);
       return;
     }
-    if (existing.state === 'Lost') {
-      this.transition(scopeId, 'Discovered', { peerId, multiaddrs });
+    if (existing.state === "Lost") {
+      this.transition(scopeId, "Discovered", { peerId, multiaddrs });
     } else {
       existing.multiaddrs = multiaddrs;
       if (peerId) existing.peerId = peerId;
     }
   }
 
-  transition(scopeId: ScopeId, next: DiscoveryState, update?: { peerId?: string; multiaddrs?: string[] }): void {
+  transition(
+    scopeId: ScopeId,
+    next: DiscoveryState,
+    update?: { peerId?: string; multiaddrs?: string[] },
+  ): void {
     const entry = this.byScope.get(scopeId);
     if (!entry) throw new Error(`discovery: no entry for ${scopeId}`);
     const allowed = ALLOWED[entry.state];
@@ -95,7 +94,11 @@ export class DiscoveryStateMachine {
       at: e.at,
     };
     for (const l of this.listeners) {
-      try { l(evt); } catch { /* listeners must not throw; swallow */ }
+      try {
+        l(evt);
+      } catch {
+        /* listeners must not throw; swallow */
+      }
     }
   }
 }

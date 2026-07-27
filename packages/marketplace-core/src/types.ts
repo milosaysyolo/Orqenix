@@ -1,28 +1,28 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/marketplace-core , Type definitions
 
-import { z } from 'zod';
-import type { PluginKind } from '@orqenix/plugin-core';
+import { z } from "zod";
+import type { PluginKind } from "@orqenix/plugin-core";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Registry source identifiers
 // ─────────────────────────────────────────────────────────────────────────
 
 export type RegistrySource =
-  | 'orqenix-official'
-  | 'npm'
-  | 'github'
-  | 'local-file'
-  | 'private-git'
-  | 'enterprise';
+  | "orqenix-official"
+  | "npm"
+  | "github"
+  | "local-file"
+  | "private-git"
+  | "enterprise";
 
 export const RegistrySourceSchema = z.enum([
-  'orqenix-official',
-  'npm',
-  'github',
-  'local-file',
-  'private-git',
-  'enterprise',
+  "orqenix-official",
+  "npm",
+  "github",
+  "local-file",
+  "private-git",
+  "enterprise",
 ]);
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -72,7 +72,7 @@ export type CreatePluginInput = z.infer<typeof CreatePluginInputSchema>;
 export const UpdatePluginInputSchema = z.object({
   name: z.string(),
   /** Semver bump kind */
-  bump: z.enum(['patch', 'minor', 'major']),
+  bump: z.enum(["patch", "minor", "major"]),
   /** Changed CSF fields */
   changes: z.record(z.unknown()),
   changesSummary: z.string().optional(),
@@ -128,14 +128,14 @@ export type ExportInput = z.infer<typeof ExportInputSchema>;
 // ─────────────────────────────────────────────────────────────────────────
 
 export type MarketplaceAuditKind =
-  | 'marketplace.crud_create'
-  | 'marketplace.crud_update'
-  | 'marketplace.crud_delete'
-  | 'marketplace.fork_created'
-  | 'marketplace.import_succeeded'
-  | 'marketplace.import_failed'
-  | 'marketplace.export_succeeded'
-  | 'marketplace.export_lossy_rejected';
+  | "marketplace.crud_create"
+  | "marketplace.crud_update"
+  | "marketplace.crud_delete"
+  | "marketplace.fork_created"
+  | "marketplace.import_succeeded"
+  | "marketplace.import_failed"
+  | "marketplace.export_succeeded"
+  | "marketplace.export_lossy_rejected";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Operation results

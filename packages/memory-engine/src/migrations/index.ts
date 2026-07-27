@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/memory-engine , Migration manifest (UPDATED for D8.γ)
 
-export { HIERARCHY_MIGRATIONS, type Migration } from './500-hierarchy';
-export { MARKETPLACE_MIGRATIONS } from './550-marketplace';
-export { MigrationRunner } from './runner';
+export { HIERARCHY_MIGRATIONS, type Migration } from "./500-hierarchy";
+export { MARKETPLACE_MIGRATIONS } from "./550-marketplace";
+export { MigrationRunner } from "./runner";
 
-import { HIERARCHY_MIGRATIONS } from './500-hierarchy';
-import { MARKETPLACE_MIGRATIONS } from './550-marketplace';
-import type { Migration } from './500-hierarchy';
+import { HIERARCHY_MIGRATIONS } from "./500-hierarchy";
+import { MARKETPLACE_MIGRATIONS } from "./550-marketplace";
+import type { Migration } from "./500-hierarchy";
 
 // D8.γ: self-learning migrations (530-539) imported from observer package.
 // To avoid a circular dependency, the observer package re-exports its

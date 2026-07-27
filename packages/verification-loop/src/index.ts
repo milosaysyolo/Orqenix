@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/verification-loop , Public API surface
 
-export { VerificationLoop } from './verification-loop';
-export type { VerificationLoopOptions } from './verification-loop';
+export { VerificationLoop } from "./verification-loop";
+export type { VerificationLoopOptions } from "./verification-loop";
 
 export type {
   VerificationStatus,
@@ -12,10 +12,6 @@ export type {
   VerifyInput,
   VerifyResult,
   SkillExecutor,
-} from './types';
+} from "./types";
 
-export {
-  DEFAULT_VERIFICATION_THRESHOLDS,
-  VerificationRunSchema,
-  MockSkillExecutor,
-} from './types';
+export { DEFAULT_VERIFICATION_THRESHOLDS, VerificationRunSchema, MockSkillExecutor } from "./types";

@@ -25,11 +25,9 @@ function fill(template: string, args: Record<string, unknown>): string {
 // ─────────────────────────────────────────────────────────────────────────
 
 const decisionTemplate: McpPromptDefinition = {
-  name: 'orqenix_decision_template',
-  description: 'Helps agents create well-structured architectural decisions.',
-  arguments: [
-    { name: 'topic', description: 'The decision topic', required: true },
-  ],
+  name: "orqenix_decision_template",
+  description: "Helps agents create well-structured architectural decisions.",
+  arguments: [{ name: "topic", description: "The decision topic", required: true }],
   render(args) {
     return fill(
       `Record an architectural decision about: {{topic}}
@@ -43,7 +41,7 @@ Structure your decision with:
 6. **Consequences**: What are the trade-offs?
 
 Then call orqenix_record_decision with the title, rationale, and alternatives.`,
-      args
+      args,
     );
   },
 };
@@ -53,11 +51,9 @@ Then call orqenix_record_decision with the title, rationale, and alternatives.`,
 // ─────────────────────────────────────────────────────────────────────────
 
 const lessonTemplate: McpPromptDefinition = {
-  name: 'orqenix_lesson_template',
-  description: 'Helps agents capture lessons learned consistently.',
-  arguments: [
-    { name: 'incident', description: 'What happened', required: false },
-  ],
+  name: "orqenix_lesson_template",
+  description: "Helps agents capture lessons learned consistently.",
+  arguments: [{ name: "incident", description: "What happened", required: false }],
   render(args) {
     return fill(
       `Capture a lesson learned{{incident}}.
@@ -69,7 +65,7 @@ Structure your lesson with:
 4. **References**: Links to commits, issues, docs that illustrate it
 
 Then call orqenix_record_lesson with the title, context, lesson, and references.`,
-      args
+      args,
     );
   },
 };
@@ -79,11 +75,9 @@ Then call orqenix_record_lesson with the title, context, lesson, and references.
 // ─────────────────────────────────────────────────────────────────────────
 
 const reviewTemplate: McpPromptDefinition = {
-  name: 'orqenix_review_template',
-  description: 'Code review prompt enriched with Orqenix decision + lesson context.',
-  arguments: [
-    { name: 'files', description: 'Files under review', required: true },
-  ],
+  name: "orqenix_review_template",
+  description: "Code review prompt enriched with Orqenix decision + lesson context.",
+  arguments: [{ name: "files", description: "Files under review", required: true }],
   render(args) {
     return fill(
       `Review the following files: {{files}}
@@ -98,7 +92,7 @@ Focus on:
 - Security + performance implications
 
 After review, if you discover a reusable insight, call orqenix_record_lesson.`,
-      args
+      args,
     );
   },
 };
@@ -108,8 +102,8 @@ After review, if you discover a reusable insight, call orqenix_record_lesson.`,
 // ─────────────────────────────────────────────────────────────────────────
 
 const summarizeSession: McpPromptDefinition = {
-  name: 'orqenix_summarize_session',
-  description: 'Session summary at conclusion, for promotion to branch memory.',
+  name: "orqenix_summarize_session",
+  description: "Session summary at conclusion, for promotion to branch memory.",
   arguments: [],
   render(args) {
     return fill(
@@ -123,7 +117,7 @@ Produce:
 
 For high-value decisions + lessons, consider orqenix_promote_to_branch so other
 sessions on this branch can reuse them.`,
-      args
+      args,
     );
   },
 };
@@ -133,11 +127,9 @@ sessions on this branch can reuse them.`,
 // ─────────────────────────────────────────────────────────────────────────
 
 const preCommit: McpPromptDefinition = {
-  name: 'orqenix_pre_commit',
-  description: 'Pre-commit hook prompt with Orqenix context.',
-  arguments: [
-    { name: 'diff', description: 'The staged diff', required: false },
-  ],
+  name: "orqenix_pre_commit",
+  description: "Pre-commit hook prompt with Orqenix context.",
+  arguments: [{ name: "diff", description: "The staged diff", required: false }],
   render(args) {
     return fill(
       `Before committing{{diff}}, run through this checklist:
@@ -150,7 +142,7 @@ const preCommit: McpPromptDefinition = {
 4. Write a Conventional Commits message (feat/fix/docs/refactor/test/chore).
 
 If this commit embodies a new decision, call orqenix_record_decision first.`,
-      args
+      args,
     );
   },
 };
@@ -160,11 +152,9 @@ If this commit embodies a new decision, call orqenix_record_decision first.`,
 // ─────────────────────────────────────────────────────────────────────────
 
 const postTestFailure: McpPromptDefinition = {
-  name: 'orqenix_post_test_failure',
-  description: 'After a test failure, capture the lesson.',
-  arguments: [
-    { name: 'failure', description: 'The failure details', required: true },
-  ],
+  name: "orqenix_post_test_failure",
+  description: "After a test failure, capture the lesson.",
+  arguments: [{ name: "failure", description: "The failure details", required: true }],
   render(args) {
     return fill(
       `A test just failed: {{failure}}
@@ -178,7 +168,7 @@ After you fix it:
    - How to prevent recurrence
 
 This builds the project's institutional memory of failure modes.`,
-      args
+      args,
     );
   },
 };

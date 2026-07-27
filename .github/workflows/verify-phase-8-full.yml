@@ -1,1 +1,109 @@
-name: verify-phase-8-fullon:  pull_request:    branches: [main, 'phase-8/**']  push:    branches: ['phase-8/**']  workflow_dispatch:permissions:  contents: readjobs:  verify:    name: Verify Phase 8 (${{ matrix.os }} / Node ${{ matrix.node }})    runs-on: ${{ matrix.os }}    timeout-minutes: 30    strategy:      fail-fast: false      matrix:        os: [ubuntu-latest, windows-latest, macos-latest]        node: ['22']    steps:      - uses: actions/checkout@v4      - uses: pnpm/action-setup@v4      - uses: actions/setup-node@v4        with:          node-version: ${{ matrix.node }}          cache: 'pnpm'      # GöÇGöÇ Ensure native build prerequisites (only needed if prebuilds fail) GöÇGöÇ      - name: Setup Python (for node-gyp fallback)        uses: actions/setup-python@v5        with:          python-version: '3.11'      - name: Install build tools (Linux)        if: matrix.os == 'ubuntu-latest'        run: sudo apt-get update && sudo apt-get install -y build-essential      # Windows: Visual Studio Build Tools come preinstalled on windows-latest.      # macOS: Xcode CLT preinstalled on macos-latest.      # GöÇGöÇ Dep-version sanity (golden rule) GöÇGöÇ      - name: Dependency version sanity        run: node scripts/verify/check-dep-versions.mjs      # GöÇGöÇ Install GöÇGöÇ      - name: Install        run: pnpm install      # GöÇGöÇ Verify lockfile integrity (compensates for no --frozen-lockfile) GöÇGöÇ      - name: Lockfile integrity        run: git diff --exit-code pnpm-lock.yaml      # GöÇGöÇ Verify native bindings load on this OS GöÇGöÇ      # Note: better-sqlite3 prebuilds may not exist for latest Node ABI on CI.      # If it fails, the remaining steps still run (typecheck, build are not      # blocked by SQLite, and test-gate handles SQLite-dependent test failures).      - name: Verify native bindings        continue-on-error: true        run: node scripts/verify/check-native-bindings.mjs --auto-rebuild      # GöÇGöÇ Add root node_modules/.bin to PATH (hoisted linker on CI creates      # .bin entries at root level only, not in workspace sub-packages) GöÇGöÇ      - name: Add root bin to PATH        shell: bash        run: echo "${{ github.workspace }}/node_modules/.bin" >> "$GITHUB_PATH"      # GöÇGöÇ Build all packages (generates dist/ for typecheck resolution and      # ensures tsc binary is discoverable on all platforms) GöÇGöÇ      # Note: --no-bail continues even if some packages fail (e.g., ui-primitives      # needs tailwindcss-animate which isn't hoisted on fresh CI).      - name: Build        continue-on-error: true        run: pnpm -r --no-bail run build      # GöÇGöÇ Typecheck (must be 100% for Phase 8 packages) GöÇGöÇ      # continue-on-error: true allows pre-existing failures (workbench, verification-loop)      # without blocking the overall Phase 8 pipeline.      - name: Typecheck        continue-on-error: true        run: pnpm -r run typecheck      # GöÇGöÇ Test (scoped to Phase 8 by default to avoid legacy noise) GöÇGöÇ      # Pre-existing: SQLite-dependent tests fail on CI due to better-sqlite3      # binding resolution in vitest context. Non-blocking for Phase 8.      - name: Test (Phase 8 scope)        continue-on-error: true        run: node scripts/verify/test-gate.mjs --phase-8-only --report      # GöÇGöÇ Stub-wiring (must be 100%) GöÇGöÇ      - name: Stub-wiring check        run: node scripts/verify/check-stub-wiring.mjs      # GöÇGöÇ Artifacts GöÇGöÇ      - name: Upload verify reports        if: always()        uses: actions/upload-artifact@v4        with:          name: verify-reports-${{ matrix.os }}          path: |            verify-report.json            test-report.json          if-no-files-found: ignore
+name: verify-phase-8-full
+
+on:
+  pull_request:
+    branches: [main, "phase-8/**"]
+  push:
+    branches: ["phase-8/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Phase 8 (${{ matrix.os }} / Node ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: ["22"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: "pnpm"
+
+      # â”€â”€ Ensure native build prerequisites (only needed if prebuilds fail) â”€â”€
+      - name: Setup Python (for node-gyp fallback)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      # Windows: Visual Studio Build Tools come preinstalled on windows-latest.
+      # macOS: Xcode CLT preinstalled on macos-latest.
+
+      # â”€â”€ Dep-version sanity (golden rule) â”€â”€
+      - name: Dependency version sanity
+        run: node scripts/verify/check-dep-versions.mjs
+
+      # â”€â”€ Install â”€â”€
+      - name: Install
+        run: pnpm install
+
+      # â”€â”€ Verify lockfile integrity (compensates for no --frozen-lockfile) â”€â”€
+      - name: Lockfile integrity
+        run: git diff --exit-code pnpm-lock.yaml
+
+      # â”€â”€ Verify native bindings load on this OS â”€â”€
+      # Note: better-sqlite3 prebuilds may not exist for latest Node ABI on CI.
+      # If it fails, the remaining steps still run (typecheck, build are not
+      # blocked by SQLite, and test-gate handles SQLite-dependent test failures).
+      - name: Verify native bindings
+        continue-on-error: true
+        run: node scripts/verify/check-native-bindings.mjs --auto-rebuild
+
+      # â”€â”€ Add root node_modules/.bin to PATH (hoisted linker on CI creates
+      # .bin entries at root level only, not in workspace sub-packages) â”€â”€
+      - name: Add root bin to PATH
+        shell: bash
+        run: echo "${{ github.workspace }}/node_modules/.bin" >> "$GITHUB_PATH"
+
+      # â”€â”€ Build all packages (generates dist/ for typecheck resolution and
+      # ensures tsc binary is discoverable on all platforms) â”€â”€
+      # Note: --no-bail continues even if some packages fail (e.g., ui-primitives
+      # needs tailwindcss-animate which isn't hoisted on fresh CI).
+      - name: Build
+        continue-on-error: true
+        run: pnpm -r --no-bail run build
+
+      # â”€â”€ Typecheck (must be 100% for Phase 8 packages) â”€â”€
+      # continue-on-error: true allows pre-existing failures (workbench, verification-loop)
+      # without blocking the overall Phase 8 pipeline.
+      - name: Typecheck
+        continue-on-error: true
+        run: pnpm -r run typecheck
+
+      # â”€â”€ Test (scoped to Phase 8 by default to avoid legacy noise) â”€â”€
+      # Pre-existing: SQLite-dependent tests fail on CI due to better-sqlite3
+      # binding resolution in vitest context. Non-blocking for Phase 8.
+      - name: Test (Phase 8 scope)
+        continue-on-error: true
+        run: node scripts/verify/test-gate.mjs --phase-8-only --report
+
+      # â”€â”€ Stub-wiring (must be 100%) â”€â”€
+      - name: Stub-wiring check
+        run: node scripts/verify/check-stub-wiring.mjs
+
+      # â”€â”€ Artifacts â”€â”€
+      - name: Upload verify reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-reports-${{ matrix.os }}
+          path: |
+            verify-report.json
+            test-report.json
+          if-no-files-found: ignore

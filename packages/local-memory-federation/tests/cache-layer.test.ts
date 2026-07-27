@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // Tests for CacheLayer
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { CacheLayer } from '../src/cache-layer';
-import type { CrossProjectQuery, FederationResult, ProjectId } from '../src/types';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { CacheLayer } from "../src/cache-layer";
+import type { CrossProjectQuery, FederationResult, ProjectId } from "../src/types";
 
-const PROJECT_A = 'blake3:aaaaaaaa00000000' as ProjectId;
-const PROJECT_B = 'blake3:bbbbbbbb00000000' as ProjectId;
+const PROJECT_A = "blake3:aaaaaaaa00000000" as ProjectId;
+const PROJECT_B = "blake3:bbbbbbbb00000000" as ProjectId;
 
-function makeQuery(query = 'auth'): CrossProjectQuery {
+function makeQuery(query = "auth"): CrossProjectQuery {
   return {
     query,
     limit: 20,
@@ -27,10 +27,10 @@ function makeResult(durationMs = 50): FederationResult {
   };
 }
 
-describe('CacheLayer', () => {
-  it('stores and retrieves results', () => {
+describe("CacheLayer", () => {
+  it("stores and retrieves results", () => {
     const cache = new CacheLayer({ ttlMs: 1000, maxSize: 10 });
-    const q = makeQuery('test');
+    const q = makeQuery("test");
     const r = makeResult(100);
 
     expect(cache.get(PROJECT_A, q)).toBeNull();
@@ -38,7 +38,7 @@ describe('CacheLayer', () => {
     expect(cache.get(PROJECT_A, q)).toEqual(r);
   });
 
-  it('returns null after TTL expires', () => {
+  it("returns null after TTL expires", () => {
     vi.useFakeTimers();
     const cache = new CacheLayer({ ttlMs: 1000, maxSize: 10 });
     const q = makeQuery();
@@ -52,9 +52,9 @@ describe('CacheLayer', () => {
     vi.useRealTimers();
   });
 
-  it('isolates cache by current project (no cross-project leakage)', () => {
+  it("isolates cache by current project (no cross-project leakage)", () => {
     const cache = new CacheLayer({ ttlMs: 60000, maxSize: 10 });
-    const q = makeQuery('shared-query');
+    const q = makeQuery("shared-query");
     const r = makeResult();
 
     cache.set(PROJECT_A, q, r);
@@ -64,64 +64,64 @@ describe('CacheLayer', () => {
     expect(cache.get(PROJECT_A, q)).toEqual(r);
   });
 
-  it('treats different queries as different keys', () => {
+  it("treats different queries as different keys", () => {
     const cache = new CacheLayer({ ttlMs: 60000, maxSize: 10 });
-    cache.set(PROJECT_A, makeQuery('auth'), makeResult(10));
-    cache.set(PROJECT_A, makeQuery('test'), makeResult(20));
+    cache.set(PROJECT_A, makeQuery("auth"), makeResult(10));
+    cache.set(PROJECT_A, makeQuery("test"), makeResult(20));
 
-    expect(cache.get(PROJECT_A, makeQuery('auth'))?.duration_ms).toBe(10);
-    expect(cache.get(PROJECT_A, makeQuery('test'))?.duration_ms).toBe(20);
+    expect(cache.get(PROJECT_A, makeQuery("auth"))?.duration_ms).toBe(10);
+    expect(cache.get(PROJECT_A, makeQuery("test"))?.duration_ms).toBe(20);
   });
 
-  it('evicts oldest entry when at capacity (LRU)', () => {
+  it("evicts oldest entry when at capacity (LRU)", () => {
     const cache = new CacheLayer({ ttlMs: 60000, maxSize: 2 });
-    cache.set(PROJECT_A, makeQuery('q1'), makeResult(1));
-    cache.set(PROJECT_A, makeQuery('q2'), makeResult(2));
-    cache.set(PROJECT_A, makeQuery('q3'), makeResult(3)); // evicts q1
+    cache.set(PROJECT_A, makeQuery("q1"), makeResult(1));
+    cache.set(PROJECT_A, makeQuery("q2"), makeResult(2));
+    cache.set(PROJECT_A, makeQuery("q3"), makeResult(3)); // evicts q1
 
     expect(cache.size()).toBe(2);
-    expect(cache.get(PROJECT_A, makeQuery('q1'))).toBeNull();
-    expect(cache.get(PROJECT_A, makeQuery('q2'))).not.toBeNull();
-    expect(cache.get(PROJECT_A, makeQuery('q3'))).not.toBeNull();
+    expect(cache.get(PROJECT_A, makeQuery("q1"))).toBeNull();
+    expect(cache.get(PROJECT_A, makeQuery("q2"))).not.toBeNull();
+    expect(cache.get(PROJECT_A, makeQuery("q3"))).not.toBeNull();
   });
 
-  it('promotes recently-accessed entries to most-recent (LRU)', () => {
+  it("promotes recently-accessed entries to most-recent (LRU)", () => {
     const cache = new CacheLayer({ ttlMs: 60000, maxSize: 2 });
-    cache.set(PROJECT_A, makeQuery('q1'), makeResult(1));
-    cache.set(PROJECT_A, makeQuery('q2'), makeResult(2));
+    cache.set(PROJECT_A, makeQuery("q1"), makeResult(1));
+    cache.set(PROJECT_A, makeQuery("q2"), makeResult(2));
 
     // Access q1 → moves to most-recent
-    cache.get(PROJECT_A, makeQuery('q1'));
+    cache.get(PROJECT_A, makeQuery("q1"));
 
     // Adding q3 should evict q2 (oldest), not q1
-    cache.set(PROJECT_A, makeQuery('q3'), makeResult(3));
+    cache.set(PROJECT_A, makeQuery("q3"), makeResult(3));
 
-    expect(cache.get(PROJECT_A, makeQuery('q1'))).not.toBeNull();
-    expect(cache.get(PROJECT_A, makeQuery('q2'))).toBeNull();
-    expect(cache.get(PROJECT_A, makeQuery('q3'))).not.toBeNull();
+    expect(cache.get(PROJECT_A, makeQuery("q1"))).not.toBeNull();
+    expect(cache.get(PROJECT_A, makeQuery("q2"))).toBeNull();
+    expect(cache.get(PROJECT_A, makeQuery("q3"))).not.toBeNull();
   });
 
-  it('clear() removes all entries', () => {
+  it("clear() removes all entries", () => {
     const cache = new CacheLayer({ ttlMs: 60000, maxSize: 10 });
-    cache.set(PROJECT_A, makeQuery('q1'), makeResult());
-    cache.set(PROJECT_A, makeQuery('q2'), makeResult());
+    cache.set(PROJECT_A, makeQuery("q1"), makeResult());
+    cache.set(PROJECT_A, makeQuery("q2"), makeResult());
     expect(cache.size()).toBe(2);
 
     cache.clear();
     expect(cache.size()).toBe(0);
   });
 
-  it('produces deterministic keys for equivalent queries', () => {
+  it("produces deterministic keys for equivalent queries", () => {
     const cache = new CacheLayer({ ttlMs: 60000, maxSize: 10 });
     const q1: CrossProjectQuery = {
-      query: 'auth',
-      kinds: ['decision', 'lesson'],
+      query: "auth",
+      kinds: ["decision", "lesson"],
       limit: 20,
       skipCache: false,
     };
     const q2: CrossProjectQuery = {
-      query: 'auth',
-      kinds: ['lesson', 'decision'], // different order
+      query: "auth",
+      kinds: ["lesson", "decision"], // different order
       limit: 20,
       skipCache: false,
     };

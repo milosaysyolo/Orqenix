@@ -4,24 +4,24 @@
 // JSON-RPC-style message protocol between Workbench (host) and plugin (sandbox).
 // Messages flow over stdin/stdout (newline-delimited JSON) per CR v8.0 Section 7.4.
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Message kinds
 // ─────────────────────────────────────────────────────────────────────────
 
 export type IpcMessageKind =
-  | 'handshake' // host → plugin: capability negotiation
-  | 'handshake_ack' // plugin → host: handshake confirmed
-  | 'invoke' // host → plugin: invoke a tool
-  | 'invoke_result' // plugin → host: tool result
-  | 'invoke_error' // plugin → host: tool error
-  | 'permission_request' // plugin → host: request to use a permission
-  | 'permission_response' // host → plugin: permission granted/denied
-  | 'log' // plugin → host: structured log line
-  | 'metrics' // plugin → host: resource usage report
-  | 'shutdown' // host → plugin: graceful shutdown request
-  | 'shutdown_ack'; // plugin → host: shutdown acknowledged
+  | "handshake" // host → plugin: capability negotiation
+  | "handshake_ack" // plugin → host: handshake confirmed
+  | "invoke" // host → plugin: invoke a tool
+  | "invoke_result" // plugin → host: tool result
+  | "invoke_error" // plugin → host: tool error
+  | "permission_request" // plugin → host: request to use a permission
+  | "permission_response" // host → plugin: permission granted/denied
+  | "log" // plugin → host: structured log line
+  | "metrics" // plugin → host: resource usage report
+  | "shutdown" // host → plugin: graceful shutdown request
+  | "shutdown_ack"; // plugin → host: shutdown acknowledged
 
 // ─────────────────────────────────────────────────────────────────────────
 // Base message envelope
@@ -29,7 +29,7 @@ export type IpcMessageKind =
 
 export interface IpcMessage {
   /** Protocol version (for forward/backward compat) */
-  v: '1.0';
+  v: "1.0";
   /** Message kind */
   kind: IpcMessageKind;
   /** Correlation ID linking request → response */
@@ -43,7 +43,7 @@ export interface IpcMessage {
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface IpcHandshakeMessage extends IpcMessage {
-  kind: 'handshake';
+  kind: "handshake";
   payload: {
     /** Granted permissions (plugin can only invoke these) */
     grantedPermissions: string[];
@@ -59,7 +59,7 @@ export interface IpcHandshakeMessage extends IpcMessage {
 }
 
 export interface IpcHandshakeAckMessage extends IpcMessage {
-  kind: 'handshake_ack';
+  kind: "handshake_ack";
   payload: {
     /** Plugin name + version (echoed for verification) */
     pluginName: string;
@@ -76,7 +76,7 @@ export interface IpcHandshakeAckMessage extends IpcMessage {
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface IpcRequestMessage extends IpcMessage {
-  kind: 'invoke';
+  kind: "invoke";
   payload: {
     toolName: string;
     input: unknown;
@@ -86,14 +86,14 @@ export interface IpcRequestMessage extends IpcMessage {
 }
 
 export interface IpcResponseMessage extends IpcMessage {
-  kind: 'invoke_result';
+  kind: "invoke_result";
   payload: {
     output: unknown;
   };
 }
 
 export interface IpcInvokeErrorMessage extends IpcMessage {
-  kind: 'invoke_error';
+  kind: "invoke_error";
   payload: {
     code: string;
     message: string;
@@ -106,7 +106,7 @@ export interface IpcInvokeErrorMessage extends IpcMessage {
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface IpcPermissionRequestMessage extends IpcMessage {
-  kind: 'permission_request';
+  kind: "permission_request";
   payload: {
     permission: string;
     reason?: string;
@@ -114,7 +114,7 @@ export interface IpcPermissionRequestMessage extends IpcMessage {
 }
 
 export interface IpcPermissionResponseMessage extends IpcMessage {
-  kind: 'permission_response';
+  kind: "permission_response";
   payload: {
     permission: string;
     granted: boolean;
@@ -127,16 +127,16 @@ export interface IpcPermissionResponseMessage extends IpcMessage {
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface IpcLogMessage extends IpcMessage {
-  kind: 'log';
+  kind: "log";
   payload: {
-    level: 'debug' | 'info' | 'warn' | 'error';
+    level: "debug" | "info" | "warn" | "error";
     message: string;
     attrs?: Record<string, unknown>;
   };
 }
 
 export interface IpcMetricsMessage extends IpcMessage {
-  kind: 'metrics';
+  kind: "metrics";
   payload: {
     cpuUsagePct: number;
     memoryUsageMb: number;
@@ -149,7 +149,7 @@ export interface IpcMetricsMessage extends IpcMessage {
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface IpcShutdownMessage extends IpcMessage {
-  kind: 'shutdown';
+  kind: "shutdown";
   payload: {
     /** Graceful shutdown deadline in ms */
     deadlineMs: number;
@@ -157,7 +157,7 @@ export interface IpcShutdownMessage extends IpcMessage {
 }
 
 export interface IpcShutdownAckMessage extends IpcMessage {
-  kind: 'shutdown_ack';
+  kind: "shutdown_ack";
   payload: Record<string, never>;
 }
 
@@ -166,19 +166,19 @@ export interface IpcShutdownAckMessage extends IpcMessage {
 // ─────────────────────────────────────────────────────────────────────────
 
 export const IpcMessageSchema = z.object({
-  v: z.literal('1.0'),
+  v: z.literal("1.0"),
   kind: z.enum([
-    'handshake',
-    'handshake_ack',
-    'invoke',
-    'invoke_result',
-    'invoke_error',
-    'permission_request',
-    'permission_response',
-    'log',
-    'metrics',
-    'shutdown',
-    'shutdown_ack',
+    "handshake",
+    "handshake_ack",
+    "invoke",
+    "invoke_result",
+    "invoke_error",
+    "permission_request",
+    "permission_response",
+    "log",
+    "metrics",
+    "shutdown",
+    "shutdown_ack",
   ]),
   id: z.string().min(1),
   ts: z.number().int().positive(),
@@ -191,7 +191,7 @@ export const IpcMessageSchema = z.object({
 
 /** Serialize a message to a newline-terminated JSON line */
 export function serializeMessage(msg: IpcMessage & { payload?: unknown }): string {
-  return JSON.stringify(msg) + '\n';
+  return JSON.stringify(msg) + "\n";
 }
 
 /** Parse a single JSON line into a validated IpcMessage */
@@ -216,9 +216,5 @@ export function parseMessage(line: string): (IpcMessage & { payload: unknown }) 
 
 /** Generate a correlation ID for request/response linking */
 export function generateMessageId(): string {
-  return (
-    Date.now().toString(36) +
-    '-' +
-    Math.random().toString(36).slice(2, 10)
-  );
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
 }

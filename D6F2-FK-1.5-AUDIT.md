@@ -87,6 +87,7 @@ grep: cross-spawn: No such file or directory (not present before FK-1.5)
 ## Phase 4: Verification
 
 ### 4.1 Build
+
 ```
 > @orqenix/local-node@0.6.0-phase-6 build
 > tsc -p tsconfig.json
@@ -95,6 +96,7 @@ grep: cross-spawn: No such file or directory (not present before FK-1.5)
 ```
 
 ### 4.2 Tests
+
 ```
 Test Files  6 passed (6)
      Tests  20 passed (20)
@@ -103,6 +105,7 @@ Test Files  6 passed (6)
 ```
 
 ### 4.3 CI skip path
+
 ```
 SKIP_E2E=1 vitest run --coverage
 ...
@@ -111,6 +114,7 @@ Test Files  5 passed (5)
 ```
 
 ### 4.4 Full orchestrator
+
 ```
 [verify-phase-6] PASS  G43   Cross-Transport Routing  (1942ms)
 ----------------------------------------------------------------

@@ -15,8 +15,8 @@ export interface SettingsPersistence {
   get(
     moduleId: string,
     settingPath: string,
-    level: 'session' | 'branch' | 'project' | 'user' | 'system',
-    hierarchyId: string | null
+    level: "session" | "branch" | "project" | "user" | "system",
+    hierarchyId: string | null,
   ): Promise<SettingsOverride | undefined>;
 
   /** Writes an override */
@@ -26,8 +26,8 @@ export interface SettingsPersistence {
   delete(
     moduleId: string,
     settingPath: string,
-    level: 'session' | 'branch' | 'project' | 'user' | 'system',
-    hierarchyId: string | null
+    level: "session" | "branch" | "project" | "user" | "system",
+    hierarchyId: string | null,
   ): Promise<void>;
 
   /** Lists all overrides (for export) */
@@ -47,29 +47,24 @@ export class InMemorySettingsPersistence implements SettingsPersistence {
   async get(
     moduleId: string,
     settingPath: string,
-    level: 'session' | 'branch' | 'project' | 'user' | 'system',
-    hierarchyId: string | null
+    level: "session" | "branch" | "project" | "user" | "system",
+    hierarchyId: string | null,
   ): Promise<SettingsOverride | undefined> {
     return this.overrides.get(this.key(moduleId, settingPath, level, hierarchyId));
   }
 
   async set(override: SettingsOverride): Promise<void> {
     this.overrides.set(
-      this.key(
-        override.moduleId,
-        override.settingPath,
-        override.level,
-        override.hierarchyId
-      ),
-      override
+      this.key(override.moduleId, override.settingPath, override.level, override.hierarchyId),
+      override,
     );
   }
 
   async delete(
     moduleId: string,
     settingPath: string,
-    level: 'session' | 'branch' | 'project' | 'user' | 'system',
-    hierarchyId: string | null
+    level: "session" | "branch" | "project" | "user" | "system",
+    hierarchyId: string | null,
   ): Promise<void> {
     this.overrides.delete(this.key(moduleId, settingPath, level, hierarchyId));
   }
@@ -79,9 +74,7 @@ export class InMemorySettingsPersistence implements SettingsPersistence {
   }
 
   async listByModule(moduleId: string): Promise<SettingsOverride[]> {
-    return Array.from(this.overrides.values()).filter(
-      (o) => o.moduleId === moduleId
-    );
+    return Array.from(this.overrides.values()).filter((o) => o.moduleId === moduleId);
   }
 
   /** Clears all overrides (for tests) */
@@ -93,8 +86,8 @@ export class InMemorySettingsPersistence implements SettingsPersistence {
     moduleId: string,
     settingPath: string,
     level: string,
-    hierarchyId: string | null
+    hierarchyId: string | null,
   ): string {
-    return `${moduleId}::${settingPath}::${level}::${hierarchyId ?? '_'}`;
+    return `${moduleId}::${settingPath}::${level}::${hierarchyId ?? "_"}`;
   }
 }

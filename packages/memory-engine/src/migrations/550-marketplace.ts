@@ -3,13 +3,13 @@
 //
 // Per CR v8.0 Section 6.8. Wired into memory-engine migrations.
 
-import { blake3 } from '@noble/hashes/blake3';
-import type { Migration } from './500-hierarchy';
+import { blake3 } from "@noble/hashes/blake3";
+import type { Migration } from "./500-hierarchy";
 
-function checksum(up: string, down = ''): string {
-  const h = blake3(new TextEncoder().encode(up + '\n' + down));
-  let s = '';
-  for (let i = 0; i < h.length; i++) s += (h[i] as number).toString(16).padStart(2, '0');
+function checksum(up: string, down = ""): string {
+  const h = blake3(new TextEncoder().encode(up + "\n" + down));
+  let s = "";
+  for (let i = 0; i < h.length; i++) s += (h[i] as number).toString(16).padStart(2, "0");
   return s;
 }
 
@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS marketplace_imports;
 export const MARKETPLACE_MIGRATIONS: Migration[] = [
   {
     id: 550,
-    name: 'marketplace-state',
+    name: "marketplace-state",
     up: MIGRATION_550_UP,
     down: MIGRATION_550_DOWN,
     checksum: checksum(MIGRATION_550_UP, MIGRATION_550_DOWN),

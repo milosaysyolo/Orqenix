@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // Plugin detail , full view of a plugin including manifest + conformance + stats
 
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 import {
   Card,
   CardHeader,
@@ -15,12 +15,12 @@ import {
   TabsTrigger,
   TabsContent,
   Separator,
-} from '@orqenix/ui-primitives';
+} from "@orqenix/ui-primitives";
 
 interface ConformanceCheckResult {
   id: string;
   description: string;
-  status: 'pass' | 'fail' | 'warn';
+  status: "pass" | "fail" | "warn";
   message?: string;
 }
 
@@ -48,8 +48,8 @@ export interface PluginDetailProps {
 }
 
 export function PluginDetail({ plugin }: PluginDetailProps) {
-  const conformancePassed = plugin.conformance.filter((c) => c.status === 'pass').length;
-  const conformanceFailed = plugin.conformance.filter((c) => c.status === 'fail').length;
+  const conformancePassed = plugin.conformance.filter((c) => c.status === "pass").length;
+  const conformanceFailed = plugin.conformance.filter((c) => c.status === "fail").length;
 
   return (
     <div className="space-y-4">
@@ -59,7 +59,7 @@ export function PluginDetail({ plugin }: PluginDetailProps) {
             {plugin.name}
             <Badge variant="secondary">v{plugin.version}</Badge>
             <Badge variant="outline">{plugin.kind}</Badge>
-            <Badge variant={plugin.state === 'active' ? 'default' : 'secondary'}>
+            <Badge variant={plugin.state === "active" ? "default" : "secondary"}>
               {plugin.state}
             </Badge>
           </CardTitle>
@@ -89,13 +89,18 @@ export function PluginDetail({ plugin }: PluginDetailProps) {
               />
               <DetailRow
                 label="Compatible platforms"
-                value={plugin.external_agent_compat.join(', ') || 'none'}
+                value={plugin.external_agent_compat.join(", ") || "none"}
               />
               {plugin.homepage && (
                 <DetailRow
                   label="Homepage"
                   value={
-                    <a href={plugin.homepage} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={plugin.homepage}
+                      className="text-primary hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {plugin.homepage}
                     </a>
                   }
@@ -126,14 +131,18 @@ export function PluginDetail({ plugin }: PluginDetailProps) {
                     <div className="flex items-center gap-2">
                       <span
                         className={
-                          check.status === 'pass'
-                            ? 'text-status-success'
-                            : check.status === 'fail'
-                              ? 'text-status-danger'
-                              : 'text-orqenix-amber'
+                          check.status === "pass"
+                            ? "text-status-success"
+                            : check.status === "fail"
+                              ? "text-status-danger"
+                              : "text-orqenix-amber"
                         }
                       >
-                        {check.status === 'pass' ? '\u2713' : check.status === 'fail' ? '\u2717' : '\u26A0'}
+                        {check.status === "pass"
+                          ? "\u2713"
+                          : check.status === "fail"
+                            ? "\u2717"
+                            : "\u26A0"}
                       </span>
                       <span>{check.description}</span>
                     </div>
@@ -154,7 +163,7 @@ export function PluginDetail({ plugin }: PluginDetailProps) {
                 value={
                   plugin.lastActivatedAt
                     ? new Date(plugin.lastActivatedAt).toLocaleString()
-                    : 'never'
+                    : "never"
                 }
               />
               <Separator />

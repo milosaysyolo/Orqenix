@@ -37,10 +37,9 @@ export class PluginLifecycle {
   constructor(options: PluginLifecycleOptions = {}) {
     this.kindRegistry = options.kindRegistry ?? new PluginKindRegistry();
     this.registry = options.registry ?? new PluginRegistry();
-    this.loader =
-      options.loader ?? new PluginLoader({ kindRegistry: this.kindRegistry });
+    this.loader = options.loader ?? new PluginLoader({ kindRegistry: this.kindRegistry });
     this.audit = options.auditWriter ?? new NoopPluginAuditWriter();
-    this.actor = options.actor ?? 'system';
+    this.actor = options.actor ?? "system";
   }
 
   /**
@@ -52,29 +51,25 @@ export class PluginLifecycle {
     try {
       discovery = await this.loader.load(packagePath);
     } catch (err) {
-      await this.auditEvent('plugin.install_failed', {
+      await this.auditEvent("plugin.install_failed", {
         packagePath,
         error: (err as Error).message,
       });
-      throw new PluginInstallFailedError(
-        packagePath,
-        (err as Error).message,
-        err
-      );
+      throw new PluginInstallFailedError(packagePath, (err as Error).message, err);
     }
 
     if (!discovery.isValidPlugin) {
-      await this.auditEvent('plugin.install_failed', {
+      await this.auditEvent("plugin.install_failed", {
         packagePath,
         issues: discovery.issues,
       });
       throw new PluginInstallFailedError(
         packagePath,
-        `Manifest invalid: ${discovery.issues.join('; ')}`
+        `Manifest invalid: ${discovery.issues.join("; ")}`,
       );
     }
 
-    await this.auditEvent('plugin.manifest_validated', {
+    await this.auditEvent("plugin.manifest_validated", {
       name: discovery.csf.name,
       version: discovery.csf.version,
       kind: discovery.csf.kind,
@@ -87,14 +82,14 @@ export class PluginLifecycle {
       try {
         await handler.onInstall(discovery.csf, discovery.packagePath);
       } catch (err) {
-        await this.auditEvent('plugin.install_failed', {
+        await this.auditEvent("plugin.install_failed", {
           name: discovery.csf.name,
           error: (err as Error).message,
         });
         throw new PluginInstallFailedError(
           discovery.csf.name,
           `onInstall hook failed: ${(err as Error).message}`,
-          err
+          err,
         );
       }
     }
@@ -102,7 +97,7 @@ export class PluginLifecycle {
     // Register
     const entry = await this.registry.register(discovery);
 
-    await this.auditEvent('plugin.installed', {
+    await this.auditEvent("plugin.installed", {
       name: entry.csf.name,
       version: entry.csf.version,
       kind: entry.csf.kind,
@@ -116,9 +111,9 @@ export class PluginLifecycle {
    * Marks a plugin as configured after user reviews settings.
    */
   async configure(name: string): Promise<void> {
-    await this.registry.setState(name, 'configured');
+    await this.registry.setState(name, "configured");
     const entry = this.registry.get(name);
-    await this.auditEvent('plugin.configured', {
+    await this.auditEvent("plugin.configured", {
       name: entry.csf.name,
       version: entry.csf.version,
     });
@@ -138,20 +133,20 @@ export class PluginLifecycle {
       try {
         await handler.onActivate(entry.csf);
       } catch (err) {
-        await this.auditEvent('plugin.activate_failed', {
+        await this.auditEvent("plugin.activate_failed", {
           name: entry.csf.name,
           error: (err as Error).message,
         });
         throw new PluginActivateFailedError(
           entry.csf.name,
           `onActivate hook failed: ${(err as Error).message}`,
-          err
+          err,
         );
       }
     }
 
-    await this.registry.setState(name, 'active');
-    await this.auditEvent('plugin.activated', {
+    await this.registry.setState(name, "active");
+    await this.auditEvent("plugin.activated", {
       name: entry.csf.name,
       version: entry.csf.version,
     });
@@ -172,15 +167,15 @@ export class PluginLifecycle {
         await handler.onDeactivate(entry.csf);
       } catch (err) {
         // Deactivate failures are logged but don't block transition
-        await this.auditEvent('plugin.deactivated', {
+        await this.auditEvent("plugin.deactivated", {
           name: entry.csf.name,
           warning: `onDeactivate hook error: ${(err as Error).message}`,
         });
       }
     }
 
-    await this.registry.setState(name, 'inactive');
-    await this.auditEvent('plugin.deactivated', {
+    await this.registry.setState(name, "inactive");
+    await this.auditEvent("plugin.deactivated", {
       name: entry.csf.name,
       version: entry.csf.version,
     });
@@ -194,12 +189,12 @@ export class PluginLifecycle {
     const entry = this.registry.find(name);
     if (!entry) return; // idempotent
 
-    if (entry.state === 'active') {
+    if (entry.state === "active") {
       await this.deactivate(name);
     }
 
     await this.registry.unregister(name);
-    await this.auditEvent('plugin.uninstalled', {
+    await this.auditEvent("plugin.uninstalled", {
       name: entry.csf.name,
       version: entry.csf.version,
     });
@@ -210,7 +205,7 @@ export class PluginLifecycle {
    */
   async update(name: string, newPackagePath: string): Promise<RegisteredPlugin> {
     const oldEntry = this.registry.get(name);
-    const wasActive = oldEntry.state === 'active';
+    const wasActive = oldEntry.state === "active";
 
     if (wasActive) {
       await this.deactivate(name);
@@ -220,18 +215,14 @@ export class PluginLifecycle {
     if (!discovery.isValidPlugin) {
       throw new PluginInstallFailedError(
         name,
-        `Update manifest invalid: ${discovery.issues.join('; ')}`
+        `Update manifest invalid: ${discovery.issues.join("; ")}`,
       );
     }
 
     const oldVersion = oldEntry.csf.version;
-    const updated = await this.registry.update(
-      name,
-      discovery.csf,
-      discovery.packagePath
-    );
+    const updated = await this.registry.update(name, discovery.csf, discovery.packagePath);
 
-    await this.auditEvent('plugin.updated', {
+    await this.auditEvent("plugin.updated", {
       name,
       oldVersion,
       newVersion: discovery.csf.version,
@@ -250,8 +241,8 @@ export class PluginLifecycle {
   }
 
   private async auditEvent(
-    kind: Parameters<PluginAuditWriter['append']>[0]['kind'],
-    payload: Record<string, unknown>
+    kind: Parameters<PluginAuditWriter["append"]>[0]["kind"],
+    payload: Record<string, unknown>,
   ): Promise<void> {
     await this.audit.append({
       kind,
