@@ -42,6 +42,7 @@ export default defineConfig({
     root: rootDir,
     retry: 2,
     include: ["packages/*/test/**/*.test.ts", "packages/*/tests/**/*.test.ts", "tests/**/*.test.ts"],
+    exclude: ["tests/merge-verify/**", "scripts/cleanup/**"],
     reporters: ["default", resolve(rootDir, "scripts/vitest-charter-reporter.ts")],
     coverage: {
       provider: "v8",

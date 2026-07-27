@@ -9,7 +9,7 @@ const workspaceRoot = resolve(import.meta.dirname);
 
 export default defineConfig({
   test: {
-    setupFiles: ['./vitest.setup.native-mocks.ts'],
+    setupFiles: [resolve(import.meta.dirname, './vitest.setup.native-mocks.ts')],
     pool: 'forks',
     poolOptions: {
       forks: {
