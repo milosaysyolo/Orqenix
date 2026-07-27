@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { describe, it, expect } from "vitest";
 import { KnowledgeQueryEngine } from "./index.js";
 
@@ -13,7 +14,7 @@ const stubKB = (kind: string) => ({
       kind: "function",
     },
   ],
-  semanticSearch: async (_topK?: number) => [
+  listByType: async (_type: string, _scope: string, _limit?: number) => [
     {
       id: `${kind}-1`,
       title: "title",

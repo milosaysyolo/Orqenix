@@ -1,135 +1,72 @@
 // SPDX-License-Identifier: Apache-2.0
-// Settings API , resolve + update + export
+// Phase 3: wired to @orqenix/settings-registry
 //
-// Bridges Workbench Settings UI to @orqenix/settings-registry.
-// D8.α.6 wires the SQLite-backed persistence; D8.α.5 provides the API shape.
+// GET  → returns all settings groups resolved through the real registry
+// POST → update or reset a setting at the 'project' layer
 
-import { NextResponse } from "next/server";
+export const dynamic = 'force-dynamic';
 
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
+import {
+  getAllSettingsGroups,
+  updateSetting,
+  revertSetting,
+} from '@/lib/engine-init';
 
-/**
- * GET /api/settings
- *   ?action=resolve&moduleId=...&path=...&projectId=...   → resolve a setting
- *   ?action=list                                          → list all contracts
- *   ?action=export&level=all&format=yaml                  → export settings
- */
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const action = url.searchParams.get("action") ?? "list";
-
+export async function GET(): Promise<Response> {
   try {
-    // D8.α.6 wires the shared registry singleton backed by SQLite:
-    //   const registry = getSettingsRegistry();
-    //   await bootstrapSettings(registry);  (or modules self-register)
-
-    switch (action) {
-      case "list": {
-        // D8.α.5 stub: returns the static contract catalog shape
-        return NextResponse.json(
-          {
-            contracts: [],
-            note: "Settings registry singleton wires in D8.α.6 (SQLite-backed persistence)",
-          },
-          { status: 200, headers: { "Cache-Control": "no-store" } },
-        );
-      }
-
-      case "resolve": {
-        const moduleId = url.searchParams.get("moduleId");
-        const path = url.searchParams.get("path");
-        if (!moduleId || !path) {
-          return NextResponse.json(
-            { error: "resolve requires moduleId and path params" },
-            { status: 400 },
-          );
-        }
-        // D8.α.6: const resolved = await registry.resolve(moduleId, path, ctx);
-        return NextResponse.json(
-          {
-            moduleId,
-            path,
-            note: "Resolution wires in D8.α.6",
-          },
-          { status: 200 },
-        );
-      }
-
-      case "export": {
-        const level = url.searchParams.get("level") ?? "all";
-        const format = url.searchParams.get("format") ?? "yaml";
-        // D8.α.6: const data = await exportSettings(registry, { level, format });
-        return NextResponse.json(
-          {
-            level,
-            format,
-            note: "Export wires in D8.α.6",
-          },
-          { status: 200 },
-        );
-      }
-
-      default:
-        return NextResponse.json({ error: `Unknown action '${action}'` }, { status: 400 });
-    }
+    const groups = await getAllSettingsGroups();
+    return Response.json({ groups });
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    console.error('[settings/GET]', err);
+    return Response.json(
+      { error: 'Failed to resolve settings' },
+      { status: 500 }
+    );
   }
 }
 
-/**
- * POST /api/settings
- *   Body: { action: 'update' | 'revert' | 'import', ... }
- */
-export async function POST(req: Request) {
-  let body: {
-    action?: string;
-    moduleId?: string;
-    path?: string;
-    value?: unknown;
-    level?: string;
-    hierarchyId?: string;
-    serialized?: string;
-    mode?: "merge" | "replace";
-  };
+export async function POST(req: Request): Promise<Response> {
   try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-  }
+    const body = (await req.json().catch(() => ({}))) as {
+      action?: string;
+      moduleId?: unknown;
+      key?: unknown;
+      value?: unknown;
+    };
 
-  const { action } = body;
-  if (!action) {
-    return NextResponse.json({ error: "Missing required field: action" }, { status: 400 });
-  }
+    if (typeof body.moduleId !== 'string' || typeof body.key !== 'string') {
+      return Response.json(
+        { error: 'moduleId and key required as strings' },
+        { status: 400 }
+      );
+    }
 
-  const validActions = ["update", "revert", "import"];
-  if (!validActions.includes(action)) {
-    return NextResponse.json(
-      { error: `Invalid action '${action}'. Must be one of: ${validActions.join(", ")}` },
-      { status: 400 },
-    );
-  }
-
-  try {
-    // D8.α.6 wires the actual registry operations:
-    //
-    //   case 'update': await registry.update(body.moduleId, body.path, body.value,
-    //                    { level: body.level, hierarchyId: body.hierarchyId });
-    //   case 'revert': await registry.revert(body.moduleId, body.path,
-    //                    { level: body.level, hierarchyId: body.hierarchyId });
-    //   case 'import': await importSettings(registry, body.serialized, { mode: body.mode });
-
-    return NextResponse.json(
-      {
+    if (body.action === 'update') {
+      await updateSetting(body.moduleId, body.key, body.value);
+      return Response.json({
         ok: true,
-        action,
-        note: "Settings mutation wires in D8.α.6 (SQLite persistence + hot-reload)",
-      },
-      { status: 200 },
-    );
+        moduleId: body.moduleId,
+        key: body.key,
+        value: body.value,
+      });
+    }
+
+    if (body.action === 'reset') {
+      await revertSetting(body.moduleId, body.key);
+      return Response.json({
+        ok: true,
+        moduleId: body.moduleId,
+        key: body.key,
+        reset: true,
+      });
+    }
+
+    return Response.json({ error: 'unknown action' }, { status: 400 });
   } catch (err) {
-    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
+    console.error('[settings/POST]', err);
+    return Response.json(
+      { error: 'Failed to update setting' },
+      { status: 500 }
+    );
   }
 }

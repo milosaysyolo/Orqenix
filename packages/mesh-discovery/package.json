@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mesh-discovery",
-  "version": "0.6.1",
+  "version": "0.9.0",
   "description": "Mesh discovery for Orqenix Phase 6: mDNS local LAN default, explicit bootstrap.yaml, typed event lifecycle. No DHT, no public bootstrap by default.",
   "type": "module",
   "license": "Apache-2.0",
@@ -24,11 +24,10 @@
     "gate:G39": "vitest run test/G39-gate-wrapper.test.ts --reporter verbose",
     "lint:no-dht-no-relay": "tsx ../../scripts/lint/no-dht-no-relay.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@orqenix/mesh-transport-core": "workspace:*",
-    "@orqenix/mesh-transport-libp2p": "workspace:*",
     "@libp2p/mdns": "^12.0.0",
     "@multiformats/multiaddr": "^12.3.0",
     "yaml": "^2.5.0"

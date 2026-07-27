@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mesh-transport-core",
-  "version": "0.6.0",
+  "version": "0.9.0",
   "description": "Transport-agnostic foundation for the Orqenix mesh: MeshTransport interface, canonical envelope, registry, lifecycle, and loopback reference transport.",
   "type": "module",
   "license": "Apache-2.0",
@@ -21,11 +21,11 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "vitest run --coverage",
+    "test": "vitest run",
     "test:watch": "vitest",
     "gate:G36": "tsx ../../scripts/gates/G36-transport-abstraction.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "msgpackr": "^1.11.0",

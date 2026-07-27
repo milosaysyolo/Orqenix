@@ -80,7 +80,7 @@ describe("dispatch", () => {
   it("version returns Phase 5 version", async () => {
     const r = await dispatch(ctx.ctx, parseArgs(["version"]));
     expect(r.exitCode).toBe(0);
-    expect(r.output).toContain("0.5.0-phase-5");
+    expect(r.output).toContain("0.9.0");
   });
 
   it("scope info returns context", async () => {

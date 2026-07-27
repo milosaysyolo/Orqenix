@@ -4,14 +4,16 @@
 // Coordinates the 5-phase lifecycle: install → configure → activate →
 // deactivate → uninstall. Per CR v8.0 Section 7.3.
 
-import type { CanonicalSkillFormat } from "./csf-schema";
-import type { PluginDiscoveryResult, RegisteredPlugin } from "./types";
-import { PluginRegistry } from "./plugin-registry";
-import { PluginLoader } from "./plugin-loader";
-import { PluginKindRegistry } from "./kinds/registry";
-import type { PluginAuditWriter } from "./audit-kinds";
-import { NoopPluginAuditWriter } from "./audit-kinds";
-import { PluginInstallFailedError, PluginActivateFailedError } from "./errors";
+import type { PluginDiscoveryResult, RegisteredPlugin } from './types';
+import { PluginRegistry } from './plugin-registry';
+import { PluginLoader } from './plugin-loader';
+import { PluginKindRegistry } from './kinds/registry';
+import type { PluginAuditWriter } from './audit-kinds';
+import { NoopPluginAuditWriter } from './audit-kinds';
+import {
+  PluginInstallFailedError,
+  PluginActivateFailedError,
+} from './errors';
 
 export interface PluginLifecycleOptions {
   registry?: PluginRegistry;

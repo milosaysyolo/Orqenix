@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mesh-transport-http",
-  "version": "0.6.1",
+  "version": "0.9.0",
   "description": "HTTP MeshTransport for Orqenix Phase 6: POST /orqenix/mesh/v1/rpc with msgpack envelopes, dedup cache, bounded retry, and clean teardown.",
   "type": "module",
   "license": "Apache-2.0",
@@ -24,7 +24,7 @@
     "test": "vitest run --coverage",
     "gate:G37": "vitest run test/G37-gate-wrapper.test.ts --reporter verbose",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@orqenix/mesh-transport-core": "workspace:*",
@@ -32,7 +32,6 @@
     "undici": "^6.20.0"
   },
   "devDependencies": {
-    "@orqenix/transport-security": "workspace:*",
     "@types/node": "^22.7.0",
     "@vitest/coverage-v8": "^2.1.0",
     "tsx": "^4.19.0",

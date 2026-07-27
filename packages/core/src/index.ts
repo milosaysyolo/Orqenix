@@ -33,5 +33,5 @@ export * from "./errors.js";
 export * from "./branded-types.js";
 
 export const ORQENIX_VERSION = "0.2.0-dev";
-export const ORQENIX_CORE_VERSION = "0.5.0-phase-5" as const;
+export const ORQENIX_CORE_VERSION = "0.9.0" as const;
 export const ORQENIX_PHASE = "phase-5" as const;

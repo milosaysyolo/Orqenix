@@ -23,8 +23,8 @@
 
 <p align="center">
   <a href="https://github.com/milosaysyolo/Orqenix/discussions"><img alt="Discussions" src="https://img.shields.io/github/discussions/milosaysyolo/Orqenix?logo=github" /></a>
-  <a href="<!-- TBD: discord-invite -->"><img alt="Discord" src="https://img.shields.io/badge/Discord-join%20waitlist-5865F2?logo=discord&logoColor=white" /></a>
-  <a href="https://x.com/<!-- TBD: twitter-handle -->"><img alt="X / Twitter" src="https://img.shields.io/badge/X-follow-000000?logo=x&logoColor=white" /></a>
+  <a href="#" title="Coming soon"><img alt="Discord" src="https://img.shields.io/badge/Discord-join%20waitlist-5865F2?logo=discord&logoColor=white" /></a>
+  <a href="#" title="Coming soon"><img alt="X / Twitter" src="https://img.shields.io/badge/X-follow-000000?logo=x&logoColor=white" /></a>
   <a href="https://github.com/milosaysyolo/Orqenix/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/milosaysyolo/Orqenix?style=social" /></a>
 </p>
 
@@ -1091,6 +1091,7 @@ flowchart TB
 | Audit logs are append-only. | Debuggability and accountability require immutable history. |
 | Plugin installs require policy. | Marketplace and supply-chain risk must be bounded. |
 | Learning promotion requires verification. | Self-learning without verification creates drift. |
+| Vulnerability reporting must have a clear path. | See [SECURITY.md](./SECURITY.md) for the disclosure process. |
 
 ---
 

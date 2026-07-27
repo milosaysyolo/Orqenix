@@ -6,7 +6,10 @@
     "composite": true,
     "module": "Node16",
     "moduleResolution": "Node16",
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts"
+  ]
 }

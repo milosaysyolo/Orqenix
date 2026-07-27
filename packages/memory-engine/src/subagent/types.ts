@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/memory-engine , Subagent types
 
-import type { MemoryEntry } from "../store/types";
-
 /** Anti-drift constraints for subagent execution (CR v8.0 Section 5.1) */
 export interface SubagentConstraints {
   maxSteps: number; // default 5

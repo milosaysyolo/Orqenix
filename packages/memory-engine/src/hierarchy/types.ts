@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // @orqenix/memory-engine , Hierarchy engine types
 
-import type { KbKind, MemoryEntry, SearchResult, ProtectionFlags } from "../store/types";
+import type { KbKind, SearchResult } from '../store/types';
 
 /** Level boost factors (CR v8.0 Section 4.4, configurable) */
 export interface LevelBoosts {

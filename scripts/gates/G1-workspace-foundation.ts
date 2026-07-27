@@ -144,7 +144,7 @@ class G1WorkspaceFoundation extends GateRunner {
         spec.criteria.find((c) => c.id === "G1.5")?.description ??
           "Phase 4 plugin-compress-input tests",
         () => {
-          execSync("pnpm --filter @orqenix/plugin-compress-input test", {
+          execSync("pnpm --filter @orqenix/plugin-compression test", {
             cwd: REPO_ROOT,
             stdio: "pipe",
             timeout: 30000,

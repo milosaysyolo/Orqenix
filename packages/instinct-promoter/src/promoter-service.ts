@@ -4,16 +4,12 @@
 // Coordinates candidate review: lists ranked candidates, enriches with redacted
 // samples, executes review decisions. On Promote, delegates to skill-genesis
 
-import type { Database } from "better-sqlite3";
-import { CandidateStore, type IDetector } from "@orqenix/self-learning-detection";
-import { Observer } from "@orqenix/self-learning-observer";
-import { SkillGenesis } from "@orqenix/skill-genesis";
-import {
-  type PromoterCandidate,
-  type ObservationSample,
-  type ReviewDecision,
-  type ReviewResult,
-} from "./types";
+import type { Database } from 'better-sqlite3';
+import { CandidateStore, type IDetector, type InstinctCandidate } from '@orqenix/self-learning-detection';
+import { Observer, DEFAULT_GOVERNANCE } from '@orqenix/self-learning-observer';
+import type { SelfLearningGovernance, ObservationEvent } from '@orqenix/self-learning-observer';
+import { SkillGenesis } from '@orqenix/skill-genesis';
+import {  type PromoterCandidate,  type ObservationSample,  type ReviewDecision,  type ReviewResult,} from './types';
 
 /** Audit writer for promoter events */
 export interface PromoterAuditWriter {
@@ -45,7 +41,8 @@ export class PromoterService {
   private readonly observer: Observer;
   private readonly skillGenesis: SkillGenesis;
   private readonly audit: PromoterAuditWriter;
-  private readonly detector?: IDetector;
+  private readonly governance: SelfLearningGovernance;
+  private iterationResults: string[][] = [];
 
   constructor(options: PromoterServiceOptions) {
     this.db = options.db;
@@ -53,7 +50,51 @@ export class PromoterService {
     this.observer = options.observer ?? new Observer({ db: this.db });
     this.skillGenesis = options.skillGenesis ?? new SkillGenesis({ db: this.db });
     this.audit = options.audit ?? new NoopPromoterAuditWriter();
-    if (options.detector) this.detector = options.detector;
+    this.governance = options.observer?.governance ?? DEFAULT_GOVERNANCE;
+  }
+
+  // ─── Convergence ─────────────────────────────────────────────────────
+
+  /**
+   * Records the pattern hashes from one loop iteration's candidate set.
+   * Used by checkConvergence to detect when results have stabilised.
+   */
+  recordIterationResult(patternHashes: string[]): void {
+    this.iterationResults.push(patternHashes);
+    // Keep only the window we need
+    if (this.iterationResults.length > this.governance.convergenceWindow) {
+      this.iterationResults = this.iterationResults.slice(
+        -this.governance.convergenceWindow
+      );
+    }
+  }
+
+  /** Returns true if the last N iteration results are identical */
+  checkConvergence(): boolean {
+    if (this.iterationResults.length < this.governance.convergenceWindow) {
+      return false;
+    }
+    const window = this.iterationResults.slice(-this.governance.convergenceWindow);
+    const first = JSON.stringify(window[0]);
+    return window.every((r) => JSON.stringify(r) === first);
+  }
+
+  /** Resets convergence tracking (e.g. new session / config change) */
+  resetConvergenceTracking(): void {
+    this.iterationResults = [];
+  }
+
+  /** Returns convergence status snapshot */
+  getConvergenceStatus(): {
+    windowSize: number;
+    recordedIterations: number;
+    converged: boolean;
+  } {
+    return {
+      windowSize: this.governance.convergenceWindow,
+      recordedIterations: this.iterationResults.length,
+      converged: this.checkConvergence(),
+    };
   }
 
   /**
@@ -61,8 +102,8 @@ export class PromoterService {
    * redacted observation samples.
    */
   async listForReview(projectId: string, limit = 50): Promise<PromoterCandidate[]> {
-    const candidates = this.candidateStore.list(projectId, "detected", limit);
-    return candidates.map((c) => {
+    const candidates = this.candidateStore.list(projectId, 'detected', limit);
+    return candidates.map((c: InstinctCandidate) => {
       const sampleIds = JSON.parse(c.sample_observation_ids) as string[];
       const samples = this.fetchSamples(projectId, sampleIds);
       const estTimeSavedPerWeekMin = this.estimateWeeklySavings(c.observation_count, samples);
@@ -160,7 +201,7 @@ export class PromoterService {
   private fetchSamples(projectId: string, ids: string[]): ObservationSample[] {
     const samples: ObservationSample[] = [];
     const events = this.observer.query({ projectId, limit: 1000 });
-    const byId = new Map(events.map((e) => [e.id, e]));
+    const byId = new Map(events.map((e: ObservationEvent) => [e.id, e]));
     for (const id of ids.slice(0, 5)) {
       const e = byId.get(id);
       if (!e) continue;

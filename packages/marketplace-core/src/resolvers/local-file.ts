@@ -3,11 +3,15 @@
 //
 // Resolves plugins from a local filesystem directory (development mode).
 
-import { readFile, readdir } from "node:fs/promises";
-import { join } from "node:path";
-import { existsSync } from "node:fs";
-import type { RegistryResolver, PluginMetadata, PluginTarball } from "../registry-resolver";
-import type { PluginListing, SearchFilters, RegistrySource } from "../types";
+import { readFile, readdir } from 'node:fs/promises';
+import { join, resolve, sep } from 'node:path';
+import { existsSync } from 'node:fs';
+import type {
+  RegistryResolver,
+  PluginMetadata,
+  PluginTarball,
+} from '../registry-resolver';
+import type { PluginListing, SearchFilters, RegistrySource } from '../types';
 
 export interface LocalFileResolverOptions {
   /** Directory to scan for plugins (default cwd/plugins) */
@@ -68,8 +72,12 @@ export class LocalFileResolver implements RegistryResolver {
   }
 
   async fetch(packageRef: string): Promise<PluginMetadata> {
-    const dir = join(this.pluginsDir, packageRef.replace("@", "").replace("/", "-"));
-    const pkgPath = join(dir, "package.json");
+    const safeRef = packageRef.replace('@', '').replace(/[\\/]+/g, '-');
+    const dir = resolve(this.pluginsDir, safeRef);
+    if (!dir.startsWith(resolve(this.pluginsDir) + sep)) {
+      throw new Error(`local-file: invalid package ref ${packageRef}`);
+    }
+    const pkgPath = join(dir, 'package.json');
     if (!existsSync(pkgPath)) {
       throw new Error(`local-file: plugin ${packageRef} not found at ${dir}`);
     }
@@ -90,7 +98,11 @@ export class LocalFileResolver implements RegistryResolver {
   }
 
   async download(packageRef: string): Promise<PluginTarball> {
-    const dir = join(this.pluginsDir, packageRef.replace("@", "").replace("/", "-"));
-    return { extractedPath: dir, hash: "" };
+    const safeRef = packageRef.replace('@', '').replace(/[\\/]+/g, '-');
+    const dir = resolve(this.pluginsDir, safeRef);
+    if (!dir.startsWith(resolve(this.pluginsDir) + sep)) {
+      throw new Error(`local-file: invalid package ref ${packageRef}`);
+    }
+    return { extractedPath: dir, hash: '' };
   }
 }

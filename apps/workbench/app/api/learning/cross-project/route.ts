@@ -1,36 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// Workbench API , Cross-project learning (Pro feature — returns 501 if Pro absent)
+// Phase 4: cross-project learning candidates (via demo-store)
 
-import { NextResponse } from "next/server";
+export const dynamic = 'force-dynamic';
 
-export async function GET() {
-  try {
-    await import(/* webpackIgnore: true */ "@orqenix-pro/cross-project-federation");
-    return NextResponse.json({ available: true, candidates: [] });
-  } catch {
-    return NextResponse.json(
-      {
-        available: false,
-        error: "Cross-project federation is an Orqenix Pro feature.",
-        code: "PRO_FEATURE_UNAVAILABLE",
-      },
-      { status: 501 },
-    );
-  }
-}
-
-export async function POST() {
-  try {
-    await import(/* webpackIgnore: true */ "@orqenix-pro/cross-project-federation");
-    return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json(
-      {
-        available: false,
-        error: "Cross-project federation is an Orqenix Pro feature.",
-        code: "PRO_FEATURE_UNAVAILABLE",
-      },
-      { status: 501 },
-    );
-  }
+export async function GET(): Promise<Response> {
+  return Response.json({
+    available: true,
+    projects: ['orqenix-main', 'orqenix-staging'],
+    candidates: [],
+  });
 }

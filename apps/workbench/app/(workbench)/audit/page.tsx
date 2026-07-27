@@ -1,94 +1,53 @@
-// SPDX-License-Identifier: Apache-2.0
-// Audit tab , browse audit chain and verify integrity
+'use client';
 
-"use client";
+import * as React from 'react';
+import { SectionTitle, Card, Badge, Button } from '@/components/ui';
+import { api } from '@/lib/api';
 
-import { ShieldCheck, FileText, AlertTriangle, Activity } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, Badge } from "@orqenix/ui-primitives";
+interface AuditEntry { ts: string; hash: string; valid: boolean; action?: string; actor?: string; }
 
 export default function AuditPage() {
+  const [entries, setEntries] = React.useState<AuditEntry[]>([]);
+  const [verification, setVerification] = React.useState<{ valid: boolean; entriesVerified: number } | null>(null);
+
+  const load = React.useCallback(async () => {
+    const res = await api.get<{ entries: AuditEntry[]; verification: { valid: boolean; entriesVerified: number } }>('/api/audit');
+    if (res.ok) { setEntries(res.data!.entries); setVerification(res.data!.verification); }
+  }, []);
+  React.useEffect(() => { void load(); }, [load]);
+
   return (
-    <div className="container mx-auto px-6 py-8 max-w-7xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Audit</h1>
-          <p className="text-muted-foreground">
-            Browse audit chain entries and verify integrity with BLAKE3 hash chain.
-          </p>
-        </div>
-        <Badge variant="default" className="gap-1">
-          <ShieldCheck className="w-3 h-3" />
-          Chain Integrity: —
-        </Badge>
+    <div className="mx-auto max-w-[1100px] px-6 py-6">
+      <div className="flex items-center justify-between">
+        <SectionTitle sub="Tamper-evident hash chain">Audit Log</SectionTitle>
+        <Button variant="outline" size="sm" onClick={load}>{'\u21BB'} Verify Chain</Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Entries</CardTitle>
-            <FileText className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Awaiting integration</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Last 24 Hours</CardTitle>
-            <Activity className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Awaiting integration</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Verified</CardTitle>
-            <ShieldCheck className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Awaiting integration</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Issues</CardTitle>
-            <AlertTriangle className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Awaiting integration</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Audit Log Browser</CardTitle>
-          <p className="text-sm text-muted-foreground mt-1">
-            BLAKE3 hash-chained audit log with filtering by branch_id, session_id, kind, actor.
-          </p>
-        </CardHeader>
-        <CardContent>
-          <div className="rounded-lg border border-dashed border-border p-12 text-center">
-            <ShieldCheck className="w-12 h-12 text-muted-foreground mx-auto mb-3" aria-hidden />
-            <h3 className="font-semibold mb-2">Audit chain browser</h3>
-            <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Full audit log browser with chain verifier (BLAKE3, 1M entries in 24s) ships in
-              D8.α.4. Reuses AuditChainVerifier Web Worker from Phase 7 D7.5.
-            </p>
-            <p className="text-xs text-muted-foreground mt-4">
-              Charter gate: G58 + G61 (Workbench UI integration)
-            </p>
+      {verification && (
+        <Card className="mt-4 p-3">
+          <div className="flex items-center gap-2 font-mono text-[11px]"
+            style={{ color: verification.valid ? 'var(--olive)' : 'var(--rust)' }}>
+            <span className="h-2 w-2 rounded-full" style={{ background: verification.valid ? 'var(--olive)' : 'var(--rust)' }} />
+            {verification.valid
+              ? `Chain valid \u00B7 ${verification.entriesVerified} entries verified`
+              : 'Chain integrity compromised'}
           </div>
-        </CardContent>
-      </Card>
+        </Card>
+      )}
+
+      <div className="mt-4 space-y-1.5">
+        {entries.length === 0 ? (
+          <Card className="p-10 text-center font-mono text-[11px] text-[var(--faint)]">No audit entries yet.</Card>
+        ) : entries.map((e, i) => (
+          <div key={`${e.ts}-${i}`} className="flex items-center gap-3 rounded-[9px] border border-[var(--line)] bg-[var(--card)] px-4 py-2">
+            <span className={'h-1.5 w-1.5 rounded-full ' + (e.valid ? 'bg-[var(--olive)]' : 'bg-[var(--rust)]')} />
+            {e.action && <Badge tone="neutral">{e.action}</Badge>}
+            <span className="font-mono text-[10px] text-[var(--dim)]">{e.actor ?? 'system'}</span>
+            <span className="ml-auto font-mono text-[9.5px] text-[var(--faint)]">{e.hash?.slice(0, 16)}&hellip;</span>
+            <span className="font-mono text-[9.5px] text-[var(--dim)]">{new Date(e.ts).toLocaleTimeString()}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

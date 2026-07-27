@@ -5,16 +5,10 @@
 // NO short-circuit. Merges with weighted level boost + protection boost +
 // dedup + cluster. Per CR v8.0 Section 4.4 + INV-12
 
-import { HybridSearch } from "../store/hybrid-search";
-import type { MemoryEntry, KbKind } from "../store/types";
-import {
-  type HierarchyQueryInput,
-  type HierarchyQueryResult,
-  type RankedResult,
-  type LevelBoosts,
-  DEFAULT_LEVEL_BOOSTS,
-} from "./types";
-const ALL_KBS: KbKind[] = ["chat", "code", "decision", "lesson"];
+import { HybridSearch } from '../store/hybrid-search';
+import type { KbKind } from '../store/types';
+import {  type HierarchyQueryInput,  type HierarchyQueryResult,  type RankedResult,  type LevelBoosts,  DEFAULT_LEVEL_BOOSTS,} from './types';
+const ALL_KBS: KbKind[] = ['chat', 'code', 'decision', 'lesson'];
 const DEFAULT_MIN_RELEVANCE = 0.65;
 const DEFAULT_CLUSTER_COSINE = 0.92;
 export class HierarchyQuery {

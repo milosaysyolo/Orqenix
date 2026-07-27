@@ -8,7 +8,6 @@ import type {
   ModuleSettingsContract,
   ResolvedSetting,
   SettingsContext,
-  SettingsLevel,
   HierarchyOverride,
 } from "./types";
 import type { SettingsPersistence } from "./persistence";

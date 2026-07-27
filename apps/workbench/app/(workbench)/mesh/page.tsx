@@ -1,90 +1,52 @@
-// SPDX-License-Identifier: Apache-2.0
-// Mesh tab , view mesh links and capabilities (LAN + Cloud peers)
+'use client';
 
-"use client";
+import * as React from 'react';
+import { SectionTitle, Card, Badge, Button } from '@/components/ui';
+import { api } from '@/lib/api';
 
-import { Network, Link2, Shield, Globe } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, Badge } from "@orqenix/ui-primitives";
+interface MeshPeer {
+  id: string; name: string; address: string; transport: string;
+  latency: number; connected: boolean;
+}
 
 export default function MeshPage() {
+  const [peers, setPeers] = React.useState<MeshPeer[]>([]);
+
+  const load = React.useCallback(async () => {
+    const res = await api.get<{ peers: MeshPeer[] }>('/api/mesh');
+    if (res.ok) setPeers(res.data!.peers);
+  }, []);
+  React.useEffect(() => { void load(); }, [load]);
+
   return (
-    <div className="container mx-auto px-6 py-8 max-w-7xl">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight mb-2">Mesh</h1>
-        <p className="text-muted-foreground">
-          View mesh links, capability tokens, and peer connections.
-        </p>
-      </div>
+    <div className="mx-auto max-w-[1100px] px-6 py-6">
+      <SectionTitle sub="Federated peers and cross-scope links">Mesh</SectionTitle>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Links</CardTitle>
-            <Link2 className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Awaiting integration</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Dormant Links</CardTitle>
-            <Network className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Awaiting integration</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Capabilities Issued</CardTitle>
-            <Shield className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Awaiting integration</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Cloud Peers</CardTitle>
-            <Globe className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <Badge variant="secondary" className="mt-1">
-              Cloud sync optional
-            </Badge>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Mesh Topology</CardTitle>
-          <p className="text-sm text-muted-foreground mt-1">
-            Graph visualization of project/branch/session links with capability flow.
-          </p>
-        </CardHeader>
-        <CardContent>
-          <div className="rounded-lg border border-dashed border-border p-12 text-center">
-            <Network className="w-12 h-12 text-muted-foreground mx-auto mb-3" aria-hidden />
-            <h3 className="font-semibold mb-2">Mesh topology graph</h3>
-            <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              The force-directed graph + hierarchical + memory flow layouts ship in D8.α.6. Built on
-              the canvas engine from D7.5 (Cloud Web Control Plane).
-            </p>
-            <p className="text-xs text-muted-foreground mt-4">
-              Charter gate: G58 (Memory Hierarchy , link state engine)
-            </p>
-          </div>
-        </CardContent>
+      <Card className="mt-4 border-[color-mix(in_oklab,var(--amber)35%,transparent)] bg-[color-mix(in_oklab,var(--amber)4%,var(--card))] p-3">
+        <div className="font-mono text-[10.5px] text-[var(--dim)]">
+          Cross-project memories are shown but never shared without explicit per-pair approval (INV-18).
+        </div>
       </Card>
+
+      {peers.length === 0 ? (
+        <Card className="mt-4 p-10 text-center font-mono text-[11px] text-[var(--faint)]">
+          No peers in mesh.
+        </Card>
+      ) : (
+        <div className="mt-4 space-y-2">
+          {peers.map((p) => (
+            <Card key={p.id} className="flex items-center gap-3 px-4 py-3">
+              <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.connected ? 'var(--olive)' : 'var(--faint)' }} />
+              <span className="font-mono text-[12px] font-bold text-[var(--ink)]">{p.name}</span>
+              <Badge tone={p.connected ? 'olive' : 'neutral'}>{p.connected ? 'connected' : 'offline'}</Badge>
+              <span className="font-mono text-[10px] text-[var(--dim)]">{p.address}</span>
+              <span className="font-mono text-[9.5px] text-[var(--faint)]">{p.transport}</span>
+              <span className="ml-auto font-mono text-[10px] text-[var(--dim)]">{p.latency}ms</span>
+              {!p.connected && <Button variant="outline" size="sm">Reconnect</Button>}
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -11,7 +11,6 @@ import {
   type SubagentHarness as Harness,
   type SubagentReturn,
   type InvokeSubagentInput,
-  type SubagentConstraints,
   DEFAULT_SUBAGENT_CONSTRAINTS,
 } from "./types";
 

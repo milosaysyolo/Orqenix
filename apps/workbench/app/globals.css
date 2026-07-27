@@ -18,11 +18,10 @@
   --plum: #73579c;
   --olive: #5f8038;
   --slate: #4a6b88;
+  --stone: #78716c;
+  --blue:  #3b82f6;
 
-  --radius-sm: 6px;
-  --radius-md: 9px;
-  --radius-lg: 13px;
-  --radius-xl: 18px;
+  --radius-sm: 6px; --radius-md: 9px; --radius-lg: 13px; --radius-xl: 18px;
 
   --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
@@ -44,46 +43,97 @@
   --plum: #9b7fc4;
   --olive: #82a155;
   --slate: #6e91b4;
+  --stone: #a8a39a;
+  --blue:  #60a5fa;
 }
 
-html {
-  font-family: var(--sans);
-  scroll-behavior: smooth;
-}
+html { font-family: var(--sans); scroll-behavior: smooth; }
 
 body {
   background: var(--paper);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   background-image:
-    linear-gradient(rgba(35, 36, 31, 0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(35, 36, 31, 0.022) 1px, transparent 1px),
-    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(182, 90, 60, 0.045), transparent 60%);
-  background-size:
-    46px 46px,
-    46px 46px,
-    100% 100%;
+    linear-gradient(rgba(35,36,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35,36,31,.022) 1px, transparent 1px),
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(182,90,60,.045), transparent 60%);
+  background-size: 46px 46px, 46px 46px, 100% 100%;
 }
 .dark body {
   background-image:
-    linear-gradient(rgba(236, 232, 223, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(236, 232, 223, 0.025) 1px, transparent 1px),
-    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(210, 113, 81, 0.06), transparent 60%);
-  background-size:
-    46px 46px,
-    46px 46px,
-    100% 100%;
+    linear-gradient(rgba(236,232,223,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236,232,223,.025) 1px, transparent 1px),
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(210,113,81,.06), transparent 60%);
+  background-size: 46px 46px, 46px 46px, 100% 100%;
 }
 
-.font-serif {
-  font-family: var(--serif);
-}
-.font-mono {
-  font-family: var(--mono);
-}
+.font-serif { font-family: var(--serif); }
+.font-mono { font-family: var(--mono); }
 .grad-text {
   background: linear-gradient(110deg, var(--rust), var(--plum));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* ----------------------------------------------------------------------------
+   Animation timing tokens (Response pillar)
+   -------------------------------------------------------------------------- */
+:root {
+  --dur-instant: 0ms;
+  --dur-fast: 150ms;
+  --dur-normal: 200ms;
+  --dur-slow: 300ms;
+  --dur-vslow: 500ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* React Flow — themed to the editorial tokens so it does not look foreign. */
+.react-flow { background: transparent; }
+.react-flow__node { font-family: var(--mono); }
+.react-flow__edge-path { stroke-linecap: round; }
+.react-flow__handle {
+  width: 7px; height: 7px; border-radius: 9999px;
+  background: var(--card); border: 1.5px solid var(--dim);
+}
+.react-flow__handle:hover { border-color: var(--rust); }
+.react-flow__controls {
+  box-shadow: 0 8px 22px rgba(35, 36, 31, 0.08);
+  border-radius: var(--radius-md); overflow: hidden;
+  border: 1px solid var(--line2);
+}
+.react-flow__controls-button {
+  background: var(--card); color: var(--ink);
+  border-bottom: 1px solid var(--line); width: 26px; height: 26px;
+}
+.react-flow__controls-button:hover { background: var(--paper2); }
+.react-flow__controls-button svg { fill: var(--dim); }
+.react-flow__minimap {
+  border-radius: var(--radius-md); border: 1px solid var(--line2);
+  background: var(--card) !important;
+}
+.react-flow__attribution { display: none; }
+.react-flow__selection { border: 1.5px dashed var(--rust); background: color-mix(in oklab, var(--rust) 8%, transparent); }
+.react-flow__node.selected .rf-node-shade,
+.react-flow__node.selected { box-shadow: 0 0 0 2px var(--rust); }
+
+/* Thin custom scrollbar (used by live feed / logs / timeline). */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line2) transparent;
+}
+.scroll-thin::-webkit-scrollbar { width: 7px; height: 7px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 9999px; }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

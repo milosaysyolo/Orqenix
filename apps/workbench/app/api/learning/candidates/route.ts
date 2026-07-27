@@ -1,53 +1,36 @@
 // SPDX-License-Identifier: Apache-2.0
-// Workbench , Self-Learning candidates API (list + review)
+// Phase 4: wired to @orqenix/instinct-promoter (demo-store fallback)
 
-import { NextResponse } from "next/server";
+export const dynamic = 'force-dynamic';
 
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
+import { getLearningCandidates, reviewCandidate } from '@/lib/engine-init';
 
-/** GET /api/learning/candidates , list candidates for review */
-export async function GET() {
-  // D8.γ runtime wiring:
-  //   const engine = getMemoryEngine();
-  //   const service = new PromoterService({ db: engine.getStore().db, audit: engine.getAuditWriter() });
-  //   const candidates = await service.listForReview(projectId);
-  return NextResponse.json(
-    { candidates: [], note: "PromoterService wires at runtime via memory-engine db" },
-    { status: 200, headers: { "Cache-Control": "no-store" } },
-  );
+export async function GET(): Promise<Response> {
+  try {
+    const candidates = await getLearningCandidates();
+    return Response.json({ candidates });
+  } catch (err) {
+    console.error('[learning/candidates/GET]', err);
+    return Response.json({ candidates: [] });
+  }
 }
 
-/** POST /api/learning/candidates , execute a review decision */
-export async function POST(req: Request) {
-  let body: { candidateId?: string; action?: string; reviewedBy?: string; reason?: string };
+export async function POST(req: Request): Promise<Response> {
   try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-
-  const valid = ["promote", "promote_customize", "reject", "defer"];
-  if (!body.action || !valid.includes(body.action)) {
-    return NextResponse.json(
-      { error: `Invalid action. Must be: ${valid.join(", ")}` },
-      { status: 400 },
-    );
-  }
-  if (!body.candidateId) {
-    return NextResponse.json({ error: "Missing candidateId" }, { status: 400 });
-  }
-
-  // D8.γ runtime:
-  //   const result = await service.review({ candidateId, action, reviewedBy, reason }, projectId);
-  return NextResponse.json(
-    {
+    const body = (await req.json().catch(() => ({}))) as { candidateId?: string; action?: string };
+    if (!body.candidateId || !body.action) {
+      return Response.json({ error: 'candidateId and action required' }, { status: 400 });
+    }
+    if (!['promote', 'reject', 'defer'].includes(body.action)) {
+      return Response.json({ error: 'unknown action' }, { status: 400 });
+    }
+    const result = await reviewCandidate(body.candidateId, body.action);
+    if (!result.ok) return Response.json({ error: 'candidate not found' }, { status: 404 });
+    return Response.json({
       ok: true,
-      candidateId: body.candidateId,
-      action: body.action,
-      openBuilder: body.action === "promote_customize",
-      note: "PromoterService.review wires at runtime",
-    },
-    { status: 200 },
-  );
+      generatedSkillName: body.action === 'promote' ? result.generatedSkillName : undefined,
+    });
+  } catch {
+    return Response.json({ error: 'invalid body' }, { status: 400 });
+  }
 }

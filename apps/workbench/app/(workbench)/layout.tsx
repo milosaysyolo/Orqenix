@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: Apache-2.0
+import { ErrorBoundary } from '@/components/ui/error-boundary';
 
-export default function WorkbenchGroupLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+export default function WorkbenchLayout({ children }: { children: React.ReactNode }) {
+  return <ErrorBoundary name="Workbench">{children}</ErrorBoundary>;
 }

@@ -12,7 +12,7 @@ node packages/cli/dist/bin.js --help
 ## Commands
 
 ```text
-orqenix v0.5.0-phase-5
+orqenix v0.9.0
 
 Commands:
   scope init --name <n>
@@ -32,6 +32,10 @@ Commands:
   migrate status
   version
 ```
+
+## Available Commands
+
+All commands listed in the Commands section above are available in the current version. Extended commands (knowledge, memory, recall, mesh, marketplace, gc, trash, history, security, config) are registered as stubs returning a helpful message and will ship in a future release.
 
 ## Environment
 

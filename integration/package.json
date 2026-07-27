@@ -12,7 +12,7 @@
     "@orqenix/kb-code": "workspace:*",
     "@orqenix/kb-decisions": "workspace:*",
     "@orqenix/kb-docs": "workspace:*",
-    "@orqenix/plugin-snapshot": "workspace:*",
+    "@orqenix/plugin-ecosystem": "workspace:*",
     "@types/node": "^22.10.0",
     "execa": "^9.5.2",
     "typescript": "^5.7.2",

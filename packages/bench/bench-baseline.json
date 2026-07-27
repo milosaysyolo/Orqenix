@@ -1,0 +1,615 @@
+{
+  "timestamp": "2026-06-19T04:01:03.554Z",
+  "env": {
+    "node": "v24.15.0",
+    "platform": "win32",
+    "arch": "x64",
+    "gc": true
+  },
+  "totalSec": 26.3,
+  "summary": {
+    "total": 23,
+    "sloEnforced": 23,
+    "sloFailed": 1
+  },
+  "results": [
+    {
+      "name": "memory.write.inline",
+      "phase": "Phase 1-2 (Memory Core)",
+      "iterations": 2000,
+      "stats": {
+        "min": 0.14279999999985193,
+        "max": 2.9443999999998596,
+        "mean": 0.2619187000000003,
+        "median": 0.2219000000000051,
+        "p95": 0.45659999999998035,
+        "p99": 1.056400000000167,
+        "stddev": 0.17816194705940838,
+        "opsPerSec": 3817.9786323007825
+      },
+      "memory": {
+        "heapUsedDeltaMb": 4.824188232421875,
+        "rssDeltaMb": 5.67578125
+      },
+      "slo": {
+        "p95TargetMs": 2,
+        "p95Pass": true,
+        "minOpsPerSec": 1000,
+        "opsPass": true
+      },
+      "passed": true
+    },
+    {
+      "name": "memory.write.blob",
+      "phase": "Phase 1-2 (Memory Core)",
+      "iterations": 1000,
+      "stats": {
+        "min": 0.38289999999960855,
+        "max": 3.9846999999999753,
+        "mean": 0.6575500000000125,
+        "median": 0.5410999999999149,
+        "p95": 1.22400000000016,
+        "p99": 1.9562000000000808,
+        "stddev": 0.3121942676295426,
+        "opsPerSec": 1520.7968975743001
+      },
+      "memory": {
+        "heapUsedDeltaMb": 5.703338623046875,
+        "rssDeltaMb": 10.85546875
+      },
+      "slo": {
+        "p95TargetMs": 5,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "memory.fetch.inline",
+      "phase": "Phase 1-2 (Memory Core)",
+      "iterations": 5000,
+      "stats": {
+        "min": 0.007899999999608553,
+        "max": 0.6995999999999185,
+        "mean": 0.01413217999999979,
+        "median": 0.00889999999981228,
+        "p95": 0.030900000000201544,
+        "p99": 0.07790000000022701,
+        "stddev": 0.021278098456916486,
+        "opsPerSec": 70760.49130424428
+      },
+      "memory": {
+        "heapUsedDeltaMb": 4.875877380371094,
+        "rssDeltaMb": 12.58203125
+      },
+      "slo": {
+        "p95TargetMs": 1,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "blake3.hash.1kb",
+      "phase": "Phase 3 (Storage)",
+      "iterations": 10000,
+      "stats": {
+        "min": 0.01890000000003056,
+        "max": 1.6075000000000728,
+        "mean": 0.02952974999999874,
+        "median": 0.02010000000018408,
+        "p95": 0.051300000000082946,
+        "p99": 0.14199999999982538,
+        "stddev": 0.037681708414723875,
+        "opsPerSec": 33864.15394644529
+      },
+      "memory": {
+        "heapUsedDeltaMb": 3.5686721801757812,
+        "rssDeltaMb": 0.5546875
+      },
+      "slo": {
+        "p95TargetMs": 0.5,
+        "p95Pass": true,
+        "minOpsPerSec": 10000,
+        "opsPass": true
+      },
+      "passed": true
+    },
+    {
+      "name": "blake3.hash.64kb",
+      "phase": "Phase 3 (Storage)",
+      "iterations": 3000,
+      "stats": {
+        "min": 1.3460000000004584,
+        "max": 11.156700000000455,
+        "mean": 1.902421599999997,
+        "median": 1.5614999999997963,
+        "p95": 3.317300000000614,
+        "p99": 5.1073999999998705,
+        "stddev": 0.8562741935608446,
+        "opsPerSec": 525.6458400177971
+      },
+      "memory": {
+        "heapUsedDeltaMb": 6.590675354003906,
+        "rssDeltaMb": 15.08203125
+      },
+      "slo": {
+        "p95TargetMs": 2,
+        "p95Pass": false,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": false
+    },
+    {
+      "name": "blob.put.new",
+      "phase": "Phase 3 (Storage)",
+      "iterations": 2000,
+      "stats": {
+        "min": 0.04609999999956926,
+        "max": 5.0812000000005355,
+        "mean": 0.07840004999998655,
+        "median": 0.055699999998978456,
+        "p95": 0.1407999999992171,
+        "p99": 0.23299999999835563,
+        "stddev": 0.1382231581382862,
+        "opsPerSec": 12755.093906192298
+      },
+      "memory": {
+        "heapUsedDeltaMb": 4.46087646484375,
+        "rssDeltaMb": 2.09765625
+      },
+      "slo": {
+        "p95TargetMs": 3,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "blob.put.dedup",
+      "phase": "Phase 3 (Storage)",
+      "iterations": 5000,
+      "stats": {
+        "min": 0.12709999999970023,
+        "max": 5.756899999998495,
+        "mean": 0.2005549599999904,
+        "median": 0.14130000000113796,
+        "p95": 0.381600000000617,
+        "p99": 0.8253999999997177,
+        "stddev": 0.19300739589551752,
+        "opsPerSec": 4986.16439104796
+      },
+      "memory": {
+        "heapUsedDeltaMb": 3.982696533203125,
+        "rssDeltaMb": -0.0390625
+      },
+      "slo": {
+        "p95TargetMs": 1,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "cosine.384dim",
+      "phase": "Phase 4 (Search)",
+      "iterations": 50000,
+      "stats": {
+        "min": 0.0006999999986874172,
+        "max": 0.5164999999997235,
+        "mean": 0.0008971960000009494,
+        "median": 0.0007999999997991836,
+        "p95": 0.001399999999193824,
+        "p99": 0.0015999999995983671,
+        "stddev": 0.003376449280792977,
+        "opsPerSec": 1114583.6584190542
+      },
+      "memory": {
+        "heapUsedDeltaMb": 4.20367431640625,
+        "rssDeltaMb": 0.4921875
+      },
+      "slo": {
+        "p95TargetMs": 0.05,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "search.1k",
+      "phase": "Phase 4 (Search)",
+      "iterations": 300,
+      "stats": {
+        "min": 4.037899999999354,
+        "max": 13.787000000000262,
+        "mean": 5.238075999999989,
+        "median": 4.283600000000661,
+        "p95": 8.52009999999973,
+        "p99": 10.246200000001409,
+        "stddev": 1.7179541072857172,
+        "opsPerSec": 190.90979206869127
+      },
+      "memory": {
+        "heapUsedDeltaMb": 1.7469940185546875,
+        "rssDeltaMb": 0.6796875
+      },
+      "slo": {
+        "p95TargetMs": 25,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "search.10k",
+      "phase": "Phase 4 (Search)",
+      "iterations": 100,
+      "stats": {
+        "min": 5.130900000000111,
+        "max": 16.18249999999898,
+        "mean": 7.851679000000003,
+        "median": 6.6895000000004075,
+        "p95": 13.022200000001249,
+        "p99": 16.177300000001196,
+        "stddev": 2.6764995255673534,
+        "opsPerSec": 127.36129431679511
+      },
+      "memory": {
+        "heapUsedDeltaMb": 20.24193572998047,
+        "rssDeltaMb": 31.5078125
+      },
+      "slo": {
+        "p95TargetMs": 120,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "permission.exact",
+      "phase": "Phase 5 (Capability)",
+      "iterations": 200000,
+      "stats": {
+        "min": 0.00009999999929277692,
+        "max": 3.742100000001301,
+        "mean": 0.0003493735000034212,
+        "median": 0.00020000000040454324,
+        "p95": 0.0004000000008090865,
+        "p99": 0.0005999999993946403,
+        "stddev": 0.00973540630883844,
+        "opsPerSec": 2862266.3138166103
+      },
+      "memory": {
+        "heapUsedDeltaMb": 6.631195068359375,
+        "rssDeltaMb": 3.12109375
+      },
+      "slo": {
+        "p95TargetMs": 0.01,
+        "p95Pass": true,
+        "minOpsPerSec": 500000,
+        "opsPass": true
+      },
+      "passed": true
+    },
+    {
+      "name": "permission.prefix",
+      "phase": "Phase 5 (Capability)",
+      "iterations": 100000,
+      "stats": {
+        "min": 0.00029999999969732016,
+        "max": 0.8207000000002154,
+        "mean": 0.0006425970000005327,
+        "median": 0.0004000000008090865,
+        "p95": 0.0009000000009109499,
+        "p99": 0.001299999999901047,
+        "stddev": 0.004831568610315224,
+        "opsPerSec": 1556185.2918690424
+      },
+      "memory": {
+        "heapUsedDeltaMb": 10.538475036621094,
+        "rssDeltaMb": 2.015625
+      },
+      "slo": {
+        "p95TargetMs": 0.05,
+        "p95Pass": true,
+        "minOpsPerSec": 100000,
+        "opsPass": true
+      },
+      "passed": true
+    },
+    {
+      "name": "manifest.validate",
+      "phase": "Phase 5 (Capability)",
+      "iterations": 5000,
+      "stats": {
+        "min": 0.008699999998498242,
+        "max": 1.2849999999998545,
+        "mean": 0.02177325999998575,
+        "median": 0.010500000000320142,
+        "p95": 0.05769999999938591,
+        "p99": 0.1305000000011205,
+        "stddev": 0.04439006486303314,
+        "opsPerSec": 45927.89504193008
+      },
+      "memory": {
+        "heapUsedDeltaMb": 27.782119750976562,
+        "rssDeltaMb": 0.25390625
+      },
+      "slo": {
+        "p95TargetMs": 2,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "audit.append",
+      "phase": "Phase 7 (Audit Chain)",
+      "iterations": 2000,
+      "stats": {
+        "min": 0.14530000000013388,
+        "max": 8.414300000000367,
+        "mean": 0.27888609999996516,
+        "median": 0.22110000000066066,
+        "p95": 0.46710000000166474,
+        "p99": 1.3655999999973574,
+        "stddev": 0.3505714307110762,
+        "opsPerSec": 3585.6932274506507
+      },
+      "memory": {
+        "heapUsedDeltaMb": 23.585792541503906,
+        "rssDeltaMb": 10.64453125
+      },
+      "slo": {
+        "p95TargetMs": 3,
+        "p95Pass": true,
+        "minOpsPerSec": 500,
+        "opsPass": true
+      },
+      "passed": true
+    },
+    {
+      "name": "audit.verify.100",
+      "phase": "Phase 7 (Audit Chain)",
+      "iterations": 200,
+      "stats": {
+        "min": 2.3999000000003434,
+        "max": 7.70509999999922,
+        "mean": 3.3020799999999144,
+        "median": 2.7264999999970314,
+        "p95": 5.657499999997526,
+        "p99": 6.9112999999997555,
+        "stddev": 1.1331024376778518,
+        "opsPerSec": 302.8394224246614
+      },
+      "memory": {
+        "heapUsedDeltaMb": 12.811492919921875,
+        "rssDeltaMb": 1.16015625
+      },
+      "slo": {
+        "p95TargetMs": 30,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "audit.verify.1000",
+      "phase": "Phase 7 (Audit Chain)",
+      "iterations": 50,
+      "stats": {
+        "min": 27.356299999999464,
+        "max": 62.841700000000856,
+        "mean": 33.67484399999972,
+        "median": 30.78150000000096,
+        "p95": 50.36870000000272,
+        "p99": 62.841700000000856,
+        "stddev": 7.069336116397334,
+        "opsPerSec": 29.695757462158053
+      },
+      "memory": {
+        "heapUsedDeltaMb": 40.16871643066406,
+        "rssDeltaMb": 70.26171875
+      },
+      "slo": {
+        "p95TargetMs": 250,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "hierarchy.query.3level",
+      "phase": "Phase 8 (Hierarchy/Branch/Subagent)",
+      "iterations": 200,
+      "stats": {
+        "min": 4.327099999998609,
+        "max": 14.749400000000605,
+        "mean": 5.975764500000187,
+        "median": 4.800599999998667,
+        "p95": 9.838999999999942,
+        "p99": 14.103500000001077,
+        "stddev": 2.1353406796527263,
+        "opsPerSec": 167.34260528505914
+      },
+      "memory": {
+        "heapUsedDeltaMb": 52.66606140136719,
+        "rssDeltaMb": -5.38671875
+      },
+      "slo": {
+        "p95TargetMs": 300,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "branch.deepcopy.1k",
+      "phase": "Phase 8 (Hierarchy/Branch/Subagent)",
+      "iterations": 50,
+      "stats": {
+        "min": 51.48229999999967,
+        "max": 164.17220000000088,
+        "mean": 64.47144199999988,
+        "median": 58.47239999999874,
+        "p95": 86.43700000000172,
+        "p99": 164.17220000000088,
+        "stddev": 20.423006748574004,
+        "opsPerSec": 15.510743500975236
+      },
+      "memory": {
+        "heapUsedDeltaMb": 7.2994537353515625,
+        "rssDeltaMb": 48.96875
+      },
+      "slo": {
+        "p95TargetMs": 200,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "subagent.invoke.absorb",
+      "phase": "Phase 8 (Hierarchy/Branch/Subagent)",
+      "iterations": 500,
+      "stats": {
+        "min": 0.3790999999982887,
+        "max": 7.647500000002765,
+        "mean": 0.6247196000000331,
+        "median": 0.5218999999997322,
+        "p95": 0.9653000000034808,
+        "p99": 1.8920999999972992,
+        "stddev": 0.4671179484577631,
+        "opsPerSec": 1600.7181461890214
+      },
+      "memory": {
+        "heapUsedDeltaMb": 7.0205535888671875,
+        "rssDeltaMb": 18.3828125
+      },
+      "slo": {
+        "p95TargetMs": 50,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "normalize.roundtrip.npm",
+      "phase": "Phase 8 (Normalization)",
+      "iterations": 2000,
+      "stats": {
+        "min": 0.029700000002776505,
+        "max": 0.6101000000016938,
+        "mean": 0.046089700000024096,
+        "median": 0.036400000000867294,
+        "p95": 0.08989999999903375,
+        "p99": 0.15890000000217697,
+        "stddev": 0.030963166064560926,
+        "opsPerSec": 21696.8216325877
+      },
+      "memory": {
+        "heapUsedDeltaMb": 33.235023498535156,
+        "rssDeltaMb": 0
+      },
+      "slo": {
+        "p95TargetMs": 5,
+        "p95Pass": true,
+        "minOpsPerSec": 200,
+        "opsPass": true
+      },
+      "passed": true
+    },
+    {
+      "name": "normalize.import.autodetect",
+      "phase": "Phase 8 (Normalization)",
+      "iterations": 1000,
+      "stats": {
+        "min": 0.5740000000005239,
+        "max": 13.881399999998393,
+        "mean": 1.198854999999996,
+        "median": 0.7906000000002678,
+        "p95": 2.5512999999991735,
+        "p99": 6.10109999999986,
+        "stddev": 1.1293383372377683,
+        "opsPerSec": 834.1292316418611
+      },
+      "memory": {
+        "heapUsedDeltaMb": 41.81529235839844,
+        "rssDeltaMb": 1.00390625
+      },
+      "slo": {
+        "p95TargetMs": 10,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "selflearning.detect.1k",
+      "phase": "Phase 8 (Self-Learning)",
+      "iterations": 50,
+      "stats": {
+        "min": 1.2186000000001513,
+        "max": 7.863999999997759,
+        "mean": 2.1114599999997155,
+        "median": 1.5198999999993248,
+        "p95": 5.9222999999983585,
+        "p99": 7.863999999997759,
+        "stddev": 1.3732791087801002,
+        "opsPerSec": 473.6059409129866
+      },
+      "memory": {
+        "heapUsedDeltaMb": 45.47539520263672,
+        "rssDeltaMb": -0.01171875
+      },
+      "slo": {
+        "p95TargetMs": 150,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    },
+    {
+      "name": "migration.apply.all",
+      "phase": "Migration",
+      "iterations": 100,
+      "stats": {
+        "min": 5.90860000000248,
+        "max": 24.182199999999284,
+        "mean": 7.767974000000031,
+        "median": 6.344100000002072,
+        "p95": 12.424900000001799,
+        "p99": 18.78019999999742,
+        "stddev": 2.7919993377404113,
+        "opsPerSec": 128.73369555562314
+      },
+      "memory": {
+        "heapUsedDeltaMb": 2.610198974609375,
+        "rssDeltaMb": 0.0234375
+      },
+      "slo": {
+        "p95TargetMs": 200,
+        "p95Pass": true,
+        "minOpsPerSec": null,
+        "opsPass": null
+      },
+      "passed": true
+    }
+  ]
+}

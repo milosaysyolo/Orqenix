@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/config",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "description": "Config for Orqenix (Part-1)",
   "license": "Apache-2.0",
   "author": {
@@ -41,10 +41,9 @@
     "CHANGELOG.md"
   ],
   "sideEffects": false,
+  "private": true,
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/",
-    "provenance": true
+    "access": "restricted"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -55,7 +54,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "devDependencies": {
     "typescript": "^5.6.0",

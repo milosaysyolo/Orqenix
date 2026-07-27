@@ -4,9 +4,17 @@
 // In-memory registry of installed plugins with optional persistence.
 // Tracks lifecycle state, crash counts, invocation stats.
 
-import type { CanonicalSkillFormat } from "./csf-schema";
-import type { RegisteredPlugin, PluginLifecycleState, PluginDiscoveryResult } from "./types";
-import { PluginAlreadyRegisteredError, PluginNotRegisteredError } from "./errors";
+import type { CanonicalSkillFormat } from './csf-schema';
+import type {
+  RegisteredPlugin,
+  PluginLifecycleState,
+  PluginDiscoveryResult,
+} from './types';
+import type { PluginRegistryInterface } from './registry-interface';
+import {
+  PluginAlreadyRegisteredError,
+  PluginNotRegisteredError,
+} from './errors';
 
 /**
  * Interface for persisting registry state (provided by D8.α.6 Memory Engine
@@ -35,7 +43,7 @@ export class InMemoryRegistryPersistence implements RegistryPersistence {
 /**
  * Registry of installed plugins.
  */
-export class PluginRegistry {
+export class PluginRegistry implements PluginRegistryInterface { // eslint-disable-line @typescript-eslint/no-unused-vars
   private plugins: Map<string, RegisteredPlugin> = new Map();
   private readonly persistence: RegistryPersistence;
 
@@ -167,6 +175,11 @@ export class PluginRegistry {
   /** Returns count of registered plugins */
   count(): number {
     return this.plugins.size;
+  }
+
+  /** Checks if a plugin is registered */
+  has(name: string): boolean {
+    return this.plugins.has(name);
   }
 
   /** Flushes registry state to persistence */

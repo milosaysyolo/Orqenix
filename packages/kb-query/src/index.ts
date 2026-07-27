@@ -78,19 +78,23 @@ export class KnowledgeQueryEngine {
     }
 
     if (kbs.includes("decisions")) {
-      const decisions = await this.decisions.semanticSearch(topK);
-      for (const item of decisions) {
-        results.push({
-          kind: "decision",
-          id: item.id,
-          text: `${item.title}\n${item.body}`,
-          score: item.confidence ?? 0.5,
-          meta: {
-            type: item.type,
-            scopeId: item.scopeId,
-            enforcement: item.enforcement,
-          },
-        });
+      try {
+        const decisions = await this.decisions.listByType("", "", topK);
+        for (const item of decisions) {
+          results.push({
+            kind: "decision",
+            id: item.id,
+            text: `${item.title}\n${item.body}`,
+            score: item.confidence ?? 0.5,
+            meta: {
+              type: item.type,
+              scopeId: item.scopeId,
+              enforcement: item.enforcement,
+            },
+          });
+        }
+      } catch (err) {
+        console.error(`[kb-query] decisions KB failed:`, err);
       }
     }
 

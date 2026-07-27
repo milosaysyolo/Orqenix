@@ -4,21 +4,24 @@
 // Synthesizes a full CSF skill from a promoted candidate. Per CR v8.0
 // Section 9.4.4 + Anti-38 (created unverified).
 
-import type { Database } from "better-sqlite3";
-import { buildCsf } from "@orqenix/normalization-engine";
-import { Observer } from "@orqenix/self-learning-observer";
-import { CandidateStore } from "@orqenix/self-learning-detection";
-import type { CanonicalSkillFormat } from "@orqenix/plugin-core";
-import type { ObservationEvent } from "@orqenix/self-learning-observer";
-import { ParameterInference } from "./parameter-inference";
-import { CodeSynthesizer } from "./code-synthesizer";
-import { FixtureGenerator } from "./fixture-generator";
-import type { GenerateFromCandidateInput, GenerateResult } from "./types";
+import type { Database } from 'better-sqlite3';
+import { buildCsf } from '@orqenix/normalization-engine';
+import { Observer, DEFAULT_GOVERNANCE } from '@orqenix/self-learning-observer';
+import type { SelfLearningGovernance } from '@orqenix/self-learning-observer';
+import { CandidateStore } from '@orqenix/self-learning-detection';
+import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
+import type { ObservationEvent } from '@orqenix/self-learning-observer';
+import { ParameterInference } from './parameter-inference';
+import { CodeSynthesizer } from './code-synthesizer';
+import { FixtureGenerator } from './fixture-generator';
+import type { GenerateFromCandidateInput, GenerateResult } from './types';
 
 export interface SkillGenesisOptions {
   db: Database;
   observer?: Observer;
   candidateStore?: CandidateStore;
+  /** Optional governance to cap skills generated per cycle */
+  governance?: Partial<SelfLearningGovernance>;
 }
 
 export class SkillGenesis {
@@ -28,11 +31,14 @@ export class SkillGenesis {
   private readonly paramInference = new ParameterInference();
   private readonly codeSynth = new CodeSynthesizer();
   private readonly fixtureGen = new FixtureGenerator();
+  private readonly generationCap: number;
+  generationCount = 0;
 
   constructor(options: SkillGenesisOptions) {
     this.db = options.db;
     this.observer = options.observer ?? new Observer({ db: this.db });
     this.candidateStore = options.candidateStore ?? new CandidateStore(this.db);
+    this.generationCap = options.governance?.generationCap ?? DEFAULT_GOVERNANCE.generationCap;
   }
 
   /**
@@ -46,6 +52,12 @@ export class SkillGenesis {
    *   5. Build CSF with derived_from_observations + verification_status=unverified
    */
   async generateFromCandidate(input: GenerateFromCandidateInput): Promise<GenerateResult> {
+    if (this.generationCount >= this.generationCap) {
+      throw new Error(
+        `Generation cap of ${this.generationCap} reached; cannot generate more skills this cycle`
+      );
+    }
+
     const candidate = this.candidateStore.get(input.candidateId);
     if (!candidate) {
       throw new Error(`Candidate ${input.candidateId} not found`);
@@ -116,6 +128,8 @@ export class SkillGenesis {
 
     // Persist into local_plugins (marketplace store) if available
     this.persistGenerated(csf);
+
+    this.generationCount++;
 
     return {
       skillName,

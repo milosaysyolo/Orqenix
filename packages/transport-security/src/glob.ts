@@ -40,13 +40,13 @@ function matchHelper(
       return false;
     }
     if (mi >= parts.length) return false;
-    if (seg === "*") {
-      if (parts[mi].length === 0) return false;
+    if (seg === '*') {
+      if ((parts[mi]?.length ?? 0) === 0) return false;
       pi++;
       mi++;
       continue;
     }
-    if (parts[mi] !== seg.literal) return false;
+    if (parts[mi]! !== seg!.literal) return false;
     pi++;
     mi++;
   }

@@ -21,14 +21,14 @@ afterAll(async () => {
 
 describe("E2E 07 snapshot create verify restore", () => {
   it("snapshot create returns valid meta", async () => {
-    const mod = await import("@orqenix/plugin-snapshot");
+    const mod = await import("@orqenix/plugin-ecosystem");
     const meta = await mod.createSnapshot(source, snaps, "baseline");
     expect(meta.fileCount).toBeGreaterThanOrEqual(1);
     expect(meta.contentHash).toHaveLength(64);
   });
 
   it("snapshot verify passes for fresh snapshot", async () => {
-    const mod = await import("@orqenix/plugin-snapshot");
+    const mod = await import("@orqenix/plugin-ecosystem");
     const list = await mod.listSnapshots(snaps);
     expect(list.length).toBeGreaterThan(0);
     const meta = list[0]!;
@@ -36,7 +36,7 @@ describe("E2E 07 snapshot create verify restore", () => {
   });
 
   it("snapshot verify fails after tampering", async () => {
-    const mod = await import("@orqenix/plugin-snapshot");
+    const mod = await import("@orqenix/plugin-ecosystem");
     const list = await mod.listSnapshots(snaps);
     const meta = list[0]!;
     await writeFile(join(snaps, meta.id, "config.json"), JSON.stringify({ v: 99 }));

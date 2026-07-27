@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
-// Settings landing page , redirects to first sub-tab (Memory)
 
-import { redirect } from "next/navigation";
+// The /settings main route delegates to the shared module renderer so the
+// landing view shows real settings content (consistent with the /settings/<module>
+// sub-routes). The left rail is owned by settings/layout.tsx.
+
+import { SettingsModulePage } from '@/components/settings-module-page';
 
 export default function SettingsPage() {
-  redirect("/settings/memory");
+  return <SettingsModulePage moduleId="@orqenix/memory-engine" />;
 }

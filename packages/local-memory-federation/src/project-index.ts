@@ -46,12 +46,13 @@ export interface IProjectIndex {
 export class ProjectIndex implements IProjectIndex {
   private readonly projectId: ProjectId;
   private readonly projectName: string;
-  private readonly projectPath: string;
-
-  constructor(input: { projectId: ProjectId; projectName: string; projectPath: string }) {
+  constructor(input: {
+    projectId: ProjectId;
+    projectName: string;
+    projectPath: string;
+  }) {
     this.projectId = input.projectId;
     this.projectName = input.projectName;
-    this.projectPath = input.projectPath;
   }
 
   getProjectId(): ProjectId {

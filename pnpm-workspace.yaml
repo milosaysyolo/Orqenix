@@ -1,16 +1,10 @@
 packages:
   - "packages/*"
-  - "packages/self-learning-observer"
-  - "packages/self-learning-detection"
-  - "packages/instinct-promoter"
-  - "packages/skill-genesis"
-  - "packages/verification-loop"
   - "apps/*"
   - "plugins/*"
   - "bench"
   - "integration"
   - "scripts"
-  - "plugins/*"
 
 catalog:
   typescript: ^5.6.0

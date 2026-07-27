@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { blake3 as nobleBlake3 } from "@noble/hashes/blake3";
 import { bytesToHex as toHex } from "@noble/hashes/utils";
 

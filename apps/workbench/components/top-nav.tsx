@@ -19,8 +19,8 @@ import {
   Moon,
   Command,
   HelpCircle,
-} from "lucide-react";
-import { Button } from "@orqenix/ui-primitives";
+} from 'lucide-react';
+import { Button } from '@orqenix/ui-primitives';
 
 const TOP_TABS = [
   { href: "/memory", label: "Memory", icon: Brain, badge: null },

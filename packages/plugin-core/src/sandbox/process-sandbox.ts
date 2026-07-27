@@ -19,9 +19,12 @@ import {
   PluginActivateFailedError,
   PluginCrashedError,
   PluginTimeoutError,
-  PluginDeniedError,
-} from "../errors";
-import { type ResolvedResourceLimits, buildSpawnEnv, memoryLimitFlag } from "./resource-limits";
+} from '../errors';
+import {
+  type ResolvedResourceLimits,
+  buildSpawnEnv,
+  memoryLimitFlag,
+} from './resource-limits';
 import {
   type IpcMessage,
   type IpcResponseMessage,

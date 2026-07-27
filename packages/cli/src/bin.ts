@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 
 const ORQENIX_ROOT = process.env.ORQENIX_ROOT ?? process.cwd();
 const ORQENIX_DB = process.env.ORQENIX_DB ?? resolve(ORQENIX_ROOT, ".orqenix", "kb.sqlite");
-const ORQENIX_SCOPE = process.env.ORQENIX_SCOPE ?? "scope:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const ORQENIX_SCOPE = process.env.ORQENIX_SCOPE ?? "";
 
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));

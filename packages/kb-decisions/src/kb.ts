@@ -48,16 +48,9 @@ export class DecisionKB {
   async listByType(type: string, _scope: string, _limit?: number): Promise<DecisionEntry[]> {
     const out: DecisionEntry[] = [];
     for (const [, n] of this.graph.nodes) {
-      if (n.tags?.includes(type)) out.push(this.toEntry(n));
+      if (!type || n.tags?.includes(type)) out.push(this.toEntry(n));
     }
     return out;
-  }
-
-  async semanticSearch(queryOrTopK?: string | number, topK?: number): Promise<DecisionEntry[]> {
-    const k = typeof queryOrTopK === "number" ? queryOrTopK : (topK ?? 10);
-    const all = Array.from(this.graph.nodes.values());
-    const scored = all.map((n) => this.toEntry(n, 0.5));
-    return scored.slice(0, k);
   }
 
   private toEntry(n: DecisionNode, confidence = 0.5): DecisionEntry {

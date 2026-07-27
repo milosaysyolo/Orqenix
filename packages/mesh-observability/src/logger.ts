@@ -1,13 +1,6 @@
-import {
-  CANONICAL_EVENTS,
-  validateLogEvent,
-  type MeshEventName,
-  type MeshLogEvent,
-  type MeshLogLevel,
-  type MeshStatus,
-} from "./schema.js";
-import { containsLeak } from "./redaction.js";
-import type { ScopeId } from "@orqenix/mesh-transport-core";
+import { validateLogEvent, type MeshEventName, type MeshLogEvent, type MeshLogLevel, type MeshStatus } from './schema.js';
+import { containsLeak } from './redaction.js';
+import type { ScopeId } from '@orqenix/mesh-transport-core';
 
 export type LogSink = (event: MeshLogEvent, serialized: string) => void;
 

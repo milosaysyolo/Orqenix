@@ -28,7 +28,10 @@ function buildWorkspaceAliases(): Record<string, string> {
 
 export default defineConfig({
   resolve: {
-    alias: buildWorkspaceAliases(),
+    alias: {
+      ...buildWorkspaceAliases(),
+      '@mongodb-js/zstd': resolve(__dirname, '__mocks__/@mongodb-js/zstd.js'),
+    },
   },
   optimizeDeps: {
     include: ["@noble/hashes/blake3", "@noble/hashes", "jsonc-parser"],
@@ -38,7 +41,7 @@ export default defineConfig({
     environment: "node",
     root: rootDir,
     retry: 2,
-    include: ["packages/*/test/**/*.test.ts", "tests/**/*.test.ts"],
+    include: ["packages/*/test/**/*.test.ts", "packages/*/tests/**/*.test.ts", "tests/**/*.test.ts"],
     reporters: ["default", resolve(rootDir, "scripts/vitest-charter-reporter.ts")],
     coverage: {
       provider: "v8",

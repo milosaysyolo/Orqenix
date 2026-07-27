@@ -7,12 +7,11 @@
 import {
   CanonicalSkillFormatSchema,
   type CanonicalSkillFormat,
-  type PluginKind,
-} from "./csf-schema";
-import { PluginKindRegistry } from "./kinds/registry";
-import { validatePermissions } from "./permissions";
-import type { ValidationResult } from "./types";
-import { ManifestInvalidError } from "./errors";
+} from './csf-schema';
+import { PluginKindRegistry } from './kinds/registry';
+import { validatePermissions } from './permissions';
+import type { ValidationResult } from './types';
+import { ManifestInvalidError } from './errors';
 
 export interface ManifestValidationOutcome extends ValidationResult {
   /** Parsed CSF when valid */

@@ -31,9 +31,9 @@ export interface QueryAggregatorResult {
  */
 export class QueryAggregator {
   /** Run parallel queries and merge results */
-  async aggregate(input: QueryAggregatorInput): Promise<QueryAggregatorResult> {
-    const startTime = Date.now();
-
+  async aggregate(
+    input: QueryAggregatorInput
+  ): Promise<QueryAggregatorResult> {
     // Parallel query (per INV-12: no short-circuit, no early-exit)
     const perProjectResults = await Promise.allSettled(
       input.indexes.map(async (index) => {

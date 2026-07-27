@@ -5,16 +5,9 @@
 // Per CR v8.0 Section 4.5. Promotion duplicates an entry to the target level
 // with provenance tracking + audit.
 
-import type { SqliteStore } from "../store/sqlite-store";
-import type { KbKind, MemoryEntry } from "../store/types";
-import type { PromoteInput } from "./types";
-
-const KB_TABLE: Record<KbKind, string> = {
-  chat: "chat_entries",
-  code: "code_entries",
-  decision: "decision_entries",
-  lesson: "lesson_entries",
-};
+import type { SqliteStore } from '../store/sqlite-store';
+import type { KbKind } from '../store/types';
+import type { PromoteInput } from './types';
 
 export interface PromotionResult {
   newEntryId: string;

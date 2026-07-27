@@ -55,6 +55,6 @@ export function scopeIdToSaltBytes(scopeId: ScopeId): Uint8Array {
   }
   const bytes = new TextEncoder().encode(String(scopeId));
   const out = new Uint8Array(32);
-  for (let i = 0; i < bytes.length && i < 32; i++) out[i] = bytes[i];
+  for (let i = 0; i < bytes.length && i < 32; i++) out[i] = bytes[i]!;
   return out;
 }

@@ -1,6 +1,7 @@
 import Database from "better-sqlite3";
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
+import { OrqenixError } from "../errors.js";
 import type { Document, Filter, StorageAdapter, VectorResult } from "./adapter.js";
 
 /**
@@ -96,13 +97,13 @@ export class SqliteAdapter implements StorageAdapter {
 
   // ─────────── Vector ───────────
   async upsertVector(): Promise<void> {
-    // stub: implement in Phase 4 with sqlite-vec.
-    throw new Error("upsertVector: implement in Phase 4 (sqlite-vec wiring)");
+    // stub: implement with sqlite-vec.
+    throw new OrqenixError("upsertVector: method not implemented in storage adapter", "NOT_IMPLEMENTED");
   }
 
   async searchVectors(): Promise<VectorResult[]> {
-    // stub: implement in Phase 4.
-    throw new Error("searchVectors: implement in Phase 4 (sqlite-vec wiring)");
+    // stub: implement with sqlite-vec.
+    throw new OrqenixError("searchVectors: method not implemented in storage adapter", "NOT_IMPLEMENTED");
   }
 
   // ─────────── Phase 3 additions ───────────

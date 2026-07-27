@@ -4,14 +4,14 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "test": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
     },
     "lint": {
@@ -19,6 +19,15 @@
     },
     "typecheck": {
       "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "audit:dead-deps": {
+      "dependsOn": [],
+      "outputs": [],
+      "inputs": ["packages/*/package.json", "packages/*/src/**/*.ts"]
+    },
+    "audit:versions": {
+      "dependsOn": [],
       "outputs": []
     },
     "clean": {

@@ -100,7 +100,51 @@ describe("PromoterService", () => {
     expect(store.get("c5")?.status).toBe("reviewed");
   });
 
-  it("throws for unknown candidate", async () => {
+  it('detects convergence when last N results are identical', async () => {
+    seedCandidate(db, 'c6');
+    const candidates = await service.listForReview(PROJECT);
+    const hashes = candidates.map((c) => `pattern-${c.patternName}`);
+
+    // Record 3 identical results
+    service.recordIterationResult(hashes);
+    service.recordIterationResult(hashes);
+    service.recordIterationResult(hashes);
+
+    expect(service.checkConvergence()).toBe(true);
+  });
+
+  it('does not converge before window is filled', async () => {
+    seedCandidate(db, 'c7');
+    const candidates = await service.listForReview(PROJECT);
+    const hashes = candidates.map((c) => `pattern-${c.patternName}`);
+
+    service.recordIterationResult(hashes);
+    expect(service.checkConvergence()).toBe(false);
+  });
+
+  it('getConvergenceStatus returns correct snapshot', async () => {
+    seedCandidate(db, 'c8');
+    const candidates = await service.listForReview(PROJECT);
+    const hashes = candidates.map((c) => `pattern-${c.patternName}`);
+
+    service.recordIterationResult(hashes);
+    const status = service.getConvergenceStatus();
+    expect(status.windowSize).toBeGreaterThan(0);
+    expect(status.recordedIterations).toBe(1);
+    expect(status.converged).toBe(false);
+  });
+
+  it('resetConvergenceTracking clears recorded results', async () => {
+    seedCandidate(db, 'c9');
+    const candidates = await service.listForReview(PROJECT);
+    const hashes = candidates.map((c) => `pattern-${c.patternName}`);
+
+    service.recordIterationResult(hashes);
+    service.resetConvergenceTracking();
+    expect(service.getConvergenceStatus().recordedIterations).toBe(0);
+  });
+
+  it('throws for unknown candidate', async () => {
     await expect(
       service.review({ candidateId: "nope", action: "reject", reviewedBy: "milo" }, PROJECT),
     ).rejects.toThrow(/not found/);

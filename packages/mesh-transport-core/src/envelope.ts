@@ -4,10 +4,10 @@
  * Agent note: encoding rules per CR v7.2 Chapter 2.3: sorted keys, smallest int width,
  * binary as bin family, no floats. Encoded output must be byte-stable for equal inputs.
  */
-import { Packr, Unpackr } from "msgpackr";
-import { ulid } from "ulidx";
-import type { MeshRequest, MeshResponse } from "./types.js";
-import { canonicalize, bytesEqual } from "./canonical.js";
+import { Packr, Unpackr } from 'msgpackr';
+import { ulid } from 'ulidx';
+import type { MeshRequest, MeshResponse } from './types.js';
+import { canonicalize } from './canonical.js';
 
 const packr = new Packr({
   useRecords: false,

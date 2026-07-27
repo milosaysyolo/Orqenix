@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { Plugin } from "@orqenix/core";
 import type { OrqenixPlugin, PluginContext } from "@orqenix/core";
 
@@ -9,11 +10,11 @@ export interface PluginHostOptions {
 }
 
 export class PluginHost {
-  readonly registry: Plugin.PluginRegistry;
+  readonly registry: Plugin.PluginHookRegistry;
   private loader: Plugin.PluginLoader;
 
   constructor(private readonly opts: PluginHostOptions = {}) {
-    this.registry = new Plugin.PluginRegistry();
+    this.registry = new Plugin.PluginHookRegistry();
     if (opts.contextProvider) {
       this.registry.setContextProvider(opts.contextProvider);
     }

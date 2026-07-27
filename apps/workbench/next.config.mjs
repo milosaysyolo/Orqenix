@@ -2,54 +2,42 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Standalone output for distributable bundles
-  output: "standalone",
-
-  // Workbench is local-first; no external CDN required
-  poweredByHeader: false,
   reactStrictMode: true,
-
-  // Workbench runs at port 27420 by default
-  // Hostname binding to 127.0.0.1 is enforced at script level
-
-  // SWC minification is enabled by default in Next.js 15+ (removed swcMinify option)
-
+  serverExternalPackages: ['better-sqlite3'],
+  transpilePackages: [
+    '@orqenix/memory-engine',
+    '@orqenix/plugin-core',
+    '@orqenix/settings-registry',
+    '@orqenix/marketplace-core',
+    '@orqenix/normalization-engine',
+    '@orqenix/input-adapters',
+    '@orqenix/output-adapters',
+    '@orqenix/self-learning-observer',
+    '@orqenix/self-learning-detection',
+    '@orqenix/skill-genesis',
+    '@orqenix/instinct-promoter',
+    '@orqenix/verification-loop',
+    '@orqenix/mcp-server',
+    '@orqenix/local-memory-federation',
+  ],
   experimental: {
-    // Enable React 19 features
-    reactCompiler: false,
+    serverActions: { bodySizeLimit: '2mb' },
   },
-
-  // Headers for security (defense in depth)
+  env: { NEXT_TELEMETRY_DISABLED: '1' },
   async headers() {
     return [
       {
         source: "/(.*)",
         headers: [
           {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
-          },
-          {
-            key: "Content-Security-Policy",
+            key: 'Content-Security-Policy-Report-Only',
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://localhost:27420; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'",
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ws:;",
           },
         ],
       },
     ];
   },
-
-  // Production assets URL prefix
-  // Set ORQENIX_WORKBENCH_BASE_URL=/orqenix if behind reverse proxy
-  basePath: process.env.ORQENIX_WORKBENCH_BASE_URL || "",
 };
 
 export default nextConfig;

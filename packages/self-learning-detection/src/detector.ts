@@ -15,22 +15,30 @@ import {
   type IDetector,
   type DetectionThresholds,
   DEFAULT_THRESHOLDS,
-} from "./types";
+} from './types';
+import {
+  type SelfLearningGovernance,
+  DEFAULT_GOVERNANCE,
+} from '@orqenix/self-learning-observer';
 
 export interface BasicDetectorOptions {
   db: Database;
   thresholds?: Partial<DetectionThresholds>;
+  /** Optional governance to cap generated candidates per run */
+  governance?: Partial<SelfLearningGovernance>;
 }
 
 export class BasicDetector implements IDetector {
   private readonly db: Database;
   private readonly thresholds: DetectionThresholds;
   private readonly candidateStore: CandidateStore;
+  private readonly generationCap: number;
 
   constructor(options: BasicDetectorOptions) {
     this.db = options.db;
     this.thresholds = { ...DEFAULT_THRESHOLDS, ...options.thresholds };
     this.candidateStore = new CandidateStore(this.db);
+    this.generationCap = options.governance?.generationCap ?? DEFAULT_GOVERNANCE.generationCap;
   }
 
   /** Returns detected patterns (without persisting) */
@@ -45,15 +53,22 @@ export class BasicDetector implements IDetector {
 
   /**
    * Full run: detect + persist candidates with cooldown handling.
+   * Respects generationCap from governance — only processes the top
+   * N patterns by impact score.
    */
   async run(input: DetectionInput): Promise<DetectionResult> {
     const startMs = Date.now();
     const thresholds = { ...this.thresholds, ...input.thresholds };
     const patterns = await this.detect(input);
 
+    // Apply generation cap — top N by impact score
+    const capped = patterns
+      .sort((a, b) => b.impactScore - a.impactScore)
+      .slice(0, this.generationCap);
+
     let created = 0;
     let updated = 0;
-    for (const pattern of patterns) {
+    for (const pattern of capped) {
       const result = this.candidateStore.upsert(
         pattern,
         {

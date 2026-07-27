@@ -9,22 +9,16 @@ import { readFileSync } from "node:fs";
 // Sources: Phase 8 D8.alpha/beta/gamma/delta delivery reports + checkpoint memory.
 const PHASE_8_SCOPE = [
   // D8.alpha Foundation
-  "@orqenix/workbench", // D8.alpha.1, G61
-  "@orqenix/ui-primitives", // D8.alpha.2, G61-07/08/09
-  "@orqenix/local-memory-federation", // D8.alpha.3, G58-09/10/11
-  "@orqenix/plugin-core", // D8.alpha.4, G62
-  "@orqenix/settings-registry", // D8.alpha.5, G64
-  "@orqenix/memory-engine", // D8.alpha.6, G58/G59/G60
-  "@orqenix/mcp-server", // D8.alpha.7, G63
-  "@orqenix/skill-runtime", // D8.alpha.7
-  "@orqenix/binding-core", // D8.alpha.7
-  "@orqenix/binding-claude-code", // D8.alpha.7
-  "@orqenix/binding-cursor",
-  "@orqenix/binding-codex",
-  "@orqenix/binding-opencode",
-  "@orqenix/binding-cline",
-  "@orqenix/binding-aider",
-  "@orqenix/binding-continue",
+  '@orqenix/workbench',                  // D8.alpha.1, G61
+  '@orqenix/ui-primitives',              // D8.alpha.2, G61-07/08/09
+  '@orqenix/local-memory-federation',    // D8.alpha.3, G58-09/10/11
+  '@orqenix/plugin-core',                // D8.alpha.4, G62
+  '@orqenix/settings-registry',          // D8.alpha.5, G64
+  '@orqenix/memory-engine',              // D8.alpha.6, G58/G59/G60
+  '@orqenix/mcp-server',                 // D8.alpha.7, G63
+  '@orqenix/skill-runtime',              // D8.alpha.7
+  '@orqenix/binding-core',               // D8.alpha.7
+  '@orqenix/binding-adapters',           // D8.alpha.7 (merged: aider, claude-code, cline, codex, continue, cursor, opencode)
   // D8.beta Marketplace
   "@orqenix/marketplace-core", // G65
   "@orqenix/marketplace-ui",

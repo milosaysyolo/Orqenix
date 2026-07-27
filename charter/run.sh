@@ -32,7 +32,7 @@ run_gate() {
   local name="$2"
   shift 2
   printf "▶ %-4s %-45s ... " "$id" "$name"
-  if "$@" >/tmp/gate.log 2>&1; then
+  if timeout 600 "$@" >/tmp/gate.log 2>&1; then
     echo "GREEN"
     PASS=$((PASS + 1))
   else

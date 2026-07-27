@@ -1,8 +1,9 @@
-import { MeshLogger } from "./logger.js";
-import { METRIC_NAMES, MeshMetrics } from "./metrics.js";
-import { summarizePayload } from "./redaction.js";
-import { traceIdOf } from "./trace.js";
-import type { MeshRequest, MeshResponse, ScopeId } from "@orqenix/mesh-transport-core";
+// SPDX-License-Identifier: Apache-2.0
+import { MeshLogger } from './logger.js';
+import { METRIC_NAMES, MeshMetrics } from './metrics.js';
+import { summarizePayload } from './redaction.js';
+import { traceIdOf } from './trace.js';
+import type { MeshRequest, MeshResponse, ScopeId } from '@orqenix/mesh-transport-core';
 
 export interface ObservabilityHooks {
   logger: MeshLogger;

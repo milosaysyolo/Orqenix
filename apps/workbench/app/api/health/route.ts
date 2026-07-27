@@ -2,6 +2,7 @@
 // Workbench health endpoint , used by local checks and load balancers if proxied
 
 import { NextResponse } from "next/server";
+import { getEngineStatus, STRICT } from "@/lib/engine-init";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -13,6 +14,8 @@ export async function GET() {
       timestamp: new Date().toISOString(),
       service: "@orqenix/workbench",
       version: "0.8.0-alpha.1",
+      strict: STRICT,
+      engines: getEngineStatus(),
     },
     {
       status: 200,

@@ -5,17 +5,24 @@
 // wires the actual memory engine consumed by Workbench, federation, plugins,
 // and settings.
 
-import { SqliteStore } from "./store/sqlite-store";
-import { HybridSearch } from "./store/hybrid-search";
-import { BlobStore } from "./store/blob-store";
-import { HierarchyQuery } from "./hierarchy/hierarchy-query";
-import { BranchStore } from "./hierarchy/branch-store";
-import { PromotionEngine } from "./hierarchy/promotion";
-import { SubagentHarnessManager } from "./subagent/harness";
-import { ReturnAbsorber } from "./subagent/return-absorber";
-import { AuditChainWriter } from "./audit/chain-writer";
-import { MigrationRunner, HIERARCHY_MIGRATIONS, BASE_KB_BOOTSTRAP } from "./migrations/index";
-import type { KbKind, MemoryEntry, WriteEntryInput } from "./store/types";
+import { SqliteStore } from './store/sqlite-store';
+import { HybridSearch } from './store/hybrid-search';
+import { HierarchyQuery } from './hierarchy/hierarchy-query';
+import { BranchStore } from './hierarchy/branch-store';
+import { PromotionEngine } from './hierarchy/promotion';
+import { SubagentHarnessManager } from './subagent/harness';
+import { ReturnAbsorber } from './subagent/return-absorber';
+import { AuditChainWriter } from './audit/chain-writer';
+import {
+  MigrationRunner,
+  HIERARCHY_MIGRATIONS,
+  BASE_KB_BOOTSTRAP,
+} from './migrations/index';
+import type {
+  KbKind,
+  MemoryEntry,
+  WriteEntryInput,
+} from './store/types';
 import type {
   HierarchyQueryInput,
   HierarchyQueryResult,

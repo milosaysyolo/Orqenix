@@ -6,8 +6,8 @@
 
 "use client";
 
-import * as React from "react";
-import { Search, ShieldAlert, CheckCircle2 } from "lucide-react";
+import * as React from 'react';
+import { Search, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import {
   Button,
   Input,

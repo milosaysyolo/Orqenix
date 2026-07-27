@@ -13,7 +13,7 @@ import type {
   ToolOutput,
 } from "./types.js";
 
-export class PluginRegistry {
+export class PluginHookRegistry {
   private plugins = new Map<string, OrqenixPlugin>();
   private contextProvider: (() => PluginContext) | null = null;
 
@@ -180,4 +180,4 @@ export class PluginRegistry {
   }
 }
 
-export const globalRegistry = new PluginRegistry();
+export const globalRegistry = new PluginHookRegistry();

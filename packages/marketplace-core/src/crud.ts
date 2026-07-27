@@ -4,7 +4,6 @@
 // Create / Update / Delete / Fork operations on local plugins. Per CR v8.0
 // Section 6.4. Each operation audits + validates via plugin-core conformance.
 
-import { blake3 } from "@noble/hashes/blake3";
 import {
   assertValidManifest,
   ConformanceSuite,
@@ -18,7 +17,8 @@ import {
   type DeletePluginInput,
   type CrudResult,
   type MarketplaceAuditKind,
-} from "./types";
+} from './types';
+import { computeContentHash } from '@orqenix/normalization-engine';
 
 /** Interface for persisting local plugin CSF documents */
 export interface LocalPluginStore {
@@ -35,6 +35,7 @@ export interface MarketplaceAuditWriter {
     ts: string;
     actor: { user: string };
     payload: Record<string, unknown>;
+    project_id: string;
   }): Promise<void>;
 }
 
@@ -55,7 +56,8 @@ export class MarketplaceCrud {
   constructor(
     private readonly store: LocalPluginStore,
     private readonly audit: MarketplaceAuditWriter,
-    private readonly actor: string = "user",
+    private readonly actor: string = 'user',
+    private readonly projectId: string = ''
   ) {
     this.conformance = new ConformanceSuite();
   }
@@ -71,7 +73,7 @@ export class MarketplaceCrud {
     }
 
     const csf = this.buildCsfFromCreate(input);
-    csf.provenance.contentHash = this.computeHash(csf);
+    csf.provenance.contentHash = computeContentHash(csf);
 
     // Validate
     assertValidManifest(this.csfToPackageJson(csf));
@@ -102,7 +104,7 @@ export class MarketplaceCrud {
       version: newVersion,
       manifest: { ...existing.manifest, ...((input.changes.manifest as object) ?? {}) },
     };
-    updated.provenance.contentHash = this.computeHash(updated);
+    updated.provenance.contentHash = computeContentHash(updated);
 
     // Re-validate + conformance check
     assertValidManifest(this.csfToPackageJson(updated));
@@ -164,7 +166,7 @@ export class MarketplaceCrud {
       name: input.newName,
       version: "0.1.0",
     };
-    forked.provenance.contentHash = this.computeHash(forked);
+    forked.provenance.contentHash = computeContentHash(forked);
 
     await this.store.set(forked);
     await this.auditEvent("marketplace.fork_created", {
@@ -189,7 +191,7 @@ export class MarketplaceCrud {
         external_agent_compat: input.external_agent_compat,
         license: "Apache-2.0",
         keywords: [],
-        compatibility: { orqenix: ">=0.8.0" },
+        compatibility: { orqenix: '^0.8.0' },
         settingsHotReloadable: false,
         settingsHierarchyOverride: "project",
         sandboxMode: "separate_process",
@@ -241,20 +243,6 @@ export class MarketplaceCrud {
     return `${major}.${minor}.${patch}`;
   }
 
-  private computeHash(csf: CanonicalSkillFormat): string {
-    const canonical = JSON.stringify({
-      name: csf.name,
-      version: csf.version,
-      kind: csf.kind,
-      manifest: csf.manifest,
-    });
-    const h = blake3(new TextEncoder().encode(canonical));
-    return Array.from(h)
-      .slice(0, 16)
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  }
-
   private async auditEvent(
     kind: MarketplaceAuditKind,
     payload: Record<string, unknown>,
@@ -264,6 +252,7 @@ export class MarketplaceCrud {
       ts: new Date().toISOString(),
       actor: { user: this.actor },
       payload,
+      project_id: this.projectId,
     });
   }
 }

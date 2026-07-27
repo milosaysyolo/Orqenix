@@ -4,5 +4,3 @@
 
 export const PACKAGE_VERSION = "0.5.0-phase-5";
 export const TODO = "Part_1" as const;
-
-console.info("@orqenix/testing: scaffold loaded, TODO: " + TODO);

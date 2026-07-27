@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/marketplace-core",
-  "version": "0.8.0-alpha.1",
+  "version": "0.9.0",
   "description": "Apache-2.0 marketplace core for Orqenix. Full CRUD + interchangeable registry sources.",
   "license": "Apache-2.0",
   "type": "module",
@@ -34,7 +34,6 @@
   "dependencies": {
     "@orqenix/plugin-core": "workspace:*",
     "@orqenix/normalization-engine": "workspace:*",
-    "@orqenix/memory-engine": "workspace:*",
     "@noble/hashes": "^1.5.0",
     "zod": "^3.25.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/kb-chat",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "description": "Chat Knowledge Base (sessions, entries, vector search, capability-gated writes)",
   "license": "Apache-2.0",
   "author": {
@@ -55,7 +55,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
     "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@orqenix/core": "workspace:*",

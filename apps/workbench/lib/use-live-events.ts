@@ -1,12 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
-"use client";
+'use client';
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 export interface LiveEvent {
+  id: string;
   kind: string;
   ts: string;
+  correlationId?: string;
+  parentId?: string;
+  actor?: string;
   payload: Record<string, unknown>;
 }
 
@@ -23,28 +27,30 @@ export function useLiveEvents(filterKinds?: string[], cap = 200): UseLiveEventsR
   const [events, setEvents] = useState<LiveEvent[]>([]);
   const esRef = useRef<EventSource | null>(null);
   const retryRef = useRef(0);
-  const filterKindsRef = useRef(filterKinds);
-  filterKindsRef.current = filterKinds;
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const mountedRef = useRef(true);
 
   const clear = useCallback(() => setEvents([]), []);
 
   useEffect(() => {
-    let stopped = false;
+    mountedRef.current = true;
 
     const connect = () => {
-      if (stopped) return;
-      const es = new EventSource("/api/stream");
+      if (!mountedRef.current) return;
+      const es = new EventSource('/api/stream');
       esRef.current = es;
 
       es.onopen = () => {
+        if (!mountedRef.current) { es.close(); return; }
         setConnected(true);
         retryRef.current = 0;
       };
 
-      es.addEventListener("orqenix", (ev) => {
+      es.addEventListener('orqenix', (ev) => {
+        if (!mountedRef.current) return;
         try {
           const data = JSON.parse((ev as MessageEvent).data) as LiveEvent;
-          if (filterKindsRef.current && !filterKindsRef.current.includes(data.kind)) return;
+          if (filterKinds && !filterKinds.includes(data.kind)) return;
           setLatest(data);
           setEvents((prev) => {
             const next = [...prev, data];
@@ -56,19 +62,24 @@ export function useLiveEvents(filterKinds?: string[], cap = 200): UseLiveEventsR
       });
 
       es.onerror = () => {
+        if (!mountedRef.current) return;
         setConnected(false);
         es.close();
-        const delay = Math.min(10000, 500 * 2 ** retryRef.current++);
-        setTimeout(connect, delay);
+        // Exponential backoff with random jitter to prevent thundering herd.
+        const base = Math.min(10000, 500 * 2 ** retryRef.current++);
+        const delay = base * (0.5 + Math.random() * 0.5);
+        timerRef.current = setTimeout(connect, delay);
       };
     };
 
     connect();
     return () => {
-      stopped = true;
+      mountedRef.current = false;
+      clearTimeout(timerRef.current);
       esRef.current?.close();
     };
-  }, [cap]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(filterKinds), cap]);
 
   return { connected, latest, events, clear };
 }

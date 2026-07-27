@@ -8,10 +8,9 @@
 //
 // Per CR v8.0 Section 7.5.
 
-import type { CanonicalSkillFormat } from "./csf-schema";
-import { PluginKindRegistry } from "./kinds/registry";
-import { validateManifest } from "./manifest-validator";
-import { PluginConformanceFailedError } from "./errors";
+import type { CanonicalSkillFormat } from './csf-schema';
+import { PluginKindRegistry } from './kinds/registry';
+import { PluginConformanceFailedError } from './errors';
 
 export interface ConformanceCheck {
   id: string;

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mesh-observability",
-  "version": "0.6.1",
+  "version": "0.9.0",
   "description": "Structured logs, OpenTelemetry-compatible metrics, W3C traceparent propagation, and strict redaction for the Orqenix mesh.",
   "type": "module",
   "license": "Apache-2.0",
@@ -24,7 +24,7 @@
     "test": "vitest run --coverage",
     "gate:G42": "vitest run test/G42-gate-wrapper.test.ts --reporter verbose",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . || true"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@orqenix/mesh-transport-core": "workspace:*",

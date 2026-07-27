@@ -16,13 +16,11 @@ interface BootstrapAttempt {
 export class MeshDiscovery {
   private sm = new DiscoveryStateMachine();
   private bootstrap?: BootstrapConfig;
-  private now: () => number;
   private bootstrapAttempts = new Map<string, BootstrapAttempt>();
   private stopped = false;
 
   constructor(opts: MeshDiscoveryOptions = {}) {
     this.bootstrap = opts.bootstrap;
-    this.now = opts.now ?? Date.now;
   }
 
   on(listener: Listener): () => void {

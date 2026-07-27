@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 // packages/mesh-transport-http/src/dedup-cache.ts
 /**
  * Bounded LRU dedup cache keyed by request.id.

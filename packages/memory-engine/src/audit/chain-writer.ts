@@ -5,10 +5,16 @@
 // shape with branch_id/session_id/parent_session_id metadata. The chain remains
 // verifiable by the D7.5 AuditChainVerifier Web Worker without modification.
 
-import type { Database } from "better-sqlite3";
-import { blake3 } from "@noble/hashes/blake3";
-import { ulid } from "../store/ulid";
-import type { AuditEntry, AppendAuditInput, ChainVerifyResult, MemoryAuditKind } from "./types";
+import type { Database } from 'better-sqlite3';
+import { blake3 } from '@noble/hashes/blake3';
+import { bytesToHex } from '@noble/hashes/utils';
+import { ulid } from '../store/ulid';
+import type {
+  AuditEntry,
+  AppendAuditInput,
+  ChainVerifyResult,
+  MemoryAuditKind,
+} from './types';
 
 const ZERO_HASH = "0".repeat(64);
 
@@ -202,12 +208,7 @@ export class AuditChainWriter {
 
   private hash(input: string): string {
     const bytes = new TextEncoder().encode(input);
-    const h = blake3(bytes);
-    let s = "";
-    for (let i = 0; i < 32; i++) {
-      s += (h[i] as number).toString(16).padStart(2, "0");
-    }
-    return s;
+    return bytesToHex(blake3(bytes));
   }
 
   private rowToEntry(row: Record<string, unknown>): AuditEntry {

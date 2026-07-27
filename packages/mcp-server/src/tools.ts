@@ -22,6 +22,7 @@ export interface McpToolDefinition {
   name: string;
   description: string;
   inputSchema: Record<string, unknown>;
+  readonly permission?: string;
   handler: (args: unknown, ctx: ToolContext) => Promise<unknown>;
 }
 
@@ -35,10 +36,28 @@ const RecallMemoryArgs = z.object({
   limit: z.number().int().positive().max(100).default(20),
 });
 
+const RECALL_PERMISSION_BY_KB: Record<string, string> = {
+  code: 'memory.read:code',
+  decision: 'memory.read:decision',
+  lesson: 'memory.read:lesson',
+  chat: 'memory.read:chat',
+};
+
+/**
+ * Resolves the most-specific read permission for the requested knowledge bases.
+ * If multiple kbs are requested, the first non-chat specific one wins; chat is
+ * the default for unspecified/no-specific cases.
+ */
+export function resolveRecallPermission(kbs?: string[]): string {
+  const specific = kbs?.find((k) => k !== 'chat');
+  return RECALL_PERMISSION_BY_KB[specific ?? 'chat'] ?? 'memory.read:chat';
+}
+
 const recallMemoryTool: McpToolDefinition = {
   name: "orqenix_recall_memory",
   description:
-    "Query memory across the project/branch/session hierarchy. Returns ranked entries with provenance.",
+    'Query memory across the project/branch/session hierarchy. Returns ranked entries with provenance.',
+  permission: resolveRecallPermission(),
   inputSchema: {
     type: "object",
     properties: {
@@ -89,8 +108,9 @@ const RecordDecisionArgs = z.object({
 });
 
 const recordDecisionTool: McpToolDefinition = {
-  name: "orqenix_record_decision",
-  description: "Record an architectural decision with rationale and alternatives.",
+  name: 'orqenix_record_decision',
+  description: 'Record an architectural decision with rationale and alternatives.',
+  permission: 'memory.write:decision',
   inputSchema: {
     type: "object",
     properties: {
@@ -132,8 +152,9 @@ const RecordLessonArgs = z.object({
 });
 
 const recordLessonTool: McpToolDefinition = {
-  name: "orqenix_record_lesson",
-  description: "Record a lesson learned from debugging, incidents, or post-mortems.",
+  name: 'orqenix_record_lesson',
+  description: 'Record a lesson learned from debugging, incidents, or post-mortems.',
+  permission: 'memory.write:lesson',
   inputSchema: {
     type: "object",
     properties: {
@@ -174,8 +195,9 @@ const QueryCodeKbArgs = z.object({
 });
 
 const queryCodeKbTool: McpToolDefinition = {
-  name: "orqenix_query_codekb",
-  description: "Query the CodeKB for code snippets, ASTs, and symbols.",
+  name: 'orqenix_query_codekb',
+  description: 'Query the CodeKB for code snippets, ASTs, and symbols.',
+  permission: 'memory.read:code',
   inputSchema: {
     type: "object",
     properties: {
@@ -213,8 +235,9 @@ const InvokeSkillArgs = z.object({
 });
 
 const invokeSkillTool: McpToolDefinition = {
-  name: "orqenix_invoke_skill",
-  description: "Invoke a registered Orqenix skill by name with input matching its schema.",
+  name: 'orqenix_invoke_skill',
+  description: 'Invoke a registered Orqenix skill by name with input matching its schema.',
+  permission: 'skill.invoke',
   inputSchema: {
     type: "object",
     properties: {
@@ -244,8 +267,9 @@ const LinkScopeArgs = z.object({
 });
 
 const linkScopeTool: McpToolDefinition = {
-  name: "orqenix_link_scope",
-  description: "Link two scopes with a capability transfer (directional).",
+  name: 'orqenix_link_scope',
+  description: 'Link two scopes with a capability transfer (directional).',
+  permission: 'scope.write',
   inputSchema: {
     type: "object",
     properties: {
@@ -273,9 +297,10 @@ const linkScopeTool: McpToolDefinition = {
 // ─────────────────────────────────────────────────────────────────────────
 
 const verifyAuditChainTool: McpToolDefinition = {
-  name: "orqenix_verify_audit_chain",
-  description: "Verify the integrity of the project audit chain (BLAKE3).",
-  inputSchema: { type: "object", properties: {} },
+  name: 'orqenix_verify_audit_chain',
+  description: 'Verify the integrity of the project audit chain (BLAKE3).',
+  permission: 'audit.read',
+  inputSchema: { type: 'object', properties: {} },
   async handler(_args, ctx) {
     const result = ctx.engine.verifyAuditChain();
     return {
@@ -333,8 +358,9 @@ const ReportSessionStartArgs = z.object({
 });
 
 const reportSessionStartTool: McpToolDefinition = {
-  name: "orqenix_report_session_start",
-  description: "Report a new session to Orqenix (for self-learning + hierarchy).",
+  name: 'orqenix_report_session_start',
+  description: 'Report a new session to Orqenix (for self-learning + hierarchy).',
+  permission: 'scope.read',
   inputSchema: {
     type: "object",
     properties: {
@@ -352,8 +378,9 @@ const reportSessionStartTool: McpToolDefinition = {
 };
 
 const reportSessionResumeTool: McpToolDefinition = {
-  name: "orqenix_report_session_resume",
-  description: "Report resumption of a previous session.",
+  name: 'orqenix_report_session_resume',
+  description: 'Report resumption of a previous session.',
+  permission: 'scope.read',
   inputSchema: {
     type: "object",
     properties: { sessionId: { type: "string" } },

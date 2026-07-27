@@ -1,32 +1,32 @@
 // SPDX-License-Identifier: Apache-2.0
-// Workbench , Skill Genesis API (generate skill from candidate)
-
-import { NextResponse } from "next/server";
+// Phase 4: wired to @orqenix/skill-genesis (demo-store fallback)
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-export async function POST(req: Request) {
+import { generateSkillFromCandidate } from '@/lib/engine-init';
+
+export async function POST(req: Request): Promise<Response> {
   let body: { candidateId?: string; language?: string; nameOverride?: string };
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return Response.json({ error: 'Invalid JSON' }, { status: 400 });
   }
   if (!body.candidateId) {
-    return NextResponse.json({ error: "Missing candidateId" }, { status: 400 });
+    return Response.json({ error: 'Missing candidateId' }, { status: 400 });
   }
 
-  // D8.γ runtime:
-  //   const { genesis } = buildSelfLearning(getMemoryEngine());
-  //   const result = await genesis.generateFromCandidate({ candidateId, projectId, language, nameOverride });
-  return NextResponse.json(
-    {
+  try {
+    const result = await generateSkillFromCandidate(body.candidateId, body.language, body.nameOverride);
+    return Response.json({
       ok: true,
       candidateId: body.candidateId,
-      note: "SkillGenesis wires at runtime; generated skill is unverified (Anti-38)",
-      verificationStatus: "unverified",
-    },
-    { status: 200 },
-  );
+      skillName: result.skillName,
+      verificationStatus: result.verificationStatus,
+    });
+  } catch (err) {
+    console.error('[learning/genesis]', err);
+    return Response.json({ error: 'Failed to record genesis' }, { status: 500 });
+  }
 }
