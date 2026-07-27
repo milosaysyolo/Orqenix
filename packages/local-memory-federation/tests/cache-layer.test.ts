@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Tests for CacheLayer
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { CacheLayer } from "../src/cache-layer";
 import type { CrossProjectQuery, FederationResult, ProjectId } from "../src/types";
 

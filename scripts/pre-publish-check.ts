@@ -31,12 +31,39 @@ const { values: args } = parseArgs({
 
 async function discoverPackages(): Promise<PackageInfo[]> {
   const packagesDir = "packages";
+  const pluginsDir = "plugins";
   const entries = await readdir(packagesDir);
   const packages: PackageInfo[] = [];
   const config = detectConfig(detectMode());
 
   for (const entry of entries) {
     const path = join(packagesDir, entry);
+    const pkgJsonPath = join(path, "package.json");
+    try {
+      const stat_ = await stat(pkgJsonPath);
+      if (!stat_.isFile()) continue;
+      const content = JSON.parse(await readFile(pkgJsonPath, "utf-8"));
+      const info: PackageInfo = {
+        name: content.name ?? `<unnamed:${entry}>`,
+        path,
+        pkgJsonPath,
+        current: content,
+        classification: classify(content, config),
+      };
+      packages.push(info);
+    } catch {
+      // No package.json, skip
+    }
+  }
+  // Also scan plugins/ for @orqenix/plugin-* packages
+  let pluginEntries: string[] = [];
+  try {
+    pluginEntries = await readdir(pluginsDir);
+  } catch {
+    // plugins/ doesn't exist, skip
+  }
+  for (const entry of pluginEntries) {
+    const path = join(pluginsDir, entry);
     const pkgJsonPath = join(path, "package.json");
     try {
       const stat_ = await stat(pkgJsonPath);
@@ -181,15 +208,19 @@ function detectMode(): "oss" | "pro" {
 }
 
 async function runChecks(checks: Check[], ctx: CheckContext): Promise<CheckResult[]> {
-  const CONCURRENCY = 8;
+  const CONCURRENCY = 1;
+  const PER_CHECK_TIMEOUT_MS = 30_000;
   const results: CheckResult[] = [];
 
   for (let i = 0; i < checks.length; i += CONCURRENCY) {
     const batch = checks.slice(i, i + CONCURRENCY);
     const batchResults = await Promise.all(
       batch.map(async (check) => {
+        const timeout = new Promise<CheckResult>((_, reject) =>
+          setTimeout(() => reject(new Error(`Check ${check.id} timed out after ${PER_CHECK_TIMEOUT_MS}ms`)), PER_CHECK_TIMEOUT_MS)
+        );
         try {
-          return await check.run(ctx);
+          return await Promise.race([check.run(ctx), timeout]);
         } catch (err) {
           return {
             id: check.id,

@@ -2,10 +2,10 @@
 // Tests for PermissionChecker
 
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { mkdtemp, rm, writeFile, mkdir } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { stringify as stringifyYaml } from "yaml";
+import type { stringify as _stringifyYaml } from "yaml";
 import { PermissionChecker } from "../src/permission-checker";
 import { ExpiredApprovalError, NoApprovalError } from "../src/errors";
 import type { ProjectId } from "../src/types";
