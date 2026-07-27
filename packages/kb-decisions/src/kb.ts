@@ -48,7 +48,7 @@ export class DecisionKB {
   async listByType(type: string, _scope: string, _limit?: number): Promise<DecisionEntry[]> {
     const out: DecisionEntry[] = [];
     for (const [, n] of this.graph.nodes) {
-      if (n.tags?.includes(type)) out.push(this.toEntry(n));
+      if (!type || n.tags?.includes(type)) out.push(this.toEntry(n));
     }
     return out;
   }

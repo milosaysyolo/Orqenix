@@ -74,14 +74,14 @@ export function issueMCPToken(client: string, scopes: string[]): { id: string; c
     expires_at: new Date(Date.now() + 86400000).toISOString(),
   };
   const s = store();
-  if (!Array.isArray((s as any).mcpTokens)) (s as any).mcpTokens = [];
-  (s as any).mcpTokens.push(tok);
+  if (!Array.isArray(s.mcpTokens)) s.mcpTokens = [];
+  s.mcpTokens.push(tok);
   eventBus.emit({ kind: 'session.updated', actor: 'you', payload: { op: 'mcp.token.issue', client, id: tok.id } });
   return tok;
 }
 
 export function revokeMCPToken(id: string): boolean {
-  const s = store() as any;
+  const s = store();
   if (!Array.isArray(s.mcpTokens)) return false;
   const before = s.mcpTokens.length;
   s.mcpTokens = s.mcpTokens.filter((t: any) => t.id !== id);
@@ -93,7 +93,7 @@ export function revokeMCPToken(id: string): boolean {
 }
 
 export function getMCPTokens(): Array<{ id: string; client: string; scopes_json: string; expires_at: string }> {
-  const s = store() as any;
+  const s = store();
   return Array.isArray(s.mcpTokens) ? s.mcpTokens : [];
 }
 

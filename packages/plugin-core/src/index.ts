@@ -17,7 +17,7 @@ export type {  PluginLifecycleState,  RegisteredPlugin,  PluginInvocationRequest
 export {  PluginError,  ManifestInvalidError,  PluginKindUnsupportedError,  PluginNotFoundError,  PluginInstallFailedError,  PluginActivateFailedError,  PluginCrashedError,  PluginTimeoutError,  PluginInvalidInputError,  PluginInvalidOutputError,  PluginAlreadyRegisteredError,  PluginNotRegisteredError,  PluginConformanceFailedError} from './errors';
 export { PluginLoader } from './plugin-loader';
 export { PluginRegistry } from './plugin-registry';
-export type { PluginRegistry } from './registry-interface';
+export type { PluginRegistryInterface } from './registry-interface';
 export { PluginLifecycle } from './lifecycle';
 export { validateManifest, assertValidManifest } from './manifest-validator';
 export { ConformanceSuite } from './conformance';

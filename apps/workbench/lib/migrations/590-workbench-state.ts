@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS config_overrides (
 ) STRICT;
 CREATE TABLE IF NOT EXISTS mcp_tokens (
   id TEXT PRIMARY KEY, client TEXT NOT NULL, scopes_json TEXT NOT NULL,
-  state TEXT NOT NULL DEFAULT 'active', issued_at TEXT NOT NULL, expires_at TEXT
+  expires_at TEXT NOT NULL, created_at TEXT NOT NULL
 ) STRICT;
 CREATE TABLE IF NOT EXISTS bindings (
   platform TEXT PRIMARY KEY, state TEXT NOT NULL DEFAULT 'not_installed',

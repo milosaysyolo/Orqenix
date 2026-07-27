@@ -10,7 +10,7 @@ import type {
   PluginLifecycleState,
   PluginDiscoveryResult,
 } from './types';
-import type { PluginRegistry as PluginRegistryInterface } from './registry-interface';
+import type { PluginRegistryInterface } from './registry-interface';
 import {
   PluginAlreadyRegisteredError,
   PluginNotRegisteredError,
@@ -43,7 +43,7 @@ export class InMemoryRegistryPersistence implements RegistryPersistence {
 /**
  * Registry of installed plugins.
  */
-export class PluginRegistry implements PluginRegistryInterface {
+export class PluginRegistry implements PluginRegistryInterface { // eslint-disable-line @typescript-eslint/no-unused-vars
   private plugins: Map<string, RegisteredPlugin> = new Map();
   private readonly persistence: RegistryPersistence;
 
@@ -175,6 +175,11 @@ export class PluginRegistry implements PluginRegistryInterface {
   /** Returns count of registered plugins */
   count(): number {
     return this.plugins.size;
+  }
+
+  /** Checks if a plugin is registered */
+  has(name: string): boolean {
+    return this.plugins.has(name);
   }
 
   /** Flushes registry state to persistence */

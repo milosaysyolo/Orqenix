@@ -7,6 +7,8 @@ import { SqliteConnection, runMigrations } from "@orqenix/storage-sqlite";
 import { ScopeLinkStore, SCOPE_LINK_MIGRATIONS } from "@orqenix/scope-link";
 import { WorkspaceStore, WORKSPACE_MIGRATIONS } from "@orqenix/workspace";
 import { AuditLogStore, AUDIT_LOG_MIGRATIONS } from "@orqenix/audit-log";
+import type { AuditEventKind } from "@orqenix/audit-log";
+import type { LinkStatus } from "@orqenix/scope-link";
 import { DetachPlanner, DetachExecutor } from "@orqenix/detach";
 import { PhaseFourToFiveMigrator } from "@orqenix/migration";
 import * as ed from "@noble/ed25519";
@@ -187,7 +189,7 @@ const handlers: Record<string, CommandHandler> = {
 
   "link list": async (ctx, args) => {
     if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
-    const status = flagString(args, "status") as any;
+    const status = flagString(args, "status") as LinkStatus | undefined;
     const conn = openConn(ctx);
     try {
       const store = new ScopeLinkStore({ conn, localScopeId: ctx.scopeId });
@@ -252,7 +254,7 @@ const handlers: Record<string, CommandHandler> = {
 
   "audit tail": async (ctx, args) => {
     if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
-    const kind = flagString(args, "kind") as any;
+    const kind = flagString(args, "kind") as AuditEventKind | undefined;
     const limit = Number(flagString(args, "limit", "50"));
     const conn = openConn(ctx);
     try {
@@ -378,8 +380,7 @@ function notImplemented(name: string, comingIn: string, description: string): Co
 // Removed once each command is implemented.
 {
   const coming: [string, string, string][] = [
-    ["init", "v0.10.0", "Initialize Orqenix in a repository."],
-    ["doctor", "v0.10.0", "Verify environment and scope health."],
+
     ["knowledge index", "v0.10.0", "Index project docs, code, and decisions."],
     ["knowledge query", "v0.10.0", "Query indexed knowledge."],
     ["knowledge status", "v0.10.0", "Show knowledge index status."],

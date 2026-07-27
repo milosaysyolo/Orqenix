@@ -81,7 +81,8 @@ export interface MemoryQueryResult {
 
 export type Subsystem =
   | 'settings' | 'memory' | 'sessions' | 'branches'
-  | 'promoter' | 'observer' | 'marketplace' | 'plugins' | 'skills';
+  | 'promoter' | 'observer' | 'marketplace' | 'plugins'
+  | 'detector' | 'skillGenesis';
 export type SubsystemStatus = 'real' | 'demo';
 
 // ── Global singleton ──────────────────────────────────────────────────────
@@ -118,7 +119,8 @@ const engineStatus: Record<Subsystem, SubsystemStatus> = {
   observer: 'real',
   marketplace: 'real',
   plugins: 'real',
-  skills: 'real',
+  detector: 'real',
+  skillGenesis: 'real',
 };
 
 // Single source of truth for strict mode. Env strings are truthy even when "0",
@@ -550,9 +552,9 @@ async function init(): Promise<void> {
     try {
       detector = new BasicDetector({ db });
       globalThis.__orqenixDetector = detector;
-      engineStatus.skills = 'real';
+      engineStatus.detector = 'real';
     } catch (e) {
-      engineStatus.skills = 'demo';
+      engineStatus.detector = 'demo';
       if (STRICT) throw e;
     }
     try {
@@ -561,9 +563,9 @@ async function init(): Promise<void> {
         observer: globalThis.__orqenixObserver ?? new Observer({ db, piiFilter: new BasicPiiFilter() }),
         candidateStore: detector?.getCandidateStore(),
       });
-      engineStatus.skills = 'real';
+      engineStatus.skillGenesis = 'real';
     } catch (e) {
-      engineStatus.skills = 'demo';
+      engineStatus.skillGenesis = 'demo';
       if (STRICT) throw e;
     }
 
@@ -641,7 +643,8 @@ async function init(): Promise<void> {
     engineStatus.sessions = 'demo';
     engineStatus.branches = 'demo';
     engineStatus.observer = 'demo';
-    engineStatus.skills = 'demo';
+    engineStatus.detector = 'demo';
+    engineStatus.skillGenesis = 'demo';
     engineStatus.promoter = 'demo';
     engineStatus.plugins = 'demo';
     engineStatus.marketplace = 'demo';

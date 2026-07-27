@@ -105,7 +105,7 @@ export type SkillExample = z.infer<typeof SkillExampleSchema>;
 
 export const CompatibilitySchema = z.object({
   /** Semver range for Orqenix compatibility */
-  orqenix: z.string().regex(/^[\^~]?\d+\.\d+\.\d+/, 'Must be a semver range'),
+  orqenix: z.string().min(1, 'Must be a semver range'),
   /** Optional MCP protocol version range */
   mcp: z.string().optional(),
   /** Optional Node.js version range */

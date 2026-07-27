@@ -8,8 +8,8 @@
 // the hooks-based registry (OrqenixPlugin) and the lifecycle-based
 // registry (PluginDiscoveryResult).
 
-export interface PluginRegistry {
-  register(plugin: any): Promise<void>;
+export interface PluginRegistryInterface {
+  register(plugin: any): Promise<any>;
   unregister(name: string): Promise<void>;
   list(): any[];
   has(name: string): boolean;

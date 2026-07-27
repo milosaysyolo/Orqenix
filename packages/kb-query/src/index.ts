@@ -79,7 +79,7 @@ export class KnowledgeQueryEngine {
 
     if (kbs.includes("decisions")) {
       try {
-        const decisions = await this.decisions.listByType("general", "", topK);
+        const decisions = await this.decisions.listByType("", "", topK);
         for (const item of decisions) {
           results.push({
             kind: "decision",
