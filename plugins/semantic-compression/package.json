@@ -69,5 +69,6 @@
     "tsup": "catalog:",
     "vitest": "catalog:",
     "typescript": "catalog:"
-  }
+  },
+  "private": true
 }
