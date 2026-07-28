@@ -78,5 +78,9 @@
     "vitest": "catalog:",
     "typescript": "catalog:"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milosaysyolo/Orqenix.git"
+  }
 }
