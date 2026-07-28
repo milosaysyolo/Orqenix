@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/capability-tokens",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Ed25519-signed capability tokens for Orqenix local-first mesh (CR v7.1 Ch.14)",
   "license": "Apache-2.0",
   "author": {

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/input-adapters",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 input adapters for Orqenix normalization. 14 source formats G CSF.",
   "license": "Apache-2.0",
   "type": "module",

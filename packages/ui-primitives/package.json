@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/ui-primitives",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 shared UI primitives for Orqenix Workbench and Cloud Web Control Plane. OKLCH design tokens + 12 shadcn-derived components.",
   "license": "Apache-2.0",
   "type": "module",

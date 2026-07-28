@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/self-learning-detection",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 basic instinct detection for Orqenix. Sequence + frequency + outcome correlation G�� candidates.",
   "license": "Apache-2.0",
   "type": "module",

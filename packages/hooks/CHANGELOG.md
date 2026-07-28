@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0
+
+### Patch Changes
+
+- @orqenix/core@0.10.0
+
 All notable changes to this package will be documented in this file.
 
 The format is based on https://keepachangelog.com/en/1.1.0/,

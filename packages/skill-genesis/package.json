@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/skill-genesis",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 skill genesis for Orqenix. Synthesize CSF + code from promoted candidate patterns.",
   "license": "Apache-2.0",
   "type": "module",

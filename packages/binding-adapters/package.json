@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/binding-adapters",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 Orqenix platform binding adapters (aider, claude-code, cline, codex, continue, cursor, opencode). Merged from 7 individual binding-* packages.",
   "license": "Apache-2.0",
   "author": "Milo Nguyen",

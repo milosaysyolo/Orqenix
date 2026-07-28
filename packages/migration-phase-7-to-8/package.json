@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/migration-phase-7-to-8",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 migration tooling: Phase 7 (scope) G�� Phase 8 (project + branch + session).",
   "license": "Apache-2.0",
   "type": "module",

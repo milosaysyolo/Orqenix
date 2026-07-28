@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mcp-client",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "MCP client for Orqenix G�� consume external MCP servers",
   "license": "Apache-2.0",
   "author": {

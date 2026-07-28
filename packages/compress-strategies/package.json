@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/compress-strategies",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "4 graduated compression strategies (Tier 0-preserving) for Orqenix Smart Compression Engine",
   "license": "Apache-2.0",
   "author": {

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/llm-adapter-ollama",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Local LLM adapter via Ollama HTTP API (default Qwen 2.5 7B)",
   "license": "Apache-2.0",
   "author": {

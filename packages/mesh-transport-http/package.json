@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mesh-transport-http",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "HTTP MeshTransport for Orqenix Phase 6: POST /orqenix/mesh/v1/rpc with msgpack envelopes, dedup cache, bounded retry, and clean teardown.",
   "type": "module",
   "license": "Apache-2.0",

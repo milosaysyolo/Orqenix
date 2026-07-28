@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/instinct-promoter",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 instinct promoter for Orqenix. Human-in-the-loop candidate review (Promote/Reject/Customize/Defer).",
   "license": "Apache-2.0",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/prompt-rewriter",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Prompt rewriter orchestrator: memory recall + injection + optional LLM rewrite",
   "license": "Apache-2.0",
   "author": {

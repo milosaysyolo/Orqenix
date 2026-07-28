@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/mesh-discovery",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Mesh discovery for Orqenix Phase 6: mDNS local LAN default, explicit bootstrap.yaml, typed event lifecycle. No DHT, no public bootstrap by default.",
   "type": "module",
   "license": "Apache-2.0",

@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/memory-engine",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 memory engine for Orqenix. 3-level hierarchy, branch deep-copy, subagent harness, parallel query, BLAKE3 audit chain.",
   "license": "Apache-2.0",
   "type": "module",

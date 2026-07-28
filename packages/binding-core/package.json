@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/binding-core",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Orqenix binding core — platform-agnostic interfaces for agent runtime bindings",
   "license": "Apache-2.0",
   "author": "Milo Nguyen",

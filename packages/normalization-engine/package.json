@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/normalization-engine",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 normalization engine for Orqenix. 14 input + 8 output adapters G CSF with round-trip fidelity.",
   "license": "Apache-2.0",
   "type": "module",

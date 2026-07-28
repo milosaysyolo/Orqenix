@@ -1,6 +1,6 @@
 {
   "name": "@orqenix/skill-runtime",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Apache-2.0 skill runtime for Orqenix. Executes CSF skills via the plugin sandbox.",
   "license": "Apache-2.0",
   "type": "module",
