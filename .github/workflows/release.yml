@@ -102,7 +102,7 @@ jobs:
         run: |
           CHANGESET_COUNT=$(ls .changeset/*.md 2>/dev/null | grep -v README | wc -l || echo 0)
           echo "changeset_count=$CHANGESET_COUNT" >> "$GITHUB_OUTPUT"
-          if [ "$CHANGESET_COUNT" -eq 0 ] && [ "${{ inputs.dry_run }}" != "true" ]; then
+          if [ "$CHANGESET_COUNT" -eq 0 ] && [ "${{ inputs.dry_run }}" != "true" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
             echo "No changesets to publish. Skipping release."
             echo "verdict=no-go" >> "$GITHUB_OUTPUT"
           else
