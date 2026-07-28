@@ -73,5 +73,6 @@
   },
   "bin": {
     "orqenix": "./dist/bin.js"
-  }
+  },
+  "private": true
 }
