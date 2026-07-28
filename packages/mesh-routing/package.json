@@ -70,6 +70,5 @@
   "devDependencies": {
     "vitest": "^1.6.0",
     "typescript": "^5.5.0"
-  },
-  "private": true
+  }
 }
