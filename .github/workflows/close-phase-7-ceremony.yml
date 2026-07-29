@@ -44,21 +44,25 @@ jobs:
         uses: actions/checkout@v4
         with: { ref: main, fetch-depth: 0 }
 
-      - name: Checkout Orqenix-Pro (sibling)
-        uses: actions/checkout@v4
+      - name: Checkout Orqenix-Pro
+        uses: ./.github/actions/checkout-orqenix-repo
         with:
-          repository: milosaysyolo/Orqenix-Pro
-          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          scope: pro
+          ref: main
+          layout: inside
           path: Orqenix-Pro-checkout
-          ref: main
-
-      - name: Checkout Orqenix-Cloud (sibling)
-        uses: actions/checkout@v4
-        with:
-          repository: milosaysyolo/Orqenix-Cloud
           token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
-          path: Orqenix-Cloud-checkout
+          fetch-depth: 0
+
+      - name: Checkout Orqenix-Cloud
+        uses: ./.github/actions/checkout-orqenix-repo
+        with:
+          scope: cloud
           ref: main
+          layout: inside
+          path: Orqenix-Cloud-checkout
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          fetch-depth: 0
 
       - name: Place sibling repos next to OSS root
         run: |
@@ -68,7 +72,7 @@ jobs:
           ls -la "${PARENT}"
 
       - uses: pnpm/action-setup@v4
-        with: { version: 9 }
+        with: { version: 9.12.0 }
       - uses: actions/setup-node@v4
         with:
           node-version: 20

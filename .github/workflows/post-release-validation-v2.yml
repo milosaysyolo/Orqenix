@@ -37,21 +37,25 @@ jobs:
           ref: ${{ inputs.ref || 'v0.7.0' }}
           fetch-depth: 1
 
-      - name: Checkout Orqenix-Cloud (sibling)
-        uses: actions/checkout@v4
+      - name: Checkout Orqenix-Cloud
+        uses: ./.github/actions/checkout-orqenix-repo
         with:
-          repository: milosaysyolo/Orqenix-Cloud
-          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          scope: cloud
+          ref: main
+          layout: inside
           path: Orqenix-Cloud-checkout
-          ref: main
-
-      - name: Checkout Orqenix-Pro (sibling)
-        uses: actions/checkout@v4
-        with:
-          repository: milosaysyolo/Orqenix-Pro
           token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
-          path: Orqenix-Pro-checkout
+          fetch-depth: 1
+
+      - name: Checkout Orqenix-Pro
+        uses: ./.github/actions/checkout-orqenix-repo
+        with:
+          scope: pro
           ref: main
+          layout: inside
+          path: Orqenix-Pro-checkout
+          token: ${{ secrets.ORQENIX_COORDINATOR_PAT }}
+          fetch-depth: 1
 
       - name: Place sibling repos
         run: |
@@ -60,7 +64,7 @@ jobs:
           mv "${GITHUB_WORKSPACE}/Orqenix-Pro-checkout"   "${PARENT}/Orqenix-Pro"
 
       - uses: pnpm/action-setup@v4
-        with: { version: 9 }
+        with: { version: 9.12.0 }
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: pnpm }
 
