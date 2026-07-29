@@ -47,7 +47,8 @@ jobs:
 
       # ---- Checkout Pro alongside (inside layout via composite action) ----
       - name: Checkout Orqenix-Pro (inside layout)
-        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
+        # Skip Pro checkout for fork PRs (secrets not available)
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: ./layout/Orqenix/.github/actions/checkout-orqenix-repo
         with:
           scope: pro

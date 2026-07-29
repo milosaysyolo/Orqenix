@@ -38,7 +38,8 @@ jobs:
           echo "ref=$(node scripts/ci/get-pro-ref.mjs)" >> "$GITHUB_OUTPUT"
 
       - name: Checkout Orqenix-Pro (sibling layout)
-        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
+        # Skip Pro checkout for fork PRs (secrets not available)
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: ./Orqenix/.github/actions/checkout-orqenix-repo
         with:
           scope: pro
@@ -52,7 +53,7 @@ jobs:
 
       - name: Resolve Pro absolute path
         id: pro-path
-        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         run: |
           WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
           echo "abs=$WORKSPACE_PARENT/Orqenix-Pro" >> "$GITHUB_OUTPUT"
@@ -75,7 +76,7 @@ jobs:
         run: docker build -t orqenix-charter -f charter/Dockerfile .
 
       - name: Run charter gates in Docker
-        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         working-directory: Orqenix
         env:
           PRO_ABS: ${{ steps.pro-path.outputs.abs }}
