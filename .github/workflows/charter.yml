@@ -98,5 +98,10 @@ jobs:
           echo "## Charter (Phase 4) Run" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "- OSS commit: $(cd Orqenix && git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Pro commit: $(cd Orqenix-Pro && git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          PRO_DIR="${{ github.workspace }}/../Orqenix-Pro"
+          if [ -d "$PRO_DIR" ]; then
+            echo "- Pro commit: $(cd "$PRO_DIR" && git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Pro commit: not checked out (skipped on fork PR)" >> "$GITHUB_STEP_SUMMARY"
+          fi
           echo "- Trigger: ${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
