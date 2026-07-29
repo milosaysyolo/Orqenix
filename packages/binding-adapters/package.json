@@ -21,19 +21,23 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
     "build": "npx tsup",
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
-    "test": "npx vitest run tests/"
+    "test": "npx vitest run tests/",
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
   },
   "publishConfig": {
     "access": "public",

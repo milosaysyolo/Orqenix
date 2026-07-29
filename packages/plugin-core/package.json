@@ -3,6 +3,7 @@
   "version": "0.10.0",
   "description": "Apache-2.0 plugin architecture foundation for Orqenix. 14 plugin kinds, lifecycle, sandbox, CSF validation.",
   "license": "Apache-2.0",
+  "author": "Milo Nguyen <milo@orqenix.dev> (https://orqenix.dev)",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -33,7 +34,8 @@
   "files": [
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
@@ -42,6 +44,8 @@
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "test:watch": "vitest"
   },
   "publishConfig": {
@@ -68,6 +72,9 @@
     "directory": "packages/plugin-core"
   },
   "homepage": "https://orqenix.dev/docs/plugin-core",
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
   "keywords": [
     "orqenix",
     "plugin-architecture",

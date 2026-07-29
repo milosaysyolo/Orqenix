@@ -3,6 +3,14 @@
   "version": "0.10.0",
   "description": "Apache-2.0 instinct promoter for Orqenix. Human-in-the-loop candidate review (Promote/Reject/Customize/Defer).",
   "license": "Apache-2.0",
+  "author": "Milo Nguyen <milo@orqenix.dev> (https://orqenix.dev)",
+  "homepage": "https://orqenix.dev",
+    "keywords": [
+    "orqenix"
+  ],
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -23,14 +31,17 @@
   "files": [
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
     "build": "npx tsup",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
   },
   "publishConfig": {
     "access": "public",

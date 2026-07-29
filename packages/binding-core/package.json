@@ -27,21 +27,26 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "publishConfig": {
     "access": "public",
     "provenance": true
   },
+    "sideEffects": false,
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "lint": "exit 0"
   },
   "dependencies": {},

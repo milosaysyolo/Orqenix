@@ -3,6 +3,7 @@
   "version": "0.10.0",
   "description": "Apache-2.0 Orqenix MCP Server. Exposes memory + skills + mesh as MCP tools/resources/prompts over stdio/HTTP/WebSocket.",
   "license": "Apache-2.0",
+  "author": "Milo Nguyen <milo@orqenix.dev> (https://orqenix.dev)",
   "type": "module",
   "bin": {
     "orqenix-mcp": "./dist/cli.mjs"
@@ -21,7 +22,8 @@
   "files": [
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
@@ -29,7 +31,9 @@
     "dev": "tsup --watch",
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
   },
   "publishConfig": {
     "access": "public",
@@ -56,6 +60,9 @@
     "directory": "packages/mcp-server"
   },
   "homepage": "https://orqenix.dev/docs/mcp-server",
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
   "keywords": [
     "orqenix",
     "mcp",

@@ -3,6 +3,7 @@
   "version": "0.10.0",
   "description": "Apache-2.0 pull-on-demand cross-project memory federation for Orqenix Workbench. Strictly opt-in per CR v8.0 ADR-E-011.",
   "license": "Apache-2.0",
+  "author": "Milo Nguyen <milo@orqenix.dev> (https://orqenix.dev)",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -18,7 +19,8 @@
   "files": [
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
@@ -27,10 +29,12 @@
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "test:watch": "vitest"
   },
   "publishConfig": {
-    "access": "restricted",
+    "access": "public",
     "provenance": false
   },
   "dependencies": {
@@ -54,6 +58,9 @@
     "directory": "packages/local-memory-federation"
   },
   "homepage": "https://orqenix.dev/docs/local-memory-federation",
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
   "keywords": [
     "orqenix",
     "memory-federation",

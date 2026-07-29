@@ -4,14 +4,24 @@
   "description": "HTTP MeshTransport for Orqenix Phase 6: POST /orqenix/mesh/v1/rpc with msgpack envelopes, dedup cache, bounded retry, and clean teardown.",
   "type": "module",
   "license": "Apache-2.0",
+  "author": "Milo Nguyen <milo@orqenix.dev> (https://orqenix.dev)",
+  "homepage": "https://orqenix.dev",
+    "keywords": [
+    "orqenix"
+  ],
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
@@ -19,9 +29,12 @@
     "LICENSE",
     "CHANGELOG.md"
   ],
+    "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --coverage",
+    "clean": "npx rimraf dist .tsbuildinfo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "gate:G37": "vitest run test/G37-gate-wrapper.test.ts --reporter verbose",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."

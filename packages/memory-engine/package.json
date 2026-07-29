@@ -3,6 +3,7 @@
   "version": "0.10.0",
   "description": "Apache-2.0 memory engine for Orqenix. 3-level hierarchy, branch deep-copy, subagent harness, parallel query, BLAKE3 audit chain.",
   "license": "Apache-2.0",
+  "author": "Milo Nguyen <milo@orqenix.dev> (https://orqenix.dev)",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -23,7 +24,8 @@
   "files": [
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
@@ -32,6 +34,8 @@
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "test:watch": "vitest"
   },
   "publishConfig": {
@@ -64,6 +68,9 @@
     "directory": "packages/memory-engine"
   },
   "homepage": "https://orqenix.dev/docs/memory-engine",
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
   "keywords": [
     "orqenix",
     "memory",

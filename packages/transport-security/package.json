@@ -4,13 +4,23 @@
   "description": "Ed25519 IdentityVerifier and capability verification pipeline for Orqenix Phase 6. Replaces the no-op verifier/signer placeholders used in Parts 2 and 3-4.",
   "type": "module",
   "license": "Apache-2.0",
+  "author": "Milo Nguyen <milo@orqenix.dev> (https://orqenix.dev)",
+  "homepage": "https://orqenix.dev",
+    "keywords": [
+    "orqenix"
+  ],
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
@@ -18,9 +28,12 @@
     "LICENSE",
     "CHANGELOG.md"
   ],
+    "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run --coverage",
+    "clean": "npx rimraf dist .tsbuildinfo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "gate:G40": "vitest run test/G40-gate-wrapper.test.ts --reporter verbose",
     "bench": "vitest run test/bench.p95.test.ts",
     "typecheck": "tsc --noEmit",

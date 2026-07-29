@@ -1,6 +1,7 @@
 {
   "name": "@orqenix/local-node",
   "version": "0.10.0",
+  "private": true,
   "description": "Orqenix Phase 6 local-node binary: wires HTTP + libp2p transports + discovery + security + observability + router into a runnable mesh node.",
   "type": "module",
   "license": "Apache-2.0",
@@ -51,10 +52,6 @@
     "tsx": "^4.19.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
-  },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
   },
   "engines": {
     "node": ">=20.0.0"

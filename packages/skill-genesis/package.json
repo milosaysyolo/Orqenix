@@ -3,6 +3,11 @@
   "version": "0.10.0",
   "description": "Apache-2.0 skill genesis for Orqenix. Synthesize CSF + code from promoted candidate patterns.",
   "license": "Apache-2.0",
+  "author": "Milo Nguyen <milo@orqenix.dev> (https://orqenix.dev)",
+  "homepage": "https://orqenix.dev",
+  "bugs": {
+    "url": "https://github.com/milosaysyolo/Orqenix/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -18,14 +23,17 @@
   "files": [
     "dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "clean": "npx rimraf dist .turbo",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test"
   },
   "publishConfig": {
     "access": "public",
