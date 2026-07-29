@@ -28,6 +28,12 @@ Thumbs.db
 
 # Test coverage
 coverage/
+
+# ESLint cache
+.eslintcache
+
+# Review worktree markers
+.review-worktree
 .nyc_output/
 
 # Env / secrets
