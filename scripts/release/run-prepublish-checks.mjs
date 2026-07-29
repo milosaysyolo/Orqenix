@@ -8,9 +8,11 @@
  * for v0.5.0 setup phase before full release infra ships).
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { resolve, join } from "node:path";
+import { resolve, join, dirname } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
-const ROOT = process.cwd();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(__dirname, "../..");
 const WHITELIST_PATH = resolve(ROOT, ".orqenix/release/publishable-whitelist.yaml");
 const CHECKS_DIR = resolve(ROOT, "scripts/release/checks");
 
@@ -27,8 +29,12 @@ if (!existsSync(CHECKS_DIR)) {
 }
 
 const checkFiles = readdirSync(CHECKS_DIR)
-  .filter((f) => /^C\d{2}-.*\.mjs$/.test(f))
+  .filter((f) => /^C\d{2,}-.*\.mjs$/.test(f))
   .sort();
+
+// Preload all package data once so checks don't each re-read disk
+const { preloadPackages } = await import(pathToFileURL(join(CHECKS_DIR, "_helpers.mjs")).href);
+preloadPackages();
 
 if (checkFiles.length === 0) {
   console.warn("[prepublish-checks] no C##-*.mjs check files found; skipping.");
@@ -41,7 +47,7 @@ let failed = [];
 for (const file of checkFiles) {
   const checkPath = join(CHECKS_DIR, file);
   try {
-    const mod = await import(checkPath);
+    const mod = await import(pathToFileURL(checkPath).href);
     if (typeof mod.run !== "function") {
       console.warn(`  SKIP ${file}: no exported run() function`);
       continue;
@@ -49,7 +55,8 @@ for (const file of checkFiles) {
     await mod.run();
     console.log(`  PASS ${file}`);
   } catch (e) {
-    console.error(`  FAIL ${file}: ${e.message}`);
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`  FAIL ${file}: ${msg}`);
     failed.push(file);
   }
 }
