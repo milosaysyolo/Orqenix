@@ -47,6 +47,7 @@ jobs:
 
       # ---- Checkout Pro alongside (inside layout via composite action) ----
       - name: Checkout Orqenix-Pro (inside layout)
+        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
         uses: ./layout/Orqenix/.github/actions/checkout-orqenix-repo
         with:
           scope: pro

@@ -21,6 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Checkout Orqenix-Pro (sibling)
+        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
         uses: ./.github/actions/checkout-orqenix-repo
         with:
           scope: pro

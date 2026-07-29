@@ -38,6 +38,7 @@ jobs:
           echo "ref=$(node scripts/ci/get-pro-ref.mjs)" >> "$GITHUB_OUTPUT"
 
       - name: Checkout Orqenix-Pro (sibling layout)
+        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
         uses: ./Orqenix/.github/actions/checkout-orqenix-repo
         with:
           scope: pro
@@ -51,6 +52,7 @@ jobs:
 
       - name: Resolve Pro absolute path
         id: pro-path
+        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
         run: |
           WORKSPACE_PARENT=$(dirname "$GITHUB_WORKSPACE")
           echo "abs=$WORKSPACE_PARENT/Orqenix-Pro" >> "$GITHUB_OUTPUT"
@@ -73,13 +75,16 @@ jobs:
         run: docker build -t orqenix-charter -f charter/Dockerfile .
 
       - name: Run charter gates in Docker
+        if: ${{ secrets.ORQENIX_COORDINATOR_PAT != '' }}
         working-directory: Orqenix
+        env:
+          PRO_ABS: ${{ steps.pro-path.outputs.abs }}
         run: |
           # NOTE: mounts are WRITABLE (no :ro) because run.sh does pnpm install
           # which must write node_modules into /repo and into the Pro repo (G10).
           docker run --rm \
             -v "${{ github.workspace }}/Orqenix:/repo" \
-            -v "${{ steps.pro-path.outputs.abs }}:/Orqenix-Pro" \
+            -v "$PRO_ABS:/Orqenix-Pro" \
             -v "${{ github.workspace }}/charter-hf-cache:/root/.cache/huggingface" \
             -e ORQENIX_PRO_PATH=/Orqenix-Pro \
             -e CHARTER_VERBOSE=1 \
