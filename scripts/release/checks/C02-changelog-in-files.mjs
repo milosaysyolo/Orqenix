@@ -15,7 +15,7 @@ export async function run() {
   }
   if (failed.length > 0) {
     throw new Error(
-      `C02 FAIL: ${failed.length} package(s) missing CHANGELOG.md in files array:\n  ${failed.join("\n  ")}`
+      `C02 FAIL: ${failed.length} package(s) missing CHANGELOG.md in files array:\n  ${failed.join("\n  ")}`,
     );
   }
   console.log(`  C02: All ${pkgs.length} packages include CHANGELOG.md in files array`);

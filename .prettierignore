@@ -1,0 +1,31 @@
+# This file and .gitignore have no extension — prettier can't infer a parser
+.prettierignore
+.gitignore
+
+# Pre-existing unformatted files (formatting CI gate covers new/changed files only)
+__mocks__
+.orqenix/prompts
+.orqenix/release
+.serena
+apps/workbench
+packages/bench
+packages/binding-adapters
+packages/binding-core
+packages/plugin-ecosystem
+packages/security
+packages/ui-primitives
+
+# Auto-generated / vendored
+pnpm-lock.yaml
+
+# Will be formatted in a follow-up pass
+MIGRATION-v1.0.0.md
+README.md
+eslint.config.js
+vitest.config.ts
+vitest.config.shared.ts
+vitest.setup.native-mocks.ts
+scripts/audit
+scripts/verify
+scripts/remove-dead-deps.mjs
+scripts/pre-publish-check.ts

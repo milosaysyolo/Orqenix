@@ -15,7 +15,7 @@ export async function run() {
   }
   if (failed.length > 0) {
     throw new Error(
-      `C03 FAIL: ${failed.length} package(s) missing LICENSE file:\n  ${failed.join("\n  ")}`
+      `C03 FAIL: ${failed.length} package(s) missing LICENSE file:\n  ${failed.join("\n  ")}`,
     );
   }
   console.log(`  C03: All ${pkgs.length} packages have LICENSE file`);

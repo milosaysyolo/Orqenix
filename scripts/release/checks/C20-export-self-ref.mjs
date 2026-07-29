@@ -18,7 +18,7 @@ export async function run() {
 
   if (failed.length > 0) {
     throw new Error(
-      `C20 FAIL: ${failed.length} package(s) missing "./package.json" self-export:\n  ${failed.join("\n  ")}`
+      `C20 FAIL: ${failed.length} package(s) missing "./package.json" self-export:\n  ${failed.join("\n  ")}`,
     );
   }
   console.log(`  C20: All ${pkgs.length} packages have "./package.json" self-export`);

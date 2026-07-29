@@ -3,10 +3,7 @@
  */
 import { loadWhitelist, loadPackage } from "./_helpers.mjs";
 
-const EXPECTED_REGISTRIES = [
-  "https://registry.npmjs.org/",
-  "https://registry.npmjs.org",
-];
+const EXPECTED_REGISTRIES = ["https://registry.npmjs.org/", "https://registry.npmjs.org"];
 
 export async function run() {
   const pkgs = loadWhitelist();

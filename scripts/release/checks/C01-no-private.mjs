@@ -14,7 +14,7 @@ export async function run() {
   }
   if (failed.length > 0) {
     throw new Error(
-      `C01 FAIL: ${failed.length} package(s) have "private": true:\n  ${failed.join("\n  ")}`
+      `C01 FAIL: ${failed.length} package(s) have "private": true:\n  ${failed.join("\n  ")}`,
     );
   }
   console.log(`  C01: All ${pkgs.length} publishable packages do not have "private": true`);

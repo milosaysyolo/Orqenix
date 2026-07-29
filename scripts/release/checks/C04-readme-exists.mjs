@@ -15,7 +15,7 @@ export async function run() {
   }
   if (failed.length > 0) {
     throw new Error(
-      `C04 FAIL: ${failed.length} package(s) missing README.md:\n  ${failed.join("\n  ")}`
+      `C04 FAIL: ${failed.length} package(s) missing README.md:\n  ${failed.join("\n  ")}`,
     );
   }
   console.log(`  C04: All ${pkgs.length} packages have README.md`);

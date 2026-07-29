@@ -16,7 +16,7 @@ export async function run() {
 
   if (failed.length > 0) {
     throw new Error(
-      `C22 FAIL: ${failed.length} package(s) missing "license" field:\n  ${failed.join("\n  ")}`
+      `C22 FAIL: ${failed.length} package(s) missing "license" field:\n  ${failed.join("\n  ")}`,
     );
   }
   console.log(`  C22: All ${pkgs.length} packages have license field`);

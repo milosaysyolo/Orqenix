@@ -17,7 +17,7 @@ export async function run() {
 
   if (failed.length > 0) {
     throw new Error(
-      `C18 FAIL: ${failed.length} package(s) have empty/missing description:\n  ${failed.join("\n  ")}`
+      `C18 FAIL: ${failed.length} package(s) have empty/missing description:\n  ${failed.join("\n  ")}`,
     );
   }
   console.log(`  C18: All ${pkgs.length} packages have non-empty description`);

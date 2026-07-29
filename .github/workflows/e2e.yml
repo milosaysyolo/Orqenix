@@ -41,7 +41,7 @@ jobs:
 
       - name: Run e2e tests
         env:
-          ORQENIX_DEV: '1'
+          ORQENIX_DEV: "1"
         run: npx playwright test --config apps/workbench/tests/e2e/playwright.config.ts
 
       - name: Upload artifacts on failure

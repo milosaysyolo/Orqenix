@@ -28,8 +28,8 @@ export function loadWhitelist() {
     const name = trimmed
       .slice(2)
       .trim()
-      .replace(/^['"]|['"]$/g, "")      // remove surrounding quotes
-      .replace(/\s*#.*$/, "")           // remove inline comments
+      .replace(/^['"]|['"]$/g, "") // remove surrounding quotes
+      .replace(/\s*#.*$/, "") // remove inline comments
       .trim();
     if (name) pkgs.push(name);
   }
@@ -54,7 +54,7 @@ export function preloadPackages() {
     const p = resolve(dir, "package.json");
     if (!existsSync(p)) {
       throw new Error(
-        `[CHECK] package.json not found for ${name} (looked at ${relative(ROOT, p)})`
+        `[CHECK] package.json not found for ${name} (looked at ${relative(ROOT, p)})`,
       );
     }
     const json = JSON.parse(readFileSync(p, "utf-8"));
@@ -78,7 +78,7 @@ export function loadPackage(pkgName) {
   const p = resolve(dir, "package.json");
   if (!existsSync(p)) {
     throw new Error(
-      `[CHECK] package.json not found for ${pkgName} (looked at ${relative(ROOT, p)})`
+      `[CHECK] package.json not found for ${pkgName} (looked at ${relative(ROOT, p)})`,
     );
   }
   const json = JSON.parse(readFileSync(p, "utf-8"));

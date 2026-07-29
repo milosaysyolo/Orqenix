@@ -25,7 +25,9 @@ export async function run() {
 
     // ESM-only packages (tsc-built) must not have "require"
     if (isTsc && dot.require) {
-      failed.push(`${name}: ESM-only (tsc-built) package has "require" in exports — use "default" instead`);
+      failed.push(
+        `${name}: ESM-only (tsc-built) package has "require" in exports — use "default" instead`,
+      );
     }
 
     // Dual CJS/ESM packages (tsup-built) must have "require"

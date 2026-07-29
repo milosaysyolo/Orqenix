@@ -22,7 +22,7 @@ export async function run() {
 
   if (failed.length > 0) {
     throw new Error(
-      `C08 FAIL: ${failed.length} workspace dep(s) not using workspace:*:\n  ${failed.join("\n  ")}`
+      `C08 FAIL: ${failed.length} workspace dep(s) not using workspace:*:\n  ${failed.join("\n  ")}`,
     );
   }
   console.log(`  C08: All @orqenix/* deps use workspace:* protocol`);

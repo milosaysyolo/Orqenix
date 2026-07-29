@@ -17,12 +17,9 @@ export async function run() {
   }
 
   const errors = [];
-  if (missingAuthor.length > 0)
-    errors.push(`  missing author: ${missingAuthor.join(", ")}`);
-  if (missingHomepage.length > 0)
-    errors.push(`  missing homepage: ${missingHomepage.join(", ")}`);
-  if (missingBugs.length > 0)
-    errors.push(`  missing bugs: ${missingBugs.join(", ")}`);
+  if (missingAuthor.length > 0) errors.push(`  missing author: ${missingAuthor.join(", ")}`);
+  if (missingHomepage.length > 0) errors.push(`  missing homepage: ${missingHomepage.join(", ")}`);
+  if (missingBugs.length > 0) errors.push(`  missing bugs: ${missingBugs.join(", ")}`);
 
   if (errors.length > 0) {
     throw new Error(`C05 FAIL:\n${errors.join("\n")}`);

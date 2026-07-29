@@ -17,7 +17,7 @@ export async function run() {
 
   if (failed.length > 0) {
     console.warn(
-      `  C19 WARN: ${failed.length} package(s) missing keywords array:\n    ${failed.join(", ")}`
+      `  C19 WARN: ${failed.length} package(s) missing keywords array:\n    ${failed.join(", ")}`,
     );
   } else {
     console.log(`  C19: All ${pkgs.length} packages have keywords`);
