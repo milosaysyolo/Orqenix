@@ -1084,6 +1084,9 @@ importers:
         specifier: ^0.1.6
         version: 0.1.9
     devDependencies:
+      '@orqenix/core':
+        specifier: workspace:*
+        version: link:../core
       '@types/better-sqlite3':
         specifier: ^7.6.11
         version: 7.6.13
