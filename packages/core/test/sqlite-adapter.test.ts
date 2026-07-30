@@ -60,8 +60,8 @@ describe("SqliteAdapter", () => {
     expect(await adapter.get("after-close")).toEqual({ ok: true });
   });
 
-  it("vector methods throw with Phase 4 hint", async () => {
-    await expect(adapter.upsertVector("c", "id", [0.1, 0.2], {})).rejects.toThrow(/Phase 4/);
-    await expect(adapter.searchVectors("c", [0.1], 5)).rejects.toThrow(/Phase 4/);
+  it("vector methods throw with NotImplemented hint", async () => {
+    await expect(adapter.upsertVector("c", "id", [0.1, 0.2], {})).rejects.toThrow(/not implemented/);
+    await expect(adapter.searchVectors("c", [0.1], 5)).rejects.toThrow(/not implemented/);
   });
 });
