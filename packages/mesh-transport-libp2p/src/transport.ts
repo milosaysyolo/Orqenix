@@ -1,4 +1,4 @@
-import type { Connection, Libp2p, Stream } from '@libp2p/interface';
+import type { Connection, Libp2p, Stream } from "@libp2p/interface";
 import {
   CapabilityError,
   DeadlineExceeded,
@@ -13,10 +13,10 @@ import {
   type ScopeId,
   type SendOpts,
   type TransportCtx,
-} from '@orqenix/mesh-transport-core';
-import { derivePeerFromScope, scopeIdToSaltBytes } from './peer-id.js';
-import { createOrqenixLibp2pNode } from './node-config.js';
-import { supportedProtocols } from './protocol.js';
+} from "@orqenix/mesh-transport-core";
+import { derivePeerFromScope, scopeIdToSaltBytes } from "./peer-id.js";
+import { createOrqenixLibp2pNode } from "./node-config.js";
+import { supportedProtocols } from "./protocol.js";
 import {
   NoopIdentityVerifier,
   NoopSigner,

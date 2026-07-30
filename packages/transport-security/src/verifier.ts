@@ -135,5 +135,5 @@ function denied(code: string, message: string): VerifyDenied {
 }
 
 function sanitizeMessage(s: string): string {
-  return (s.split('\n')[0] ?? '').slice(0, 160);
+  return (s.split("\n")[0] ?? "").slice(0, 160);
 }

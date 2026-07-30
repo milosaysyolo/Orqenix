@@ -4,14 +4,11 @@
 // Validates a package.json's orqenixPlugin field against CSF schema +
 // kind-specific rules. The first gate in the plugin install flow.
 
-import {
-  CanonicalSkillFormatSchema,
-  type CanonicalSkillFormat,
-} from './csf-schema';
-import { PluginKindRegistry } from './kinds/registry';
-import { validatePermissions } from './permissions';
-import type { ValidationResult } from './types';
-import { ManifestInvalidError } from './errors';
+import { CanonicalSkillFormatSchema, type CanonicalSkillFormat } from "./csf-schema";
+import { PluginKindRegistry } from "./kinds/registry";
+import { validatePermissions } from "./permissions";
+import type { ValidationResult } from "./types";
+import { ManifestInvalidError } from "./errors";
 
 export interface ManifestValidationOutcome extends ValidationResult {
   /** Parsed CSF when valid */

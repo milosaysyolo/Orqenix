@@ -70,9 +70,9 @@ export class IllegalStateError extends Error {
 /** Strip stack frames and filesystem paths from a free-form message. */
 function sanitize(msg: string): string {
   // Remove anything that looks like a stack frame: "at foo (path:line)" or "/abs/path.ts"
-  const noFrames = msg.replace(/\s*at\s+\S+\s*\([^)]*\)/g, '');
-  const noPaths = noFrames.replace(/(?:\/|\\)[\w./\\-]+\.(?:ts|js|mjs|cjs)/g, '<file>');
-  return noPaths.split('\n')[0]?.trim().slice(0, 256) ?? '';
+  const noFrames = msg.replace(/\s*at\s+\S+\s*\([^)]*\)/g, "");
+  const noPaths = noFrames.replace(/(?:\/|\\)[\w./\\-]+\.(?:ts|js|mjs|cjs)/g, "<file>");
+  return noPaths.split("\n")[0]?.trim().slice(0, 256) ?? "";
 }
 
 /** Map a thrown error into a MeshResponse with the correct status and a sanitized message. */

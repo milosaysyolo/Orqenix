@@ -5,16 +5,11 @@
 // shape with branch_id/session_id/parent_session_id metadata. The chain remains
 // verifiable by the D7.5 AuditChainVerifier Web Worker without modification.
 
-import type { Database } from 'better-sqlite3';
-import { blake3 } from '@noble/hashes/blake3';
-import { bytesToHex } from '@noble/hashes/utils';
-import { ulid } from '../store/ulid';
-import type {
-  AuditEntry,
-  AppendAuditInput,
-  ChainVerifyResult,
-  MemoryAuditKind,
-} from './types';
+import type { Database } from "better-sqlite3";
+import { blake3 } from "@noble/hashes/blake3";
+import { bytesToHex } from "@noble/hashes/utils";
+import { ulid } from "../store/ulid";
+import type { AuditEntry, AppendAuditInput, ChainVerifyResult, MemoryAuditKind } from "./types";
 
 const ZERO_HASH = "0".repeat(64);
 

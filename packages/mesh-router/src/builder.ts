@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
-import type { ObservabilityHooks } from '@orqenix/mesh-observability';
-import type { ScopeId, TransportRegistry } from '@orqenix/mesh-transport-core';
-import { MeshRouter, type AddressResolver, type MeshRouterOptions } from './router.js';
-import { CircuitBreaker, type CircuitBreakerOptions } from './circuit-breaker.js';
-import { CrossTransportDedup, type CrossTransportDedupOptions } from './dedup.js';
-import { DEFAULT_PRIORITY, priorityList, type PriorityList } from './priority.js';
-import type { AppHandler, StructuralCapabilityVerifier } from './inbound.js';
+import type { ObservabilityHooks } from "@orqenix/mesh-observability";
+import type { ScopeId, TransportRegistry } from "@orqenix/mesh-transport-core";
+import { MeshRouter, type AddressResolver, type MeshRouterOptions } from "./router.js";
+import { CircuitBreaker, type CircuitBreakerOptions } from "./circuit-breaker.js";
+import { CrossTransportDedup, type CrossTransportDedupOptions } from "./dedup.js";
+import { DEFAULT_PRIORITY, priorityList, type PriorityList } from "./priority.js";
+import type { AppHandler, StructuralCapabilityVerifier } from "./inbound.js";
 
 export class MeshRouterBuilder {
   private localScopeId?: ScopeId;

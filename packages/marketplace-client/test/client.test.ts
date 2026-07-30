@@ -26,30 +26,24 @@ describe("marketplace-client network timeout", () => {
     const registry = stubRegistry({
       checkConflicts: vi.fn(
         () =>
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("request timed out")), 5),
-          ),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("request timed out")), 5)),
       ),
     });
 
-    await expect(
-      install("plugin@1.0.0", { registry: registry as any }),
-    ).rejects.toThrow(/timed out/);
+    await expect(install("plugin@1.0.0", { registry: registry as any })).rejects.toThrow(
+      /timed out/,
+    );
   });
 
   it("rejects install when add times out", async () => {
     const registry = stubRegistry({
       add: vi.fn(
         () =>
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("connection timeout")), 5),
-          ),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("connection timeout")), 5)),
       ),
     });
 
-    await expect(
-      install("plugin@1.0.0", { registry: registry as any }),
-    ).rejects.toThrow(/timeout/);
+    await expect(install("plugin@1.0.0", { registry: registry as any })).rejects.toThrow(/timeout/);
   });
 });
 
@@ -61,9 +55,9 @@ describe("marketplace-client HTTP 4xx errors", () => {
       }),
     });
 
-    await expect(
-      install("plugin@1.0.0", { registry: registry as any }),
-    ).rejects.toThrow(/Bad Request/);
+    await expect(install("plugin@1.0.0", { registry: registry as any })).rejects.toThrow(
+      /Bad Request/,
+    );
   });
 
   it("rejects uninstall on 404 Not Found", async () => {
@@ -73,9 +67,9 @@ describe("marketplace-client HTTP 4xx errors", () => {
       }),
     });
 
-    await expect(
-      uninstall("missing-plugin@1.0.0", { registry: registry as any }),
-    ).rejects.toThrow(/Not Found/);
+    await expect(uninstall("missing-plugin@1.0.0", { registry: registry as any })).rejects.toThrow(
+      /Not Found/,
+    );
   });
 });
 
@@ -87,9 +81,9 @@ describe("marketplace-client HTTP 5xx errors", () => {
       }),
     });
 
-    await expect(
-      uninstall("plugin@1.0.0", { registry: registry as any }),
-    ).rejects.toThrow(/Internal Server Error/);
+    await expect(uninstall("plugin@1.0.0", { registry: registry as any })).rejects.toThrow(
+      /Internal Server Error/,
+    );
   });
 
   it("rejects uninstall purge on 503 Service Unavailable", async () => {

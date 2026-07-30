@@ -4,7 +4,14 @@
 
 // ---- compress-context exports ----
 export { ConfigSchema, createV2Plugin, PLUGIN_COMPRESS_CONTEXT_VERSION } from "./context/index.js";
-export type { V1Message, V1Input, V1Output, V2Input, V2Output, CreateV2PluginOptions } from "./context/index.js";
+export type {
+  V1Message,
+  V1Input,
+  V1Output,
+  V2Input,
+  V2Output,
+  CreateV2PluginOptions,
+} from "./context/index.js";
 // preserve default-import compatibility with original compress-context API
 export { default as default } from "./context/index.js";
 

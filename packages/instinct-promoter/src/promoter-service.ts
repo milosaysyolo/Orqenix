@@ -4,12 +4,21 @@
 // Coordinates candidate review: lists ranked candidates, enriches with redacted
 // samples, executes review decisions. On Promote, delegates to skill-genesis
 
-import type { Database } from 'better-sqlite3';
-import { CandidateStore, type IDetector, type InstinctCandidate } from '@orqenix/self-learning-detection';
-import { Observer, DEFAULT_GOVERNANCE } from '@orqenix/self-learning-observer';
-import type { SelfLearningGovernance, ObservationEvent } from '@orqenix/self-learning-observer';
-import { SkillGenesis } from '@orqenix/skill-genesis';
-import {  type PromoterCandidate,  type ObservationSample,  type ReviewDecision,  type ReviewResult,} from './types';
+import type { Database } from "better-sqlite3";
+import {
+  CandidateStore,
+  type IDetector,
+  type InstinctCandidate,
+} from "@orqenix/self-learning-detection";
+import { Observer, DEFAULT_GOVERNANCE } from "@orqenix/self-learning-observer";
+import type { SelfLearningGovernance, ObservationEvent } from "@orqenix/self-learning-observer";
+import { SkillGenesis } from "@orqenix/skill-genesis";
+import {
+  type PromoterCandidate,
+  type ObservationSample,
+  type ReviewDecision,
+  type ReviewResult,
+} from "./types";
 
 /** Audit writer for promoter events */
 export interface PromoterAuditWriter {
@@ -63,9 +72,7 @@ export class PromoterService {
     this.iterationResults.push(patternHashes);
     // Keep only the window we need
     if (this.iterationResults.length > this.governance.convergenceWindow) {
-      this.iterationResults = this.iterationResults.slice(
-        -this.governance.convergenceWindow
-      );
+      this.iterationResults = this.iterationResults.slice(-this.governance.convergenceWindow);
     }
   }
 
@@ -102,7 +109,7 @@ export class PromoterService {
    * redacted observation samples.
    */
   async listForReview(projectId: string, limit = 50): Promise<PromoterCandidate[]> {
-    const candidates = this.candidateStore.list(projectId, 'detected', limit);
+    const candidates = this.candidateStore.list(projectId, "detected", limit);
     return candidates.map((c: InstinctCandidate) => {
       const sampleIds = JSON.parse(c.sample_observation_ids) as string[];
       const samples = this.fetchSamples(projectId, sampleIds);

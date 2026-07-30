@@ -116,7 +116,7 @@ jobs:
         if: env.RACE_DETECTED != 'true' && steps.validate.outputs.should_run == 'true' && steps.fork_policy.outputs.skip_push == 'false'
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Setup pnpm
         if: env.RACE_DETECTED != 'true' && steps.validate.outputs.should_run == 'true' && steps.fork_policy.outputs.skip_push == 'false'

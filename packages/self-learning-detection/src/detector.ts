@@ -15,11 +15,8 @@ import {
   type IDetector,
   type DetectionThresholds,
   DEFAULT_THRESHOLDS,
-} from './types';
-import {
-  type SelfLearningGovernance,
-  DEFAULT_GOVERNANCE,
-} from '@orqenix/self-learning-observer';
+} from "./types";
+import { type SelfLearningGovernance, DEFAULT_GOVERNANCE } from "@orqenix/self-learning-observer";
 
 export interface BasicDetectorOptions {
   db: Database;

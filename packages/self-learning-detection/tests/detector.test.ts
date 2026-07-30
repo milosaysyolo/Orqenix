@@ -102,10 +102,10 @@ describe("BasicDetector", () => {
     expect(detected).toHaveLength(0);
   });
 
-  it('respects generationCap from governance', async () => {
-    const events = makeSequenceEvents('s', 6, true);
+  it("respects generationCap from governance", async () => {
+    const events = makeSequenceEvents("s", 6, true);
     // 6 occurrences × 2 events each = 12 events → multiple patterns
-    const moreEvents = makeSequenceEvents('t', 6, false);
+    const moreEvents = makeSequenceEvents("t", 6, false);
     const detectorCapped = new BasicDetector({
       db,
       governance: { generationCap: 1 },
@@ -118,8 +118,8 @@ describe("BasicDetector", () => {
     expect(result.candidatesCreated).toBeLessThanOrEqual(1);
   });
 
-  it('updates impact when pattern re-detected (not in cooldown)', async () => {
-    const events = makeSequenceEvents('s', 6, true);
+  it("updates impact when pattern re-detected (not in cooldown)", async () => {
+    const events = makeSequenceEvents("s", 6, true);
     await detector.run({ projectId: PROJECT, events });
     const moreEvents = makeSequenceEvents("t", 10, true);
     const result = await detector.run({ projectId: PROJECT, events: [...events, ...moreEvents] });

@@ -4,17 +4,17 @@
 // Synthesizes a full CSF skill from a promoted candidate. Per CR v8.0
 // Section 9.4.4 + Anti-38 (created unverified).
 
-import type { Database } from 'better-sqlite3';
-import { buildCsf } from '@orqenix/normalization-engine';
-import { Observer, DEFAULT_GOVERNANCE } from '@orqenix/self-learning-observer';
-import type { SelfLearningGovernance } from '@orqenix/self-learning-observer';
-import { CandidateStore } from '@orqenix/self-learning-detection';
-import type { CanonicalSkillFormat } from '@orqenix/plugin-core';
-import type { ObservationEvent } from '@orqenix/self-learning-observer';
-import { ParameterInference } from './parameter-inference';
-import { CodeSynthesizer } from './code-synthesizer';
-import { FixtureGenerator } from './fixture-generator';
-import type { GenerateFromCandidateInput, GenerateResult } from './types';
+import type { Database } from "better-sqlite3";
+import { buildCsf } from "@orqenix/normalization-engine";
+import { Observer, DEFAULT_GOVERNANCE } from "@orqenix/self-learning-observer";
+import type { SelfLearningGovernance } from "@orqenix/self-learning-observer";
+import { CandidateStore } from "@orqenix/self-learning-detection";
+import type { CanonicalSkillFormat } from "@orqenix/plugin-core";
+import type { ObservationEvent } from "@orqenix/self-learning-observer";
+import { ParameterInference } from "./parameter-inference";
+import { CodeSynthesizer } from "./code-synthesizer";
+import { FixtureGenerator } from "./fixture-generator";
+import type { GenerateFromCandidateInput, GenerateResult } from "./types";
 
 export interface SkillGenesisOptions {
   db: Database;
@@ -54,7 +54,7 @@ export class SkillGenesis {
   async generateFromCandidate(input: GenerateFromCandidateInput): Promise<GenerateResult> {
     if (this.generationCount >= this.generationCap) {
       throw new Error(
-        `Generation cap of ${this.generationCap} reached; cannot generate more skills this cycle`
+        `Generation cap of ${this.generationCap} reached; cannot generate more skills this cycle`,
       );
     }
 

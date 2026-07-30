@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: "20.10.0" }
+        with: { node-version: "22" }
       - run: corepack enable && pnpm install --frozen-lockfile
       - run: pnpm --filter @orqenix/self-learning-observer run build
       - run: pnpm --filter @orqenix/self-learning-observer run test

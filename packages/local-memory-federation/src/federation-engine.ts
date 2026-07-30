@@ -21,11 +21,9 @@ import {
   FederationEngineConfig,
   FederationResult,
   KbKind,
-} from './types';
+} from "./types";
 
-import {
-  CandidateNotFoundError,
-} from './errors';
+import { CandidateNotFoundError } from "./errors";
 
 /**
  * Top-level federation engine.

@@ -50,8 +50,12 @@ const handlers: Record<string, CommandHandler> = {
   }),
 
   "scope info": async (ctx) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
-    return { exitCode: 0, output: json({ scopeId: ctx.scopeId, rootDir: ctx.rootDir, dbPath: ctx.dbPath }) };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    return {
+      exitCode: 0,
+      output: json({ scopeId: ctx.scopeId, rootDir: ctx.rootDir, dbPath: ctx.dbPath }),
+    };
   },
 
   init: async (ctx, args) => {
@@ -159,7 +163,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "scope init": async (ctx, args) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const name = flagString(args, "name");
     if (!name) return { exitCode: 1, output: "error: --name is required" };
     return {
@@ -173,7 +178,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "link create": async (ctx, args) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const remote = flagString(args, "remote");
     const direction = flagString(args, "direction", "outbound") as "outbound" | "inbound";
     if (!remote) return { exitCode: 1, output: "error: --remote is required" };
@@ -188,7 +194,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "link list": async (ctx, args) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const status = flagString(args, "status") as LinkStatus | undefined;
     const conn = openConn(ctx);
     try {
@@ -201,7 +208,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "link revoke": async (ctx, args) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const remote = flagString(args, "remote");
     const direction = flagString(args, "direction", "outbound") as "outbound" | "inbound";
     if (!remote) return { exitCode: 1, output: "error: --remote is required" };
@@ -216,7 +224,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "workspace create": async (ctx, args) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const name = flagString(args, "name");
     if (!name) return { exitCode: 1, output: "error: --name is required" };
     const conn = openConn(ctx);
@@ -230,7 +239,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "workspace list": async (ctx) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const conn = openConn(ctx);
     try {
       const store = new WorkspaceStore({ conn });
@@ -241,7 +251,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "audit verify": async (ctx) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const conn = openConn(ctx);
     try {
       const store = new AuditLogStore({ conn, scopeId: ctx.scopeId });
@@ -253,7 +264,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "audit tail": async (ctx, args) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const kind = flagString(args, "kind") as AuditEventKind | undefined;
     const limit = Number(flagString(args, "limit", "50"));
     const conn = openConn(ctx);
@@ -267,7 +279,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "detach plan": async (ctx, args) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const kind = flagString(args, "kind");
     const remote = flagString(args, "remote");
     if (!kind)
@@ -299,7 +312,8 @@ const handlers: Record<string, CommandHandler> = {
   },
 
   "detach exec": async (ctx, args) => {
-    if (!ctx.scopeId) return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
+    if (!ctx.scopeId)
+      return { exitCode: 1, output: "error: no scope ID — run 'orqenix init' first" };
     const kind = flagString(args, "kind");
     const remote = flagString(args, "remote");
     const token = flagString(args, "token");
@@ -380,7 +394,6 @@ function notImplemented(name: string, comingIn: string, description: string): Co
 // Removed once each command is implemented.
 {
   const coming: [string, string, string][] = [
-
     ["knowledge index", "v0.10.0", "Index project docs, code, and decisions."],
     ["knowledge query", "v0.10.0", "Query indexed knowledge."],
     ["knowledge status", "v0.10.0", "Show knowledge index status."],
@@ -449,16 +462,11 @@ const COMMAND_META: Record<string, string> = {
   "migrate up": "  migrate up",
   "migrate rollback": "  migrate rollback --backup <path>",
   "migrate status": "  migrate status",
-  "version": "  version",
+  version: "  version",
 };
 
 export function usage(): string {
-  return [
-    `orqenix v${version}`,
-    "",
-    "Commands:",
-    ...Object.values(COMMAND_META),
-  ].join("\n");
+  return [`orqenix v${version}`, "", "Commands:", ...Object.values(COMMAND_META)].join("\n");
 }
 
 export { handlers as _commandHandlers };

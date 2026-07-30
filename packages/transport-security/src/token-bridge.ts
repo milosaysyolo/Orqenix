@@ -1,6 +1,10 @@
-import { CapabilityError, ErrorCode } from '@orqenix/mesh-transport-core';
-import { decodeCapabilityToken, encodeCapabilityToken, type CapabilityTokenFields } from './capability-token.js';
-import { CapabilityVerifier, type VerifyInput, type VerifyResult } from './verifier.js';
+import { CapabilityError, ErrorCode } from "@orqenix/mesh-transport-core";
+import {
+  decodeCapabilityToken,
+  encodeCapabilityToken,
+  type CapabilityTokenFields,
+} from "./capability-token.js";
+import { CapabilityVerifier, type VerifyInput, type VerifyResult } from "./verifier.js";
 
 /**
  * Detects whether a token string uses transport-security (msgpack) or
@@ -18,7 +22,7 @@ function tryDecode(token: string): CapabilityTokenFields {
   }
 
   throw new CapabilityError(
-    'token: unsupported format (not transport-security or capability-tokens)',
+    "token: unsupported format (not transport-security or capability-tokens)",
     ErrorCode.CAP_MALFORMED,
   );
 }
@@ -44,7 +48,11 @@ export class TokenBridge {
     try {
       decoded = tryDecode(tokenStr);
     } catch (e) {
-      return { ok: false, code: ErrorCode.CAP_MALFORMED, message: e instanceof Error ? e.message : String(e) };
+      return {
+        ok: false,
+        code: ErrorCode.CAP_MALFORMED,
+        message: e instanceof Error ? e.message : String(e),
+      };
     }
 
     // Encode to canonical transport-security format and delegate to the verifier

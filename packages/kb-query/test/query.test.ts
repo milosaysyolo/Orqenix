@@ -5,14 +5,27 @@ import { KnowledgeQueryEngine } from "../src/index.js";
 describe("KnowledgeQueryEngine query shape", () => {
   it("produces correct result shape from all KBs", async () => {
     const docResult = {
-      id: "d1", text: "doc body", score: 0.9, path: "/readme", heading: "Intro",
+      id: "d1",
+      text: "doc body",
+      score: 0.9,
+      path: "/readme",
+      heading: "Intro",
     };
     const codeResult = {
-      id: "c1", name: "authFn", score: 0.8, path: "/src/auth.ts", kind: "function",
+      id: "c1",
+      name: "authFn",
+      score: 0.8,
+      path: "/src/auth.ts",
+      kind: "function",
     };
     const decisionResult = {
-      id: "dec1", title: "ADR-1", body: "use postgres",
-      type: "adr", scopeId: "s1", enforcement: "soft" as const, confidence: 0.7,
+      id: "dec1",
+      title: "ADR-1",
+      body: "use postgres",
+      type: "adr",
+      scopeId: "s1",
+      enforcement: "soft" as const,
+      confidence: 0.7,
     };
 
     const engine = new KnowledgeQueryEngine(

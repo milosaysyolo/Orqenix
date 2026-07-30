@@ -15,16 +15,8 @@ import type {
   PluginRuntimeHandle,
   RuntimeMetrics,
 } from "../types";
-import {
-  PluginActivateFailedError,
-  PluginCrashedError,
-  PluginTimeoutError,
-} from '../errors';
-import {
-  type ResolvedResourceLimits,
-  buildSpawnEnv,
-  memoryLimitFlag,
-} from './resource-limits';
+import { PluginActivateFailedError, PluginCrashedError, PluginTimeoutError } from "../errors";
+import { type ResolvedResourceLimits, buildSpawnEnv, memoryLimitFlag } from "./resource-limits";
 import {
   type IpcMessage,
   type IpcResponseMessage,

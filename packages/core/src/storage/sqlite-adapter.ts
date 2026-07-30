@@ -98,12 +98,18 @@ export class SqliteAdapter implements StorageAdapter {
   // ─────────── Vector ───────────
   async upsertVector(): Promise<void> {
     // stub: implement with sqlite-vec.
-    throw new OrqenixError("upsertVector: method not implemented in storage adapter", "NOT_IMPLEMENTED");
+    throw new OrqenixError(
+      "upsertVector: method not implemented in storage adapter",
+      "NOT_IMPLEMENTED",
+    );
   }
 
   async searchVectors(): Promise<VectorResult[]> {
     // stub: implement with sqlite-vec.
-    throw new OrqenixError("searchVectors: method not implemented in storage adapter", "NOT_IMPLEMENTED");
+    throw new OrqenixError(
+      "searchVectors: method not implemented in storage adapter",
+      "NOT_IMPLEMENTED",
+    );
   }
 
   // ─────────── Phase 3 additions ───────────

@@ -51,9 +51,14 @@ export class MarketplaceManager {
     this.normalization = options.normalizationEngine;
     this.lifecycle = options.lifecycle;
     this.resolvers = options.resolverRegistry ?? new RegistryResolverRegistry();
-    this.actor = options.actor ?? 'user';
-    this.projectId = options.projectId ?? '';
-    this.crud = new MarketplaceCrud(options.store, options.audit, this.actor, options.projectId ?? '');
+    this.actor = options.actor ?? "user";
+    this.projectId = options.projectId ?? "";
+    this.crud = new MarketplaceCrud(
+      options.store,
+      options.audit,
+      this.actor,
+      options.projectId ?? "",
+    );
   }
 
   // ─── CRUD ────────────────────────────────────────────────────────────

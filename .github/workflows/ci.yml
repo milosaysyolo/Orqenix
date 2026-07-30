@@ -16,13 +16,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node-version: ["20", "22"]
+        node-version: ["22", "24"]
         exclude:
-          # windows-latest + Node 20: better-sqlite3 requires VS 2022 for native
+          # windows-latest + Node 22: better-sqlite3 requires VS 2022 for native
           # compilation, but the runner has VS 2025 Preview which node-gyp 10.3.1
-          # doesn't recognize. Node 22 runners cover Windows testing.
+          # doesn't recognize. Node 24 runners cover Windows testing.
           - os: windows-latest
-            node-version: "20"
+            node-version: "22"
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
 

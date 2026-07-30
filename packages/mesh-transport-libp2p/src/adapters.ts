@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
-import { memory } from '@libp2p/memory';
-import { tcp } from '@libp2p/tcp';
-import { webSockets } from '@libp2p/websockets';
-import type { Libp2pOptions } from 'libp2p';
+import { memory } from "@libp2p/memory";
+import { tcp } from "@libp2p/tcp";
+import { webSockets } from "@libp2p/websockets";
+import type { Libp2pOptions } from "libp2p";
 
 export type AdapterKind = "tcp" | "websockets" | "memory";
 

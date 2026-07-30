@@ -14,11 +14,8 @@ import {
   type PiiFilter,
   DEFAULT_OBSERVER_CONFIG,
   NoopPiiFilter,
-} from './types';
-import {
-  type SelfLearningGovernance,
-  DEFAULT_GOVERNANCE,
-} from './governance';
+} from "./types";
+import { type SelfLearningGovernance, DEFAULT_GOVERNANCE } from "./governance";
 
 export interface ObserverOptions {
   db: Database;
@@ -89,7 +86,7 @@ export class Observer {
       canIterate: this.canIterate(),
       remainingIterations: Math.max(
         0,
-        this.governance.maxIterationsPerSession - this.iterationCount
+        this.governance.maxIterationsPerSession - this.iterationCount,
       ),
     };
   }

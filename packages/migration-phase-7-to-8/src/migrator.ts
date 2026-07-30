@@ -3,10 +3,10 @@
 //
 // Performs the Phase 7 → Phase 8 migration. Per CR v8.0 Section 11.3 + 11.5.
 
-import { readFile, writeFile, cp } from 'node:fs/promises';
-import { existsSync, symlinkSync } from 'node:fs';
-import { join } from 'node:path';
-import Database from 'better-sqlite3';
+import { readFile, writeFile, cp } from "node:fs/promises";
+import { existsSync, symlinkSync } from "node:fs";
+import { join } from "node:path";
+import Database from "better-sqlite3";
 import {
   MigrationRunner,
   AuditChainWriter,

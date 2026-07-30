@@ -11,13 +11,10 @@ import type {
   SettingsOverride,
   UpdateSettingInput,
   SettingsAuditWriter,
-} from './types';
-import { NoopSettingsAuditWriter } from './types';
-import { SettingsResolver, getByPath } from './resolver';
-import {
-  type SettingsPersistence,
-  InMemorySettingsPersistence,
-} from './persistence';
+} from "./types";
+import { NoopSettingsAuditWriter } from "./types";
+import { SettingsResolver, getByPath } from "./resolver";
+import { type SettingsPersistence, InMemorySettingsPersistence } from "./persistence";
 
 export interface SettingsRegistryOptions {
   persistence?: SettingsPersistence;

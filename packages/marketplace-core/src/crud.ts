@@ -17,8 +17,8 @@ import {
   type DeletePluginInput,
   type CrudResult,
   type MarketplaceAuditKind,
-} from './types';
-import { computeContentHash } from '@orqenix/normalization-engine';
+} from "./types";
+import { computeContentHash } from "@orqenix/normalization-engine";
 
 /** Interface for persisting local plugin CSF documents */
 export interface LocalPluginStore {
@@ -56,8 +56,8 @@ export class MarketplaceCrud {
   constructor(
     private readonly store: LocalPluginStore,
     private readonly audit: MarketplaceAuditWriter,
-    private readonly actor: string = 'user',
-    private readonly projectId: string = ''
+    private readonly actor: string = "user",
+    private readonly projectId: string = "",
   ) {
     this.conformance = new ConformanceSuite();
   }
@@ -191,7 +191,7 @@ export class MarketplaceCrud {
         external_agent_compat: input.external_agent_compat,
         license: "Apache-2.0",
         keywords: [],
-        compatibility: { orqenix: '^0.8.0' },
+        compatibility: { orqenix: "^0.8.0" },
         settingsHotReloadable: false,
         settingsHierarchyOverride: "project",
         sandboxMode: "separate_process",

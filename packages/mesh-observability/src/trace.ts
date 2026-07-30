@@ -13,7 +13,7 @@ export interface ParsedTraceparent {
 export function parseTraceparent(tp: string): ParsedTraceparent | null {
   const m = TRACEPARENT_RE.exec(tp);
   if (!m) return null;
-  return { version: '00', traceId: m[1]!, spanId: m[2]!, flags: m[3]! };
+  return { version: "00", traceId: m[1]!, spanId: m[2]!, flags: m[3]! };
 }
 
 export function validateTraceparent(tp: string): boolean {

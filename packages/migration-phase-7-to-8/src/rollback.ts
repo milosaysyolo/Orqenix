@@ -4,9 +4,9 @@
 // Restores a project to its pre-migration state from a backup. Per CR v8.0
 // Section 11.4 (rollback within 30 days).
 
-import { existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { type MigrationRollbackResult, MigrationError } from './types';
+import { existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { type MigrationRollbackResult, MigrationError } from "./types";
 
 export class Rollback {
   /**
@@ -39,8 +39,8 @@ export class Rollback {
     }
 
     // Restore: remove current Phase 8 files, copy backup contents back
-    const { rm, cp, readdir } = await import('node:fs/promises');
-    const phase8Files = ['project.yaml', 'memory.db', 'memory.db-wal', 'memory.db-shm'];
+    const { rm, cp, readdir } = await import("node:fs/promises");
+    const phase8Files = ["project.yaml", "memory.db", "memory.db-wal", "memory.db-shm"];
     for (const f of phase8Files) {
       const p = join(orqenixDir, f);
       if (existsSync(p)) {

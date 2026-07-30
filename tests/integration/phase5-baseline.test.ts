@@ -84,8 +84,8 @@ describe("Phase 5 Baseline Integration (G1)", () => {
     }).not.toThrow();
   }, 120_000);
 
-  it("keeps Phase 4 plugin-compress-input contract", () => {
-    const pluginPath = join(REPO_ROOT, "packages/plugin-compress-input");
+  it("keeps Phase 4 plugin-compression contract", () => {
+    const pluginPath = join(REPO_ROOT, "packages/plugin-compression");
     expect(existsSync(pluginPath)).toBe(true);
   });
 });
