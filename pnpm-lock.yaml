@@ -293,27 +293,6 @@ importers:
         specifier: ^1.5.0
         version: 1.8.0
     devDependencies:
-      '@orqenix/input-adapters':
-        specifier: workspace:*
-        version: link:../input-adapters
-      '@orqenix/memory-engine':
-        specifier: workspace:*
-        version: link:../memory-engine
-      '@orqenix/normalization-engine':
-        specifier: workspace:*
-        version: link:../normalization-engine
-      '@orqenix/output-adapters':
-        specifier: workspace:*
-        version: link:../output-adapters
-      '@orqenix/plugin-core':
-        specifier: workspace:*
-        version: link:../plugin-core
-      '@orqenix/self-learning-detection':
-        specifier: workspace:*
-        version: link:../self-learning-detection
-      '@orqenix/self-learning-observer':
-        specifier: workspace:*
-        version: link:../self-learning-observer
       '@types/node':
         specifier: 20.16.11
         version: 20.16.11
