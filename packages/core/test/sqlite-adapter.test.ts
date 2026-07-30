@@ -61,7 +61,9 @@ describe("SqliteAdapter", () => {
   });
 
   it("vector methods throw with NotImplemented hint", async () => {
-    await expect(adapter.upsertVector("c", "id", [0.1, 0.2], {})).rejects.toThrow(/not implemented/);
+    await expect(adapter.upsertVector("c", "id", [0.1, 0.2], {})).rejects.toThrow(
+      /not implemented/,
+    );
     await expect(adapter.searchVectors("c", [0.1], 5)).rejects.toThrow(/not implemented/);
   });
 });
