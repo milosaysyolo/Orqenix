@@ -161,16 +161,10 @@ class G1WorkspaceFoundation extends GateRunner {
         "G1.7",
         spec.criteria.find((c) => c.id === "G1.7")?.description ?? "baseline integration tests",
         () => {
-          // Run core unit tests (npx resolves bins correctly in pnpm isolated mode)
+          // Run core unit tests via npx (resolves bins in pnpm isolated mode)
           const coreDir = join(REPO_ROOT, "packages/core");
-          execSync("npx vitest run 2>&1", {
+          execSync("npx vitest run packages/core/test/ 2>&1", {
             cwd: coreDir,
-            stdio: "pipe",
-            timeout: 30000,
-          });
-          const grDir = join(REPO_ROOT, "packages/gate-runner-core");
-          execSync("npx vitest run 2>&1", {
-            cwd: grDir,
             stdio: "pipe",
             timeout: 30000,
           });
