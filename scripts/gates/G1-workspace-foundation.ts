@@ -161,14 +161,16 @@ class G1WorkspaceFoundation extends GateRunner {
         "G1.7",
         spec.criteria.find((c) => c.id === "G1.7")?.description ?? "baseline integration tests",
         () => {
-          // Run core unit tests via turbo (matches CI workflow)
-          execSync("pnpm --filter @orqenix/core test 2>&1", {
-            cwd: REPO_ROOT,
+          // Run core unit tests via pnpm exec (filtered pnpm scripts miss hoisted bins)
+          const coreDir = join(REPO_ROOT, "packages/core");
+          execSync("pnpm exec vitest run", {
+            cwd: coreDir,
             stdio: "pipe",
             timeout: 30000,
           });
-          execSync("pnpm --filter @orqenix/gate-runner-core test 2>&1", {
-            cwd: REPO_ROOT,
+          const grDir = join(REPO_ROOT, "packages/gate-runner-core");
+          execSync("pnpm exec vitest run", {
+            cwd: grDir,
             stdio: "pipe",
             timeout: 30000,
           });
