@@ -116,6 +116,7 @@ for (const dir of pkgDirs) {
     const p = join(PACKAGES_DIR, dir, td);
     if (existsSync(p)) testDirs.push(p);
   }
+  const scriptsDir = join(PACKAGES_DIR, dir, "scripts");
 
   // If no src/ dir at all, skip — package may be build-only/config
   if (!existsSync(srcDir)) continue;
@@ -123,8 +124,9 @@ for (const dir of pkgDirs) {
   for (const dep of workspaceDeps) {
     const inSrc = hasImport(dep, [srcDir]);
     const inTests = testDirs.length > 0 ? hasImport(dep, testDirs) : false;
+    const inScripts = existsSync(scriptsDir) ? hasImport(dep, [scriptsDir]) : false;
 
-    if (!inSrc && !inTests) {
+    if (!inSrc && !inTests && !inScripts) {
       if (!allDead[pkgName]) allDead[pkgName] = [];
       allDead[pkgName].push(dep);
     }

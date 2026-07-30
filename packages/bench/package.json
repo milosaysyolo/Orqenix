@@ -21,14 +21,7 @@
     "bench:report": "node --import tsx scripts/generate-report.mjs"
   },
   "dependencies": {
-    "@noble/hashes": "^1.5.0",
-    "@orqenix/memory-engine": "workspace:*",
-    "@orqenix/plugin-core": "workspace:*",
-    "@orqenix/self-learning-observer": "workspace:*",
-    "@orqenix/self-learning-detection": "workspace:*",
-    "@orqenix/normalization-engine": "workspace:*",
-    "@orqenix/input-adapters": "workspace:*",
-    "@orqenix/output-adapters": "workspace:*"
+    "@noble/hashes": "^1.5.0"
   },
   "devDependencies": {
     "@types/node": "20.16.11",

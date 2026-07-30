@@ -292,6 +292,7 @@ importers:
       '@noble/hashes':
         specifier: ^1.5.0
         version: 1.8.0
+    devDependencies:
       '@orqenix/input-adapters':
         specifier: workspace:*
         version: link:../input-adapters
@@ -313,7 +314,6 @@ importers:
       '@orqenix/self-learning-observer':
         specifier: workspace:*
         version: link:../self-learning-observer
-    devDependencies:
       '@types/node':
         specifier: 20.16.11
         version: 20.16.11
@@ -1105,9 +1105,6 @@ importers:
         specifier: ^0.1.6
         version: 0.1.9
     devDependencies:
-      '@orqenix/core':
-        specifier: workspace:*
-        version: link:../core
       '@types/better-sqlite3':
         specifier: ^7.6.11
         version: 7.6.13

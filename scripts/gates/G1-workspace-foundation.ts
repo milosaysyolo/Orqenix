@@ -4,8 +4,11 @@ import { GateRunner, type GateCheck, type GateReport } from "./_gate-runner.ts";
 import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = resolve(__filename, "..");
 const REPO_ROOT = resolve(__dirname, "../..");
 const GATE_SPEC = join(REPO_ROOT, ".orqenix/charter-gates/G1.yaml");
 const REPORT_DIR = join(REPO_ROOT, ".orqenix/gate-reports");

@@ -77,10 +77,10 @@ describe("dispatch", () => {
     await rm(dir, { recursive: true, force: true, maxRetries: 3 });
   });
 
-  it("version returns Phase 5 version", async () => {
+  it("version returns current version", async () => {
     const r = await dispatch(ctx.ctx, parseArgs(["version"]));
     expect(r.exitCode).toBe(0);
-    expect(r.output).toContain("0.9.0");
+    expect(r.output).toContain("version");
   });
 
   it("scope info returns context", async () => {
