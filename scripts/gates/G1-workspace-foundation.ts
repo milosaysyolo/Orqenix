@@ -145,7 +145,7 @@ class G1WorkspaceFoundation extends GateRunner {
       await this.check(
         "G1.5",
         spec.criteria.find((c) => c.id === "G1.5")?.description ??
-          "Phase 4 plugin-compress-input tests",
+          "Phase 4 plugin-compression tests",
         () => {
           execSync("pnpm --filter @orqenix/plugin-compression test", {
             cwd: REPO_ROOT,
@@ -161,10 +161,10 @@ class G1WorkspaceFoundation extends GateRunner {
         () => {
           // Check that Phase 4 packages still have their core exports
           const pkg = JSON.parse(
-            readFileSync(join(REPO_ROOT, "packages/plugin-compress-context/package.json"), "utf-8"),
+            readFileSync(join(REPO_ROOT, "packages/compress-strategies/package.json"), "utf-8"),
           );
           if (!pkg.name || !pkg.version)
-            throw new Error("plugin-compress-context package.json malformed");
+            throw new Error("compress-strategies package.json malformed");
         },
       ),
 

@@ -61,7 +61,7 @@ function hasImport(depName, searchDirs) {
   //   require("@orqenix/foo")
   //   require("@orqenix/foo/something")
   const re = new RegExp(
-    `(?:from|require)\\s*\\(?\\s*["'\`]${quoted}(?:/|["'\`])`,
+    `(?:from|require|import)\\s*\\(?\\s*["'\`]${quoted}(?:/|["'\`])`,
   );
 
   for (const dir of searchDirs) {
