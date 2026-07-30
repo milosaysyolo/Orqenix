@@ -125,20 +125,9 @@ class G1WorkspaceFoundation extends GateRunner {
         "G1.4",
         spec.criteria.find((c) => c.id === "G1.4")?.description ?? "topological build",
         () => {
-          // Build core and gate-runner-core (real packages); skip scaffold-only
-          execSync("pnpm --filter @orqenix/core build", { cwd: REPO_ROOT, stdio: "pipe" });
-          execSync("pnpm --filter @orqenix/gate-runner-core build", {
-            cwd: REPO_ROOT,
-            stdio: "pipe",
-          });
-          // Verify all existing packages compile (excluding private)
-          execSync(
-            "pnpm -r --filter @orqenix/core --filter @orqenix/gate-runner-core exec tsc --build --noEmit",
-            {
-              cwd: REPO_ROOT,
-              stdio: "pipe",
-            },
-          );
+          // Build via turbo (matches CI workflow); direct pnpm --filter misses
+          // hoisted bins like tsup in pnpm isolated mode.
+          execSync("pnpm build 2>&1", { cwd: REPO_ROOT, stdio: "pipe", timeout: 120_000 });
         },
       ),
 
