@@ -260,8 +260,8 @@ export const CanonicalSkillFormatSchema = z.object({
     /** Compatibility declaration */
     compatibility: CompatibilitySchema,
 
-    /** Optional JSON Schema for settings */
-    settingsSchema: z.record(z.unknown()).optional(),
+    /** Optional JSON Schema for settings (object or path to schema file) */
+    settingsSchema: z.union([z.record(z.unknown()), z.string()]).optional(),
 
     /** Optional defaults for settings */
     settingsDefaults: z.record(z.unknown()).optional(),
