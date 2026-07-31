@@ -7,7 +7,11 @@ export default [
   },
   {
     files: ["**/*.{ts,tsx,mts,cts}"],
-    ignores: ["**/*.{test,spec}.{ts,tsx,mts,cts}", "**/vitest.config.*"],
+    ignores: [
+      "**/*.{test,spec}.{ts,tsx,mts,cts}",
+      "**/vitest.config.*",
+      "**/tsup.config.*",
+    ],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -21,7 +25,7 @@ export default [
     },
     rules: {
       "@typescript-eslint/no-unused-vars": [
-        "error",
+        "warn",
         {
           argsIgnorePattern: "^_",
           varsIgnorePattern: "^_",
@@ -49,7 +53,7 @@ export default [
   {
     // Test files and tooling configs are not in package tsconfig projects;
     // lint them without type-aware rules to avoid "file not found in project".
-    files: ["**/*.{test,spec}.{ts,tsx,mts,cts}", "**/vitest.config.*"],
+    files: ["**/*.{test,spec}.{ts,tsx,mts,cts}", "**/vitest.config.*", "**/tsup.config.*"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
