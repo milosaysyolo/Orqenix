@@ -64,8 +64,9 @@ export function CandidateCard({
         {/* Samples (collapsible) */}
         <div>
           <button
-            className="text-xs text-muted-foreground hover:text-foreground"
+            className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-50"
             onClick={() => setExpanded(!expanded)}
+            disabled={busy}
           >
             {expanded ? "Hide" : "Show"} {candidate.samples.length} sample observations (redacted)
           </button>

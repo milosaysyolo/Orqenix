@@ -12,18 +12,18 @@ export class Rollback {
   /**
    * Rolls back a migration by restoring from a backup directory.
    *
-   * @param backupPath Path to the _migration_backup_<timestamp> directory
+   * @param backupPath Path to the .orqenix-migration-backup-<timestamp> directory
    */
   async rollback(backupPath: string): Promise<MigrationRollbackResult> {
     if (!existsSync(backupPath)) {
       throw new MigrationError("BACKUP_NOT_FOUND", `Backup not found at ${backupPath}`);
     }
 
-    // The .orqenix dir is the parent of the backup
-    const orqenixDir = dirname(backupPath);
+    // The .orqenix dir is a sibling of the backup (backup lives at project root)
+    const orqenixDir = join(dirname(backupPath), ".orqenix");
 
     // Verify backup is within the 30-day window (by timestamp in name)
-    const m = /_migration_backup_(.+)$/.exec(backupPath);
+    const m = /orqenix-migration-backup-(.+)$/.exec(backupPath);
     if (m) {
       const ts = m[1]!.replace(/-/g, (c, i) => (i === 13 || i === 16 ? ":" : i === 19 ? "." : c));
       const backupTime = new Date(ts).getTime();

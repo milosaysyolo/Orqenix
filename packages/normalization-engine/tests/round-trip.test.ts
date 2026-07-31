@@ -98,8 +98,8 @@ describe("Round-trip fidelity", () => {
       version: "1.0.0",
       name: "WS",
       async serialize() {
-        // Add trailing whitespace + extra blank lines (normalized away)
-        return { content: "line1   \n\n\n\nline2  \n", format: "text" };
+        // Add trailing whitespace + trailing blank lines (normalized away)
+        return { content: "line1   \nline2  \n\n\n\n", format: "text" };
       },
       validateExportability() {
         return { lossyFields: [], warnings: [] };

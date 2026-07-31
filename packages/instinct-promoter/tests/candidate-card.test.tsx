@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// Created by D8.y.1.3 spec - from listing.// Component contract test for CandidateCardimport { describe, it, expect } from 'vitest';
-import { render, screen } from "@testing-library/react";
+// Component contract test for CandidateCard
+import { afterEach } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 import { CandidateCard } from "../src/ui/candidate-card";
 import type { PromoterCandidate } from "../src/types";
+
+afterEach(cleanup);
 const mockCandidate: PromoterCandidate = {
   id: "c1",
   patternName: "@local/test-then-commit",

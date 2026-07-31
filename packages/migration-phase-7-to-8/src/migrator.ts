@@ -68,9 +68,9 @@ export class Migrator {
       throw new MigrationError("NO_SCOPE", "No scope.yaml found");
     }
 
-    // Step 1: Backup
+    // Step 1: Backup (sibling dir — cp of a dir into its own subdir fails with EINVAL)
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const backupPath = join(orqenixDir, `_migration_backup_${timestamp}`);
+    const backupPath = join(projectPath, `.orqenix-migration-backup-${timestamp}`);
     await cp(orqenixDir, backupPath, { recursive: true });
 
     // Step 2 + 3: Apply schema migrations

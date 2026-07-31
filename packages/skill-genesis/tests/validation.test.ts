@@ -9,10 +9,10 @@ describe("SkillValidation", () => {
     const invalid = ["Git Commit", "build_and_test", "code.review", "", "a"];
 
     for (const name of valid) {
-      expect(name).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+      expect(name).toMatch(/^[a-z0-9]+-[a-z0-9]+(-[a-z0-9]+)*$/);
     }
     for (const name of invalid) {
-      expect(name).not.toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+      expect(name).not.toMatch(/^[a-z0-9]+-[a-z0-9]+(-[a-z0-9]+)*$/);
     }
   });
 

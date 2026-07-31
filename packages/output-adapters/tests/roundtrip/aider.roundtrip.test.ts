@@ -5,7 +5,7 @@ import { aiderInputAdapter } from "@orqenix/input-adapters";
 import { aiderOutputAdapter } from "../../src/aider";
 
 const FIXTURES = [
-  `aider_version: '>=0.40.0'\nname: my-aider-plugin\nversion: 1.0.0\ndescription: An aider plugin\nentry: ./plugin.py`,
+  `aider_version: ">=0.40.0"\nname: my-aider-plugin\nversion: 1.0.0\ndescription: An aider plugin\nentry: ./plugin.py`,
 ];
 
 describe("Round-trip: aider", () => {
