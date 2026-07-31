@@ -7,6 +7,7 @@ export default [
   },
   {
     files: ["**/*.{ts,tsx,mts,cts}"],
+    ignores: ["**/*.{test,spec}.{ts,tsx,mts,cts}", "**/vitest.config.*"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -42,6 +43,34 @@ export default [
           ],
         },
       ],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+    },
+  },
+  {
+    // Test files and tooling configs are not in package tsconfig projects;
+    // lint them without type-aware rules to avoid "file not found in project".
+    files: ["**/*.{test,spec}.{ts,tsx,mts,cts}", "**/vitest.config.*"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'off',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
