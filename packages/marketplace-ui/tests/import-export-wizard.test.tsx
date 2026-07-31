@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import { describe, it, expect, vi } from "vitest";
+import { createElement } from "react";
 import { ImportExportWizard } from "../src/import-export-wizard";
 
 describe("ImportExportWizard", () => {
@@ -7,8 +8,8 @@ describe("ImportExportWizard", () => {
     expect(typeof ImportExportWizard).toBe("function");
   });
 
-  it("renders import mode without crashing", () => {
-    const element = ImportExportWizard({
+  it("creates import mode element without crashing", () => {
+    const element = createElement(ImportExportWizard, {
       mode: "import",
       open: true,
       onClose: vi.fn(),
@@ -16,8 +17,8 @@ describe("ImportExportWizard", () => {
     expect(element).toBeDefined();
   });
 
-  it("renders export mode without crashing", () => {
-    const element = ImportExportWizard({
+  it("creates export mode element without crashing", () => {
+    const element = createElement(ImportExportWizard, {
       mode: "export",
       open: true,
       pluginName: "test-plugin",
