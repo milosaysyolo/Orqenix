@@ -78,10 +78,12 @@ export class PluginLoader {
     const contentHash = this.computeContentHash(csf);
     csf.provenance.contentHash = contentHash;
 
-    // Resolve entry path
-    const entryPath = isAbsolute(csf.implementation.entry)
-      ? csf.implementation.entry
-      : join(absPath, csf.implementation.entry);
+    // Resolve entry path (normalized to forward slashes for cross-platform determinism)
+    const entryPath = (
+      isAbsolute(csf.implementation.entry)
+        ? csf.implementation.entry
+        : join(absPath, csf.implementation.entry)
+    ).replaceAll("\\", "/");
 
     return {
       csf,

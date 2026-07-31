@@ -2,14 +2,7 @@
 import { defineConfig, mergeConfig } from "vitest/config";
 import shared from "../../vitest.config.shared";
 
-const localConfig = defineConfig({
-  test: {
-    server: {
-      deps: {
-        external: [/web-tree-sitter/],
-      },
-    },
-  },
-});
+const localConfig = defineConfig({});
 
 export default mergeConfig(shared, localConfig);
+

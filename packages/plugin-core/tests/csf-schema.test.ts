@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: Apache-2.0
+﻿// SPDX-License-Identifier: Apache-2.0
 import { describe, it, expect } from "vitest";
 import {
   CanonicalSkillFormatSchema,
@@ -32,7 +32,7 @@ function makeValidCsf(overrides: Record<string, unknown> = {}) {
     },
     provenance: {
       verification_status: "unverified",
-      contentHash: "abc123def456abc1",
+      contentHash: "abc123def456abc1abc123def456abc1",
     },
     ...overrides,
   };
@@ -89,7 +89,7 @@ describe("CSF Schema", () => {
       makeValidCsf({
         provenance: {
           verification_status: "totally-fake",
-          contentHash: "abc123def456abc1",
+          contentHash: "abc123def456abc1abc123def456abc1",
         },
       }),
     );
@@ -100,7 +100,7 @@ describe("CSF Schema", () => {
     for (const status of ["unverified", "replay_tested", "verified", "marketplace-ready"]) {
       const result = CanonicalSkillFormatSchema.safeParse(
         makeValidCsf({
-          provenance: { verification_status: status, contentHash: "abc123def456abc1" },
+          provenance: { verification_status: status, contentHash: "abc123def456abc1abc123def456abc1" },
         }),
       );
       expect(result.success, status).toBe(true);
@@ -119,3 +119,4 @@ describe("CSF Schema", () => {
     expect(result.success).toBe(false);
   });
 });
+

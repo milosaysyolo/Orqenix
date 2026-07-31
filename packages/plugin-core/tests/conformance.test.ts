@@ -33,7 +33,7 @@ function makeCsf(overrides: Partial<CanonicalSkillFormat> = {}): CanonicalSkillF
     },
     provenance: {
       verification_status: "unverified",
-      contentHash: "abc123def4567890",
+      contentHash: "abc123def4567890abc123def4567890",
     },
     ...overrides,
   };
