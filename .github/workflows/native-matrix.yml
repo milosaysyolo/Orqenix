@@ -109,7 +109,7 @@ jobs:
             pnpm-${{ matrix.os_label }}-node${{ matrix.node }}-
 
       - name: Install (frozen lockfile)
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --config.ignore-scripts=false
 
       - name: Rebuild allowlisted native dependencies
         run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --config.ignore-scripts=false
