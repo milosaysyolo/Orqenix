@@ -111,38 +111,42 @@ describe("G40: Transport Security Gate", () => {
   // Perf gate: noble Ed25519 verify is 3-5x slower on win32 CI runners and
   // the p95 threshold can't be met under CPU contention. Skip on win32.
   const runC5 = process.platform === "win32" ? it.skip : it;
-  runC5("C5: p95 verify latency < 10ms (CI tolerance +5ms)", async () => {
-    const ITER = process.env.G40_ITER ? Number(process.env.G40_ITER) : 2_000;
-    const CI_TOLERANCE_MS = 5;
-    const kp = await generateEd25519Keypair();
-    const ks = new LRUKeyStore();
-    const iss = "scp_b3_B" as ScopeId;
-    const sub = "scp_b3_A" as ScopeId;
-    ks.put(iss, await exportEd25519PublicKeyRaw(kp.publicKey));
-    const base: Omit<CapabilityTokenFields, "sig"> = {
-      iss,
-      sub,
-      caps: ["memory.query", "kb.recall.*"],
-      exp: Date.now() + 600_000,
-      jti: "jti-bench",
-    };
-    const signed = await ed25519Sign(kp.privateKey, canonicalSigningBytes(base));
-    const wire = encodeCapabilityToken({ ...base, sig: b64urlEncode(signed) });
-    const v = new CapabilityVerifier({ keyStore: ks });
-    for (let i = 0; i < 200; i++) {
-      await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: "memory.query" });
-    }
-    const samples = new Float64Array(ITER);
-    for (let i = 0; i < ITER; i++) {
-      const start = performance.now();
-      await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: "memory.query" });
-      samples[i] = performance.now() - start;
-    }
-    const sorted = Array.from(samples).sort((a, b) => a - b);
-    const p95 = sorted[Math.floor(ITER * 0.95)];
-    console.log(`[G40 wrapper C5] p95=${p95.toFixed(3)}ms n=${ITER}`);
-    expect(p95).toBeLessThan(10 + CI_TOLERANCE_MS);
-  }, 60_000);
+  runC5(
+    "C5: p95 verify latency < 10ms (CI tolerance +5ms)",
+    async () => {
+      const ITER = process.env.G40_ITER ? Number(process.env.G40_ITER) : 2_000;
+      const CI_TOLERANCE_MS = 5;
+      const kp = await generateEd25519Keypair();
+      const ks = new LRUKeyStore();
+      const iss = "scp_b3_B" as ScopeId;
+      const sub = "scp_b3_A" as ScopeId;
+      ks.put(iss, await exportEd25519PublicKeyRaw(kp.publicKey));
+      const base: Omit<CapabilityTokenFields, "sig"> = {
+        iss,
+        sub,
+        caps: ["memory.query", "kb.recall.*"],
+        exp: Date.now() + 600_000,
+        jti: "jti-bench",
+      };
+      const signed = await ed25519Sign(kp.privateKey, canonicalSigningBytes(base));
+      const wire = encodeCapabilityToken({ ...base, sig: b64urlEncode(signed) });
+      const v = new CapabilityVerifier({ keyStore: ks });
+      for (let i = 0; i < 200; i++) {
+        await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: "memory.query" });
+      }
+      const samples = new Float64Array(ITER);
+      for (let i = 0; i < ITER; i++) {
+        const start = performance.now();
+        await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: "memory.query" });
+        samples[i] = performance.now() - start;
+      }
+      const sorted = Array.from(samples).sort((a, b) => a - b);
+      const p95 = sorted[Math.floor(ITER * 0.95)];
+      console.log(`[G40 wrapper C5] p95=${p95.toFixed(3)}ms n=${ITER}`);
+      expect(p95).toBeLessThan(10 + CI_TOLERANCE_MS);
+    },
+    60_000,
+  );
 
   it("C6: pipeline preserves order -> bad sig denies before scope/method match", async () => {
     const kp = await generateEd25519Keypair();
