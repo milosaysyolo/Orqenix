@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/reindex-incremental",
   "version": "0.10.0",
   "description": "Watermark-based incremental reindex for Orqenix KBs (BLAKE3 content hash + path index)",

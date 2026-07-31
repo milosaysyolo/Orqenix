@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/kb-chat",
   "version": "0.10.0",
   "description": "Chat Knowledge Base (sessions, entries, vector search, capability-gated writes)",

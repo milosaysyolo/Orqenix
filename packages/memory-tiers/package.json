@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/memory-tiers",
   "version": "0.10.0",
   "description": "4-tier memory classification (working/episodic/semantic/procedural) for Orqenix Memory Matrix",

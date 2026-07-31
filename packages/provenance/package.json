@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/provenance",
   "version": "0.10.0",
   "description": "Provenance tagging + verification for cross-scope mesh data (CR v7.1 Ch.13)",

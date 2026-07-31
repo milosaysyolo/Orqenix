@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/compress-strategies",
   "version": "0.10.0",
   "description": "4 graduated compression strategies (Tier 0-preserving) for Orqenix Smart Compression Engine",

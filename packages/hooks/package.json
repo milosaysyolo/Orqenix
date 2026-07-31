@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/hooks",
   "version": "0.10.0",
   "description": "Typed event bus for Orqenix compress/distill lifecycle (preCompress, postCompress, postDistill, etc.)",

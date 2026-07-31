@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/memory-distiller",
   "version": "0.10.0",
   "description": "Heuristic memory distiller for Orqenix (OSS tier, regex+sentence patterns + background worker)",

@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/audit-log",
   "version": "0.10.0",
   "description": "Tamper-evident append-only audit log for Orqenix scope actions (CR v7.1 Ch.17)",

@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/smart-compression",
   "version": "0.10.0",
   "description": "Smart Compression Engine: strategy selection + overflow 105% + hooks + telemetry (CR v7.1 Ch.6)",

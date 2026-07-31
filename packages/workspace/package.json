@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/workspace",
   "version": "0.10.0",
   "description": "Workspace concept for grouping scope memberships in the Orqenix mesh (CR v7.1 Ch.13)",

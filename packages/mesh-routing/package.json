@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/mesh-routing",
   "version": "0.10.0",
   "description": "Cross-scope mesh query coordinator with parallel fanout + timeouts + provenance (CR v7.1 Ch.13)",

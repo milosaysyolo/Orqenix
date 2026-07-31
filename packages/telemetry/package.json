@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@orqenix/telemetry",
   "version": "0.10.0",
   "description": "In-memory telemetry primitives for Orqenix (counters, histograms, gauges) with sink interface",
