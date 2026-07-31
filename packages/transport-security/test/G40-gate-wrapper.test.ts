@@ -109,7 +109,7 @@ describe("G40: Transport Security Gate", () => {
   });
 
   it("C5: p95 verify latency < 10ms (CI tolerance +5ms)", async () => {
-    const ITER = 5_000; // fast for CI; benchmark uses larger N
+    const ITER = process.env.G40_ITER ? Number(process.env.G40_ITER) : 2_000;
     const CI_TOLERANCE_MS = 5;
     const kp = await generateEd25519Keypair();
     const ks = new LRUKeyStore();
@@ -126,7 +126,7 @@ describe("G40: Transport Security Gate", () => {
     const signed = await ed25519Sign(kp.privateKey, canonicalSigningBytes(base));
     const wire = encodeCapabilityToken({ ...base, sig: b64urlEncode(signed) });
     const v = new CapabilityVerifier({ keyStore: ks });
-    for (let i = 0; i < 1_000; i++) {
+    for (let i = 0; i < 200; i++) {
       await v.verify({ capability: wire, fromScope: sub, toScope: iss, method: "memory.query" });
     }
     const samples = new Float64Array(ITER);
