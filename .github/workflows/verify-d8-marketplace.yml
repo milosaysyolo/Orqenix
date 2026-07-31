@@ -27,19 +27,10 @@ jobs:
         with: { node-version: "22", cache: "pnpm" }
       - run: pnpm install --frozen-lockfile
       - name: Build dependencies
-        run: pnpm --filter @orqenix/marketplace-core... run build
+        run: pnpm build
       - name: Typecheck marketplace packages
-        run: |
-          pnpm --filter @orqenix/marketplace-core typecheck
-          pnpm --filter @orqenix/normalization-engine typecheck
-          pnpm --filter @orqenix/input-adapters typecheck
-          pnpm --filter @orqenix/output-adapters typecheck
-          pnpm --filter @orqenix/marketplace-ui typecheck
+        run: pnpm exec turbo run typecheck --filter=@orqenix/marketplace-core... --filter=@orqenix/normalization-engine --filter=@orqenix/input-adapters --filter=@orqenix/output-adapters --filter=@orqenix/marketplace-ui
       - name: Test (includes round-trip fidelity gate)
-        run: |
-          pnpm --filter @orqenix/marketplace-core test
-          pnpm --filter @orqenix/normalization-engine test
-          pnpm --filter @orqenix/input-adapters test
-          pnpm --filter @orqenix/output-adapters test
+        run: pnpm exec turbo run test --filter=@orqenix/marketplace-core --filter=@orqenix/normalization-engine --filter=@orqenix/input-adapters
       - name: Round-trip fidelity gate (INV-15)
-        run: pnpm --filter @orqenix/output-adapters test -- roundtrip
+        run: pnpm exec turbo run test --filter=@orqenix/output-adapters
