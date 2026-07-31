@@ -31,8 +31,17 @@ jobs:
       - name: Build dependencies
         run: pnpm build
       - name: Typecheck marketplace packages
-        run: pnpm exec turbo run typecheck --filter=@orqenix/marketplace-core... --filter=@orqenix/normalization-engine --filter=@orqenix/input-adapters --filter=@orqenix/output-adapters --filter=@orqenix/marketplace-ui
+        shell: bash
+        run: |
+          export PATH="$PWD/node_modules/.bin:$PATH"
+          pnpm exec turbo run typecheck --filter=@orqenix/marketplace-core... --filter=@orqenix/normalization-engine --filter=@orqenix/input-adapters --filter=@orqenix/output-adapters --filter=@orqenix/marketplace-ui
       - name: Test (includes round-trip fidelity gate)
-        run: pnpm exec turbo run test --filter=@orqenix/marketplace-core --filter=@orqenix/normalization-engine --filter=@orqenix/input-adapters
+        shell: bash
+        run: |
+          export PATH="$PWD/node_modules/.bin:$PATH"
+          pnpm exec turbo run test --filter=@orqenix/marketplace-core --filter=@orqenix/normalization-engine --filter=@orqenix/input-adapters
       - name: Round-trip fidelity gate (INV-15)
-        run: pnpm exec turbo run test --filter=@orqenix/output-adapters
+        shell: bash
+        run: |
+          export PATH="$PWD/node_modules/.bin:$PATH"
+          pnpm exec turbo run test --filter=@orqenix/output-adapters
