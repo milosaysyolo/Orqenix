@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import { KnowledgeQueryEngine } from "./index.js";
 
 const stubKB = (kind: string) => ({
-  query: async (_q: string, _topK?: number) => [
+  query: (_q: string, _topK?: number) => [
     {
       id: `${kind}-1`,
       text: `text from ${kind}`,
