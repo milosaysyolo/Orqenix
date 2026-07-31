@@ -10,8 +10,8 @@ describe("kb-query behavior tests", () => {
 
   beforeEach(async () => {
     dbPath = mkdtempSync(join(tmpdir(), "kb-query-test-"));
-    const mockDocs = { query: async () => [] } as any;
-    const mockCode = { query: async () => [] } as any;
+const mockDocs = { query: () => [] } as any;
+const mockCode = { query: async () => [] } as any;
     const mockDecisions = { listByType: async () => [] } as any;
     engine = new KnowledgeQueryEngine(mockDocs, mockCode, mockDecisions);
   });
