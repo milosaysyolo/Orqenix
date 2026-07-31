@@ -140,10 +140,11 @@ async function smokeSqliteVec() {
     const v4 = mk(13);
 
     const insert = db.prepare("INSERT INTO v (rowid, embedding) VALUES (?, ?)");
-    insert.run(1, v1);
-    insert.run(2, v2);
-    insert.run(3, v3);
-    insert.run(4, v4);
+    // better-sqlite3 12.x + sqlite-vec require BigInt rowids (INT64 PK)
+    insert.run(BigInt(1), v1);
+    insert.run(BigInt(2), v2);
+    insert.run(BigInt(3), v3);
+    insert.run(BigInt(4), v4);
 
     const top = db
       .prepare(
