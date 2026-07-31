@@ -150,6 +150,7 @@ function genId(): string {
   return count.toString();
 }
 type ActionType = typeof actionTypes;
+void actionTypes;
 type Action =
   | { type: ActionType["ADD_TOAST"]; toast: ToasterToast }
   | { type: ActionType["UPDATE_TOAST"]; toast: Partial<ToasterToast> }

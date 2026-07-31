@@ -167,7 +167,7 @@ describe("G38A libp2p foundation gate criteria", () => {
     const addr: MeshAddress = { kind: "libp2p", multiaddr: B.multiaddrs()[0] };
     const resp = await A.send(
       addr,
-      mkReq("scp_b3_bb" as ScopeId, "01HV0R6X3M8YQ9G7F2D5W1ZA08", Date.now() + 80),
+      mkReq("scp_b3_bb" as ScopeId, "01HV0R6X3M8YQ9G7F2D5W1ZA08", Date.now() + 250),
     );
     expect(resp.status).toBe("timeout");
     await A.stop();
