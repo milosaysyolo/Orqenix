@@ -45,7 +45,7 @@ export class KnowledgeQueryEngine {
     const results: KnowledgeResult[] = [];
 
     if (kbs.includes("docs")) {
-      const docs = await this.docs.query(q.text, topK);
+      const docs = this.docs.query(q.text, topK);
       for (const doc of docs) {
         results.push({
           kind: "doc",
