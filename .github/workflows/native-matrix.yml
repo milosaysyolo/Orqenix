@@ -112,7 +112,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Rebuild allowlisted native dependencies
-        run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --pending --config.ignore-scripts=false
+        run: pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core sharp --config.ignore-scripts=false
 
       - name: Verify BLAKE3 fixture
         run: node --experimental-vm-modules scripts/ci/native-matrix/verify-fixture.mjs
