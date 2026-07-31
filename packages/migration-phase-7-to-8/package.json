@@ -32,7 +32,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
-    "lint": "eslint src tests",
+    "lint": "pnpm exec eslint src tests",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "clean": "npx rimraf dist .turbo",
