@@ -15,6 +15,8 @@ const workspaceRoot = resolve(import.meta.dirname);
 export default defineConfig({
   test: {
     setupFiles: [resolve(import.meta.dirname, './vitest.setup.native-mocks.ts')],
+    // Workspace packages appear as symlinks in node_modules; don't re-run their tests
+    exclude: ["**/node_modules/**", "**/dist/**"],
     pool: 'forks',
     poolOptions: {
       forks: {
