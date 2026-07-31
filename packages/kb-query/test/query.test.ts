@@ -28,11 +28,11 @@ describe("KnowledgeQueryEngine query shape", () => {
       confidence: 0.7,
     };
 
-    const engine = new KnowledgeQueryEngine(
-      { query: async () => [docResult] } as any,
-      { query: async () => [codeResult] } as any,
-      { listByType: async () => [decisionResult] } as any,
-    );
+const engine = new KnowledgeQueryEngine(
+  { query: () => [docResult] } as any,
+  { query: async () => [codeResult] } as any,
+  { listByType: async () => [decisionResult] } as any,
+);
 
     const results = await engine.query({ text: "test", scope: "s1", topK: 10 });
 
@@ -49,7 +49,7 @@ describe("KnowledgeQueryEngine query shape", () => {
 
   it("returns empty array when kbs list is empty", async () => {
     const engine = new KnowledgeQueryEngine(
-      { query: async () => [{ id: "d1", text: "x", score: 0.5, path: "", heading: "" }] } as any,
+      { query: () => [{ id: "d1", text: "x", score: 0.5, path: "", heading: "" }] } as any,
       { query: async () => [{ id: "c1", name: "fn", score: 0.5, path: "", kind: "" }] } as any,
       { listByType: async () => [] } as any,
     );
