@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: Apache-2.0
+﻿// SPDX-License-Identifier: Apache-2.0
 import { describe, it, expect } from "vitest";
 import { KnowledgeQueryEngine } from "../src/index.js";
 
@@ -62,7 +62,7 @@ describe("KnowledgeQueryEngine query shape", () => {
 describe("KnowledgeQueryEngine empty query", () => {
   it("does not throw on empty text", async () => {
     const engine = new KnowledgeQueryEngine(
-      { query: async () => [] } as any,
+      { query: () => [] } as any,
       { query: async () => [] } as any,
       { listByType: async () => [] } as any,
     );
@@ -73,7 +73,7 @@ describe("KnowledgeQueryEngine empty query", () => {
 
   it("returns results when empty text still matches", async () => {
     const engine = new KnowledgeQueryEngine(
-      { query: async () => [{ id: "d1", text: "", score: 0.5, path: "", heading: "" }] } as any,
+      { query: () => [{ id: "d1", text: "", score: 0.5, path: "", heading: "" }] } as any,
       { query: async () => [] } as any,
       { listByType: async () => [] } as any,
     );
@@ -86,7 +86,7 @@ describe("KnowledgeQueryEngine empty query", () => {
 describe("KnowledgeQueryEngine invalid input", () => {
   it("handles undefined optional fields gracefully", async () => {
     const engine = new KnowledgeQueryEngine(
-      { query: async () => [{ id: "d1", text: "x", score: 0.5, path: "", heading: "" }] } as any,
+      { query: () => [{ id: "d1", text: "x", score: 0.5, path: "", heading: "" }] } as any,
       { query: async () => [] } as any,
       { listByType: async () => [] } as any,
     );
@@ -104,7 +104,7 @@ describe("KnowledgeQueryEngine invalid input", () => {
 
   it("handles retrieval config with missing fields", async () => {
     const engine = new KnowledgeQueryEngine(
-      { query: async () => [] } as any,
+      { query: () => [] } as any,
       { query: async () => [] } as any,
       { listByType: async () => [] } as any,
     );
