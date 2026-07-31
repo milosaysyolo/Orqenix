@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/workspace",
   "version": "0.10.0",
   "description": "Workspace concept for grouping scope memberships in the Orqenix mesh (CR v7.1 Ch.13)",
@@ -64,7 +64,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.5.0"
   }
 }

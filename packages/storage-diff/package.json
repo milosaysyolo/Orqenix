@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/storage-diff",
   "version": "0.10.0",
   "description": "BLAKE3 content-addressed + zstd-delta diff storage for Orqenix KBs",
@@ -64,7 +64,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.5.0"
   }
 }

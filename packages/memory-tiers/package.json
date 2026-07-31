@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/memory-tiers",
   "version": "0.10.0",
   "description": "4-tier memory classification (working/episodic/semantic/procedural) for Orqenix Memory Matrix",
@@ -65,7 +65,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.5.0"
   }
 }

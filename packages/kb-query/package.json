@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/kb-query",
   "version": "0.10.0",
   "description": "Orqenix kb-query package",
@@ -63,7 +63,7 @@
     "@orqenix/kb-code": "workspace:*"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.4.0"
   }
 }

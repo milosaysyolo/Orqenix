@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/detach",
   "version": "0.10.0",
   "description": "Safe detach: clean unlink + .orqenix directory teardown with explicit confirmation (CR v7.1 Ch.16)",
@@ -68,7 +68,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.5.0"
   }
 }

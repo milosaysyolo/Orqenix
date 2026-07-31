@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/embedding-cloud",
   "version": "0.10.0",
   "description": "Orqenix embedding-cloud package",
@@ -62,7 +62,7 @@
     "openai": "^4.50.0"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.4.0"
   }
 }

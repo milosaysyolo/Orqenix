@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/rtk-hooks",
   "version": "0.10.0",
   "description": "Read-Through Kernel shell hooks (capture stdout/stderr to ChatKB) extending plugin-compress-input",
@@ -64,7 +64,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.5.0"
   }
 }

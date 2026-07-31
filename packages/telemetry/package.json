@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/telemetry",
   "version": "0.10.0",
   "description": "In-memory telemetry primitives for Orqenix (counters, histograms, gauges) with sink interface",
@@ -61,7 +61,7 @@
     "@orqenix/core": "workspace:*"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.5.0"
   }
 }

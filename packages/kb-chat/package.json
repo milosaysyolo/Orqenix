@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/kb-chat",
   "version": "0.10.0",
   "description": "Chat Knowledge Base (sessions, entries, vector search, capability-gated writes)",
@@ -66,7 +66,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.5.0"
   }
 }

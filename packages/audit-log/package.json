@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "@orqenix/audit-log",
   "version": "0.10.0",
   "description": "Tamper-evident append-only audit log for Orqenix scope actions (CR v7.1 Ch.17)",
@@ -65,7 +65,7 @@
     "zod": "^3.25.0"
   },
   "devDependencies": {
-    "vitest": "^1.6.0",
+    "vitest": "^2.1.9",
     "typescript": "^5.5.0"
   }
 }
