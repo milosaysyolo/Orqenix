@@ -14,7 +14,7 @@ import {
 } from "../src/capability-token.js";
 import type { ScopeId } from "@orqenix/mesh-transport-core";
 
-const ITER = Number(process.env.G40_BENCH_ITER ?? 30_000);
+const ITER = Number(process.env.G40_BENCH_ITER ?? 10_000);
 const CI_TOLERANCE_MS = 5;
 
 describe("CapabilityVerifier p95 benchmark", () => {

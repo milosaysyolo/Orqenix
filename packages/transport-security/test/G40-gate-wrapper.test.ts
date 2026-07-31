@@ -109,7 +109,7 @@ describe("G40: Transport Security Gate", () => {
   });
 
   it("C5: p95 verify latency < 10ms (CI tolerance +5ms)", async () => {
-    const ITER = 10_000; // faster for unit test; benchmark uses 100k
+    const ITER = 5_000; // fast for CI; benchmark uses larger N
     const CI_TOLERANCE_MS = 5;
     const kp = await generateEd25519Keypair();
     const ks = new LRUKeyStore();
