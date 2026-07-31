@@ -12,13 +12,5 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
       - run: corepack enable && pnpm install --frozen-lockfile
-      - run: pnpm --filter @orqenix/self-learning-observer run build
-      - run: pnpm --filter @orqenix/self-learning-observer run test
-      - run: pnpm --filter @orqenix/self-learning-detection run build
-      - run: pnpm --filter @orqenix/self-learning-detection run test
-      - run: pnpm --filter @orqenix/instinct-promoter run build
-      - run: pnpm --filter @orqenix/instinct-promoter run test
-      - run: pnpm --filter @orqenix/skill-genesis run build
-      - run: pnpm --filter @orqenix/skill-genesis run test
-      - run: pnpm --filter @orqenix/verification-loop run build
-      - run: pnpm --filter @orqenix/verification-loop run test
+      - run: pnpm exec turbo run build --filter=@orqenix/self-learning-observer --filter=@orqenix/self-learning-detection --filter=@orqenix/instinct-promoter --filter=@orqenix/skill-genesis --filter=@orqenix/verification-loop
+      - run: pnpm exec turbo run test --filter=@orqenix/self-learning-observer --filter=@orqenix/self-learning-detection --filter=@orqenix/instinct-promoter --filter=@orqenix/skill-genesis --filter=@orqenix/verification-loop
