@@ -95,7 +95,12 @@ jobs:
         run: pnpm test
 
       - name: Lint
-        run: pnpm exec turbo run lint
+        shell: bash
+        run: |
+          # hoisted linker puts bins at root .bin; package-local .bin may
+          # lack eslint/vitest for packages that don't declare them directly
+          export PATH="$PWD/node_modules/.bin:$PATH"
+          pnpm exec turbo run lint
 
       - name: Version staleness gate
         run: |
