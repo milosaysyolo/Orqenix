@@ -197,7 +197,7 @@ describe("G38B libp2p adapters gate criteria", () => {
     const tcpAddr = pickTcpAddr(B.multiaddrs());
     const resp = await A.send(
       { kind: "libp2p", multiaddr: tcpAddr },
-      mkReq("scp_b3_bb" as ScopeId, "01HV0R6X3M8YQ9G7F2D5W1ZB08", Date.now() + 80),
+      mkReq("scp_b3_bb" as ScopeId, "01HV0R6X3M8YQ9G7F2D5W1ZB08", Date.now() + 250),
     );
     expect(resp.status).toBe("timeout");
     await A.stop();
