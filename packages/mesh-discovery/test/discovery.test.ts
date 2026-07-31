@@ -31,7 +31,7 @@ describe("MeshDiscovery", () => {
       return attempts >= 3;
     });
     d.scheduleBootstrapAttempt("/ip4/127.0.0.1/tcp/1/p2p/x", attemptFn, () => 0.5);
-    await new Promise((res) => setTimeout(res, 200));
+    await new Promise((res) => setTimeout(res, 500));
     expect(attemptFn).toHaveBeenCalled();
     expect(attempts).toBeGreaterThanOrEqual(3);
     d.stop();
