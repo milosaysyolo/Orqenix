@@ -11,6 +11,7 @@ export default [
       "**/*.{test,spec}.{ts,tsx,mts,cts}",
       "**/vitest.config.*",
       "**/tsup.config.*",
+      "**/D6F2*.ts",
     ],
     languageOptions: {
       parser: tsParser,

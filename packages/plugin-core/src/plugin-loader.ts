@@ -49,7 +49,7 @@ export class PluginLoader {
     let raw: string;
     try {
       raw = await readFile(packageJsonPath, "utf-8");
-    } catch (err) {
+    } catch {
       throw new PluginNotFoundError(packageJsonPath);
     }
 
