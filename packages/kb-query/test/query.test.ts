@@ -28,11 +28,11 @@ describe("KnowledgeQueryEngine query shape", () => {
       confidence: 0.7,
     };
 
-const engine = new KnowledgeQueryEngine(
-  { query: () => [docResult] } as any,
-  { query: async () => [codeResult] } as any,
-  { listByType: async () => [decisionResult] } as any,
-);
+    const engine = new KnowledgeQueryEngine(
+      { query: () => [docResult] } as any,
+      { query: async () => [codeResult] } as any,
+      { listByType: async () => [decisionResult] } as any,
+    );
 
     const results = await engine.query({ text: "test", scope: "s1", topK: 10 });
 
