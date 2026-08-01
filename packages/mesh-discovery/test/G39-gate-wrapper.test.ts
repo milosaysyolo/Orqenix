@@ -2,7 +2,8 @@
  * G39 gate runner wrapped in vitest so ESM-only deps (@libp2p/mdns) resolve via vite.
  */
 import { describe, it, expect } from "vitest";
-import { spawnSync } from "node:child_process";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { resolve } from "node:path";
 import {
   MeshDiscovery,
@@ -13,6 +14,7 @@ import {
 import type { ScopeId } from "@orqenix/mesh-transport-core";
 
 const REPO_ROOT = resolve(import.meta.dirname, "../../..");
+const execFileAsync = promisify(execFile);
 
 describe("G39: Mesh Discovery", () => {
   it("C1a: mDNS service tag locked", () => {
@@ -60,14 +62,13 @@ reconnect:
     d.stop();
   });
 
-  it("C3: no-DHT no-relay static-import lint", () => {
-    const r = spawnSync(process.execPath, ["--import", "tsx", "scripts/lint/no-dht-no-relay.ts"], {
-      cwd: REPO_ROOT,
-      stdio: "pipe",
-      encoding: "utf8",
-    });
-    expect(r.status).toBe(0);
-  });
+  it("C3: no-DHT no-relay static-import lint", async () => {
+    await execFileAsync(
+      process.execPath,
+      ["--import", "tsx", "scripts/lint/no-dht-no-relay.ts"],
+      { cwd: REPO_ROOT },
+    );
+  }, 120_000);
 
   it("C4: no circuit-relay imports", () => {
     expect(true).toBe(true);
