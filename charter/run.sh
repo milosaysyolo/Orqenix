@@ -103,7 +103,7 @@ run_gate G9 "Orqenix-Pro tier present" bash -c '
 run_gate G10 "Pro tests pass" bash -c '
   PRO="${ORQENIX_PRO_PATH:-../Orqenix-Pro}"
   cd "$PRO" && pnpm install --frozen-lockfile --config.ignore-scripts=false >/dev/null &&
-  pnpm rebuild better-sqlite3 esbuild @swc/core --config.ignore-scripts=false >/dev/null &&
+  pnpm rebuild @mongodb-js/zstd better-sqlite3 esbuild @swc/core --config.ignore-scripts=false >/dev/null &&
   pnpm test
 '
 
