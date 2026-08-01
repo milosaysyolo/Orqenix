@@ -6,7 +6,7 @@ on:
       ref:
         description: "Tag or ref to validate"
         type: string
-        default: "v0.7.0"
+        default: "v0.8.0"
       strict:
         description: "Fail fast on P0 FAIL"
         type: boolean
@@ -15,7 +15,7 @@ on:
     inputs:
       ref:
         type: string
-        default: "v0.7.0"
+        default: "v0.8.0"
       strict:
         type: boolean
         default: true
@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref || 'v0.7.0' }}
+          ref: ${{ inputs.ref || 'v0.8.0' }}
           fetch-depth: 1
 
       - name: Checkout Orqenix-Cloud
