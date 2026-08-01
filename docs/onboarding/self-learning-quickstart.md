@@ -35,10 +35,10 @@ Cross-project learning requires Orqenix Pro. When installed, the system can dete
 
 ## Package Structure
 
-| Package | Path | Purpose |
-|---------|------|---------|
-| Observer | `packages/self-learning-observer` | Action capture, PII filtering |
-| Detection | `packages/self-learning-detection` | Pattern detection, frequency analysis |
-| Promoter | `packages/instinct-promoter` | Candidate review UI + workflow |
-| Skill Genesis | `packages/skill-genesis` | CSF skill generation from candidates |
-| Verification | `packages/verification-loop` | Auto-verification via replay |
+| Package       | Path                               | Purpose                               |
+| ------------- | ---------------------------------- | ------------------------------------- |
+| Observer      | `packages/self-learning-observer`  | Action capture, PII filtering         |
+| Detection     | `packages/self-learning-detection` | Pattern detection, frequency analysis |
+| Promoter      | `packages/instinct-promoter`       | Candidate review UI + workflow        |
+| Skill Genesis | `packages/skill-genesis`           | CSF skill generation from candidates  |
+| Verification  | `packages/verification-loop`       | Auto-verification via replay          |

@@ -32,22 +32,22 @@ orqenix_invoke_skill {
 
 Start from a reference plugin. The 14 reference plugins each demonstrate one kind:
 
-| Kind | Reference |
-|---|---|
-| skill | `@orqenix/plugin-git-commit-conventional` |
-| knowledge-source | `@orqenix/plugin-notion-source` |
-| embedding-model | `@orqenix/plugin-bge-embedding` |
-| reranker | `@orqenix/plugin-bge-reranker` |
-| compression-strategy | `@orqenix/plugin-semantic-compression` |
-| memory-injection-strategy | `@orqenix/plugin-windowed-injection` |
-| prompt-rewriter | `@orqenix/plugin-qwen-rewriter` |
-| visualization | `@orqenix/plugin-timeline-viz` |
-| code-analyzer | `@orqenix/plugin-python-analyzer` |
-| kb-schema | `@orqenix/plugin-design-kb` |
-| mcp-server | `@orqenix/plugin-example-mcp-server` |
-| agent | `@orqenix/plugin-example-agent` |
-| subagent | `@orqenix/plugin-test-runner-subagent` |
-| agent-binding | `@orqenix/plugin-claude-code-binding-ref` |
+| Kind                      | Reference                                 |
+| ------------------------- | ----------------------------------------- |
+| skill                     | `@orqenix/plugin-git-commit-conventional` |
+| knowledge-source          | `@orqenix/plugin-notion-source`           |
+| embedding-model           | `@orqenix/plugin-bge-embedding`           |
+| reranker                  | `@orqenix/plugin-bge-reranker`            |
+| compression-strategy      | `@orqenix/plugin-semantic-compression`    |
+| memory-injection-strategy | `@orqenix/plugin-windowed-injection`      |
+| prompt-rewriter           | `@orqenix/plugin-qwen-rewriter`           |
+| visualization             | `@orqenix/plugin-timeline-viz`            |
+| code-analyzer             | `@orqenix/plugin-python-analyzer`         |
+| kb-schema                 | `@orqenix/plugin-design-kb`               |
+| mcp-server                | `@orqenix/plugin-example-mcp-server`      |
+| agent                     | `@orqenix/plugin-example-agent`           |
+| subagent                  | `@orqenix/plugin-test-runner-subagent`    |
+| agent-binding             | `@orqenix/plugin-claude-code-binding-ref` |
 
 ```bash
 # Create a new plugin from a template

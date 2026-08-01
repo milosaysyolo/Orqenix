@@ -10,35 +10,36 @@
 
 All D8-verify-5 requirements met:
 
-| Requirement | Status |
-|---|---|
-| 5 spec files created | ✅ |
-| 14 reference plugins reinstated | ✅ |
-| pnpm-workspace.yaml `plugins/*` glob | ✅ |
-| G70 gate check (14/14) | ✅ |
-| pnpm install (113 workspace projects) | ✅ |
-| Typecheck all 108 packages + plugins | ✅ |
-| Plugin builds (ESM + CJS + DTS) | ✅ |
-| post-fix-capture.mjs run | ✅ |
-| CI triggered (run 27613199945) | ✅ |
+| Requirement                           | Status |
+| ------------------------------------- | ------ |
+| 5 spec files created                  | ✅     |
+| 14 reference plugins reinstated       | ✅     |
+| pnpm-workspace.yaml `plugins/*` glob  | ✅     |
+| G70 gate check (14/14)                | ✅     |
+| pnpm install (113 workspace projects) | ✅     |
+| Typecheck all 108 packages + plugins  | ✅     |
+| Plugin builds (ESM + CJS + DTS)       | ✅     |
+| post-fix-capture.mjs run              | ✅     |
+| CI triggered (run 27613199945)        | ✅     |
 
 ---
 
 ## 5 Spec Files Created
 
-| File | Purpose |
-|---|---|
-| `pnpm-workspace.yaml` | Added `- "plugins/*"` glob + `tsup: ^8.3.0` catalog |
-| `scripts/verify/reinstate-reference-plugins.mjs` | G70 gate checker |
-| `scripts/verify/post-fix-capture.mjs` | Vitest binding post-fix evidence |
-| `.github/workflows/force-rerun-with-fix-4.yml` | CI re-run workflow |
-| `.orqenix/prompts/verify-phase-8-closure.md` | Agent closure prompt |
+| File                                             | Purpose                                             |
+| ------------------------------------------------ | --------------------------------------------------- |
+| `pnpm-workspace.yaml`                            | Added `- "plugins/*"` glob + `tsup: ^8.3.0` catalog |
+| `scripts/verify/reinstate-reference-plugins.mjs` | G70 gate checker                                    |
+| `scripts/verify/post-fix-capture.mjs`            | Vitest binding post-fix evidence                    |
+| `.github/workflows/force-rerun-with-fix-4.yml`   | CI re-run workflow                                  |
+| `.orqenix/prompts/verify-phase-8-closure.md`     | Agent closure prompt                                |
 
 ## 14 Reference Plugins (D8.δ Spec)
 
 All have `package.json`, `LICENSE`, `src/index.ts`, `tests/plugin.test.ts`:
 
 ### Knowledge Plugins (9)
+
 - `notion-source` — Notion KB source
 - `bge-embedding` — BGE embedding model
 - `bge-reranker` — BGE reranker model
@@ -50,6 +51,7 @@ All have `package.json`, `LICENSE`, `src/index.ts`, `tests/plugin.test.ts`:
 - `design-kb` — Design KB schema
 
 ### Agent Plugins (5)
+
 - `example-mcp-server` — MCP server example
 - `example-agent` — Agent example
 - `test-runner-subagent` — Test runner subagent
@@ -58,22 +60,22 @@ All have `package.json`, `LICENSE`, `src/index.ts`, `tests/plugin.test.ts`:
 
 ## Repair Issues Fixed
 
-| Issue | Fix |
-|---|---|
-| BOM + doubled quotes in 7 package.json | Rewrote all 7 with correct JSON |
-| devDependencies in wrong block | Restructured all 14 package.json |
-| tsup not found (hoisted layout) | Changed `tsup` → `npx tsup` in all 14 build scripts |
+| Issue                                  | Fix                                                 |
+| -------------------------------------- | --------------------------------------------------- |
+| BOM + doubled quotes in 7 package.json | Rewrote all 7 with correct JSON                     |
+| devDependencies in wrong block         | Restructured all 14 package.json                    |
+| tsup not found (hoisted layout)        | Changed `tsup` → `npx tsup` in all 14 build scripts |
 
 ## Verify Results
 
-| Step | Result |
-|---|---|
-| G70 gate (reinstate-reference-plugins.mjs) | **14/14 ✅** |
-| pnpm install | **✅** 113 projects |
-| Plugin builds (all 14) | **✅** ESM + CJS + DTS |
-| Typecheck (108 packages) | **✅** All pass |
-| Typecheck (workbench) | **❌** Pre-existing (instinct-promoter DTS missing) |
-| post-fix-capture.mjs | **❌** Binding fix did not work (pre-existing better-sqlite3 Windows issue) |
+| Step                                       | Result                                                                      |
+| ------------------------------------------ | --------------------------------------------------------------------------- |
+| G70 gate (reinstate-reference-plugins.mjs) | **14/14 ✅**                                                                |
+| pnpm install                               | **✅** 113 projects                                                         |
+| Plugin builds (all 14)                     | **✅** ESM + CJS + DTS                                                      |
+| Typecheck (108 packages)                   | **✅** All pass                                                             |
+| Typecheck (workbench)                      | **❌** Pre-existing (instinct-promoter DTS missing)                         |
+| post-fix-capture.mjs                       | **❌** Binding fix did not work (pre-existing better-sqlite3 Windows issue) |
 
 ## CI Run
 

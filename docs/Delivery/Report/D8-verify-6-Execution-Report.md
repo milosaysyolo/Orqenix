@@ -10,20 +10,20 @@ D8-verify-6 closed 1 real blocker (workbench typecheck due to instinct-promoter/
 
 ## Changes Made (3 files)
 
-| File | Change |
-|------|--------|
-| `packages/instinct-promoter/package.json` | Aligned scripts/build/tsconfig to conventions. No functional change — exports map and build were already correct. |
-| `packages/instinct-promoter/tsup.config.ts` | Already had dual-entry + DTS. No changes needed. |
-| `scripts/verify/verify-subpath-dts.mjs` | Created — scans all packages for subpath exports and confirms .d.ts files exist. |
+| File                                        | Change                                                                                                            |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `packages/instinct-promoter/package.json`   | Aligned scripts/build/tsconfig to conventions. No functional change — exports map and build were already correct. |
+| `packages/instinct-promoter/tsup.config.ts` | Already had dual-entry + DTS. No changes needed.                                                                  |
+| `scripts/verify/verify-subpath-dts.mjs`     | Created — scans all packages for subpath exports and confirms .d.ts files exist.                                  |
 
 ## Verification Results
 
-| Step | Result |
-|------|--------|
-| `npx tsup` (instinct-promoter build) | ✅ `dist/index.d.ts` (1.98 KB) + `dist/ui/index.d.ts` (734 B) |
-| `verify-subpath-dts.mjs` | ✅ All 93+ subpath exports match their .d.ts files, exit 0 |
-| `@orqenix/workbench typecheck` | ✅ EXIT 0 (was previously claimed as pre-existing — now confirmed fixed) |
-| Full `packages/*` typecheck (Phase 8) | ✅ 94/94 packages pass, zero errors |
+| Step                                  | Result                                                                   |
+| ------------------------------------- | ------------------------------------------------------------------------ |
+| `npx tsup` (instinct-promoter build)  | ✅ `dist/index.d.ts` (1.98 KB) + `dist/ui/index.d.ts` (734 B)            |
+| `verify-subpath-dts.mjs`              | ✅ All 93+ subpath exports match their .d.ts files, exit 0               |
+| `@orqenix/workbench typecheck`        | ✅ EXIT 0 (was previously claimed as pre-existing — now confirmed fixed) |
+| Full `packages/*` typecheck (Phase 8) | ✅ 94/94 packages pass, zero errors                                      |
 
 ## Test Results
 
@@ -35,7 +35,7 @@ The instinct-promoter/ui DTS was already exported correctly — both `tsup.confi
 
 ## Pre-existing Issues (unchanged)
 
-1. better-sqlite3 vitest Windows binding (all D8-verify-* reports)
+1. better-sqlite3 vitest Windows binding (all D8-verify-\* reports)
 2. ESLint legacy config (5 packages not migrated to flat config)
 3. orqenix-mcp bin symlink WARN on Windows (pnpm appends .EXE)
 

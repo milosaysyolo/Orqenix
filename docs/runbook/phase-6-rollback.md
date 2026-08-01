@@ -67,6 +67,7 @@ Use this path only if you want to remove every trace of Phase 6 transport state.
 ## 5. Restoring from backup
 
 If anything goes wrong:
+
 ```bash
 tar -xzf orqenix-backup-<timestamp>.tar.gz
 sqlite3 .orqenix/state.db ".restore '.orqenix/state.db.before-rollback'"

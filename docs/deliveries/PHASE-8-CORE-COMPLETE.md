@@ -6,32 +6,32 @@ Repos: milosaysyolo/Orqenix (OSS) + milosaysyolo/Orqenix-Pro (Pro)
 
 ## Sub-phases delivered
 
-| Sub-phase | Description | Files | Charter gates |
-|---|---|---|---|
-| D8.α | Foundation | 226 | G58-G64 (7 gates, 100 criteria) |
-| D8.β | Marketplace CRUD + Normalization | 110 | G65-G66 (2 gates, 30 criteria) |
-| D8.γ | Self-Learning (OSS 124 + Pro 31) | 155 | G67-G69 (3 gates, 34 criteria) |
-| D8.δ | Reference Plugins + Migration | 75 | G70 (1 gate, 10 criteria) |
-| **TOTAL** | **Phase 8 CORE** | **566** | **13 gates, 174 criteria** |
+| Sub-phase | Description                      | Files   | Charter gates                   |
+| --------- | -------------------------------- | ------- | ------------------------------- |
+| D8.α      | Foundation                       | 226     | G58-G64 (7 gates, 100 criteria) |
+| D8.β      | Marketplace CRUD + Normalization | 110     | G65-G66 (2 gates, 30 criteria)  |
+| D8.γ      | Self-Learning (OSS 124 + Pro 31) | 155     | G67-G69 (3 gates, 34 criteria)  |
+| D8.δ      | Reference Plugins + Migration    | 75      | G70 (1 gate, 10 criteria)       |
+| **TOTAL** | **Phase 8 CORE**                 | **566** | **13 gates, 174 criteria**      |
 
 ## Charter gates G58-G70 , ALL CLOSED
 
-| Gate | Name | Criteria |
-|---|---|---|
-| G58 | Memory Hierarchy | 18 ✅ |
-| G59 | Branch Deep Copy + Audit Continuity | 8 ✅ |
-| G60 | Subagent Harness + Return Protection | 12 ✅ |
-| G61 | Workbench Core + UI Primitives | 16 ✅ |
-| G62 | Plugin Architecture Foundation | 22 ✅ |
-| G63 | Agent Ecosystem (MCP + 7 bindings) | 14 ✅ |
-| G64 | Settings Registry + Hot Reload | 10 ✅ |
-| G65 | Marketplace Full CRUD | 12 ✅ |
-| G66 | Normalization Engine | 18 ✅ |
-| G67 | Self-Learning Observer + Detection | 14 ✅ |
-| G68 | Skill Generation + Verification | 12 ✅ |
-| G69 | Cross-Scope Federation (Pro) | 8 ✅ |
-| G70 | Reference Plugins + Migration | 10 ✅ |
-| **TOTAL** | | **174 ✅** |
+| Gate      | Name                                 | Criteria   |
+| --------- | ------------------------------------ | ---------- |
+| G58       | Memory Hierarchy                     | 18 ✅      |
+| G59       | Branch Deep Copy + Audit Continuity  | 8 ✅       |
+| G60       | Subagent Harness + Return Protection | 12 ✅      |
+| G61       | Workbench Core + UI Primitives       | 16 ✅      |
+| G62       | Plugin Architecture Foundation       | 22 ✅      |
+| G63       | Agent Ecosystem (MCP + 7 bindings)   | 14 ✅      |
+| G64       | Settings Registry + Hot Reload       | 10 ✅      |
+| G65       | Marketplace Full CRUD                | 12 ✅      |
+| G66       | Normalization Engine                 | 18 ✅      |
+| G67       | Self-Learning Observer + Detection   | 14 ✅      |
+| G68       | Skill Generation + Verification      | 12 ✅      |
+| G69       | Cross-Scope Federation (Pro)         | 8 ✅       |
+| G70       | Reference Plugins + Migration        | 10 ✅      |
+| **TOTAL** |                                      | **174 ✅** |
 
 ## What Phase 8 CORE established
 
@@ -65,12 +65,12 @@ INV-11/12/13/14/15/16/17/18/19 + ADR-E-001 through E-020 + Anti-patterns 28-42.
 
 ## Roadmap remaining (post Phase 8 CORE)
 
-| Phase | Description | Est. files |
-|---|---|---|
-| 8.1 (D8.1) | Cloud Patches (SSO + witness + multi-region + governance) | ~80 |
-| 8.2 (D8.2) | OSS Plugin Registry (plugins.orqenix.dev + Sigstore + analytics) | ~67 |
-| 9 | Monetization (Stripe + real quotas) | ~150 |
-| 10 | Commercial Marketplace (paid plugins, 70/30 revenue share) | ~120 |
+| Phase      | Description                                                      | Est. files |
+| ---------- | ---------------------------------------------------------------- | ---------- |
+| 8.1 (D8.1) | Cloud Patches (SSO + witness + multi-region + governance)        | ~80        |
+| 8.2 (D8.2) | OSS Plugin Registry (plugins.orqenix.dev + Sigstore + analytics) | ~67        |
+| 9          | Monetization (Stripe + real quotas)                              | ~150       |
+| 10         | Commercial Marketplace (paid plugins, 70/30 revenue share)       | ~120       |
 
 ## Tag
 

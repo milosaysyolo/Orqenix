@@ -19,20 +19,20 @@ The matrix does **not** apply to libp2p. Per CR v7.2 decision D1, Phase 6 uses p
 
 ## Tier 1, required (blocking)
 
-| OS x arch       | Node 22       | Node 24       | Rationale                                           |
-|-----------------|---------------|---------------|-----------------------------------------------------|
-| `darwin-arm64`  | required      | required      | Primary developer machine (Apple Silicon)           |
-| `linux-x64-gnu` | required      | required      | Standard CI runner and the vast majority of servers |
-| `win32-x64`     | required      | required      | Windows developer surface, where native bugs hide   |
+| OS x arch       | Node 22  | Node 24  | Rationale                                           |
+| --------------- | -------- | -------- | --------------------------------------------------- |
+| `darwin-arm64`  | required | required | Primary developer machine (Apple Silicon)           |
+| `linux-x64-gnu` | required | required | Standard CI runner and the vast majority of servers |
+| `win32-x64`     | required | required | Windows developer surface, where native bugs hide   |
 
 Total: **6 blocking jobs**. Any failure blocks merge.
 
 ## Tier 2, informational (`continue-on-error: true`)
 
-| OS x arch          | Node 22         | Node 24         | Rationale                                |
-|--------------------|-----------------|-----------------|------------------------------------------|
-| `darwin-x64`       | informational   | informational   | Intel Mac, declining footprint           |
-| `linux-arm64-gnu`  | informational   | informational   | ARM servers (Graviton and similar)       |
+| OS x arch         | Node 22       | Node 24       | Rationale                          |
+| ----------------- | ------------- | ------------- | ---------------------------------- |
+| `darwin-x64`      | informational | informational | Intel Mac, declining footprint     |
+| `linux-arm64-gnu` | informational | informational | ARM servers (Graviton and similar) |
 
 Total: **4 non-blocking jobs**. Failures produce a workflow warning but do not block merge.
 
@@ -52,11 +52,11 @@ Revisit when a concrete user request or production deployment requires one of th
 
 ## Node version policy
 
-| Version  | Phase 6 status   | Reason                                       |
-|----------|------------------|----------------------------------------------|
-| Node 20  | dropped          | Approaching EOL around April 2026            |
-| Node 22  | supported (LTS)  | Current LTS, primary target                  |
-| Node 24  | supported        | Current stable release, future-proofing      |
+| Version | Phase 6 status  | Reason                                  |
+| ------- | --------------- | --------------------------------------- |
+| Node 20 | dropped         | Approaching EOL around April 2026       |
+| Node 22 | supported (LTS) | Current LTS, primary target             |
+| Node 24 | supported       | Current stable release, future-proofing |
 
 ## What each job does
 

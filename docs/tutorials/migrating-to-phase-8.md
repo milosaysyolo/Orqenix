@@ -15,6 +15,7 @@ orqenix-migrate check
 ```
 
 Output:
+
 ```
 Detected phase: 7
 Ready to migrate: YES
@@ -30,6 +31,7 @@ orqenix-migrate to-phase-8 --dry-run
 ```
 
 Output:
+
 ```
 Would apply migrations: 500, 501, 502, 540, 550, 560
 Would backfill 12,847 entries with branch_id blake3:3a8c91f2...
@@ -45,6 +47,7 @@ orqenix-migrate to-phase-8 --apply
 ```
 
 This:
+
 1. Backs up `.orqenix/` to a timestamped dir
 2. Applies the schema migrations
 3. Backfills all entries to the `main` branch at project level
