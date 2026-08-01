@@ -102,7 +102,9 @@ run_gate G9 "Orqenix-Pro tier present" bash -c '
 # G10: Pro tests pass
 run_gate G10 "Pro tests pass" bash -c '
   PRO="${ORQENIX_PRO_PATH:-../Orqenix-Pro}"
-  cd "$PRO" && pnpm install --frozen-lockfile >/dev/null && pnpm test
+  cd "$PRO" && pnpm install --frozen-lockfile --config.ignore-scripts=false >/dev/null &&
+  pnpm rebuild better-sqlite3 esbuild @swc/core --config.ignore-scripts=false >/dev/null &&
+  pnpm test
 '
 
 # G11: 7 architecture docs, each >= 200 lines

@@ -18,10 +18,6 @@ export default defineConfig({
     // Workspace packages appear as symlinks in node_modules; don't re-run their tests
     exclude: ["**/node_modules/**", "**/dist/**"],
     pool: 'forks',
-    forks: {
-      singleFork: false,
-      execArgv: [],
-    },
     server: {
       deps: {
         external: [/better-sqlite3/, /esbuild/, /@swc\/core/, /bindings/],
