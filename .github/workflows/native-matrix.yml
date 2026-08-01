@@ -64,14 +64,6 @@ jobs:
 
           # ---------------- Tier 2, informational (continue-on-error) --
           - tier: 2
-            os_label: darwin-x64
-            runner: macos-13
-            node: 22
-          - tier: 2
-            os_label: darwin-x64
-            runner: macos-13
-            node: 24
-          - tier: 2
             os_label: linux-arm64-gnu
             runner: ubuntu-22.04-arm
             node: 22
