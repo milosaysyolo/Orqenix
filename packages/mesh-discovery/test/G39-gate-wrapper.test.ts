@@ -63,11 +63,9 @@ reconnect:
   });
 
   it("C3: no-DHT no-relay static-import lint", async () => {
-    await execFileAsync(
-      process.execPath,
-      ["--import", "tsx", "scripts/lint/no-dht-no-relay.ts"],
-      { cwd: REPO_ROOT },
-    );
+    await execFileAsync(process.execPath, ["--import", "tsx", "scripts/lint/no-dht-no-relay.ts"], {
+      cwd: REPO_ROOT,
+    });
   }, 120_000);
 
   it("C4: no circuit-relay imports", () => {

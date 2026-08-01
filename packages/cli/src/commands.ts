@@ -46,7 +46,7 @@ function json(value: unknown): string {
 const handlers: Record<string, CommandHandler> = {
   version: async (_ctx) => ({
     exitCode: 0,
-        output: json({ version: pkg.version, phase: "Phase 5 Memory Foundation Refactor" }),
+    output: json({ version: pkg.version, phase: "Phase 5 Memory Foundation Refactor" }),
   }),
 
   "scope info": async (ctx) => {
