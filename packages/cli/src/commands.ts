@@ -14,7 +14,7 @@ import { PhaseFourToFiveMigrator } from "@orqenix/migration";
 import * as ed from "@noble/ed25519";
 import { stat, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { version } from "../package.json";
+import pkg from "../package.json" with { type: "json" };
 import { type ParsedArgs, flagString, flagBool } from "./parser.js";
 
 export interface CliIO {
@@ -46,7 +46,7 @@ function json(value: unknown): string {
 const handlers: Record<string, CommandHandler> = {
   version: async (_ctx) => ({
     exitCode: 0,
-    output: json({ version, phase: "Phase 5 Memory Foundation Refactor" }),
+        output: json({ version: pkg.version, phase: "Phase 5 Memory Foundation Refactor" }),
   }),
 
   "scope info": async (ctx) => {
@@ -466,7 +466,7 @@ const COMMAND_META: Record<string, string> = {
 };
 
 export function usage(): string {
-  return [`orqenix v${version}`, "", "Commands:", ...Object.values(COMMAND_META)].join("\n");
+  return [`orqenix v${pkg.version}`, "", "Commands:", ...Object.values(COMMAND_META)].join("\n");
 }
 
 export { handlers as _commandHandlers };

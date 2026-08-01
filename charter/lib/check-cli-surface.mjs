@@ -7,7 +7,7 @@
 // file but NOT the parent .orqenix/ directory, so we create it before running
 // DB-backed commands (link/audit/detach).
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, existsSync } from "node:fs";
+import { mkdtempSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -24,6 +24,11 @@ function run(args, cwd) {
       cwd,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
+      env: {
+        ...process.env,
+        ORQENIX_ROOT: cwd,
+        ORQENIX_SCOPE: "scope:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      },
     });
     return { ok: true, out };
   } catch (e) {
@@ -39,8 +44,15 @@ let pass = 0;
 let fail = 0;
 
 // Each check: [name, argv, predicate(result) => boolean]
+const expectedVersion = JSON.parse(
+  readFileSync(join(process.cwd(), "packages/cli/package.json"), "utf8"),
+).version;
 const checks = [
-  ["version reports 0.5.0-phase-5", ["version"], (r) => r.ok && /0\.5\.0-phase-5/.test(r.out)],
+  [
+    `version reports ${expectedVersion}`,
+    ["version"],
+    (r) => r.ok && new RegExp(expectedVersion.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).test(r.out),
+  ],
   ["scope init --name", ["scope", "init", "--name=smoke"], (r) => r.ok],
   ["scope info", ["scope", "info"], (r) => r.ok],
   [

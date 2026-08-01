@@ -9,9 +9,14 @@ import { join, resolve } from "node:path";
 import { SqliteConnection, runMigrations } from "@orqenix/storage-sqlite";
 import { AuditLogStore, AUDIT_LOG_MIGRATIONS, AuditChainBrokenError } from "@orqenix/audit-log";
 
-const REPO_ROOT = resolve(__dirname, "../..");
+const REPO_ROOT = resolve(import.meta.dirname, "../..");
 const REPORT_DIR = join(REPO_ROOT, ".orqenix/gate-reports");
 const A = "scope:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const VITEST_BIN = join(REPO_ROOT, "node_modules/vitest/vitest.mjs");
+
+function runVitest(cwd: string): void {
+  execSync(`node ${JSON.stringify(VITEST_BIN)} run`, { cwd, stdio: "pipe" });
+}
 
 async function fresh() {
   const dir = await mkdtemp(join(tmpdir(), "g18-"));
@@ -34,7 +39,7 @@ class G18 extends GateRunner {
   protected async runChecks(): Promise<GateCheck[]> {
     return [
       await this.check("G18.1", "audit-log unit tests pass", () => {
-        execSync("npx vitest run", { cwd: join(REPO_ROOT, "packages/audit-log"), stdio: "pipe" });
+        runVitest(join(REPO_ROOT, "packages/audit-log"));
       }),
       await this.check("G18.2", "verifyChain passes on 50-entry untampered log", async () => {
         const { dir, conn, store } = await fresh();

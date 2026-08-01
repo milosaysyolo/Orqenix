@@ -17,7 +17,8 @@ const node = (matrix["node-version"] ?? matrix.node ?? []).map(String);
 
 const REQUIRED_OS = ["ubuntu-latest", "macos-latest", "windows-latest"];
 const hasAllOS = REQUIRED_OS.every((o) => os.includes(o));
-const has2Node = node.includes("20") && node.includes("22");
+// Node 20 is EOL (deprecated on runners); CI runs 22 and 24.
+const has2Node = node.includes("22") && node.includes("24");
 const jobCount = os.length * node.length;
 
 console.log(`OS: [${os.join(", ")}], Node: [${node.join(", ")}], Jobs: ${jobCount}`);
@@ -27,6 +28,6 @@ if (hasAllOS && has2Node && jobCount === 6) {
 }
 
 if (!hasAllOS) console.error(`Missing OS. Required: ${REQUIRED_OS.join(", ")}`);
-if (!has2Node) console.error("Missing Node 20 or 22");
+if (!has2Node) console.error("Missing Node 22 or 24");
 if (jobCount !== 6) console.error(`Expected 6 jobs, got ${jobCount}`);
 process.exit(1);

@@ -12,10 +12,15 @@ import { WorkspaceStore, WORKSPACE_MIGRATIONS } from "@orqenix/workspace";
 import { AuditLogStore, AUDIT_LOG_MIGRATIONS } from "@orqenix/audit-log";
 import { DetachPlanner, DetachExecutor, InvalidConfirmationError } from "@orqenix/detach";
 
-const REPO_ROOT = resolve(__dirname, "../..");
+const REPO_ROOT = resolve(import.meta.dirname, "../..");
 const REPORT_DIR = join(REPO_ROOT, ".orqenix/gate-reports");
 const A = "scope:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const B = "scope:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB";
+const VITEST_BIN = join(REPO_ROOT, "node_modules/vitest/vitest.mjs");
+
+function runVitest(cwd: string): void {
+  execSync(`node ${JSON.stringify(VITEST_BIN)} run`, { cwd, stdio: "pipe" });
+}
 
 async function setup() {
   const dir = await mkdtemp(join(tmpdir(), "g17-"));
@@ -55,7 +60,7 @@ class G17 extends GateRunner {
   protected async runChecks(): Promise<GateCheck[]> {
     return [
       await this.check("G17.1", "detach unit tests pass", () => {
-        execSync("npx vitest run", { cwd: join(REPO_ROOT, "packages/detach"), stdio: "pipe" });
+        runVitest(join(REPO_ROOT, "packages/detach"));
       }),
       await this.check("G17.2", "planUnlink + execute revokes both directions", async () => {
         const { dir, conn, linkStore, planner, executor } = await setup();

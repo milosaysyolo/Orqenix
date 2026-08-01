@@ -18,11 +18,9 @@ export default defineConfig({
     // Workspace packages appear as symlinks in node_modules; don't re-run their tests
     exclude: ["**/node_modules/**", "**/dist/**"],
     pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: false,
-        execArgv: [],
-      },
+    forks: {
+      singleFork: false,
+      execArgv: [],
     },
     server: {
       deps: {
